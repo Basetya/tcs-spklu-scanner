@@ -1670,11 +1670,51 @@ out center;`;
             
             // Limit score between 25% and 98%
             score = Math.max(25, Math.min(98, score));
+
+            // 4. Apply Rigid Business Consultant Drop Rules (Anti-Hallucination & Premium Guarantee)
+            const fitsOnlyOneCar = isAlley;
+            const lowTrafficOutsideCommercial = (roadScore === 15 && realMalls.length === 0 && realOffices.length === 0 && realTraffic.length === 0);
+            const emptyOrLowPopulation = (realMalls.length === 0 && realOffices.length === 0 && realHubs.length === 0 && realTraffic.length === 0);
+
+            let isDropped = false;
+            let dropReasonId = '';
+            let dropReasonEn = '';
+
+            if (fitsOnlyOneCar) {
+              isDropped = true;
+              score = 25;
+              dropReasonId = 'Lebar Jalan Tidak Memenuhi Syarat (Hanya 1 Mobil)';
+              dropReasonEn = 'Road Width Unsuitable (Fits Only 1 Car)';
+            } else if (lowTrafficOutsideCommercial) {
+              isDropped = true;
+              score = 25;
+              dropReasonId = 'Trafik Rendah di Luar Pusat Komersial';
+              dropReasonEn = 'Low Traffic & Outside Commercial Centers';
+            } else if (emptyOrLowPopulation) {
+              isDropped = true;
+              score = 25;
+              dropReasonId = 'Kawasan Sepi Penduduk / Sangat Jarang';
+              dropReasonEn = 'Empty or Low-Population Density Area';
+            }
+
+            // Print drop warning in console if triggered
+            if (isDropped && consoleBody) {
+              const dropEl = document.createElement('div');
+              dropEl.style.marginBottom = "4px";
+              dropEl.style.color = "#ef4444";
+              dropEl.style.fontWeight = "bold";
+              if (currentLang === 'en') {
+                dropEl.innerHTML = `<span style="color:#ef4444; font-weight:bold;">> [CRITICAL]</span> SITE DROPPED: ${dropReasonEn}`;
+              } else {
+                dropEl.innerHTML = `<span style="color:#ef4444; font-weight:bold;">> [CRITICAL]</span> LOKASI DI-DROP: ${dropReasonId}`;
+              }
+              consoleBody.appendChild(dropEl);
+              consoleBody.scrollTop = consoleBody.scrollHeight;
+            }
+
             window.tcsScannerState.score = score;
             scoreText.innerText = score + '%';
 
-            // Generate premium residential & hotspots dynamically ONLY if location is actually feasible
-            const currentLang = localStorage.getItem('tcs_lang') || 'id';
             if (score >= 65) {
               window.tcsScannerState.premiumResidential = [
                 {
