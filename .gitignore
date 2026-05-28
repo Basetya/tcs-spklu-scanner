@@ -20,3 +20,5 @@ $RECYCLE.BIN/
 # Temporary/Scratch assets
 .gemini/
 scratch/
+
+.vercel

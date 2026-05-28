@@ -52,12 +52,12 @@
     <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=XXXXXXXXXXXXXXX&ev=PageView&noscript=1"/>
   </noscript>
   
-  <!-- Fallback Loader for Local Live Server Preview -->
+  <!-- Fallback Loader for Local Live Server & Static Hosting Preview -->
   <script>
-    if (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost') {
-      // Local Router Fallback: Redirect back to Index.html if ?page=spklu is not in the URL parameters
+    if (!window.location.hostname.includes('google')) {
+      // Local Router Fallback: Redirect back to index.html if ?page=spklu is not in the URL parameters
       if (!window.location.search.includes('page=spklu')) {
-        window.location.href = 'Index.html' + window.location.search;
+        window.location.href = 'index.html' + window.location.search;
       }
       
       fetch('SpkluCSS.html')
@@ -804,9 +804,9 @@
   <?!= include('TranslationJS'); ?>
   <?!= include('SpkluJS'); ?>
 
-  <!-- Fallback Loader for Local Live Server Preview -->
+  <!-- Fallback Loader for Local Live Server & Static Hosting Preview -->
   <script>
-    if (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost') {
+    if (!window.location.hostname.includes('google')) {
       // Load local TranslationJS fallback first
       fetch('TranslationJS.html')
         .then(response => response.text())
