@@ -2,7 +2,53 @@
  * PT. Titis Cahaya Sejahtera (TCS) - Web Application Server Code
  * Platform: Google Apps Script Web App Ecosystem
  * Author: Antigravity AI
+ * 
+ * CONFIGURATION: Paste your Google Spreadsheet ID here to sync leads and settings.
+ * Pre-populated with your spreadsheet ID from your screenshots!
  */
+var TCS_SPREADSHEET_ID = "1P1G4b34I5CjjYvBxAxYAROn2HjVpUfG6_ziML7PqmSg";
+
+/**
+ * Helper to retrieve the target Google Spreadsheet instance.
+ * Resolves priority order: Configured ID -> Container-Bound -> Standalone File Search.
+ * @return {Spreadsheet} The Spreadsheet instance or null if not found.
+ */
+function getTcsSpreadsheet() {
+  var ss = null;
+  
+  // 1. Try to open using the configured Spreadsheet ID (highly recommended for Web App context)
+  if (typeof TCS_SPREADSHEET_ID !== 'undefined' && TCS_SPREADSHEET_ID) {
+    try {
+      ss = SpreadsheetApp.openById(TCS_SPREADSHEET_ID);
+      if (ss) return ss;
+    } catch (e) {
+      console.warn("Failed to open spreadsheet by ID: " + e.message);
+    }
+  }
+
+  // 2. Try to get container-bound active spreadsheet
+  try {
+    ss = SpreadsheetApp.getActiveSpreadsheet();
+    if (ss) return ss;
+  } catch (e) {
+    console.warn("SpreadsheetApp.getActiveSpreadsheet() failed: " + e.message);
+  }
+
+  // 3. Fallback: Search or create a standalone file named "TCS Leads Tracker"
+  try {
+    var files = DriveApp.getFilesByName("TCS Leads Tracker");
+    if (files.hasNext()) {
+      ss = SpreadsheetApp.open(files.next());
+    } else {
+      ss = SpreadsheetApp.create("TCS Leads Tracker");
+    }
+  } catch (e) {
+    console.error("DriveApp spreadsheet retrieval/creation failed: " + e.message);
+  }
+
+  return ss;
+}
+
 
 /**
  * Serves the web application
@@ -68,16 +114,7 @@ function submitConsultation(formData) {
     
     // 1. Log to Google Sheet (Active Spreadsheet or create one)
     try {
-      var ss = SpreadsheetApp.getActiveSpreadsheet();
-      if (!ss) {
-        // Fallback: search for or create a standalone sheet named "TCS Leads Tracker"
-        var files = DriveApp.getFilesByName("TCS Leads Tracker");
-        if (files.hasNext()) {
-          ss = SpreadsheetApp.open(files.next());
-        } else {
-          ss = SpreadsheetApp.create("TCS Leads Tracker");
-        }
-      }
+      var ss = getTcsSpreadsheet();
       
       if (ss) {
         var sheet = ss.getSheetByName('Consultations');
@@ -219,15 +256,7 @@ function submitSpkluLead(leadData) {
     
     // 1. Log to Google Sheet (Active Spreadsheet or create/open 'TCS Leads Tracker')
     try {
-      var ss = SpreadsheetApp.getActiveSpreadsheet();
-      if (!ss) {
-        var files = DriveApp.getFilesByName("TCS Leads Tracker");
-        if (files.hasNext()) {
-          ss = SpreadsheetApp.open(files.next());
-        } else {
-          ss = SpreadsheetApp.create("TCS Leads Tracker");
-        }
-      }
+      var ss = getTcsSpreadsheet();
       
       if (ss) {
         var sheet = ss.getSheetByName('SPKLU Leads');
@@ -343,15 +372,7 @@ function submitSpkluLead(leadData) {
  */
 function getSpkluPasscode() {
   try {
-    var ss = SpreadsheetApp.getActiveSpreadsheet();
-    if (!ss) {
-      var files = DriveApp.getFilesByName("TCS Leads Tracker");
-      if (files.hasNext()) {
-        ss = SpreadsheetApp.open(files.next());
-      } else {
-        ss = SpreadsheetApp.create("TCS Leads Tracker");
-      }
-    }
+    var ss = getTcsSpreadsheet();
     
     if (ss) {
       var sheet = ss.getSheetByName('Settings');
