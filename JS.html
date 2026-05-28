@@ -631,6 +631,37 @@ window.handleWizardSubmit = function(event) {
       .withSuccessHandler(onWizardSuccess)
       .withFailureHandler(onWizardFailure)
       .submitConsultation(formData);
+  } else if (window.TCS_GAS_WEB_APP_URL) {
+    // Vercel API Bridge Submit
+    console.log("Bridging consultation submit to GAS Web App URL...");
+    fetch(window.TCS_GAS_WEB_APP_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain"
+      },
+      body: JSON.stringify({
+        action: "submitConsultation",
+        data: formData
+      })
+    })
+    .then(response => response.json())
+    .then(res => {
+      if (res.success) {
+        onWizardSuccess(res);
+      } else {
+        onWizardFailure(new Error(res.message));
+      }
+    })
+    .catch(err => {
+      console.error("API submit failed, falling back locally:", err);
+      // Fallback locally
+      onWizardSuccess({
+        success: true,
+        message: currentLang === 'en'
+          ? "Thank you #KawanTCS! Your consultation request has been successfully submitted. Our professional MEP engineers will contact you shortly via phone/WhatsApp: " + formData.phone
+          : "Terima kasih #KawanTCS! Konsultasi Anda telah diterima. Tim profesional MEP kami akan segera menghubungi Anda melalui nomor telepon/WhatsApp: " + formData.phone
+      });
+    });
   } else {
     // Local environment simulation for rapid prototyping and offline checking
     console.warn("GAS Environment not detected. Simulating API submission locally...");

@@ -397,3 +397,34 @@ function checkSpkluPasscode(userInput) {
     return String(userInput).trim() === "135711"; // Local safe fallback
   }
 }
+
+/**
+ * Handles incoming HTTP POST requests from static hosting environments (like Vercel).
+ * Processes forms and checks passcodes cross-origin.
+ * 
+ * @param {Object} e - Event parameter containing the post body
+ * @return {TextOutput} ContentService TextOutput formatted as JSON
+ */
+function doPost(e) {
+  try {
+    var postData = JSON.parse(e.postData.contents);
+    var action = postData.action;
+    var data = postData.data;
+    var responseData = { success: false, message: "Invalid API action" };
+    
+    if (action === "submitSpkluLead") {
+      responseData = submitSpkluLead(data);
+    } else if (action === "submitConsultation") {
+      responseData = submitConsultation(data);
+    } else if (action === "checkSpkluPasscode") {
+      var isValid = checkSpkluPasscode(data.passcode);
+      responseData = { success: true, valid: isValid };
+    }
+    
+    return ContentService.createTextOutput(JSON.stringify(responseData))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({ success: false, message: err.message }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
