@@ -1976,19 +1976,26 @@ out center;`;
       year: 'numeric', month: 'long', day: 'numeric'
     });
 
+    // Create a hidden wrapper container in the DOM tree to hide rendering from users
+    const pdfWrapper = document.createElement('div');
+    pdfWrapper.style.position = "fixed";
+    pdfWrapper.style.left = "0";
+    pdfWrapper.style.top = "0";
+    pdfWrapper.style.width = "800px";
+    pdfWrapper.style.zIndex = "-9999";
+    pdfWrapper.style.pointerEvents = "none";
+    document.body.appendChild(pdfWrapper);
+
+    // Create the actual PDF content container (captured relative to wrapper)
     const element = document.createElement('div');
     element.style.fontFamily = "'Plus Jakarta Sans', Arial, sans-serif";
     element.style.color = "#0f172a";
     element.style.background = "#ffffff";
     element.style.padding = "0";
     element.style.margin = "0";
-    element.style.position = "fixed";
-    element.style.left = "0";
-    element.style.top = "0";
+    element.style.position = "relative";
     element.style.width = "800px";
-    element.style.zIndex = "-9999";
-    element.style.pointerEvents = "none";
-    document.body.appendChild(element);
+    pdfWrapper.appendChild(element);
 
     element.innerHTML = `
       <!-- PAGE 1: COVER PAGE -->
@@ -2231,11 +2238,11 @@ out center;`;
     // Delay PDF compilation to guarantee browser reflow and layout coordinate calculations are complete
     setTimeout(() => {
       html2pdf().set(opt).from(element).save().then(() => {
-        document.body.removeChild(element);
+        document.body.removeChild(pdfWrapper);
       }).catch(err => {
         console.error("PDF generation failed:", err);
-        if (document.body.contains(element)) {
-          document.body.removeChild(element);
+        if (document.body.contains(pdfWrapper)) {
+          document.body.removeChild(pdfWrapper);
         }
       });
     }, 250);
