@@ -1942,18 +1942,21 @@ out center;`;
 
   // Claim quota button action (Auto-fill lead form address & smooth scroll)
   btnClaim.addEventListener('click', () => {
-    const leadForm = document.getElementById('leadForm');
+    const leadForm = document.getElementById('spklu-lead-form');
     if (!leadForm) return;
 
-    // Find address input in the form
-    const inputs = leadForm.querySelectorAll('input');
-    if (inputs.length >= 4) {
-      inputs[inputs.length - 1].value = input.value; // set address
-      inputs[inputs.length - 1].dispatchEvent(new Event('input')); // trigger reactive updates
+    // Fill in the address field (textarea with id='lead-address')
+    const addressField = document.getElementById('lead-address');
+    if (addressField) {
+      addressField.value = input.value;
+      addressField.dispatchEvent(new Event('input')); // trigger reactive updates if any
     }
 
-    // Smooth scroll down to registration form
-    document.getElementById('gabung').scrollIntoView({ behavior: 'smooth' });
+    // Smooth scroll down to registration form (section with id='proposal')
+    const proposalSection = document.getElementById('proposal');
+    if (proposalSection) {
+      proposalSection.scrollIntoView({ behavior: 'smooth' });
+    }
   });
 
   // Download proposal button action (glowing PDF multi-page proposal with passcode protection)
