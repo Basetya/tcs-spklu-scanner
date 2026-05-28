@@ -23,10 +23,13 @@
   <script>
     window.TCS_GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzQ8SbaXHJZN1WQK_slsPlCN-cktmaSxzR63ZKEBHcBb1gwqxjkh9R9GXYr3jFpuW4s1g/exec";
   </script>
-  
-  <!-- Fallback Loader for Local Live Server & Static Hosting Preview -->
+    <!-- Fallback Loader for Local Live Server & Static Hosting Preview -->
   <script>
     if (!window.location.hostname.includes('google')) {
+      // Prevent Flash of Unstyled Content (FOUC) on static hosting (Vercel)
+      document.documentElement.style.backgroundColor = '#030712';
+      document.write('<style id="fouc-style">body { opacity: 0 !important; background-color: #030712 !important; }</style>');
+
       // Local Router Fallback: Redirect to spklu.html if page=spklu is requested
       if (window.location.search.includes('page=spklu')) {
         window.location.href = 'spklu.html' + window.location.search;
@@ -39,8 +42,16 @@
           const doc = parser.parseFromString(html, 'text/html');
           const style = doc.querySelector('style');
           if (style) document.head.appendChild(style);
+          
+          // Remove the FOUC style to make body visible
+          const fouc = document.getElementById('fouc-style');
+          if (fouc) fouc.remove();
         })
-        .catch(err => console.error('Failed to load local CSS fallback:', err));
+        .catch(err => {
+          console.error('Failed to load local CSS fallback:', err);
+          const fouc = document.getElementById('fouc-style');
+          if (fouc) fouc.remove();
+        });
     }
   </script>
 </head>
