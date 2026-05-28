@@ -5,6 +5,22 @@
  * Author: Antigravity AI
  */
 
+// Helper to get qualitative EV description based on count
+function getEvDescription(evCount, lang) {
+  const isEn = lang === 'en';
+  if (evCount >= 4000) {
+    return isEn ? "Abundant" : "Melimpah";
+  } else if (evCount >= 2000) {
+    return isEn ? "Quite Many" : "Cukup Banyak";
+  } else if (evCount >= 1000) {
+    return isEn ? "Adequate" : "Cukup";
+  } else if (evCount >= 500) {
+    return isEn ? "Lacking" : "Kurang";
+  } else {
+    return isEn ? "Very Few" : "Sangat Sedikit";
+  }
+}
+
 window.spkluCharts = {
   evGrowth: null,
   responsibility: null,
@@ -1125,14 +1141,15 @@ function initFeasibilityScanner() {
         : `Memetakan pusat keramaian: Mall, Perkantoran & Perumahan Premium (Radius ${radKm.toFixed(1)} KM)...`;
     }
 
-    // Inject actual EV registration count dynamically if log_6 is triggered!
+    // Inject qualitative EV density dynamically if log_6 is triggered!
     if (logKey === 'sp_scan_log_6') {
       const count = window.tcsScannerState.evCount || 1200;
+      const evDesc = getEvDescription(count, currentLang);
       const compCount = window.tcsScannerState.realCompetitors ? window.tcsScannerState.realCompetitors.length : 0;
       if (currentLang === 'en') {
-        text = `EV DENSITY & COMPETITORS OK: Mapped ~${count.toLocaleString('en-US')} registered EVs & ${compCount} competitor SPKLUs (Google Maps 'spklu terdekat' scan).`;
+        text = `EV DENSITY & COMPETITORS OK: EV ownership density is ${evDesc} & mapped ${compCount} competitor SPKLUs (Google Maps 'spklu terdekat' scan).`;
       } else {
-        text = `DENSITAS EV & AUDIT KOMPETITOR OK: Terdeteksi ~${count.toLocaleString('id-ID')} unit EV & ${compCount} SPKLU kompetitor (Pindai Google Maps 'spklu terdekat').`;
+        text = `DENSITAS EV & AUDIT KOMPETITOR OK: Kepadatan adopsi EV tergolong ${evDesc} & terdeteksi ${compCount} SPKLU kompetitor (Pindai Google Maps 'spklu terdekat').`;
       }
     }
 
@@ -1835,13 +1852,17 @@ out center;`;
             ? `Detected low commercial amenities and office hubs around this location. Feasibility score is low (~${score}%). Developing a high-power commercial SPKLU is not recommended. However, you can consider smaller private home-charging setups or contact our MEP team for custom grid solutions.`
             : `Terdeteksi densitas amenitas komersial dan perkantoran yang rendah di sekitar lokasi ini. Skor kelayakan rendah (~${score}%). Pembangunan SPKLU komersial tidak direkomendasikan untuk wilayah ini. Namun, Anda dapat mempertimbangkan pemasangan home-charging privat atau berkonsultasi dengan tim MEP kami.`;
         } else if (compCount <= 2) {
+          const evDescEn = getEvDescription(evCount, 'en').toLowerCase();
+          const evDescId = getEvDescription(evCount, 'id').toLowerCase();
           scoreRec.innerHTML = currentLang === 'en'
-            ? `Your location has a high EV ownership density (~${evCount.toLocaleString('en-US')} units) with moderate competition (${compCount} SPKLUs). Supported by strong PLN grid capacity, this site has high monopolization potential. **Claim your regional partnership quota now** in the registration form below before it is taken by another investor.`
-            : `Lokasi Anda berada di wilayah dengan densitas kepemilikan EV tinggi (~${evCount.toLocaleString('id-ID')} unit) dan persaingan moderat (${compCount} kompetitor). Dengan pasokan grid PLN yang mumpuni, wilayah ini berpotensi tinggi untuk dimonopoli. **Klaim kuota kemitraan wilayah Anda sekarang** pada form registrasi di bawah sebelum diambil investor lain.`;
+            ? `Your location has an ${evDescEn} EV ownership density with moderate competition (${compCount} SPKLUs). Supported by strong PLN grid capacity, this site has high monopolization potential. **Claim your regional partnership quota now** in the registration form below before it is taken by another investor.`
+            : `Lokasi Anda berada di wilayah dengan densitas kepemilikan EV yang ${evDescId} dan persaingan moderat (${compCount} kompetitor). Dengan pasokan grid PLN yang mumpuni, wilayah ini berpotensi tinggi untuk dimonopoli. **Klaim kuota kemitraan wilayah Anda sekarang** pada form registrasi di bawah sebelum diambil investor lain.`;
         } else {
+          const evDescEn = getEvDescription(evCount, 'en').toLowerCase();
+          const evDescId = getEvDescription(evCount, 'id').toLowerCase();
           scoreRec.innerHTML = currentLang === 'en'
-            ? `Detected ${compCount} competitor SPKLUs around your location. However, with massive prospective EV density (~${evCount.toLocaleString('en-US')} units), the market share remains highly lucrative with a strategic placement and pricing strategy. **Claim your regional partnership quota now** in the registration form below.`
-            : `Terdeteksi ${compCount} SPKLU kompetitor di sekitar lokasi Anda. Namun, dengan densitas kepemilikan EV prospektif yang melimpah (~${evCount.toLocaleString('id-ID')} unit), pangsa pasar tetap sangat menguntungkan dengan penempatan strategis dan harga kompetitif. **Klaim kuota kemitraan wilayah Anda sekarang** pada form registrasi di bawah.`;
+            ? `Detected ${compCount} competitor SPKLUs around your location. However, with an ${evDescEn} prospective EV density, the market share remains highly lucrative with a strategic placement and pricing strategy. **Claim your regional partnership quota now** in the registration form below.`
+            : `Terdeteksi ${compCount} SPKLU kompetitor di sekitar lokasi Anda. Namun, dengan densitas kepemilikan EV prospektif yang ${evDescId}, pangsa pasar tetap sangat menguntungkan dengan penempatan strategis dan harga kompetitif. **Klaim kuota kemitraan wilayah Anda sekarang** pada form registrasi di bawah.`;
         }
 
         if (window.tcsUpdateSaaSReport) {
@@ -2272,8 +2293,8 @@ out center;`;
               </h3>
               <p style="font-size: 12px; color: #64748b; line-height: 1.5; margin-top: 4px; max-width: 480px;">
                 ${score >= 93 
-                  ? (isEn ? `Excellent grid capability, minimal competitor saturation, and massive regional EV ownership density (~${evCount.toLocaleString('en-US')} units). Highly recommended for dynamic commercial development.`
-                           : `Kapasitas grid listrik unggulan, saturasi kompetitor minimal, dan densitas kepemilikan EV regional melimpah (~${evCount.toLocaleString('id-ID')} unit). Sangat direkomendasikan untuk pengembangan komersial dinamis.`)
+                  ? (isEn ? `Excellent grid capability, minimal competitor saturation, and an ${getEvDescription(evCount, 'en').toLowerCase()} regional EV ownership density. Highly recommended for dynamic commercial development.`
+                           : `Kapasitas grid listrik unggulan, saturasi kompetitor minimal, dan densitas kepemilikan EV regional yang ${getEvDescription(evCount, 'id').toLowerCase()}. Sangat direkomendasikan untuk pengembangan komersial dinamis.`)
                   : (isEn ? `Highly active EV market with established competitors. Feasible for setup with a focus on premium charging packages and prime retail convenience.`
                            : `Pasar EV yang aktif dengan kompetitor terpetakan. Layak dipasang dengan strategi promosi khusus dan integrasi area komersial premium.`)}
               </p>
@@ -2627,14 +2648,16 @@ window.addEventListener('tcsLanguageChanged', (e) => {
   }
 
   if (scoreRec) {
+    const evDescEn = getEvDescription(evCount, 'en').toLowerCase();
+    const evDescId = getEvDescription(evCount, 'id').toLowerCase();
     if (competitorCount <= 2) {
       scoreRec.innerHTML = currentLang === 'en'
-        ? `Your location has a high EV ownership density (~${evCount.toLocaleString('en-US')} units) with moderate competition (${competitorCount} SPKLUs). Supported by strong PLN grid capacity, this site has high monopolization potential. **Claim your regional partnership quota now** in the registration form below before it is taken by another investor.`
-        : `Lokasi Anda berada di wilayah dengan densitas kepemilikan EV tinggi (~${evCount.toLocaleString('id-ID')} unit) dan persaingan moderat (${competitorCount} kompetitor). Dengan pasokan grid PLN yang mumpuni, wilayah ini berpotensi tinggi untuk dimonopoli. **Klaim kuota kemitraan wilayah Anda sekarang** pada form registrasi di bawah sebelum diambil investor lain.`;
+        ? `Your location has an ${evDescEn} EV ownership density with moderate competition (${competitorCount} SPKLUs). Supported by strong PLN grid capacity, this site has high monopolization potential. **Claim your regional partnership quota now** in the registration form below before it is taken by another investor.`
+        : `Lokasi Anda berada di wilayah dengan densitas kepemilikan EV yang ${evDescId} dan persaingan moderat (${competitorCount} kompetitor). Dengan pasokan grid PLN yang mumpuni, wilayah ini berpotensi tinggi untuk dimonopoli. **Klaim kuota kemitraan wilayah Anda sekarang** pada form registrasi di bawah sebelum diambil investor lain.`;
     } else {
       scoreRec.innerHTML = currentLang === 'en'
-        ? `Detected ${competitorCount} competitor SPKLUs around your location. However, with massive prospective EV density (~${evCount.toLocaleString('en-US')} units), the market share remains highly lucrative with a strategic placement and pricing strategy. **Claim your regional partnership quota now** in the registration form below.`
-        : `Terdeteksi ${competitorCount} SPKLU kompetitor di sekitar lokasi Anda. Namun, dengan densitas kepemilikan EV prospektif yang melimpah (~${evCount.toLocaleString('id-ID')} unit), pangsa pasar tetap sangat menguntungkan dengan penempatan strategis dan harga kompetitif. **Klaim kuota kemitraan wilayah Anda sekarang** pada form registrasi di bawah.`;
+        ? `Detected ${competitorCount} competitor SPKLUs around your location. However, with an ${evDescEn} prospective EV density, the market share remains highly lucrative with a strategic placement and pricing strategy. **Claim your regional partnership quota now** in the registration form below.`
+        : `Terdeteksi ${competitorCount} SPKLU kompetitor di sekitar lokasi Anda. Namun, dengan densitas kepemilikan EV prospektif yang ${evDescId}, pangsa pasar tetap sangat menguntungkan dengan penempatan strategis dan harga kompetitif. **Klaim kuota kemitraan wilayah Anda sekarang** pada form registrasi di bawah.`;
     }
   }
 
@@ -2694,14 +2717,15 @@ window.addEventListener('tcsLanguageChanged', (e) => {
               : `Memetakan pusat keramaian: Mall, Perkantoran & Perumahan Premium (Radius ${radKm.toFixed(1)} KM)...`;
           }
 
-          // Inject actual EV registration count dynamically if log_6 is triggered!
+          // Inject qualitative EV density dynamically if log_6 is triggered!
           if (logKey === 'sp_scan_log_6') {
             const count = window.tcsScannerState.evCount || 1200;
+            const evDesc = getEvDescription(count, currentLang);
             const compCount = window.tcsScannerState.realCompetitors ? window.tcsScannerState.realCompetitors.length : 0;
             if (currentLang === 'en') {
-              text = `EV DENSITY & COMPETITORS OK: Mapped ~${count.toLocaleString('en-US')} registered EVs & ${compCount} competitor SPKLUs (Google Maps 'spklu terdekat' scan).`;
+              text = `EV DENSITY & COMPETITORS OK: EV ownership density is ${evDesc} & mapped ${compCount} competitor SPKLUs (Google Maps 'spklu terdekat' scan).`;
             } else {
-              text = `DENSITAS EV & AUDIT KOMPETITOR OK: Terdeteksi ~${count.toLocaleString('id-ID')} unit EV & ${compCount} SPKLU kompetitor (Pindai Google Maps 'spklu terdekat').`;
+              text = `DENSITAS EV & AUDIT KOMPETITOR OK: Kepadatan adopsi EV tergolong ${evDesc} & terdeteksi ${compCount} SPKLU kompetitor (Pindai Google Maps 'spklu terdekat').`;
             }
           }
 
