@@ -1199,8 +1199,9 @@ function initFeasibilityScanner() {
         window.tcsScannerState.markerGroup.addLayer(marker);
       });
 
-      // Fallback in case no malls or offices are found to maintain premium visual
-      if (malls.length === 0 && offices.length === 0 && hubs.length === 0) {
+      // Fallback in case no malls or offices are found to maintain premium visual (only if location is feasible)
+      const scanScore = window.tcsScannerState.score || 95;
+      if (malls.length === 0 && offices.length === 0 && hubs.length === 0 && scanScore >= 65) {
         const mockMall = L.marker([lat - 0.0035, lon + 0.0041], { icon: createGlowIcon('#00e575') });
         mockMall.bindPopup(`<div style="color:#030712; font-weight:bold; font-size:11px; margin-bottom:4px;">🛍️ Commercial Mall Area</div><div style="color:#00e575; font-size:10px; font-weight:bold;">Shopping Mall & Retail</div>`);
         window.tcsScannerState.markerGroup.addLayer(mockMall);
@@ -1431,21 +1432,8 @@ function initFeasibilityScanner() {
         const evCount = estimateEvCount(resolvedAddress);
         window.tcsScannerState.evCount = evCount;
 
-        // Generate Prospect Hotspots dynamically based on coordinate offsets
-        window.tcsScannerState.evHotspots = [
-          {
-            lat: lat + 0.0028,
-            lon: lon - 0.0032,
-            emoji: '🛍️',
-            name: localStorage.getItem('tcs_lang') === 'en' ? 'Commercial EV Demand Hotspot' : 'Hotspot EV Komersial (Trafik Tinggi)'
-          },
-          {
-            lat: lat - 0.0025,
-            lon: lon + 0.0039,
-            emoji: '🏡',
-            name: localStorage.getItem('tcs_lang') === 'en' ? 'Residential EV Demand Hotspot' : 'Hotspot EV Residensial (Daya Beli Tinggi)'
-          }
-        ];
+        // Initialize Prospect Hotspots as empty, to be dynamically populated after geocoding results
+        window.tcsScannerState.evHotspots = [];
 
         // Fetch real-world malls, building=retail, hotels, attractions, hospitals, rest areas, and competitor SPKLUs via Overpass API
         const overpassQuery = `[out:json][timeout:15];
@@ -1485,12 +1473,16 @@ out center;`;
               const name = tags.name || tags.brand || "";
               const lowerName = name.toLowerCase();
 
-              // Filter out administrative/local government offices
+              // Filter out administrative/local government offices, cemeteries, graveyards, and slums
               if (tags.office === 'government' || tags.office === 'administrative' || tags.office === 'association') return;
+              if (tags.landuse === 'cemetery' || tags.amenity === 'grave_yard' || tags.cemetery || tags.grave_yard) return;
               if (lowerName.includes('rt') || lowerName.includes('rw') || lowerName.includes('kelurahan') || 
                   lowerName.includes('kecamatan') || lowerName.includes('balai') || lowerName.includes('kantor desa') || 
                   lowerName.includes('posko') || lowerName.includes('kua') || lowerName.includes('pos yandu') ||
-                  lowerName.includes('puskesmas') || lowerName.includes('pkk') || lowerName.includes('lurah')) {
+                  lowerName.includes('puskesmas') || lowerName.includes('pkk') || lowerName.includes('lurah') ||
+                  lowerName.includes('tpu') || lowerName.includes('kuburan') || lowerName.includes('pemakaman') || 
+                  lowerName.includes('cemetery') || lowerName.includes('makam') || lowerName.includes('grave') ||
+                  lowerName.includes('tomb') || lowerName.includes('slum') || lowerName.includes('kumuh')) {
                 return;
               }
 
@@ -1608,41 +1600,72 @@ out center;`;
             window.tcsScannerState.realHubs = realHubs;
             window.tcsScannerState.realTraffic = realTraffic;
 
-            // Generate premium residential complexes with small offsets around the property coordinates
-            window.tcsScannerState.premiumResidential = [
-              {
-                lat: lat + 0.0042,
-                lon: lon + 0.0035,
-                name: localStorage.getItem('tcs_lang') === 'en' ? 'Premium Residential Zone (High Purchasing Power)' : 'Zona Residensial Premium (Daya Beli Tinggi)'
-              },
-              {
-                lat: lat - 0.0038,
-                lon: lon - 0.0048,
-                name: localStorage.getItem('tcs_lang') === 'en' ? 'Elite Housing Complex (High Dwell-Time Potential)' : 'Kompleks Perumahan Elit (Daya Beli Tinggi)'
-              }
-            ];
-
-            // Deterministic premium A-grade score
-            let score = 95;
-            if (realCompetitors.length === 1) score = 95;
-            else if (realCompetitors.length === 2) score = 94;
-            else if (realCompetitors.length > 2) score = 91;
-
+            // Highly robust, realistic geographic scoring algorithm based on actual geocoding results
+            let score = 50; // Base score (represents typical residential/rural potential)
+            score += realMalls.length * 8; // Malls add massive value
+            score += realOffices.length * 5; // Offices add high value
+            score += realHubs.length * 4; // Hotels/Stations add good value
+            score += realTraffic.length * 6; // Rest areas add high value
+            score -= realCompetitors.length * 7; // Deduct points for competitors (market saturation)
+            
+            // Limit score between 25% and 98%
+            score = Math.max(25, Math.min(98, score));
             window.tcsScannerState.score = score;
             scoreText.innerText = score + '%';
 
-            // Set appropriate status and recommendation text
+            // Generate premium residential & hotspots dynamically ONLY if location is actually feasible
             const currentLang = localStorage.getItem('tcs_lang') || 'id';
-            if (score >= 93) {
+            if (score >= 65) {
+              window.tcsScannerState.premiumResidential = [
+                {
+                  lat: lat + 0.0042,
+                  lon: lon + 0.0035,
+                  name: currentLang === 'en' ? 'Premium Residential Zone (High Purchasing Power)' : 'Zona Residensial Premium (Daya Beli Tinggi)'
+                },
+                {
+                  lat: lat - 0.0038,
+                  lon: lon - 0.0048,
+                  name: currentLang === 'en' ? 'Elite Housing Complex (High Dwell-Time Potential)' : 'Kompleks Perumahan Elit (Daya Beli Tinggi)'
+                }
+              ];
+              
+              window.tcsScannerState.evHotspots = [
+                {
+                  lat: lat + 0.0028,
+                  lon: lon - 0.0032,
+                  emoji: '🛍️',
+                  name: currentLang === 'en' ? 'Commercial EV Demand Hotspot' : 'Hotspot EV Komersial (Trafik Tinggi)'
+                },
+                {
+                  lat: lat - 0.0025,
+                  lon: lon + 0.0039,
+                  emoji: '🏡',
+                  name: currentLang === 'en' ? 'Residential EV Demand Hotspot' : 'Hotspot EV Residensial (Daya Beli Tinggi)'
+                }
+              ];
+            } else {
+              window.tcsScannerState.premiumResidential = [];
+              window.tcsScannerState.evHotspots = [];
+            }
+
+            // Set appropriate status and recommendation text
+            if (score >= 85) {
               scoreStatus.innerText = currentLang === 'en' ? 'HIGHLY FEASIBLE (HI-POTENTIAL)' : 'SANGAT LAYAK (HI-POTENTIAL)';
               scoreStatus.style.color = 'var(--primary-lime)';
-            } else {
+            } else if (score >= 65) {
               scoreStatus.innerText = currentLang === 'en' ? 'FEASIBLE WITH NOTES (MODERATE)' : 'LAYAK DENGAN CATATAN (MODERATE)';
               scoreStatus.style.color = 'var(--electric-amber)';
+            } else {
+              scoreStatus.innerText = currentLang === 'en' ? 'NOT FEASIBLE (LOW POTENTIAL)' : 'TIDAK LAYAK (LOW POTENTIAL)';
+              scoreStatus.style.color = '#ef4444';
             }
 
             const compCount = realCompetitors.length;
-            if (compCount <= 2) {
+            if (score < 65) {
+              scoreRec.innerHTML = currentLang === 'en'
+                ? `Detected low commercial amenities and office hubs around this location. Feasibility score is low (~${score}%). Developing a high-power commercial SPKLU is not recommended. However, you can consider smaller private home-charging setups or contact our MEP team for custom grid solutions.`
+                : `Terdeteksi densitas amenitas komersial dan perkantoran yang rendah di sekitar lokasi ini. Skor kelayakan rendah (~${score}%). Pembangunan SPKLU komersial tidak direkomendasikan untuk wilayah ini. Namun, Anda dapat mempertimbangkan pemasangan home-charging privat atau berkonsultasi dengan tim MEP kami.`;
+            } else if (compCount <= 2) {
               scoreRec.innerHTML = currentLang === 'en'
                 ? `Your location has a high EV ownership density (~${evCount.toLocaleString('en-US')} units) with moderate competition (${compCount} SPKLUs). Supported by strong PLN grid capacity, this site has high monopolization potential. **Claim your regional partnership quota now** in the registration form below before it is taken by another investor.`
                 : `Lokasi Anda berada di wilayah dengan densitas kepemilikan EV tinggi (~${evCount.toLocaleString('id-ID')} unit) dan persaingan moderat (${compCount} kompetitor). Dengan pasokan grid PLN yang mumpuni, wilayah ini berpotensi tinggi untuk dimonopoli. **Klaim kuota kemitraan wilayah Anda sekarang** pada form registrasi di bawah sebelum diambil investor lain.`;
