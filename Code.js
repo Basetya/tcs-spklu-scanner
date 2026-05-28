@@ -370,33 +370,75 @@ function submitSpkluLead(leadData) {
  * 
  * @return {string} Passcode string
  */
-function getSpkluPasscode() {
+/**
+ * Retrieves the contact settings (WhatsApp, Sales WhatsApp, Telephone) from the Settings sheet.
+ * Self-healing: Appends default keys if the Settings sheet is missing them.
+ * 
+ * @return {Object} An object containing the settings values
+ */
+function getTcsContactSettings() {
+  var settings = {
+    SPKLU_PROPOSAL_PASSCODE: "135711",
+    TCS_CONTACT_WHATSAPP: "628111460707",
+    TCS_SALES_WHATSAPP: "628111978888",
+    TCS_CONTACT_TELEPHONE: "021 - 2126 6084"
+  };
+
   try {
     var ss = getTcsSpreadsheet();
-    
     if (ss) {
       var sheet = ss.getSheetByName('Settings');
       if (!sheet) {
+        // Initialize sheet if completely missing
         sheet = ss.insertSheet('Settings');
         sheet.appendRow(['Setting Name', 'Value', 'Description']);
-        sheet.appendRow(['SPKLU_PROPOSAL_PASSCODE', '135711', 'Passcode for SPKLU Feasibility PDF Downloads (Editable)']);
-        
-        // Style header row
+        sheet.setFrozenRows(1);
         var headerRange = sheet.getRange(1, 1, 1, 3);
         headerRange.setFontWeight('bold');
         headerRange.setBackground('#0f172a');
         headerRange.setFontColor('#ffffff');
-        sheet.setFrozenRows(1);
       }
-      
+
       var data = sheet.getDataRange().getValues();
+      var sheetKeys = {};
       for (var i = 1; i < data.length; i++) {
-        if (data[i][0] === 'SPKLU_PROPOSAL_PASSCODE') {
-          return String(data[i][1]).trim();
+        if (data[i][0]) {
+          sheetKeys[data[i][0]] = { value: String(data[i][1]).trim(), rowIndex: i + 1 };
         }
       }
+
+      // Self-heal/ensure all default settings exist in the Sheet
+      var defaults = [
+        { key: 'SPKLU_PROPOSAL_PASSCODE', val: '135711', desc: 'Passcode for SPKLU Feasibility PDF Downloads (Editable)' },
+        { key: 'TCS_CONTACT_WHATSAPP', val: '628111460707', desc: 'General TCS WhatsApp (digits only, e.g. 628111460707)' },
+        { key: 'TCS_SALES_WHATSAPP', val: '628111978888', desc: 'TCS Sales WhatsApp for passcode requests (digits only, e.g. 628111978888)' },
+        { key: 'TCS_CONTACT_TELEPHONE', val: '021 - 2126 6084', desc: 'TCS Office Telephone (e.g. 021 - 2126 6084)' }
+      ];
+
+      defaults.forEach(function(item) {
+        if (sheetKeys.hasOwnProperty(item.key)) {
+          settings[item.key] = sheetKeys[item.key].value;
+        } else {
+          sheet.appendRow([item.key, item.val, item.desc]);
+          settings[item.key] = item.val;
+        }
+      });
     }
-    return "135711"; // Fallback to default
+  } catch (err) {
+    console.warn("getTcsContactSettings failed: " + err.message);
+  }
+
+  return settings;
+}
+
+/**
+ * Retrieves the passcode for SPKLU Business Proposal downloads.
+ * 
+ * @return {string} Passcode string
+ */
+function getSpkluPasscode() {
+  try {
+    return getTcsContactSettings().SPKLU_PROPOSAL_PASSCODE;
   } catch (err) {
     console.warn("getSpkluPasscode failed: " + err.message);
     return "135711"; // Absolute fallback
@@ -440,6 +482,8 @@ function doPost(e) {
     } else if (action === "checkSpkluPasscode") {
       var isValid = checkSpkluPasscode(data.passcode);
       responseData = { success: true, valid: isValid };
+    } else if (action === "getContactSettings") {
+      responseData = { success: true, settings: getTcsContactSettings() };
     }
     
     return ContentService.createTextOutput(JSON.stringify(responseData))

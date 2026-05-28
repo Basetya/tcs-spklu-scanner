@@ -277,7 +277,8 @@ Catatan Tambahan: ${leadData.notes || 'Tidak ada catatan.'}
 
 Mohon proposal kemitraan SPKLU dapat diproses dan dijadwalkan survei lokasi. Terima kasih!`;
     
-    const waUrl = `https://wa.me/628111460707?text=${encodeURIComponent(waText)}`;
+    const activeWa = window.tcsContactSettings ? window.tcsContactSettings.TCS_CONTACT_WHATSAPP : "628111460707";
+    const waUrl = `https://wa.me/${activeWa}?text=${encodeURIComponent(waText)}`;
     
     const waBtn = document.getElementById('success-wa-btn');
     if (waBtn) {
@@ -314,7 +315,8 @@ function onFormFailure(error) {
       `<span style="color:#ff4d4d;">Terjadi gangguan transmisi server: ${error.message}</span><br>Harap klik tombol di bawah untuk langsung berkoordinasi secara manual via WhatsApp.`;
   }
   
-  const waUrl = "https://wa.me/628111460707?text=Halo%20Admin%20TCS%2C%20saya%20mengalami%20kendala%20saat%20mengirim%20form%20kemitraan%20SPKLU%20di%20website.%20Saya%20ingin%20berkonsultasi%20langsung.";
+  const activeWa = window.tcsContactSettings ? window.tcsContactSettings.TCS_CONTACT_WHATSAPP : "628111460707";
+  const waUrl = `https://wa.me/${activeWa}?text=Halo%20Admin%20TCS%2C%20saya%20mengalami%20kendala%20saat%20mengirim%20form%20kemitraan%20SPKLU%20di%20website.%20Saya%20ingin%20berkonsultasi%20langsung.`;
   const waBtn = document.getElementById('success-wa-btn');
   if (waBtn) {
     waBtn.setAttribute('href', waUrl);
@@ -2398,7 +2400,7 @@ out center;`;
               ${isEn ? 'This feasibility analysis confirms high commercial potential. Lock your regional partnership coordinates today before it is secured by a competitor.'
                        : 'Hasil audit spasial membuktikan lokasi Anda memiliki potensi komersial luar biasa. Segera amankan kuota koordinat kemitraan Anda sekarang sebelum diambil kompetitor sejenis.'}
             </p>
-            <a href="https://wa.me/628111978888?text=Halo%20Sales%20TCS%2C%20saya%20sudah%20melakukan%20Scan%20Kelayakan%20Pro%20untuk%20lokasi%20saya%20di%20${encodeURIComponent(targetAddress)}%20dengan%20Skor%20${score}%25.%20Saya%20tertarik%20segera%20bermitra%20untuk%20pemasangan%20${encodeURIComponent(recommendedCharger)}.%20Mohon%20jadwalkan%20survei%20fisik." target="_blank" style="background: #00e575; color: #0f172a; font-family: 'Outfit'; font-weight: 900; font-size: 12.5px; text-decoration: none; padding: 12px 24px; border-radius: 6px; display: inline-block; box-shadow: 0 0 10px rgba(0,229,117,0.4); text-transform: uppercase;">
+            <a href="https://wa.me/${window.tcsContactSettings ? window.tcsContactSettings.TCS_SALES_WHATSAPP : '628111978888'}?text=Halo%20Sales%20TCS%2C%20saya%20sudah%20melakukan%20Scan%20Kelayakan%20Pro%20untuk%20lokasi%20saya%20di%20${encodeURIComponent(targetAddress)}%20dengan%20Skor%20${score}%25.%20Saya%20tertarik%20segera%20bermitra%20untuk%20pemasangan%20${encodeURIComponent(recommendedCharger)}.%20Mohon%20jadwalkan%20survei%20fisik." target="_blank" style="background: #00e575; color: #0f172a; font-family: 'Outfit'; font-weight: 900; font-size: 12.5px; text-decoration: none; padding: 12px 24px; border-radius: 6px; display: inline-block; box-shadow: 0 0 10px rgba(0,229,117,0.4); text-transform: uppercase;">
               ${isEn ? 'JUMPSTART SURVEY VIA WHATSAPP' : 'JADWALKAN SURVEI FISIK VIA WHATSAPP'}
             </a>
           </div>
@@ -2691,6 +2693,47 @@ window.addEventListener('tcsLanguageChanged', (e) => {
     }
   }
 });
+
+// Helper to apply dynamic contact numbers loaded from Sheets
+function applyTcsContactSettings(settings) {
+  if (!settings) return;
+  
+  const waContact = settings.TCS_CONTACT_WHATSAPP || "628111460707";
+  const waSales = settings.TCS_SALES_WHATSAPP || "628111978888";
+
+  // 1. Update all links matching general/sales WhatsApp on spklu page
+  document.querySelectorAll('a').forEach(a => {
+    let href = a.getAttribute('href') || '';
+    if (href.includes('wa.me/628111460707')) {
+      a.setAttribute('href', href.replace('628111460707', waContact));
+    } else if (href.includes('wa.me/628111978888')) {
+      a.setAttribute('href', href.replace('628111978888', waSales));
+    }
+  });
+}
+
+// Start API fetch immediately on script run to minimize visual latency
+if (window.TCS_GAS_WEB_APP_URL) {
+  fetch(window.TCS_GAS_WEB_APP_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "text/plain"
+    },
+    body: JSON.stringify({
+      action: "getContactSettings"
+    })
+  })
+  .then(res => res.json())
+  .then(res => {
+    if (res.success && res.settings) {
+      window.tcsContactSettings = res.settings;
+      applyTcsContactSettings(res.settings);
+    }
+  })
+  .catch(err => {
+    console.warn("Failed to load contact settings dynamically:", err);
+  });
+}
 
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', startSpkluApp);
