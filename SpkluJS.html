@@ -1494,6 +1494,22 @@ out center;`;
         const realHubs = [];
         const realTraffic = [];
 
+        // Helper to check if two POI names are highly similar (prevents gate/entrance double-counting)
+        const areNamesSimilar = (name1, name2) => {
+          if (!name1 || !name2) return false;
+          const clean = (str) => {
+            return str.toLowerCase()
+              .replace(/mall|mal|plaza|square|lobby|gate|entrance|parkir|parking|drop\s*off|basement|east|west|north|south|barat|timur|utara|selatan/g, "")
+              .replace(/office|gedung|ruko|rukan|kantor|tower|building|complex|kompleks/g, "")
+              .replace(/[^a-z0-9]/g, "")
+              .trim();
+          };
+          const c1 = clean(name1);
+          const c2 = clean(name2);
+          if (!c1 || !c2) return false;
+          return c1 === c2 || c1.includes(c2) || c2.includes(c1);
+        };
+
         elements.forEach(el => {
           const elLat = el.lat || (el.center ? el.center.lat : null);
           const elLon = el.lon || (el.center ? el.center.lon : null);
@@ -1520,7 +1536,11 @@ out center;`;
           const isMallByName = lowerName.match(/mall|mal|plaza|square|city|walk|gallery|junction|center|centre|town|avenue|itc/i);
 
           if (tags.amenity === 'charging_station') {
-            const isDuplicate = realCompetitors.some(c => Math.abs(c.lat - elLat) < 0.0001 && Math.abs(c.lon - elLon) < 0.0001);
+            const isDuplicate = realCompetitors.some(c => {
+              const distanceCheck = Math.abs(c.lat - elLat) < 0.0001 && Math.abs(c.lon - elLon) < 0.0001;
+              const nameCheck = name && c.name && areNamesSimilar(c.name, name);
+              return distanceCheck || nameCheck;
+            });
             if (!isDuplicate) {
               realCompetitors.push({
                 lat: elLat,
@@ -1529,7 +1549,11 @@ out center;`;
               });
             }
           } else if (tags.shop === 'mall' || tags.amenity === 'mall' || (tags.building === 'retail' && isMallByName)) {
-            const isDuplicate = realMalls.some(m => Math.abs(m.lat - elLat) < 0.0002 && Math.abs(m.lon - elLon) < 0.0002);
+            const isDuplicate = realMalls.some(m => {
+              const distanceCheck = Math.abs(m.lat - elLat) < 0.0002 && Math.abs(m.lon - elLon) < 0.0002;
+              const nameCheck = name && m.name && areNamesSimilar(m.name, name);
+              return distanceCheck || nameCheck;
+            });
             if (!isDuplicate) {
               realMalls.push({
                 lat: elLat,
@@ -1538,7 +1562,11 @@ out center;`;
               });
             }
           } else if (tags.highway === 'rest_area' || lowerName.includes('rest area') || lowerName.includes('restarea') || lowerName.includes('toll exit') || lowerName.includes('pintu tol') || lowerName.includes('gerbang tol')) {
-            const isDuplicate = realTraffic.some(t => Math.abs(t.lat - elLat) < 0.0002 && Math.abs(t.lon - elLon) < 0.0002);
+            const isDuplicate = realTraffic.some(t => {
+              const distanceCheck = Math.abs(t.lat - elLat) < 0.0002 && Math.abs(t.lon - elLon) < 0.0002;
+              const nameCheck = name && t.name && areNamesSimilar(t.name, name);
+              return distanceCheck || nameCheck;
+            });
             if (!isDuplicate) {
               realTraffic.push({
                 lat: elLat,
@@ -1548,7 +1576,11 @@ out center;`;
               });
             }
           } else if (tags.building === 'office' || tags.office || tags.building === 'commercial' || tags.amenity === 'office') {
-            const isDuplicate = realOffices.some(o => Math.abs(o.lat - elLat) < 0.0002 && Math.abs(o.lon - elLon) < 0.0002);
+            const isDuplicate = realOffices.some(o => {
+              const distanceCheck = Math.abs(o.lat - elLat) < 0.0002 && Math.abs(o.lon - elLon) < 0.0002;
+              const nameCheck = name && o.name && areNamesSimilar(o.name, name);
+              return distanceCheck || nameCheck;
+            });
             if (!isDuplicate) {
               realOffices.push({
                 lat: elLat,
@@ -1561,7 +1593,11 @@ out center;`;
                             tags.railway === 'station' ? 'station' : 
                             tags.amenity === 'hospital' ? 'hospital' : 'attraction';
             
-            const isDuplicate = realHubs.some(h => Math.abs(h.lat - elLat) < 0.0002 && Math.abs(h.lon - elLon) < 0.0002);
+            const isDuplicate = realHubs.some(h => {
+              const distanceCheck = Math.abs(h.lat - elLat) < 0.0002 && Math.abs(h.lon - elLon) < 0.0002;
+              const nameCheck = name && h.name && areNamesSimilar(h.name, name);
+              return distanceCheck || nameCheck;
+            });
             if (!isDuplicate) {
               realHubs.push({
                 lat: elLat,
