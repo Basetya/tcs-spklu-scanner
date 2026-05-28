@@ -373,10 +373,10 @@
                 <label class="form-label" style="text-transform: uppercase; font-size: 12px; letter-spacing: 0.05em; color: var(--text-secondary); margin: 0;" data-translate="sp_sim_label_session">JUMLAH TRANSAKSI (SESI / HARI)</label>
                 <span id="sessionValue" style="background: rgba(0, 229, 117, 0.1); border: 1px solid rgba(0, 229, 117, 0.2); color: var(--primary-lime); font-size: 12px; font-weight: 800; padding: 4px 12px; border-radius: 50px;">15 Sesi</span>
               </div>
-              <input id="sessionSlider" type="range" min="5" max="50" step="1" value="15" class="form-input slider-input" style="padding: 0; height: 8px; cursor: pointer;">
+              <input id="sessionSlider" type="range" min="2" max="8" step="1" value="5" class="form-input slider-input" style="padding: 0; height: 8px; cursor: pointer;">
               <div class="slider-range-labels" style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); font-weight: 600; margin-top: 8px;">
-                <span data-translate="sp_sim_sessions_conservative">5 Sesi (Konservatif)</span>
-                <span data-translate="sp_sim_sessions_crowded">50 Sesi (Sangat Padat)</span>
+                <span id="sliderMinLabel" data-translate="sp_sim_sessions_conservative">2 Sesi (Minimum Nozzle AC)</span>
+                <span id="sliderMaxLabel" data-translate="sp_sim_sessions_crowded">8 Sesi (Maksimal Nozzle AC)</span>
               </div>
             </div>
 
@@ -537,14 +537,25 @@
                   <div id="saasRequiredGridPower" style="font-family: 'Outfit'; font-size: 14px; font-weight: 800; color: #fff; margin-top: 6px;">22 kVA (Standard Connection)</div>
                 </div>
                 <!-- Est Sessions/Day -->
-                <div style="background: rgba(3, 7, 18, 0.4); border: 1px solid rgba(255,255,255,0.03); border-radius: var(--border-radius-sm); padding: 14px; text-align: center;">
-                  <span style="font-size: 9px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;" id="saasSessionsPerDayLabel">Projected Sessions/Day</span>
-                  <div id="saasSessionsPerDay" style="font-family: 'Outfit'; font-size: 14px; font-weight: 800; color: #fff; margin-top: 6px;">18 Sessions / Day</div>
                 </div>
-                <!-- Payback BEP -->
-                <div style="background: rgba(3, 7, 18, 0.4); border: 1px solid rgba(255,255,255,0.03); border-radius: var(--border-radius-sm); padding: 14px; text-align: center; border-color: rgba(0, 229, 117, 0.15); box-shadow: 0 0 10px rgba(0, 229, 117, 0.02);">
-                  <span style="font-size: 9px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;" id="saasPaybackPeriodLabel">Projected Payback (BEP)</span>
-                  <div id="saasPaybackPeriod" style="font-family: 'Outfit'; font-size: 16px; font-weight: 900; color: var(--primary-lime); margin-top: 4px; text-shadow: 0 0 8px var(--primary-lime-glow);">2.3 Years</div>
+              </div>
+
+              <!-- Operational Specs Sub-Grid -->
+              <div id="saasOperationalGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; border-top: 1px dashed rgba(255,255,255,0.05); padding-top: 15px; margin-top: 5px;">
+                <!-- Average Charge Duration -->
+                <div style="background: rgba(15, 23, 42, 0.2); border: 1px solid rgba(255,255,255,0.02); border-radius: var(--border-radius-sm); padding: 10px; text-align: center;">
+                  <span style="font-size: 8px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;" id="saasChargeDurationLabel">Est. Charge Duration</span>
+                  <div id="saasChargeDuration" style="font-family: 'Outfit'; font-size: 11.5px; font-weight: 700; color: #fff; margin-top: 4px;">180 Mins (AC)</div>
+                </div>
+                <!-- Competitor Impact Factor -->
+                <div style="background: rgba(15, 23, 42, 0.2); border: 1px solid rgba(255,255,255,0.02); border-radius: var(--border-radius-sm); padding: 10px; text-align: center;">
+                  <span style="font-size: 8px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;" id="saasCompImpactLabel">Market Share / Competition</span>
+                  <div id="saasCompImpact" style="font-family: 'Outfit'; font-size: 11.5px; font-weight: 700; color: #fff; margin-top: 4px;">100% (No Competitors)</div>
+                </div>
+                <!-- Surrounding SPKLU Capacity -->
+                <div style="background: rgba(15, 23, 42, 0.2); border: 1px solid rgba(255,255,255,0.02); border-radius: var(--border-radius-sm); padding: 10px; text-align: center;">
+                  <span style="font-size: 8px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;" id="saasSurroundingCapLabel">Surrounding SPKLU Cap</span>
+                  <div id="saasSurroundingCap" style="font-family: 'Outfit'; font-size: 11.5px; font-weight: 700; color: #fff; margin-top: 4px;">0 Sessions / Day</div>
                 </div>
               </div>
               
@@ -552,6 +563,23 @@
               <div id="saasConsultantNarrative" style="background: rgba(15, 23, 42, 0.3); border-left: 3px solid #00f2fe; padding: 12px 16px; border-radius: 0 var(--border-radius-sm) var(--border-radius-sm) 0; font-size: 11.5px; color: var(--text-secondary); line-height: 1.5; font-style: italic;">
                 "Dwell-time tinggi di zona perkantoran dan hunian premium mendukung pengisian daya AC Charger 22 kW agar kendaraan dapat terisi penuh selagi pemiliknya bekerja atau beristirahat, meminimalisir beban grid PLN lokal."
               </div>
+
+              <!-- Disclaimer -->
+              <div id="saasReportDisclaimer" style="font-size: 10px; color: var(--text-muted); line-height: 1.5; font-style: italic; border-top: 1px solid rgba(255,255,255,0.03); padding-top: 10px; margin-top: 5px;">
+                * Disclaimer: Analisis ini merupakan pemindaian cepat potensi peluang bisnis awal (Quick Scan Business Opportunity). Kelayakan final wajib dihitung secara komprehensif dengan memasukkan parameter riil lapangan yang lebih komplit (kapasitas gardu PLN lokal, skema sewa lahan fisik, dan kurva adopsi EV lokal).
+              </div>
+
+              <!-- Operational Footnotes Block -->
+              <div id="saasReportFootnotes" style="font-size: 9.5px; color: var(--text-muted); line-height: 1.5; border-top: 1px dashed rgba(255,255,255,0.04); padding-top: 10px; margin-top: 5px; display: flex; flex-direction: column; gap: 4px;">
+                <strong style="color: var(--text-secondary);" id="saasFootnotesHeader">Catatan & Batasan Operasional:</strong>
+                <ul style="margin: 0; padding-left: 14px; display: flex; flex-direction: column; gap: 3px; list-style-type: disc;">
+                  <li id="fnMallHours">Operasional terbatas (misal: Mall 10.00 - 24.00) dapat memotong perputaran sesi hingga 30% dibanding Rest Area 24 jam.</li>
+                  <li id="fnNozzleCap">Kapasitas 1 nozzle terbatas durasi isi: AC (~180 m, maks 8 sesi/hari) vs DC (~45 m, maks 24 sesi/hari).</li>
+                  <li id="fnCompImpact">Saturasi kompetitor di sekitar radius pemindaian akan mendilusi pangsa pasar harian hingga 60%.</li>
+                  <li id="fnMepGrid">Estimasi CAPEX belum mencakup biaya khusus pemutakhiran gardu transformer PLN atau penarikan kabel jarak jauh.</li>
+                </ul>
+              </div>
+            </div>
             </div>
           </div>
         </div>

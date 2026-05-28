@@ -731,7 +731,43 @@ function initSimulator() {
     };
   }
 
+  function updateSliderConstraints() {
+    const isEn = (localStorage.getItem('tcs_lang') || 'id') === 'en';
+    const sliderMinLabel = document.getElementById('sliderMinLabel');
+    const sliderMaxLabel = document.getElementById('sliderMaxLabel');
+
+    if (currentScenario === 'AC') {
+      sessionSlider.min = 2;
+      sessionSlider.max = 8;
+      if (parseInt(sessionSlider.value) > 8) sessionSlider.value = 5; // Snap back to highly realistic peak AC sessions
+      if (parseInt(sessionSlider.value) < 2) sessionSlider.value = 2;
+
+      if (sliderMinLabel) {
+        sliderMinLabel.innerText = isEn ? '2 Sessions (Min AC Nozzle)' : '2 Sesi (Minimum Nozzle AC)';
+      }
+      if (sliderMaxLabel) {
+        sliderMaxLabel.innerText = isEn ? '8 Sessions (Max AC Nozzle)' : '8 Sesi (Maksimal Nozzle AC)';
+      }
+    } else {
+      sessionSlider.min = 6;
+      sessionSlider.max = 24;
+      // If we switched from AC and value was at maximum (8), we can snap to a nice default for DC (like 12)
+      if (parseInt(sessionSlider.value) < 6 || parseInt(sessionSlider.value) === 8) {
+        sessionSlider.value = 12;
+      }
+      if (parseInt(sessionSlider.value) > 24) sessionSlider.value = 24;
+
+      if (sliderMinLabel) {
+        sliderMinLabel.innerText = isEn ? '6 Sessions (Min DC Nozzle)' : '6 Sesi (Minimum Nozzle DC)';
+      }
+      if (sliderMaxLabel) {
+        sliderMaxLabel.innerText = isEn ? '24 Sessions (Max DC Nozzle)' : '24 Sesi (Maksimal Nozzle DC)';
+      }
+    }
+  }
+
   function updateSimulation() {
+    updateSliderConstraints();
     let dailySessions = parseInt(sessionSlider.value);
     let data = getFinancials(currentScenario, dailySessions);
     const currentLang = localStorage.getItem('tcs_lang') || 'id';
@@ -1015,31 +1051,54 @@ function initFeasibilityScanner() {
     const labelPayback = document.getElementById('saasPaybackPeriodLabel');
     if (labelPayback) labelPayback.innerText = isEn ? 'Projected Payback (BEP)' : 'Proyeksi PBP (BEP)';
 
+    // New Operational Spec Labels
+    const labelChargeDuration = document.getElementById('saasChargeDurationLabel');
+    if (labelChargeDuration) labelChargeDuration.innerText = isEn ? 'Est. Charge Duration' : 'Asumsi Lama Charge';
+
+    const labelCompImpact = document.getElementById('saasCompImpactLabel');
+    if (labelCompImpact) labelCompImpact.innerText = isEn ? 'Market Share / Competition' : 'Pangsa Pasar / Kompetisi';
+
+    const labelSurroundingCap = document.getElementById('saasSurroundingCapLabel');
+    if (labelSurroundingCap) labelSurroundingCap.innerText = isEn ? 'Surrounding SPKLU Cap' : 'Kapasitas SPKLU Sekitar';
+
     const evCount = window.tcsScannerState ? window.tcsScannerState.evCount || 1200 : 1200;
     const mallsCount = window.tcsScannerState && window.tcsScannerState.realMalls ? window.tcsScannerState.realMalls.length : 0;
     const officesCount = window.tcsScannerState && window.tcsScannerState.realOffices ? window.tcsScannerState.realOffices.length : 0;
     const hubsCount = window.tcsScannerState && window.tcsScannerState.realHubs ? window.tcsScannerState.realHubs.length : 0;
     const trafficCount = window.tcsScannerState && window.tcsScannerState.realTraffic ? window.tcsScannerState.realTraffic.length : 0;
+    const compCount = window.tcsScannerState && window.tcsScannerState.realCompetitors ? window.tcsScannerState.realCompetitors.length : 0;
 
     const transitHubsCount = trafficCount + (window.tcsScannerState && window.tcsScannerState.realHubs ? window.tcsScannerState.realHubs.filter(h => h.type === 'station').length : 0);
     const residentialCount = 2;
     const isAcHeavy = (officesCount + residentialCount) > (mallsCount + transitHubsCount);
+
+    // Heuristics: Competitor reduction factor
+    const compFactor = 1 / (1 + (compCount * 0.15));
 
     let recommendedChargerText = "";
     let requiredGridPowerText = "";
     let sessionsCount = 0;
     let bepYears = 0.0;
     let narrativeText = "";
+    let chargeDurationText = "";
+    let compImpactText = "";
+    let surroundingCapText = "";
 
-    sessionsCount = Math.round((evCount * 0.002) + (mallsCount * 2.5) + (officesCount * 1.8) + (hubsCount * 1.2) + (trafficCount * 3.2));
-    sessionsCount = Math.max(8, Math.min(48, sessionsCount));
+    const rawSessionsCount = (evCount * 0.002) + (mallsCount * 2.5) + (officesCount * 1.8) + (hubsCount * 1.2) + (trafficCount * 3.2);
+    sessionsCount = Math.round(rawSessionsCount * compFactor);
 
     if (isAcHeavy) {
       recommendedChargerText = isEn ? 'AC Charger (22 kW)' : 'AC Charger (22 kW)';
       requiredGridPowerText = isEn ? '24 kVA (Standard Connection)' : '24 kVA (Koneksi Standar)';
+      
+      // AC Nozzle capacity constraints: max 8 sessions per day, minimum floor of 2 sessions
+      sessionsCount = Math.max(2, Math.min(8, sessionsCount));
+      
       const annualNetAC = sessionsCount * 18000 * 365;
       bepYears = 150000000 / annualNetAC;
-      bepYears = Math.max(1.2, Math.min(4.2, parseFloat(bepYears.toFixed(1))));
+      bepYears = Math.max(1.2, Math.min(8.5, parseFloat(bepYears.toFixed(1))));
+
+      chargeDurationText = isEn ? '180 Mins (AC)' : '180 Menit (AC)';
 
       narrativeText = isEn 
         ? `"High dwell-time in office zones and premium residential areas supports AC Charging (22 kW), allowing vehicles to fully charge while owners work or rest, minimizing local grid load."`
@@ -1047,13 +1106,34 @@ function initFeasibilityScanner() {
     } else {
       recommendedChargerText = isEn ? 'DC Fast Charger (50 kW)' : 'DC Fast Charger (50 kW)';
       requiredGridPowerText = isEn ? '80 kVA (Fast-Charging Connection)' : '80 kVA (Koneksi Fast-Charging)';
+      
+      // DC Nozzle capacity constraints: max 24 sessions per day, minimum floor of 6 sessions
+      sessionsCount = Math.max(6, Math.min(24, sessionsCount));
+      
       const annualNetDC = sessionsCount * 48000 * 365;
       bepYears = 850000000 / annualNetDC;
-      bepYears = Math.max(1.8, Math.min(5.2, parseFloat(bepYears.toFixed(1))));
+      bepYears = Math.max(1.8, Math.min(9.5, parseFloat(bepYears.toFixed(1))));
+
+      chargeDurationText = isEn ? '45 Mins (Fast / DC)' : '45 Menit (Cepat / DC)';
 
       narrativeText = isEn
         ? `"Dynamic commercial traffic (Mall/Plaza/Hub) and transit hubs require rapid DC Fast Charging (50 kW, <1 hour dwell time) to optimize session turnover and maximize daily commercial revenue."`
         : `"Trafik komersial yang dinamis (Mall/Plaza/Hub) dan hub transit memerlukan pengisian daya cepat DC Fast Charging 50 kW (durasi pengisian <1 jam), mengoptimalkan perputaran sesi charger dan memaksimalkan pendapatan per hari."`;
+    }
+
+    // Set Competitor Impact and Surrounding combined capacity values
+    if (compCount === 0) {
+      compImpactText = isEn ? '100% (No Competitors)' : '100% (Tanpa Kompetitor)';
+      surroundingCapText = isEn ? '0 Sessions / Day' : '0 Sesi / Hari';
+    } else {
+      compImpactText = isEn 
+        ? `${Math.round(compFactor * 100)}% (${compCount} SPKLUs Mapped)` 
+        : `${Math.round(compFactor * 100)}% (${compCount} SPKLU Terdeteksi)`;
+      
+      const surroundingSess = compCount * (isAcHeavy ? 8 : 24);
+      surroundingCapText = isEn 
+        ? `${surroundingSess} Sessions / Day` 
+        : `${surroundingSess} Sesi / Hari`;
     }
 
     const elRecommended = document.getElementById('saasRecommendedCharger');
@@ -1070,6 +1150,57 @@ function initFeasibilityScanner() {
 
     const elNarrative = document.getElementById('saasConsultantNarrative');
     if (elNarrative) elNarrative.innerHTML = narrativeText;
+
+    // Set newly added elements
+    const elChargeDuration = document.getElementById('saasChargeDuration');
+    if (elChargeDuration) elChargeDuration.innerText = chargeDurationText;
+
+    const elCompImpact = document.getElementById('saasCompImpact');
+    if (elCompImpact) elCompImpact.innerText = compImpactText;
+
+    const elSurroundingCap = document.getElementById('saasSurroundingCap');
+    if (elSurroundingCap) elSurroundingCap.innerText = surroundingCapText;
+
+    // Translate Disclaimer and Footnotes
+    const elDisclaimer = document.getElementById('saasReportDisclaimer');
+    if (elDisclaimer) {
+      elDisclaimer.innerText = isEn
+        ? '* Disclaimer: This dynamic analysis is a Quick Scan Business Opportunity. Final operational setup must be preceded by comprehensive engineering checks (PLN grid capacity, physical lease contracts, and real EV growth curves).'
+        : '* Disclaimer: Analisis ini merupakan pemindaian cepat potensi peluang bisnis awal (Quick Scan Business Opportunity). Kelayakan final wajib dihitung secara komprehensif dengan memasukkan parameter riil lapangan yang lebih komplit (kapasitas gardu PLN lokal, skema sewa lahan fisik, dan kurva adopsi EV lokal).';
+    }
+
+    const elFootnotesHeader = document.getElementById('saasFootnotesHeader');
+    if (elFootnotesHeader) {
+      elFootnotesHeader.innerText = isEn ? 'Operational Notes & Limitations:' : 'Catatan & Batasan Operasional:';
+    }
+
+    const elFnMallHours = document.getElementById('fnMallHours');
+    if (elFnMallHours) {
+      elFnMallHours.innerText = isEn
+        ? 'Restricted operating hours (e.g., Malls 10:00 - 24:00) can cut session turnover by up to 30% compared to 24-hour Rest Areas.'
+        : 'Operasional terbatas (misal: Mall 10.00 - 24.00) dapat memotong perputaran sesi hingga 30% dibanding Rest Area 24 jam.';
+    }
+
+    const elFnNozzleCap = document.getElementById('fnNozzleCap');
+    if (elFnNozzleCap) {
+      elFnNozzleCap.innerText = isEn
+        ? 'Single nozzle capacity limits: AC (~180 mins charge, max 8 sessions/day) vs DC (~45 mins, max 24 sessions/day).'
+        : 'Kapasitas 1 nozzle terbatas durasi isi: AC (~180 m, maks 8 sesi/hari) vs DC (~45 m, maks 24 sesi/hari).';
+    }
+
+    const elFnCompImpact = document.getElementById('fnCompImpact');
+    if (elFnCompImpact) {
+      elFnCompImpact.innerText = isEn
+        ? 'Competitor presence in the scan radius dilutes market share, reducing projected daily sessions by up to 60%.'
+        : 'Saturasi kompetitor di sekitar radius pemindaian akan mendilusi pangsa pasar harian hingga 60%.';
+    }
+
+    const elFnMepGrid = document.getElementById('fnMepGrid');
+    if (elFnMepGrid) {
+      elFnMepGrid.innerText = isEn
+        ? 'CAPEX projection does not include custom PLN substation transformer upgrades or extended long-distance wiring.'
+        : 'Estimasi CAPEX belum mencakup biaya khusus pemutakhiran gardu transformer PLN atau penarikan kabel jarak jauh.';
+    }
   };
 
   // Slider Event Listener
@@ -2181,25 +2312,35 @@ out center;`;
     const residentialCount = 2;
     const isAcHeavy = (offices.length + residentialCount) > (malls.length + transitHubsCount);
 
+    // Heuristics: Competitor reduction factor
+    const compCount = competitors.length;
+    const compFactor = 1 / (1 + (compCount * 0.15));
+
     let recommendedCharger = isEn ? 'AC Charger (22 kW)' : 'AC Charger (22 kW)';
     let requiredGridPower = isEn ? '24 kVA (Standard Connection)' : '24 kVA (Koneksi Standar)';
+    let chargeDuration = isEn ? '180 Mins (AC)' : '180 Menit (AC)';
     
-    let sessionsCount = Math.round((evCount * 0.002) + (malls.length * 2.5) + (offices.length * 1.8) + (hubs.length * 1.2) + (traffic.length * 3.2));
-    sessionsCount = Math.max(8, Math.min(48, sessionsCount));
+    let rawSessionsCount = (evCount * 0.002) + (malls.length * 2.5) + (offices.length * 1.8) + (hubs.length * 1.2) + (traffic.length * 3.2);
+    let sessionsCount = Math.round(rawSessionsCount * compFactor);
 
     let bepYears = 0.0;
     let netProfitPerSession = 18000;
     if (isAcHeavy) {
+      // AC Nozzle capacity constraints: max 8 sessions per day, minimum floor of 2 sessions
+      sessionsCount = Math.max(2, Math.min(8, sessionsCount));
       const annualNetAC = sessionsCount * 18000 * 365;
       bepYears = 150000000 / annualNetAC;
-      bepYears = Math.max(1.2, Math.min(4.2, parseFloat(bepYears.toFixed(1))));
+      bepYears = Math.max(1.2, Math.min(8.5, parseFloat(bepYears.toFixed(1))));
     } else {
       recommendedCharger = isEn ? 'DC Fast Charger (50 kW)' : 'DC Fast Charger (50 kW)';
       requiredGridPower = isEn ? '80 kVA (Fast-Charging Connection)' : '80 kVA (Koneksi Fast-Charging)';
+      chargeDuration = isEn ? '45 Mins (Fast / DC)' : '45 Menit (Cepat / DC)';
       netProfitPerSession = 48000;
+      // DC Nozzle capacity constraints: max 24 sessions per day, minimum floor of 6 sessions
+      sessionsCount = Math.max(6, Math.min(24, sessionsCount));
       const annualNetDC = sessionsCount * 48000 * 365;
       bepYears = 850000000 / annualNetDC;
-      bepYears = Math.max(1.8, Math.min(5.2, parseFloat(bepYears.toFixed(1))));
+      bepYears = Math.max(1.8, Math.min(9.5, parseFloat(bepYears.toFixed(1))));
     }
 
     // Capture chart image from Chart.js canvas
@@ -2353,34 +2494,44 @@ out center;`;
       </div>
 
       <!-- PAGE 3: TECH/FINANCIAL ROI -->
-      <div style="padding: 60px; height: 1040px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; border-left: 20px solid #0f172a; border-right: 20px solid #0f172a; page-break-after: always;">
+      <div style="padding: 50px 60px; height: 1040px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; border-left: 20px solid #0f172a; border-right: 20px solid #0f172a; page-break-after: always;">
         <div>
-          <h2 style="font-family: 'Outfit'; font-size: 22px; font-weight: 800; color: #0f172a; border-bottom: 2px solid #f1f5f9; padding-bottom: 12px; margin-bottom: 25px;">
+          <h2 style="font-family: 'Outfit'; font-size: 20px; font-weight: 800; color: #0f172a; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px; margin-bottom: 20px;">
             2. ${isEn ? 'Financial Viability & ROI Projections' : 'Kelayakan Finansial & Proyeksi ROI'}
           </h2>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px;">
-            <div style="background: #fafafa; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px;">
-              <span style="font-size: 9px; text-transform: uppercase; font-weight: 700; color: #94a3b8; display: block;">${isEn ? 'RECOMMENDED CHARGER' : 'REKOMENDASI INSTALASI'}</span>
-              <strong style="font-size: 14px; color: #089994; display: block; margin-top: 4px;">${recommendedCharger}</strong>
-              <span style="font-size: 11px; color: #64748b; display: block; margin-top: 2px;">${isEn ? 'Required Power:' : 'Kapasitas Grid:'} ${requiredGridPower}</span>
+          
+          <div style="display: grid; grid-template-columns: 1.1fr 0.9fr 1.2fr; gap: 15px; margin-bottom: 20px;">
+            <div style="background: #fafafa; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px;">
+              <span style="font-size: 8.5px; text-transform: uppercase; font-weight: 700; color: #94a3b8; display: block;">${isEn ? 'RECOMMENDED CHARGER' : 'REKOMENDASI INSTALASI'}</span>
+              <strong style="font-size: 13px; color: #089994; display: block; margin-top: 4px;">${recommendedCharger}</strong>
+              <span style="font-size: 10px; color: #64748b; display: block; margin-top: 2px;">${isEn ? 'Required Power:' : 'Kapasitas Grid:'} ${requiredGridPower}</span>
             </div>
-            <div style="background: #fafafa; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; border-color: rgba(0,229,117,0.3); background: rgba(0,229,117,0.02);">
-              <span style="font-size: 9px; text-transform: uppercase; font-weight: 700; color: #94a3b8; display: block;">${isEn ? 'PROJECTED PAYBACK (BEP)' : 'PROYEKSI PAYBACK (BEP)'}</span>
-              <strong style="font-size: 16px; color: #00e575; display: block; margin-top: 4px;">${bepYears} ${isEn ? 'Years' : 'Tahun'}</strong>
-              <span style="font-size: 11px; color: #64748b; display: block; margin-top: 2px;">${isEn ? 'Est. Sessions/Day:' : 'Utilisasi Sesi/Hari:'} ${sessionsCount} ${isEn ? 'Sessions' : 'Sesi'}</span>
+            <div style="background: #fafafa; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; border-color: rgba(0,229,117,0.3); background: rgba(0,229,117,0.02);">
+              <span style="font-size: 8.5px; text-transform: uppercase; font-weight: 700; color: #94a3b8; display: block;">${isEn ? 'PROJECTED PAYBACK (BEP)' : 'PROYEKSI PAYBACK (BEP)'}</span>
+              <strong style="font-size: 15px; color: #00e575; display: block; margin-top: 4px;">${bepYears} ${isEn ? 'Years' : 'Tahun'}</strong>
+              <span style="font-size: 10px; color: #64748b; display: block; margin-top: 2px;">${isEn ? 'Est. Sessions/Day:' : 'Utilisasi Sesi/Hari:'} ${sessionsCount} ${isEn ? 'Sessions' : 'Sesi'}</span>
+            </div>
+            <div style="background: #fafafa; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px;">
+              <span style="font-size: 8.5px; text-transform: uppercase; font-weight: 700; color: #94a3b8; display: block;">${isEn ? 'OPERATIONAL SPECIFICATIONS' : 'ASUMSI OPERASIONAL'}</span>
+              <strong style="font-size: 13px; color: #0f172a; display: block; margin-top: 4px;">${chargeDuration}</strong>
+              <span style="font-size: 10px; color: #64748b; display: block; margin-top: 2px;">
+                ${isEn ? 'Market Share:' : 'Pangsa Pasar:'} ${compCount === 0 ? '100%' : Math.round(compFactor * 100) + '%'} | 
+                ${isEn ? 'Surrounding Cap:' : 'Sesi SPKLU Sekitar:'} ${compCount * (isAcHeavy ? 8 : 24)}
+              </span>
             </div>
           </div>
-          <h3 style="font-family: 'Outfit'; font-size: 14px; font-weight: 800; color: #0f172a; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">
+
+          <h3 style="font-family: 'Outfit'; font-size: 13px; font-weight: 800; color: #0f172a; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px;">
             ${isEn ? 'CUMULATIVE BUSINESS CASH FLOWS (5-YEAR PROJECTION)' : 'PROYEKSI ARUS KAS KUMULATIF (5 TAHUN)'}
           </h3>
-          <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px; font-size: 12px;">
+          <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 11.5px;">
             <thead>
               <tr style="background: #f1f5f9; border-bottom: 1px solid #cbd5e1;">
-                <th style="padding: 8px; text-align: left; font-weight: 800; color: #475569;">${isEn ? 'Year' : 'Tahun'}</th>
-                <th style="padding: 8px; text-align: right; font-weight: 800; color: #475569;">${isEn ? 'Invest CAPEX' : 'CAPEX Awal'}</th>
-                <th style="padding: 8px; text-align: right; font-weight: 800; color: #475569;">${isEn ? 'Gross Revenue / Yr' : 'Gross Omzet / Thn'}</th>
-                <th style="padding: 8px; text-align: right; font-weight: 800; color: #475569;">${isEn ? 'Net Revenue / Yr' : 'Net Pendapatan / Thn'}</th>
-                <th style="padding: 8px; text-align: right; font-weight: 800; color: #475569;">${isEn ? 'Cumulative Cash' : 'Akumulasi Kas'}</th>
+                <th style="padding: 6px 8px; text-align: left; font-weight: 800; color: #475569;">${isEn ? 'Year' : 'Tahun'}</th>
+                <th style="padding: 6px 8px; text-align: right; font-weight: 800; color: #475569;">${isEn ? 'Invest CAPEX' : 'CAPEX Awal'}</th>
+                <th style="padding: 6px 8px; text-align: right; font-weight: 800; color: #475569;">${isEn ? 'Gross Revenue / Yr' : 'Gross Omzet / Thn'}</th>
+                <th style="padding: 6px 8px; text-align: right; font-weight: 800; color: #475569;">${isEn ? 'Net Revenue / Yr' : 'Net Pendapatan / Thn'}</th>
+                <th style="padding: 6px 8px; text-align: right; font-weight: 800; color: #475569;">${isEn ? 'Cumulative Cash' : 'Akumulasi Kas'}</th>
               </tr>
             </thead>
             <tbody>
@@ -2394,11 +2545,11 @@ out center;`;
                   cumulative += annualNet;
                   rowsHtml += `
                     <tr style="border-bottom: 1px solid #f1f5f9; font-weight: ${cumulative >= 0 && year-1 === Math.floor(bepYears) ? 'bold' : 'normal'};">
-                      <td style="padding: 8px; color: #0f172a; font-weight: bold;">${isEn ? 'Year' : 'Tahun'} ${year}</td>
-                      <td style="padding: 8px; text-align: right; color: #64748b;">${year === 1 ? 'Rp ' + capex.toLocaleString('id-ID') : '-'}</td>
-                      <td style="padding: 8px; text-align: right; color: #475569;">Rp ${Math.round(annualGross).toLocaleString('id-ID')}</td>
-                      <td style="padding: 8px; text-align: right; color: #089994; font-weight: 700;">Rp ${Math.round(annualNet).toLocaleString('id-ID')}</td>
-                      <td style="padding: 8px; text-align: right; color: ${cumulative >= 0 ? '#00e575' : '#ef4444'}; font-weight: bold;">Rp ${Math.round(cumulative).toLocaleString('id-ID')}</td>
+                      <td style="padding: 6px 8px; color: #0f172a; font-weight: bold;">${isEn ? 'Year' : 'Tahun'} ${year}</td>
+                      <td style="padding: 6px 8px; text-align: right; color: #64748b;">${year === 1 ? 'Rp ' + capex.toLocaleString('id-ID') : '-'}</td>
+                      <td style="padding: 6px 8px; text-align: right; color: #475569;">Rp ${Math.round(annualGross).toLocaleString('id-ID')}</td>
+                      <td style="padding: 6px 8px; text-align: right; color: #089994; font-weight: 700;">Rp ${Math.round(annualNet).toLocaleString('id-ID')}</td>
+                      <td style="padding: 6px 8px; text-align: right; color: ${cumulative >= 0 ? '#00e575' : '#ef4444'}; font-weight: bold;">Rp ${Math.round(cumulative).toLocaleString('id-ID')}</td>
                     </tr>
                   `;
                 }
@@ -2406,16 +2557,41 @@ out center;`;
               })()}
             </tbody>
           </table>
+          
           ${chartImageSrc ? `
-            <div style="text-align: center; border: 1.5px dashed #e2e8f0; border-radius: 8px; padding: 15px; background: #fafafa;">
-              <span style="font-size: 9px; text-transform: uppercase; font-weight: 700; color: #94a3b8; display: block; margin-bottom: 8px;">
+            <div style="text-align: center; border: 1.5px dashed #e2e8f0; border-radius: 8px; padding: 10px; background: #fafafa; margin-bottom: 15px;">
+              <span style="font-size: 8.5px; text-transform: uppercase; font-weight: 700; color: #94a3b8; display: block; margin-bottom: 4px;">
                 ${isEn ? 'VISUALIZED CASH FLOW PROJECTION (ROI CHART)' : 'INFOGRAFIS PROYEKSI ROI (BAGAN ARUS KAS)'}
               </span>
-              <img src="${chartImageSrc}" style="max-width: 100%; height: 160px; object-fit: contain;" />
+              <img src="${chartImageSrc}" style="max-width: 100%; height: 130px; object-fit: contain;" />
             </div>
           ` : ""}
+
+          <!-- PDF Operational Footnotes & Disclaimer -->
+          <div style="font-size: 8.5px; color: #64748b; line-height: 1.4; border-top: 1.5px dashed #e2e8f0; padding-top: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div>
+              <strong style="color: #475569; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 4px;">
+                ${isEn ? 'Operational Limitations & Footnotes:' : 'Catatan Batasan Operasional:'}
+              </strong>
+              <ul style="margin: 0; padding-left: 12px; list-style-type: disc;">
+                <li>${isEn ? 'Restricted operating hours (e.g., Malls 10:00 - 24:00) can cut session turnover by up to 30% compared to 24-hour locations.' : 'Operasional terbatas (misal: Mall 10.00 - 24.00) dapat memotong perputaran sesi hingga 30% dibanding Rest Area 24 jam.'}</li>
+                <li>${isEn ? 'Single nozzle capacity limits: AC (~180 mins, max 8 sessions/day) vs DC (~45 mins, max 24 sessions/day).' : 'Kapasitas 1 nozzle terbatas durasi isi: AC (~180 m, maks 8 sesi/hari) vs DC (~45 m, maks 24 sesi/hari).'}</li>
+                <li>${isEn ? 'Competitor presence in the scan radius dilutes market share, reducing projected sessions by up to 60%.' : 'Saturasi kompetitor di sekitar radius pemindaian akan mendilusi pangsa pasar harian hingga 60%.'}</li>
+              </ul>
+            </div>
+            <div>
+              <strong style="color: #ef4444; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 4px;">
+                ${isEn ? '* Quick Scan Disclaimer:' : '* Disclaimer Kelayakan Spasial:'}
+              </strong>
+              <span style="font-style: italic; display: block;">
+                ${isEn 
+                  ? 'This spatial feasibility assessment is a Quick Scan Business Opportunity evaluation. Final investment decisions must be supported by detailed engineering studies (MEP), local grid capacity checks by PLN, official land-lease contracts, and actual EV adoption trends in this specific sector.'
+                  : 'Analisis kelayakan spasial ini merupakan pemindaian cepat potensi peluang bisnis awal (Quick Scan Business Opportunity). Kelayakan final wajib dihitung secara komprehensif dengan memasukkan parameter riil lapangan yang lebih komplit (kapasitas gardu PLN lokal, skema sewa lahan fisik, dan kurva adopsi EV lokal).'}
+              </span>
+            </div>
+          </div>
         </div>
-        <div style="border-top: 1px solid #e2e8f0; padding-top: 15px; font-size: 10px; color: #94a3b8; text-align: center;">
+        <div style="border-top: 1px solid #e2e8f0; padding-top: 10px; font-size: 9px; color: #94a3b8; text-align: center;">
           PT. Titis Cahaya Sejahtera &copy; 2026 | ${isEn ? 'Confidential Feasibility Study' : 'Studi Kelayakan Rahasia Mitra SPKLU'}
         </div>
       </div>
