@@ -56,14 +56,21 @@
   <script>
     window.TCS_GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzQ8SbaXHJZN1WQK_slsPlCN-cktmaSxzR63ZKEBHcBb1gwqxjkh9R9GXYr3jFpuW4s1g/exec";
   </script>
+
+  <!-- Prevent Flash of Unstyled Content (FOUC) on static hosting platforms like Vercel -->
+  <style id="fouc-style">
+    html, body { background-color: #030712 !important; }
+    body { opacity: 0 !important; }
+  </style>
+
   <!-- Fallback Loader for Local Live Server & Static Hosting Preview -->
   <script>
-    if (!window.location.hostname.includes('google')) {
-      // Prevent Flash of Unstyled Content (FOUC) on static hosting (Vercel)
-      document.documentElement.style.backgroundColor = '#030712';
-      document.write('<style id="fouc-style">body { opacity: 0 !important; background-color: #030712 !important; }</style>');
-
-      // Local Router Fallback: Redirect back to index.html if ?page=spklu is not in the URL parameters
+    if (window.location.hostname.includes('google')) {
+      // In Google Apps Script ecosystem, the CSS is already injected, so show body immediately
+      const fouc = document.getElementById('fouc-style');
+      if (fouc) fouc.remove();
+    } else {
+      // On Vercel / Local Preview, dynamically fetch SpkluCSS.html fallback
       if (!window.location.search.includes('page=spklu')) {
         window.location.href = 'index.html' + window.location.search;
       }
@@ -76,7 +83,7 @@
           const style = doc.querySelector('style');
           if (style) document.head.appendChild(style);
           
-          // Remove the FOUC style to make body visible
+          // Remove FOUC overlay to smoothly display the fully-styled page
           const fouc = document.getElementById('fouc-style');
           if (fouc) fouc.remove();
         })
