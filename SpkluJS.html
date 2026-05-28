@@ -1601,12 +1601,51 @@ out center;`;
             window.tcsScannerState.realTraffic = realTraffic;
 
             // Highly robust, realistic geographic scoring algorithm based on actual geocoding results
-            let score = 50; // Base score (represents typical residential/rural potential)
-            score += realMalls.length * 8; // Malls add massive value
-            score += realOffices.length * 5; // Offices add high value
-            score += realHubs.length * 4; // Hotels/Stations add good value
-            score += realTraffic.length * 6; // Rest areas add high value
-            score -= realCompetitors.length * 7; // Deduct points for competitors (market saturation)
+            const addrLower = resolvedAddress.toLowerCase();
+            
+            // 1. Determine Immediate Road/Traffic Class Heuristics (World-Class Site Scoring)
+            const majorRoadKeywords = ['raya', 'boulevard', 'bulvar', 'tol', 'toll', 'bypass', 'by pass', 'arteri', 'lingkar', 'ring road', 'ringroad', 'jenderal', 'jend.', 'sudirman', 'thamrin', 'gatot subroto', 'rasuna said', 's. parman', 'haryono', 'panjaitan', 'suprapto', 'boulevard', 'utama', 'protokol', 'highway', 'expressway'];
+            const narrowAlleyKeywords = ['gang', 'gg.', 'rt ', 'rw ', 'kampung', 'slum', 'kumuh', 'pemukiman padat', 'pemakaman', 'tpu', 'grave', 'cemetery', 'sigma'];
+            
+            let roadScore = 25; // Default: Secondary/Local Street (standard traffic potential)
+            let roadClassLabelId = 'Jalan Lokal / Sekunder';
+            let roadClassLabelEn = 'Secondary / Local Road';
+            
+            const isAlley = narrowAlleyKeywords.some(kw => addrLower.includes(kw));
+            const isMajorRoad = majorRoadKeywords.some(kw => addrLower.includes(kw));
+            
+            if (isAlley) {
+              roadScore = 5; // Penalty for narrow access / graveyard / slum
+              roadClassLabelId = 'Gang Sempit / Pemukiman Akses Terbatas';
+              roadClassLabelEn = 'Narrow Alley / Slum / Limited Access';
+            } else if (isMajorRoad) {
+              roadScore = 50; // Bonus for high-traffic primary arterial / highway
+              roadClassLabelId = 'Jalan Raya Utama / Protokol (Trafik Tinggi)';
+              roadClassLabelEn = 'Primary Highway / Arterial (High Traffic)';
+            }
+
+            const currentLang = localStorage.getItem('tcs_lang') || 'id';
+            const consoleBody = document.getElementById('spScanLogConsole');
+            if (consoleBody) {
+              const lineEl = document.createElement('div');
+              lineEl.style.marginBottom = "4px";
+              if (currentLang === 'en') {
+                lineEl.innerHTML = `<span style="color:#a855f7; font-weight:bold;">> [TRAFFIC]</span> ACCESSIBILITY: <span style="color:#00e575; font-weight:bold;">${roadClassLabelEn}</span>`;
+              } else {
+                lineEl.innerHTML = `<span style="color:#a855f7; font-weight:bold;">> [TRAFFIC]</span> AKSES JALAN: <span style="color:#00e575; font-weight:bold;">${roadClassLabelId}</span>`;
+              }
+              consoleBody.appendChild(lineEl);
+              consoleBody.scrollTop = consoleBody.scrollHeight;
+            }
+
+            // 2. Calculated Score based on Road Accessibility + Commercial Hub Densities
+            let score = 20; // Base constant
+            score += roadScore; // Traffic accessibility weight (Max 50 points)
+            score += realMalls.length * 8; // Malls add massive value (Max 24 points)
+            score += realOffices.length * 4; // Offices add high value (Max 20 points)
+            score += realHubs.length * 3; // Hotels/Stations add good value (Max 12 points)
+            score += realTraffic.length * 8; // Tollway corridors / rest areas add high value
+            score -= realCompetitors.length * 7; // Competitors deduct points
             
             // Limit score between 25% and 98%
             score = Math.max(25, Math.min(98, score));
