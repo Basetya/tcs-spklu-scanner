@@ -1201,6 +1201,13 @@ function initFeasibilityScanner() {
         ? 'CAPEX projection does not include custom PLN substation transformer upgrades or extended long-distance wiring.'
         : 'Estimasi CAPEX belum mencakup biaya khusus pemutakhiran gardu transformer PLN atau penarikan kabel jarak jauh.';
     }
+
+    const elFnPrudentNozzle = document.getElementById('fnPrudentNozzle');
+    if (elFnPrudentNozzle) {
+      elFnPrudentNozzle.innerText = isEn
+        ? 'Dual nozzle SPKLU machines utilize Power Sharing. Simultaneous charging splits power (AC: 2x11kW / DC: 2x25kW), doubling durations. This proposal adopts a conservative, single-nozzle active projection to ensure prudent financial viability.'
+        : 'Mesin SPKLU dual nozzle menerapkan Power Sharing yang membagi daya saat cas bersamaan (AC: 2x11kW / DC: 2x25kW) yang melipatgandakan durasi cas. Analisis ini menggunakan pendekatan konservatif berbasis 1 nozzle aktif untuk menjamin proyeksi investasi yang prudent.';
+    }
   };
 
   // Slider Event Listener
@@ -2577,6 +2584,7 @@ out center;`;
                 <li>${isEn ? 'Restricted operating hours (e.g., Malls 10:00 - 24:00) can cut session turnover by up to 30% compared to 24-hour locations.' : 'Operasional terbatas (misal: Mall 10.00 - 24.00) dapat memotong perputaran sesi hingga 30% dibanding Rest Area 24 jam.'}</li>
                 <li>${isEn ? 'Single nozzle capacity limits: AC (~180 mins, max 8 sessions/day) vs DC (~45 mins, max 24 sessions/day).' : 'Kapasitas 1 nozzle terbatas durasi isi: AC (~180 m, maks 8 sesi/hari) vs DC (~45 m, maks 24 sesi/hari).'}</li>
                 <li>${isEn ? 'Competitor presence in the scan radius dilutes market share, reducing projected sessions by up to 60%.' : 'Saturasi kompetitor di sekitar radius pemindaian akan mendilusi pangsa pasar harian hingga 60%.'}</li>
+                <li>${isEn ? 'Dual nozzle machines utilize Power Sharing. Simultaneous cas splits power (AC: 2x11kW / DC: 2x25kW), doubling durations. This proposal adopts a conservative, single-nozzle active projection to ensure prudent financial viability.' : 'Mesin dual nozzle menerapkan Power Sharing yang membagi daya saat cas bersamaan. Studi ini menggunakan pendekatan konservatif berbasis 1 nozzle aktif untuk menjamin investasi yang prudent.'}</li>
               </ul>
             </div>
             <div>
