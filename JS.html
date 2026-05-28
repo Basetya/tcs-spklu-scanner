@@ -1,0 +1,1228 @@
+<script>
+/**
+ * PT. Titis Cahaya Sejahtera (TCS) - Client-side Interactive Logic
+ * Platform: Google Apps Script Web App Ecosystem
+ * Author: Antigravity AI
+ */
+
+function startApp() {
+  initNavbar();
+  initHeroCanvas();
+  initServiceTabs();
+  initWizard();
+  initStatsCounter();
+  initScrollspy();
+  initBimSimulator();
+}
+
+
+/* ==========================================================================
+   1. NAVIGATION & SCROLLSPY
+   ========================================================================== */
+function initNavbar() {
+  const navbar = document.getElementById('navbar');
+  const mobileToggle = document.getElementById('mobile-toggle');
+  const navLinks = document.getElementById('nav-links');
+  
+  // Sticky Navbar on Scroll
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
+  });
+  
+  // Mobile Menu Toggle
+  mobileToggle.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+  });
+  
+  // Close menu when link is clicked
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+    });
+  });
+
+  // Auto-reset wizard when clicking any planner links if success screen is active
+  document.querySelectorAll('a[href="#planner"]').forEach(link => {
+    link.addEventListener('click', () => {
+      const success = document.getElementById('wizard-success-pane');
+      if (success && success.style.display === 'block') {
+        resetWizard();
+      }
+    });
+  });
+}
+
+function initScrollspy() {
+  const sections = document.querySelectorAll('section');
+  const navLinks = document.querySelectorAll('.nav-link:not(.nav-btn)');
+  
+  window.addEventListener('scroll', () => {
+    let current = '';
+    
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop;
+      const sectionHeight = section.clientHeight;
+      if (window.pageYOffset >= (sectionTop - 150)) {
+        current = section.getAttribute('id');
+      }
+    });
+    
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href').slice(1) === current) {
+        link.classList.add('active');
+      }
+    });
+  });
+}
+
+/* ==========================================================================
+   2. HERO INTERACTIVE CANVAS (MEP ENERGY/PIPE sirkuits)
+   ========================================================================== */
+function initHeroCanvas() {
+  const canvas = document.getElementById('hero-canvas');
+  if (!canvas) return;
+  
+  const ctx = canvas.getContext('2d');
+  let animationFrameId;
+  
+  let width = canvas.width = window.innerWidth;
+  let height = canvas.height = window.innerHeight;
+  
+  const particles = [];
+  const particleCount = Math.min(60, Math.floor(width / 25)); // Responsive density
+  const connectionDistance = 120;
+  
+  const mouse = {
+    x: null,
+    y: null,
+    radius: 180
+  };
+  
+  window.addEventListener('mousemove', (e) => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY + window.scrollY; // Compensate for scroll page offset
+  });
+  
+  window.addEventListener('mouseleave', () => {
+    mouse.x = null;
+    mouse.y = null;
+  });
+  
+  window.addEventListener('resize', () => {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  });
+  
+  class Particle {
+    constructor() {
+      this.x = Math.random() * width;
+      this.y = Math.random() * height;
+      this.vx = (Math.random() - 0.5) * 0.6;
+      this.vy = (Math.random() - 0.5) * 0.6;
+      this.size = Math.random() * 2 + 1;
+      
+      // Select primary cyan, teal, or gold colors dynamically
+      const colorType = Math.random();
+      if (colorType < 0.4) {
+        this.color = '0, 242, 254'; // Teal Cyan
+      } else if (colorType < 0.8) {
+        this.color = '0, 229, 117'; // Neon Green-Teal
+      } else {
+        this.color = '243, 156, 18'; // Amber Gold
+      }
+    }
+    
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+      
+      // Screen edge bounce
+      if (this.x < 0 || this.x > width) this.vx *= -1;
+      if (this.y < 0 || this.y > height) this.vy *= -1;
+      
+      // Mouse push effect
+      if (mouse.x != null && mouse.y != null) {
+        let dx = this.x - mouse.x;
+        let dy = this.y - mouse.y;
+        let dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < mouse.radius) {
+          const force = (mouse.radius - dist) / mouse.radius;
+          this.x += (dx / dist) * force * 1.5;
+          this.y += (dy / dist) * force * 1.5;
+        }
+      }
+    }
+    
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${this.color}, 0.65)`;
+      ctx.fill();
+    }
+  }
+  
+  // Initialize particles
+  for (let i = 0; i < particleCount; i++) {
+    particles.push(new Particle());
+  }
+  
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+    
+    // Connect particles
+    for (let i = 0; i < particles.length; i++) {
+      particles[i].update();
+      particles[i].draw();
+      
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        
+        if (dist < connectionDistance) {
+          const alpha = (connectionDistance - dist) / connectionDistance * 0.15;
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          // Color based on particle 1
+          ctx.strokeStyle = `rgba(${particles[i].color}, ${alpha})`;
+          ctx.lineWidth = 0.8;
+          ctx.stroke();
+        }
+      }
+    }
+    
+    animationFrameId = requestAnimationFrame(animate);
+  }
+  
+  animate();
+}
+
+/* ==========================================================================
+   3. SERVICES EXPLORER TABS
+   ========================================================================== */
+function initServiceTabs() {
+  const tabButtons = document.querySelectorAll('.service-tab-btn');
+  const tabPanes = document.querySelectorAll('.service-content-pane');
+  
+  tabButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const tabId = button.getAttribute('data-tab');
+      
+      // Update buttons
+      tabButtons.forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+      
+      // Update panes
+      tabPanes.forEach(pane => {
+        pane.classList.remove('active');
+        if (pane.getAttribute('id') === `pane-${tabId}`) {
+          pane.classList.add('active');
+        }
+      });
+      
+      // Resize BIM canvas if Design Facility tab is clicked and it's initialized
+      if (tabId === 'design' && window.tcsBimState && typeof window.tcsBimState.resize === 'function') {
+        setTimeout(() => {
+          window.tcsBimState.resize();
+        }, 50);
+      }
+    });
+  });
+}
+
+window.selectWizardService = function(serviceName) {
+  // Ensure the form is visible and success/loader screens are hidden if previous submission occurred
+  const form = document.getElementById('tcs-wizard-form');
+  const loader = document.getElementById('wizard-loader-pane');
+  const success = document.getElementById('wizard-success-pane');
+  if (form) form.style.display = 'block';
+  if (loader) loader.style.display = 'none';
+  if (success) success.style.display = 'none';
+
+  const input = document.getElementById('wizard-input-service');
+  if (input) {
+    input.value = serviceName;
+  }
+  
+  // Highlight card visually
+  document.querySelectorAll('.service-select-card').forEach(card => {
+    card.classList.remove('selected');
+    if (card.getAttribute('data-val') === serviceName) {
+      card.classList.add('selected');
+    }
+  });
+  
+  // Update step 2 questions dynamically
+  updateStep2Questions(serviceName);
+  
+  // Directly set the step to 2 and update UI
+  wizardStep = 2;
+  updateWizardUI();
+}
+
+/* ==========================================================================
+   4. LEADS CONSULTATION WIZARD STATE MACHINE & DYNAMIC STEP QUESTIONS
+   ========================================================================== */
+const serviceWizardConfigs = {
+  "HVAC System": {
+    id: {
+      title: "Berapa Kapasitas AC & Skala Ruangan Anda?",
+      options: [
+        { val: "Skala Kecil (Ruko/Kantor < 500 m2, AC Split/Multi-Split)", icon: "🏢", title: "Skala Kecil", desc: "&lt; 500 m&sup2;<br>(Split / Multi-Split)" },
+        { val: "Skala Menengah (Gedung 500 - 2000 m2, AC VRV/VRF)", icon: "🏭", title: "Skala Menengah", desc: "500 - 2.000 m&sup2;<br>(Sistem VRV / VRF)" },
+        { val: "Skala Industri (Pabrik/RS > 2000 m2, Chiller & AHU)", icon: "🏗️", title: "Skala Industri", desc: "&gt; 2.000 m&sup2;<br>(Chiller & AHU)" }
+      ]
+    },
+    en: {
+      title: "What is Your AC Capacity & Room Scale?",
+      options: [
+        { val: "Small Scale (Shophouse/Office < 500 m2, AC Split/Multi-Split)", icon: "🏢", title: "Small Scale", desc: "&lt; 500 m&sup2;<br>(Split / Multi-Split)" },
+        { val: "Medium Scale (Building 500 - 2000 m2, AC VRV/VRF)", icon: "🏭", title: "Medium Scale", desc: "500 - 2,000 m&sup2;<br>(VRV / VRF System)" },
+        { val: "Industrial Scale (Factory/Hospital > 2000 m2, Chiller & AHU)", icon: "🏗️", title: "Industrial Scale", desc: "&gt; 2,000 m&sup2;<br>(Chiller & AHU)" }
+      ]
+    }
+  },
+  "Electrical System": {
+    id: {
+      title: "Berapa Kebutuhan Kapasitas Daya Listrik Anda?",
+      options: [
+        { val: "Tegangan Rendah (s/d 197 kVA, Panel & Penerangan)", icon: "🔌", title: "Tegangan Rendah", desc: "s/d 197 kVA<br>(Panel & Penerangan)" },
+        { val: "Tegangan Menengah (197 - 1000 kVA, Panel LVMDP & Kabel)", icon: "⚡", title: "Tegangan Menengah", desc: "197 - 1.000 kVA<br>(LVMDP & Distribusi)" },
+        { val: "Skala Gardu / Industri (> 1000 kVA, Trafo & Genset Utama)", icon: "🏗️", title: "Skala Gardu / Industri", desc: "&gt; 1.000 kVA<br>(Trafo & Genset)" }
+      ]
+    },
+    en: {
+      title: "What is Your Electrical Power Capacity Requirement?",
+      options: [
+        { val: "Low Voltage (up to 197 kVA, Panel & Lighting)", icon: "🔌", title: "Low Voltage", desc: "up to 197 kVA<br>(Panel & Lighting)" },
+        { val: "Medium Voltage (197 - 1000 kVA, LVMDP Panel & Cabling)", icon: "⚡", title: "Medium Voltage", desc: "197 - 1,000 kVA<br>(LVMDP & Distribution)" },
+        { val: "Substation / Industrial (> 1000 kVA, Transformer & Main Genset)", icon: "🏗️", title: "Substation / Industrial", desc: "&gt; 1,000 kVA<br>(Transformer & Genset)" }
+      ]
+    }
+  },
+  "Plumbing System": {
+    id: {
+      title: "Berapa Kompleksitas Sistem Pipa & Air Anda?",
+      options: [
+        { val: "Skala Ruko/Kantor (Pipa Air Bersih & Kotor < 3 Lantai)", icon: "🚰", title: "Ruko / Kantor", desc: "Tinggi &lt; 3 Lantai<br>(Air Bersih & Kotor)" },
+        { val: "Skala Gedung Menengah (3 - 10 Lantai, Booster & Air Panas)", icon: "🏢", title: "Gedung Menengah", desc: "3 - 10 Lantai<br>(Booster & Air Panas)" },
+        { val: "Skala High-Rise / Industri (Sewage Treatment & Deep Well)", icon: "🏭", title: "High-Rise / Industri", desc: "Gedung Tinggi / Pabrik<br>(STP & Deep Well)" }
+      ]
+    },
+    en: {
+      title: "What is the Complexity of Your Piping & Water System?",
+      options: [
+        { val: "Shophouse/Office (Clean & Wastewater Pipe < 3 Floors)", icon: "🚰", title: "Shophouse / Office", desc: "Height &lt; 3 Floors<br>(Clean & Wastewater)" },
+        { val: "Medium Building (3 - 10 Floors, Booster & Hot Water)", icon: "🏢", title: "Medium Building", desc: "3 - 10 Floors<br>(Booster & Hot Water)" },
+        { val: "High-Rise / Industrial (Sewage Treatment & Deep Well)", icon: "🏭", title: "High-Rise / Industrial", desc: "High-Rise / Factory<br>(STP & Deep Well)" }
+      ]
+    }
+  },
+  "Process Utilities": {
+    id: {
+      title: "Apa Kebutuhan Utilitas Proses Industri Anda?",
+      options: [
+        { val: "Udara Tekan / Steam Kecil (Kompresor, Boiler Ruko/Kantor)", icon: "💨", title: "Udara Tekan/Steam", desc: "Skala Ruko / Kantor<br>(Kompresor & Boiler)" },
+        { val: "Utilitas Pabrik Menengah (Sistem Pipa Gas Medis/Industri)", icon: "🧪", title: "Utilitas Menengah", desc: "Pipa Khusus & Gas<br>(Medis / Industri)" },
+        { val: "Utilitas Kompleks Pabrik (Steam Boiler, Chilled Loop)", icon: "⚙️", title: "Utilitas Kompleks", desc: "Pabrik Manufaktur<br>(Boiler & Chilled Loop)" }
+      ]
+    },
+    en: {
+      title: "What is Your Industrial Process Utility Requirement?",
+      options: [
+        { val: "Compressed Air / Small Steam (Compressor, Boiler Shophouse)", icon: "💨", title: "Compressed Air/Steam", desc: "Shophouse / Office<br>(Compressor & Boiler)" },
+        { val: "Medium Plant Utilities (Medical/Industrial Gas Piping)", icon: "🧪", title: "Medium Utilities", desc: "Specialized & Gas Pipe<br>(Medical / Industrial)" },
+        { val: "Complex Plant Utilities (Steam Boiler, Chilled Loop)", icon: "⚙️", title: "Complex Utilities", desc: "Manufacturing Plant<br>(Boiler & Chilled Loop)" }
+      ]
+    }
+  },
+  "Fire Protection": {
+    id: {
+      title: "Berapa Luas Sistem Proteksi Kebakaran?",
+      options: [
+        { val: "Proteksi Dasar (Portable Extinguisher & Fire Alarm)", icon: "🧯", title: "Proteksi Dasar", desc: "Kapasitas Terbatas<br>(Extinguisher & Alarm)" },
+        { val: "Proteksi Menengah (Hydrant & Sprinkler Gedung Kantor)", icon: "🚨", title: "Proteksi Menengah", desc: "Gedung Ruko / Kantor<br>(Hydrant & Sprinkler)" },
+        { val: "Proteksi Skala Penuh (Pump House & Foam System Industri)", icon: "🔥", title: "Skala Industri", desc: "Pabrik / High-Rise<br>(Pump House & Foam)" }
+      ]
+    },
+    en: {
+      title: "What is the Scope of Your Fire Protection System?",
+      options: [
+        { val: "Basic Protection (Portable Extinguisher & Fire Alarm)", icon: "🧯", title: "Basic Protection", desc: "Limited Capacity<br>(Extinguisher & Alarm)" },
+        { val: "Medium Protection (Hydrant & Sprinkler Office Building)", icon: "🚨", title: "Medium Protection", desc: "Shophouse / Office<br>(Hydrant & Sprinkler)" },
+        { val: "Full-Scale Protection (Pump House & Industrial Foam System)", icon: "🔥", title: "Industrial Scale", desc: "Factory / High-Rise<br>(Pump House & Foam)" }
+      ]
+    }
+  },
+  "Water Treatment": {
+    id: {
+      title: "Berapa Kapasitas Water Treatment yang Dibutuhkan?",
+      options: [
+        { val: "Kapasitas Domestik (< 10 m3/hari, Filter & STP Portable)", icon: "💧", title: "Kapasitas Domestik", desc: "&lt; 10 m³/hari<br>(Filter / STP Portable)" },
+        { val: "Kapasitas Komersial (10 - 50 m3/hari, WTP/STP Gedung)", icon: "🏢", title: "Kapasitas Komersial", desc: "10 - 50 m³/hari<br>(WTP/STP Gedung & Hotel)" },
+        { val: "Skala Industri (> 50 m3/hari, WTP/WWTP Pabrik)", icon: "🏭", title: "Skala Industri / WWTP", desc: "&gt; 50 m³/hari<br>(WTP / WWTP Pabrik)" }
+      ]
+    },
+    en: {
+      title: "What Water Treatment Capacity is Required?",
+      options: [
+        { val: "Domestic Capacity (< 10 m3/day, Filter & Portable STP)", icon: "💧", title: "Domestic Capacity", desc: "&lt; 10 m³/day<br>(Filter / Portable STP)" },
+        { val: "Commercial Capacity (10 - 50 m3/day, Building WTP/STP)", icon: "🏢", title: "Commercial Capacity", desc: "10 - 50 m³/day<br>(WTP/STP Building & Hotel)" },
+        { val: "Industrial Scale (> 50 m3/day, Factory WTP/WWTP)", icon: "🏭", title: "Industrial / WWTP", desc: "&gt; 50 m³/day<br>(WTP / WWTP Factory)" }
+      ]
+    }
+  },
+  "EV Charging & SPKLU": {
+    id: {
+      title: "Berapa Kapasitas Charger & Luas Lahan SPKLU Anda?",
+      options: [
+        { val: "Kemitraan Privat (1-2 Mobil, Lahan < 50 m2, AC s/d 22 kW)", icon: "🚗", title: "Kemitraan Privat", desc: "1 - 2 Mobil (Lahan &lt; 50 m²)<br>(AC Charger s/d 22 kW)" },
+        { val: "Kemitraan Hub (3-5 Mobil, Lahan 50-150 m2, DC s/d 100 kW)", icon: "⚡", title: "Kemitraan Hub", desc: "3 - 5 Mobil (Lahan 50-150 m²)<br>(DC Fast s/d 100 kW)" },
+        { val: "Kemitraan Stasiun SPKLU (> 5 Mobil, Lahan > 150 m2, DC Ultra Fast)", icon: "🔌", title: "Stasiun SPKLU Utama", desc: "&gt; 5 Mobil (Lahan &gt; 150 m²)<br>(DC Ultra Fast Charger)" }
+      ]
+    },
+    en: {
+      title: "What Charger Capacity & Land Area is Available?",
+      options: [
+        { val: "Private Partnership (1-2 Cars, Land < 50 m2, AC up to 22 kW)", icon: "🚗", title: "Private Partnership", desc: "1 - 2 Cars (Land &lt; 50 m²)<br>(AC Charger up to 22 kW)" },
+        { val: "Hub Partnership (3-5 Cars, Land 50-150 m2, DC up to 100 kW)", icon: "⚡", title: "Hub Partnership", desc: "3 - 5 Cars (Land 50-150 m²)<br>(DC Fast up to 100 kW)" },
+        { val: "SPKLU Station Partnership (> 5 Cars, Land > 150 m2, DC Ultra Fast)", icon: "🔌", title: "Primary SPKLU Station", desc: "&gt; 5 Cars (Land &gt; 150 m²)<br>(DC Ultra Fast Charger)" }
+      ]
+    }
+  },
+  "Design Facility": {
+    id: {
+      title: "Apa Skala Perancangan Desain / B.I.M Anda?",
+      options: [
+        { val: "Desain Layout 2D/3D (Revisi Single-Line Diagram / CAD Basic)", icon: "📐", title: "Desain Layout 2D/3D", desc: "Revisi Cepat / Basic<br>(CAD & Single Line)" },
+        { val: "Model B.I.M Level 1 (Modeling Arsitektur & MEP Dasar 3D)", icon: "🖥️", title: "Model B.I.M Level 1", desc: "Modeling Standar<br>(MEP 3D Modeling)" },
+        { val: "B.I.M Koordinasi Penuh Level 2 (Clash Detection & Revit)", icon: "🏗️", title: "B.I.M Koordinasi Penuh", desc: "Kolaborasi Kompleks<br>(Clash Detection & Revit)" }
+      ]
+    },
+    en: {
+      title: "What is Your Design / B.I.M Modeling Scale?",
+      options: [
+        { val: "2D/3D Layout Design (Single-Line Diagram / Basic CAD)", icon: "📐", title: "2D/3D Layout Design", desc: "Quick Revision / Basic<br>(CAD & Single Line)" },
+        { val: "B.I.M Model Level 1 (Architecture & Basic 3D MEP)", icon: "🖥️", title: "B.I.M Model Level 1", desc: "Standard Modeling<br>(MEP 3D Modeling)" },
+        { val: "Full Coordination B.I.M Level 2 (Clash Detection & Revit)", icon: "🏗️", title: "Full Coordinated B.I.M", desc: "Complex Collaboration<br>(Clash Detection & Revit)" }
+      ]
+    }
+  }
+};
+
+function updateStep2Questions(serviceName) {
+  const currentLang = localStorage.getItem('tcs_lang') || 'id';
+  const serviceConfig = serviceWizardConfigs[serviceName] || serviceWizardConfigs["HVAC System"];
+  const config = serviceConfig[currentLang] || serviceConfig['id'];
+  
+  // Update Step 2 Title
+  const titleEl = document.getElementById('wizard-step-2-title');
+  if (titleEl) {
+    titleEl.innerText = config.title;
+  }
+  
+  // Update Step 2 Grid
+  const gridEl = document.getElementById('wizard-step-2-grid');
+  if (gridEl) {
+    let html = '';
+    config.options.forEach((opt) => {
+      html += `
+        <div class="scale-select-card" data-val="${opt.val}" onclick="selectWizardCard(this, 'scale')">
+          <div class="scale-icon">${opt.icon}</div>
+          <h4>${opt.title}</h4>
+          <p>${opt.desc}</p>
+        </div>
+      `;
+    });
+    gridEl.innerHTML = html;
+  }
+  
+  // Reset selected scale value when service changes
+  const scaleInput = document.getElementById('wizard-input-scale');
+  if (scaleInput) {
+    scaleInput.value = '';
+  }
+}
+
+let wizardStep = 1;
+const totalSteps = 4;
+
+function initWizard() {
+  updateStep2Questions("HVAC System");
+  updateWizardUI();
+  
+  // Dynamic language listener to re-render step 2 questions and next/prev button texts
+  window.addEventListener('tcsLanguageChanged', (e) => {
+    const currentService = document.getElementById('wizard-input-service').value;
+    if (currentService) {
+      updateStep2Questions(currentService);
+    } else {
+      updateStep2Questions("HVAC System");
+    }
+    updateWizardUI();
+  });
+}
+
+window.selectWizardCard = function(element, type) {
+  const val = element.getAttribute('data-val');
+  
+  if (type === 'service') {
+    document.getElementById('wizard-input-service').value = val;
+    document.querySelectorAll('.service-select-card').forEach(card => card.classList.remove('selected'));
+    element.classList.add('selected');
+    
+    // Update step 2 questions dynamically based on selected service
+    updateStep2Questions(val);
+  } else if (type === 'scale') {
+    document.getElementById('wizard-input-scale').value = val;
+    document.querySelectorAll('.scale-select-card').forEach(card => card.classList.remove('selected'));
+    element.classList.add('selected');
+  }
+  
+  // Automatically move to next step for better micro-interactions UX
+  setTimeout(() => {
+    moveWizardStep(1);
+  }, 350);
+}
+
+window.moveWizardStep = function(direction) {
+  const currentLang = localStorage.getItem('tcs_lang') || 'id';
+
+  // Validate current step before moving forward
+  if (direction === 1) {
+    if (wizardStep === 1) {
+      const service = document.getElementById('wizard-input-service').value;
+      if (!service) {
+        const msg = currentLang === 'en'
+          ? 'Please select one of the service categories first.'
+          : 'Mohon pilih salah satu kategori jasa terlebih dahulu.';
+        alert(msg);
+        return;
+      }
+    } else if (wizardStep === 2) {
+      const scale = document.getElementById('wizard-input-scale').value;
+      if (!scale) {
+        const msg = currentLang === 'en'
+          ? 'Please select your project scale.'
+          : 'Mohon pilih skala proyek Anda.';
+        alert(msg);
+        return;
+      }
+    } else if (wizardStep === 3) {
+      const name = document.getElementById('wizard-name').value.trim();
+      const phone = document.getElementById('wizard-phone').value.trim();
+      if (!name || !phone) {
+        const msg = currentLang === 'en'
+          ? 'Full Name and active WhatsApp/phone number are required fields.'
+          : 'Nama Lengkap dan Nomor Telepon/WhatsApp wajib diisi.';
+        alert(msg);
+        return;
+      }
+    }
+  }
+  
+  wizardStep += direction;
+  
+  // Bound check
+  if (wizardStep < 1) wizardStep = 1;
+  if (wizardStep > totalSteps) wizardStep = totalSteps;
+  
+  // Update review values on step 4
+  if (wizardStep === 4) {
+    // Translate the Category values on Step 4 dynamically for premium quality
+    const rawService = document.getElementById('wizard-input-service').value;
+    const rawScale = document.getElementById('wizard-input-scale').value;
+    
+    // Check tab keys to see if we can easily map the service name
+    let localizedService = rawService;
+    if (currentLang === 'en') {
+      if (rawService === "HVAC System") localizedService = "HVAC System";
+      else if (rawService === "Electrical System") localizedService = "Electrical System";
+      else if (rawService === "Plumbing System") localizedService = "Plumbing System";
+      else if (rawService === "Process Utilities") localizedService = "Process Process Utilities";
+      else if (rawService === "Fire Protection") localizedService = "Fire Protection";
+      else if (rawService === "Water Treatment") localizedService = "Water Treatment";
+      else if (rawService === "EV Charging & SPKLU") localizedService = "EV Charging & SPKLU";
+      else if (rawService === "Design Facility") localizedService = "Design Facility";
+    }
+
+    document.getElementById('sum-service').innerText = localizedService;
+    document.getElementById('sum-scale').innerText = rawScale;
+    document.getElementById('sum-name').innerText = document.getElementById('wizard-name').value;
+    document.getElementById('sum-company').innerText = document.getElementById('wizard-company').value || '-';
+    document.getElementById('sum-phone').innerText = document.getElementById('wizard-phone').value;
+  }
+  
+  updateWizardUI();
+}
+
+function updateWizardUI() {
+  const currentLang = localStorage.getItem('tcs_lang') || 'id';
+
+  // Toggle step panes
+  document.querySelectorAll('.wizard-step-content').forEach(pane => pane.classList.remove('active'));
+  document.getElementById(`step-${wizardStep}`).classList.add('active');
+  
+  // Toggle progress nodes active state
+  document.querySelectorAll('.wizard-step-node').forEach((node, idx) => {
+    const stepIdx = idx + 1;
+    node.classList.remove('active', 'completed');
+    
+    if (stepIdx < wizardStep) {
+      node.classList.add('completed');
+    } else if (stepIdx === wizardStep) {
+      node.classList.add('active');
+    }
+  });
+  
+  // Update progress line width
+  const percent = ((wizardStep - 1) / (totalSteps - 1)) * 100;
+  document.getElementById('wizard-progress-line').style.width = `${percent}%`;
+  
+  // Toggle prev/next action buttons
+  const prevBtn = document.getElementById('btn-wizard-prev');
+  const nextBtn = document.getElementById('btn-wizard-next');
+  
+  if (wizardStep === 1) {
+    prevBtn.style.visibility = 'hidden';
+  } else {
+    prevBtn.style.visibility = 'visible';
+    prevBtn.innerText = currentLang === 'en' ? 'Previous' : 'Sebelumnya';
+  }
+  
+  if (wizardStep === totalSteps) {
+    nextBtn.innerText = currentLang === 'en' ? 'Submit Plan' : 'Kirim Rencana';
+    nextBtn.setAttribute('type', 'submit');
+  } else {
+    nextBtn.innerText = currentLang === 'en' ? 'Next' : 'Berikutnya';
+    nextBtn.setAttribute('type', 'button');
+    // Ensure button acts as step navigator
+    nextBtn.onclick = () => moveWizardStep(1);
+  }
+}
+
+window.handleWizardSubmit = function(event) {
+  event.preventDefault();
+  const currentLang = localStorage.getItem('tcs_lang') || 'id';
+  
+  // 1. Collect form data
+  const formData = {
+    service: document.getElementById('wizard-input-service').value,
+    scale: document.getElementById('wizard-input-scale').value,
+    name: document.getElementById('wizard-name').value.trim(),
+    company: document.getElementById('wizard-company').value.trim(),
+    phone: document.getElementById('wizard-phone').value.trim(),
+    notes: document.getElementById('wizard-notes').value.trim()
+  };
+  
+  // 2. Hide form UI, Show Loader
+  document.getElementById('tcs-wizard-form').style.display = 'none';
+  document.getElementById('wizard-loader-pane').style.display = 'block';
+  
+  // 3. Submit to GAS backend asynchronously via google.script.run (with Local Fallback Simulation)
+  if (typeof google !== 'undefined' && google.script && google.script.run) {
+    google.script.run
+      .withSuccessHandler(onWizardSuccess)
+      .withFailureHandler(onWizardFailure)
+      .submitConsultation(formData);
+  } else {
+    // Local environment simulation for rapid prototyping and offline checking
+    console.warn("GAS Environment not detected. Simulating API submission locally...");
+    setTimeout(() => {
+      const mockResponse = {
+        success: true,
+        message: currentLang === 'en'
+          ? "Thank you #KawanTCS! Your consultation request has been successfully submitted. Our professional MEP engineers will contact you shortly via phone/WhatsApp: " + formData.phone
+          : "Terima kasih #KawanTCS! Konsultasi Anda telah diterima. Tim profesional MEP kami akan segera menghubungi Anda melalui nomor telepon/WhatsApp: " + formData.phone,
+      };
+      onWizardSuccess(mockResponse);
+    }, 1500);
+  }
+}
+
+function onWizardSuccess(response) {
+  document.getElementById('wizard-loader-pane').style.display = 'none';
+  const successPane = document.getElementById('wizard-success-pane');
+  successPane.style.display = 'block';
+  
+  const currentLang = localStorage.getItem('tcs_lang') || 'id';
+  
+  if (response.success) {
+    document.getElementById('wizard-success-msg').innerText = response.message;
+    
+    // Format a high-fidelity formatted WhatsApp direct link
+    const phone = document.getElementById('wizard-phone').value;
+    const name = document.getElementById('wizard-name').value;
+    const service = document.getElementById('wizard-input-service').value;
+    const scale = document.getElementById('wizard-input-scale').value;
+    const company = document.getElementById('wizard-company').value || '-';
+    const notes = document.getElementById('wizard-notes').value || (currentLang === 'en' ? 'No additional notes provided.' : 'Tidak ada catatan tambahan.');
+    
+    const waText = currentLang === 'en' 
+      ? `Hello TCS Team! I have submitted the Project Planner form on the website with the following details:
+
+Name: ${name}
+Company: ${company}
+Contact No: ${phone}
+Service Needed: ${service}
+Project Scale: ${scale}
+Specific Requirements: ${notes}
+
+Please process this consultation. Thank you!`
+      : `Halo Kawan TCS! Saya sudah mengisi Perencana Proyek di website dengan rincian berikut:
+
+Nama: ${name}
+Perusahaan: ${company}
+No. HP: ${phone}
+Jasa yang dibutuhkan: ${service}
+Skala Proyek: ${scale}
+Detail Kebutuhan: ${notes}
+
+Mohon dapat diproses segera. Terima kasih!`;
+    
+    const waUrl = `https://wa.me/628111460707?text=${encodeURIComponent(waText)}`;
+    document.getElementById('wizard-whatsapp-direct').setAttribute('href', waUrl);
+  } else {
+    // If business validation failed in the server
+    document.getElementById('wizard-success-msg').innerText = currentLang === 'en' 
+      ? "Sorry, submission failed: " + response.message 
+      : "Maaf, pengiriman gagal: " + response.message;
+    document.getElementById('wizard-whatsapp-direct').style.display = 'none';
+  }
+}
+
+function onWizardFailure(error) {
+  document.getElementById('wizard-loader-pane').style.display = 'none';
+  const successPane = document.getElementById('wizard-success-pane');
+  successPane.style.display = 'block';
+  
+  const currentLang = localStorage.getItem('tcs_lang') || 'id';
+  
+  if (currentLang === 'en') {
+    document.getElementById('wizard-success-msg').innerHTML = `<span style="color:#ff4d4d;">Server transmission failure: ${error.message}</span><br>Please click the button below to directly contact TCS Admin via WhatsApp.`;
+  } else {
+    document.getElementById('wizard-success-msg').innerHTML = `<span style="color:#ff4d4d;">Terjadi kegagalan transmisi server: ${error.message}</span><br>Silakan klik tombol di bawah untuk langsung menghubungi Admin TCS via WhatsApp.`;
+  }
+  
+  const waUrl = "https://wa.me/628111460707?text=Halo%20TCS%2C%20saya%20mengalami%20kendala%20saat%20mengirim%20formulir%20di%20website.%20Saya%20ingin%20berkonsultasi%20langsung%20di%20sini.";
+  document.getElementById('wizard-whatsapp-direct').setAttribute('href', waUrl);
+}
+
+window.resetWizard = function() {
+  wizardStep = 1;
+  document.getElementById('tcs-wizard-form').reset();
+  
+  // Clear select cards
+  document.querySelectorAll('.service-select-card').forEach(card => card.classList.remove('selected'));
+  document.querySelectorAll('.scale-select-card').forEach(card => card.classList.remove('selected'));
+  document.getElementById('wizard-input-service').value = '';
+  document.getElementById('wizard-input-scale').value = '';
+  
+  document.getElementById('wizard-success-pane').style.display = 'none';
+  document.getElementById('tcs-wizard-form').style.display = 'block';
+  
+  updateWizardUI();
+}
+
+/* ==========================================================================
+   5. DYNAMIC STATS COUNTER ACTION
+   ========================================================================== */
+function initStatsCounter() {
+  const statNumElements = document.querySelectorAll('.stat-num');
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const target = entry.target;
+        const targetValAttr = target.innerText;
+        
+        // Skip year logic
+        if (target.id === 'stat-year') return;
+        
+        const isPercent = targetValAttr.includes('%');
+        const isPlus = targetValAttr.includes('+');
+        
+        const rawVal = parseInt(targetValAttr.replace(/[^0-9]/g, ''));
+        animateCount(target, rawVal, isPercent, isPlus);
+        
+        observer.unobserve(target); // Animate once
+      }
+    });
+  }, { threshold: 0.5 });
+  
+  statNumElements.forEach(el => observer.observe(el));
+}
+
+function animateCount(element, targetVal, isPercent, isPlus) {
+  let currentVal = 0;
+  const duration = 1200; // ms
+  const stepTime = Math.max(10, Math.floor(duration / targetVal));
+  
+  const timer = setInterval(() => {
+    currentVal++;
+    element.innerText = currentVal + (isPercent ? '%' : '') + (isPlus ? '+' : '');
+    
+    if (currentVal >= targetVal) {
+      clearInterval(timer);
+      element.innerText = targetVal + (isPercent ? '%' : '') + (isPlus ? '+' : '');
+    }
+  }, stepTime);
+}
+
+/* ==========================================================================
+   6. INTERACTIVE 3D BIM & CLASH DETECTION SIMULATOR
+   ========================================================================== */
+function initBimSimulator() {
+  const canvas = document.getElementById('bimCanvas');
+  if (!canvas) return;
+  
+  const ctx = canvas.getContext('2d');
+  const scanline = document.getElementById('bimScanline');
+  const hudStatus = document.getElementById('bimHudStatus');
+  const consoleBody = document.getElementById('bimLogConsole');
+  
+  const togglePlumb = document.getElementById('bimTogglePlumbing');
+  const toggleHvac = document.getElementById('bimToggleHvac');
+  const toggleElec = document.getElementById('bimToggleElec');
+  
+  const btnRun = document.getElementById('bimBtnRun');
+  const btnReset = document.getElementById('bimBtnReset');
+  
+  if (!scanline || !hudStatus || !consoleBody || !togglePlumb || !toggleHvac || !toggleElec || !btnRun || !btnReset) return;
+  
+  // Expose state globally so we can control and clean up if necessary
+  window.tcsBimState = {
+    state: 'idle', // 'idle', 'scanning', 'resolved'
+    progress: 0,
+    pipeOffset: 0, // current interpolated offset of plumbing (0 to 1)
+    elecOffset: 0, // current interpolated offset of electrical (0 to 1)
+    scale: 1,
+    logsPrinted: new Set()
+  };
+  
+  // Set high-DPI scaling for retina screens
+  function resizeCanvas() {
+    const rect = canvas.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    ctx.scale(dpr, dpr);
+    window.tcsBimState.width = rect.width;
+    window.tcsBimState.height = rect.height;
+  }
+  
+  window.tcsBimState.resize = resizeCanvas;
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+  
+  // Isometric projection math helper
+  function toIso(x, y, z) {
+    const cx = window.tcsBimState.width / 2;
+    const cy = window.tcsBimState.height / 2 - 10;
+    
+    // Rotate and projection factor
+    const isoX = cx + (x - y) * 0.866; // cos(30) = 0.866
+    const isoY = cy + (x + y) * 0.5 - z; // sin(30) = 0.5
+    return { x: isoX, y: isoY };
+  }
+  
+  // Drawing helpers
+  function drawIsoPillar(x, y, h) {
+    ctx.fillStyle = 'rgba(30, 41, 59, 0.4)';
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+    ctx.lineWidth = 1;
+    
+    // Draw columns
+    const w = 15;
+    const bottom = toIso(x, y, 0);
+    const top = toIso(x, y, h);
+    
+    ctx.beginPath();
+    ctx.moveTo(toIso(x - w, y - w, 0).x, toIso(x - w, y - w, 0).y);
+    ctx.lineTo(toIso(x + w, y - w, 0).x, toIso(x + w, y - w, 0).y);
+    ctx.lineTo(toIso(x + w, y + w, 0).x, toIso(x + w, y + w, 0).y);
+    ctx.lineTo(toIso(x - w, y + w, 0).x, toIso(x - w, y + w, 0).y);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    
+    // Vertical line
+    ctx.beginPath();
+    ctx.moveTo(bottom.x, bottom.y);
+    ctx.lineTo(top.x, top.y);
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+    ctx.stroke();
+  }
+  
+  function drawIsoBox(x, y, z, wx, wy, wz, colorGradients) {
+    // Volume faces
+    const p1 = toIso(x, y, z);
+    const p2 = toIso(x + wx, y, z);
+    const p3 = toIso(x + wx, y + wy, z);
+    const p4 = toIso(x, y + wy, z);
+    const p5 = toIso(x, y, z + wz);
+    const p6 = toIso(x + wx, y, z + wz);
+    const p7 = toIso(x + wx, y + wy, z + wz);
+    const p8 = toIso(x, y + wy, z + wz);
+    
+    // Face Top
+    ctx.fillStyle = colorGradients.top;
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+    ctx.lineWidth = 0.5;
+    ctx.beginPath();
+    ctx.moveTo(p5.x, p5.y);
+    ctx.lineTo(p6.x, p6.y);
+    ctx.lineTo(p7.x, p7.y);
+    ctx.lineTo(p8.x, p8.y);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    
+    // Face Left
+    ctx.fillStyle = colorGradients.left;
+    ctx.beginPath();
+    ctx.moveTo(p1.x, p1.y);
+    ctx.lineTo(p5.x, p5.y);
+    ctx.lineTo(p8.x, p8.y);
+    ctx.lineTo(p4.x, p4.y);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    
+    // Face Right
+    ctx.fillStyle = colorGradients.right;
+    ctx.beginPath();
+    ctx.moveTo(p2.x, p2.y);
+    ctx.lineTo(p6.x, p6.y);
+    ctx.lineTo(p7.x, p7.y);
+    ctx.lineTo(p3.x, p3.y);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+  }
+  
+  function drawIsoTube(x1, y1, z1, x2, y2, z2, radius, color, glowColor) {
+    const start = toIso(x1, y1, z1);
+    const end = toIso(x2, y2, z2);
+    
+    ctx.strokeStyle = color;
+    ctx.lineWidth = radius * 2;
+    ctx.lineCap = 'round';
+    
+    if (glowColor) {
+      ctx.shadowColor = glowColor;
+      ctx.shadowBlur = 8;
+    }
+    
+    ctx.beginPath();
+    ctx.moveTo(start.x, start.y);
+    ctx.lineTo(end.x, end.y);
+    ctx.stroke();
+    
+    // Reset shadow
+    ctx.shadowBlur = 0;
+  }
+  
+  function drawClashNode(x, y, z, label, active) {
+    const pt = toIso(x, y, z);
+    const currentLang = localStorage.getItem('tcs_lang') || 'id';
+    
+    if (active) {
+      // Glow pulse
+      const pulseRadius = 8 + Math.sin(Date.now() / 150) * 4;
+      ctx.fillStyle = 'rgba(239, 68, 68, 0.25)';
+      ctx.beginPath();
+      ctx.arc(pt.x, pt.y, pulseRadius + 6, 0, Math.PI * 2);
+      ctx.fill();
+      
+      ctx.fillStyle = '#ef4444';
+      ctx.beginPath();
+      ctx.arc(pt.x, pt.y, 6, 0, Math.PI * 2);
+      ctx.fill();
+      
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(pt.x, pt.y, 6, 0, Math.PI * 2);
+      ctx.stroke();
+      
+      // Draw small warning text label
+      ctx.fillStyle = '#f87171';
+      ctx.font = 'bold 8px Courier New';
+      ctx.fillText(label, pt.x + 10, pt.y - 4);
+    } else {
+      // Soft green checkmark node
+      ctx.fillStyle = 'rgba(0, 229, 117, 0.2)';
+      ctx.beginPath();
+      ctx.arc(pt.x, pt.y, 10, 0, Math.PI * 2);
+      ctx.fill();
+      
+      ctx.fillStyle = '#00e575';
+      ctx.beginPath();
+      ctx.arc(pt.x, pt.y, 4, 0, Math.PI * 2);
+      ctx.fill();
+      
+      ctx.fillStyle = '#a7f3d0';
+      ctx.font = 'bold 7px Courier New';
+      ctx.fillText(currentLang === 'en' ? 'OK' : 'AMAN', pt.x + 8, pt.y - 4);
+    }
+  }
+  
+  // Console logging queue runner
+  function addConsoleLine(logKey, type) {
+    const currentLang = localStorage.getItem('tcs_lang') || 'id';
+    const translation = window.TCS_TRANSLATIONS[logKey];
+    const text = translation ? translation[currentLang] : logKey;
+    
+    // Prevent duplicate logs in same run
+    if (window.tcsBimState.logsPrinted.has(logKey)) return;
+    window.tcsBimState.logsPrinted.add(logKey);
+    
+    const lineEl = document.createElement('div');
+    lineEl.className = `console-line ${type}`;
+    lineEl.innerText = `> ${text}`;
+    
+    consoleBody.appendChild(lineEl);
+    consoleBody.scrollTop = consoleBody.scrollHeight;
+  }
+  
+  function clearConsole() {
+    consoleBody.innerHTML = '';
+    window.tcsBimState.logsPrinted.clear();
+  }
+  
+  // MAIN ANIMATION LOOP
+  function render() {
+    ctx.clearRect(0, 0, window.tcsBimState.width, window.tcsBimState.height);
+    
+    // Draw Grid floor
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.02)';
+    ctx.lineWidth = 0.5;
+    for (let i = -160; i <= 160; i += 40) {
+      ctx.beginPath();
+      const p1 = toIso(i, -160, 0);
+      const p2 = toIso(i, 160, 0);
+      ctx.moveTo(p1.x, p1.y);
+      ctx.lineTo(p2.x, p2.y);
+      ctx.stroke();
+      
+      ctx.beginPath();
+      const p3 = toIso(-160, i, 0);
+      const p4 = toIso(160, i, 0);
+      ctx.moveTo(p3.x, p3.y);
+      ctx.lineTo(p4.x, p4.y);
+      ctx.stroke();
+    }
+    
+    // Draw Pillars/Columns
+    drawIsoPillar(-120, -120, 80);
+    drawIsoPillar(-120, 120, 80);
+    drawIsoPillar(120, -120, 80);
+    drawIsoPillar(120, 120, 80);
+    
+    // Interpolate offset routes
+    if (window.tcsBimState.state === 'scanning') {
+      window.tcsBimState.progress += 0.006;
+      if (window.tcsBimState.progress >= 1) {
+        window.tcsBimState.progress = 1;
+        window.tcsBimState.state = 'resolved';
+        
+        // Update UI status to Zero-Clash
+        hudStatus.className = 'bim-hud-status-badge clean';
+        hudStatus.setAttribute('data-translate', 'bim_status_clean');
+        const currentLang = localStorage.getItem('tcs_lang') || 'id';
+        hudStatus.innerText = window.TCS_TRANSLATIONS['bim_status_clean'][currentLang];
+        
+        btnRun.style.display = 'none';
+        btnReset.style.display = 'inline-block';
+        scanline.classList.remove('scanning');
+      }
+      
+      // Interpolate offsets
+      window.tcsBimState.pipeOffset = Math.min(1, window.tcsBimState.progress * 1.3);
+      window.tcsBimState.elecOffset = Math.min(1, window.tcsBimState.progress * 1.1);
+      
+      // Inject logs dynamically as scan bar passes coordinate thresholds
+      if (window.tcsBimState.progress > 0.05) addConsoleLine('bim_log_1', 'system');
+      if (window.tcsBimState.progress > 0.20) addConsoleLine('bim_log_2', 'scan');
+      if (window.tcsBimState.progress > 0.35) addConsoleLine('bim_log_3', 'warn');
+      if (window.tcsBimState.progress > 0.50) addConsoleLine('bim_log_4', 'warn');
+      if (window.tcsBimState.progress > 0.65) addConsoleLine('bim_log_5', 'system');
+      if (window.tcsBimState.progress > 0.78) addConsoleLine('bim_log_6', 'resolve');
+      if (window.tcsBimState.progress > 0.88) addConsoleLine('bim_log_7', 'resolve');
+      if (window.tcsBimState.progress >= 0.98) addConsoleLine('bim_log_8', 'resolve');
+    }
+    
+    // --- 1. Draw HVAC Ducting (STATIC - TEAL) ---
+    // Complies with real-life standards: volumetric HVAC ducts
+    if (toggleHvac.checked) {
+      drawIsoBox(
+        -100, -60, 40,   // Position (X, Y, Z)
+        200, 40, 25,     // Dimensions (WX, WY, WZ)
+        {
+          top: 'rgba(0, 229, 117, 0.15)',
+          left: 'rgba(0, 229, 117, 0.1)',
+          right: 'rgba(0, 229, 117, 0.2)'
+        }
+      );
+    }
+    
+    // --- 2. Draw Plumbing System (BLUE PIPELINE with offset translation) ---
+    // Connects chiller pipeline. Initial clash occurs at X:0, Y:-40, Z:40.
+    if (togglePlumb.checked) {
+      const zOffset = window.tcsBimState.pipeOffset * 35; // Shifts pipeline up by 35px in Z to resolve conflict
+      
+      // Part 1: Entering pipe
+      drawIsoTube(-140, -40, 30, -50, -40, 30 + zOffset, 3.5, '#00f2fe', 'rgba(0, 242, 254, 0.3)');
+      // Part 2: Middle crossing pipe (clashing segment)
+      drawIsoTube(-50, -40, 30 + zOffset, 50, -40, 30 + zOffset, 3.5, '#00f2fe', 'rgba(0, 242, 254, 0.3)');
+      // Part 3: Exiting pipe
+      drawIsoTube(50, -40, 30 + zOffset, 140, -40, 30, 3.5, '#00f2fe', 'rgba(0, 242, 254, 0.3)');
+    }
+    
+    // --- 3. Draw Electrical System (YELLOW WIRE WAY with offset translation) ---
+    // Conduits. Initial clash occurs at X:-40, Y:-20, Z:55.
+    if (toggleElec.checked) {
+      const yOffset = window.tcsBimState.elecOffset * -25; // Shifts cable laterally by 25px in Y to resolve conflict
+      
+      // Part 1: Entering tray
+      drawIsoTube(-40, -120, 52, -40, -50 + yOffset, 52, 1.8, '#f39c12', 'rgba(243, 156, 18, 0.2)');
+      // Part 2: Middle crossing tray
+      drawIsoTube(-40, -50 + yOffset, 52, -40, 40 + yOffset, 52, 1.8, '#f39c12', 'rgba(243, 156, 18, 0.2)');
+      // Part 3: Exiting tray
+      drawIsoTube(-40, 40 + yOffset, 52, -40, 120, 52, 1.8, '#f39c12', 'rgba(243, 156, 18, 0.2)');
+    }
+    
+    // --- 4. Draw Clash / Conflict Nodes ---
+    // Visually highlights real-life coordination nodes
+    const plumbingActive = window.tcsBimState.state !== 'resolved';
+    const electricalActive = window.tcsBimState.state !== 'resolved';
+    
+    if (toggleHvac.checked && togglePlumb.checked) {
+      // Clash Node 1: Plumbing crossing HVAC duct boundary
+      drawClashNode(-50, -40, 30, 'CLASH-B12A', plumbingActive);
+      drawClashNode(50, -40, 30, 'CLASH-B12B', plumbingActive);
+    }
+    
+    if (toggleHvac.checked && toggleElec.checked) {
+      // Clash Node 2: Electrical tray crossing HVAC top clearance boundary
+      drawClashNode(-40, -50, 52, 'CLASH-C04', electricalActive);
+    }
+    
+    requestAnimationFrame(render);
+  }
+  
+  // EVENT TRIGGER HANDLERS
+  btnRun.addEventListener('click', () => {
+    if (window.tcsBimState.state !== 'idle') return;
+    
+    window.tcsBimState.state = 'scanning';
+    window.tcsBimState.progress = 0;
+    scanline.classList.add('scanning');
+    clearConsole();
+    
+    addConsoleLine('bim_log_1', 'system');
+  });
+  
+  btnReset.addEventListener('click', () => {
+    window.tcsBimState.state = 'idle';
+    window.tcsBimState.progress = 0;
+    window.tcsBimState.pipeOffset = 0;
+    window.tcsBimState.elecOffset = 0;
+    
+    hudStatus.className = 'bim-hud-status-badge clash';
+    hudStatus.setAttribute('data-translate', 'bim_status_clash');
+    const currentLang = localStorage.getItem('tcs_lang') || 'id';
+    hudStatus.innerText = window.TCS_TRANSLATIONS['bim_status_clash'][currentLang];
+    
+    btnRun.style.display = 'inline-block';
+    btnReset.style.display = 'none';
+    scanline.classList.remove('scanning');
+    
+    clearConsole();
+    const lineEl = document.createElement('div');
+    lineEl.className = 'console-line system';
+    lineEl.innerText = '> [SYS] READY. PRESS RUN TO INITIATE 3D AUDIT.';
+    consoleBody.appendChild(lineEl);
+  });
+  
+  // Watch checkbox layer toggles
+  togglePlumb.addEventListener('change', () => {
+    addConsoleLine(togglePlumb.checked ? 'Plumbing Layer Enabled.' : 'Plumbing Layer Disabled.', 'system');
+  });
+  toggleHvac.addEventListener('change', () => {
+    addConsoleLine(toggleHvac.checked ? 'HVAC Duct Layer Enabled.' : 'HVAC Duct Layer Disabled.', 'system');
+  });
+  toggleElec.addEventListener('change', () => {
+    addConsoleLine(toggleElec.checked ? 'Electrical Layer Enabled.' : 'Electrical Layer Disabled.', 'system');
+  });
+  
+  // Dynamic language listener to update HUD and reset console on the fly
+  window.addEventListener('tcsLanguageChanged', (e) => {
+    const lang = e.detail.language || 'id';
+    
+    // Update active status badge text
+    const activeKey = hudStatus.getAttribute('data-translate');
+    if (activeKey && window.TCS_TRANSLATIONS[activeKey]) {
+      hudStatus.innerText = window.TCS_TRANSLATIONS[activeKey][lang];
+    }
+    
+    // Translate the run and reset button texts
+    const runKey = btnRun.getAttribute('data-translate');
+    if (runKey && window.TCS_TRANSLATIONS[runKey]) {
+      btnRun.innerText = window.TCS_TRANSLATIONS[runKey][lang];
+    }
+    const resetKey = btnReset.getAttribute('data-translate');
+    if (resetKey && window.TCS_TRANSLATIONS[resetKey]) {
+      btnReset.innerText = window.TCS_TRANSLATIONS[resetKey][lang];
+    }
+    
+    // Translate the checkboxes toggle texts
+    document.querySelectorAll('.bim-toggle-text').forEach((el) => {
+      const key = el.getAttribute('data-translate');
+      if (key && window.TCS_TRANSLATIONS[key]) {
+        el.innerText = window.TCS_TRANSLATIONS[key][lang];
+      }
+    });
+    
+    // Re-render printed console logs in correct language
+    const currentLines = Array.from(consoleBody.children);
+    const printedLogs = Array.from(window.tcsBimState.logsPrinted);
+    
+    // Clear and reprint printed logs
+    consoleBody.innerHTML = '';
+    window.tcsBimState.logsPrinted.clear();
+    
+    if (printedLogs.length === 0) {
+      const lineEl = document.createElement('div');
+      lineEl.className = 'console-line system';
+      lineEl.innerText = lang === 'en' ? '> [SYS] READY. PRESS RUN TO INITIATE 3D AUDIT.' : '> [SYS] READY. TEKAN MULAI UNTUK AUDIT BENTROKAN.';
+      consoleBody.appendChild(lineEl);
+    } else {
+      printedLogs.forEach((logKey) => {
+        let type = 'system';
+        if (logKey.includes('log_3') || logKey.includes('log_4')) type = 'warn';
+        else if (logKey.includes('log_6') || logKey.includes('log_7') || logKey.includes('log_8')) type = 'resolve';
+        else if (logKey.includes('log_2')) type = 'scan';
+        addConsoleLine(logKey, type);
+      });
+    }
+  });
+  
+  // Kickstart animation loop
+  render();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', startApp);
+} else {
+  startApp();
+}
+</script>
+<!-- <body></body> -->

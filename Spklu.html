@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kemitraan Bisnis SPKLU - PT. Titis Cahaya Sejahtera</title>
+  <meta name="description" content="Bergabunglah sebagai mitra investor SPKLU bersama PT. Titis Cahaya Sejahtera. Skema kemitraan tepercaya: Anda menyediakan lahan strategis, kami sediakan mesin, instalasi MEP standar nasional, perizinan, dan bagi hasil transparan.">
+  <meta name="keywords" content="kemitraan spklu, bisnis charger mobil listrik, investasi spklu, franchise spklu indonesia, titis cahaya sejahtera, mep contractor nasional">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="images/favicon.png">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Chart.js CDN for Interactive Graphs -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- Leaflet.js CSS & JS for Free Real-Time Interactive Maps -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  
+  <!-- html2pdf.js CDN for sophisticated client-side A4 PDF creation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  
+  <!-- CSS Stylesheet Injection (Google Apps Script Scriptlet) -->
+  <?!= include('SpkluCSS'); ?>
+  
+  <!-- Global site tag (gtag.js) - Google Analytics & Meta Pixel Tracker Slots -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', 'XXXXXXXXXXXXXXX');
+    fbq('track', 'PageView');
+  </script>
+  <noscript>
+    <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=XXXXXXXXXXXXXXX&ev=PageView&noscript=1"/>
+  </noscript>
+  
+  <!-- Fallback Loader for Local Live Server Preview -->
+  <script>
+    if (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost') {
+      // Local Router Fallback: Redirect back to Index.html if ?page=spklu is not in the URL parameters
+      if (!window.location.search.includes('page=spklu')) {
+        window.location.href = 'Index.html' + window.location.search;
+      }
+      
+      fetch('SpkluCSS.html')
+        .then(response => response.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, 'text/html');
+          const style = doc.querySelector('style');
+          if (style) document.head.appendChild(style);
+        })
+        .catch(err => console.error('Failed to load local CSS fallback:', err));
+    }
+  </script>
+</head>
+<body>
+
+  <!-- ------------------- HEADER & NAVIGATION ------------------- -->
+  <header class="main-header" id="navbar">
+    <div class="header-container">
+      <a href="?page=index" class="logo" style="display: flex; align-items: center;">
+        <svg viewBox="0 0 260 60" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:48px; width:auto; vertical-align:middle;" id="logo-img">
+          <g transform="translate(5, 5)">
+            <circle cx="25" cy="25" r="22" stroke="url(#logo-grad)" stroke-width="3" fill="none" stroke-dasharray="100" stroke-dashoffset="10"/>
+            <path d="M25 7V17" stroke="#00F2FE" stroke-width="3" stroke-linecap="round"/>
+            <path d="M25 33V43" stroke="#00F2FE" stroke-width="3" stroke-linecap="round"/>
+            <path d="M7 25H17" stroke="#00F2FE" stroke-width="3" stroke-linecap="round"/>
+            <path d="M33 25H43" stroke="#00F2FE" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="25" cy="25" r="7" fill="#00F2FE"/>
+            <circle cx="25" cy="25" r="3" fill="#FFFFFF"/>
+          </g>
+          <text x="62" y="26" font-family="'Outfit', sans-serif" font-weight="800" font-size="18" fill="#FFFFFF" letter-spacing="1.5">TITIS CAHAYA</text>
+          <text x="62" y="41" font-family="'Outfit', sans-serif" font-weight="800" font-size="14" fill="#00F2FE" letter-spacing="4">SEJAHTERA</text>
+          <text x="62" y="52" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600" font-size="7.5" fill="#94A3B8" letter-spacing="0.5">MEP NATIONAL CONTRACTOR</text>
+          <defs>
+            <linearGradient id="logo-grad" x1="0" y1="0" x2="50" y2="50" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#00F2FE"/>
+              <stop offset="1" stop-color="#00E575"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </a>
+      
+      <nav>
+        <ul class="nav-menu" id="nav-links">
+          <li><a href="#home" class="nav-link active" data-translate="nav_home">Beranda</a></li>
+          <li><a href="#trust" class="nav-link" data-translate="nav_credibility">Kredibilitas</a></li>
+          <li><a href="#scheme" class="nav-link" data-translate="nav_scheme">Skema Bisnis</a></li>
+          <li><a href="#simulator" class="nav-link" data-translate="nav_simulator">Simulator ROI</a></li>
+          <li><a href="#analysis" class="nav-link" data-translate="nav_analysis">Analisis Pasar</a></li>
+          <li><a href="#proposal" class="nav-link" data-translate="nav_proposal">Proposal & Lahan</a></li>
+          <li>
+            <div class="lang-switcher">
+              <button type="button" class="lang-btn active" data-lang="id" onclick="setLanguage('id')">ID</button>
+              <span class="lang-separator">|</span>
+              <button type="button" class="lang-btn" data-lang="en" onclick="setLanguage('en')">EN</button>
+            </div>
+          </li>
+          <li><a href="?page=index" class="nav-link nav-btn" data-translate="nav_contact_mep">Hubungi Kami</a></li>
+        </ul>
+      </nav>
+      
+      <div class="menu-toggle" id="mobile-toggle">
+        <svg style="width:24px;height:24px;" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+        </svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- ------------------- HERO SECTION ------------------- -->
+  <section class="hero" id="home">
+    <canvas id="hero-canvas"></canvas>
+    <div class="hero-glow-1"></div>
+    <div class="hero-glow-2"></div>
+    
+    <div class="container grid-2">
+      <div class="hero-content">
+        <span class="hero-tag" data-translate="sp_hero_tag">⚡ Inisiatif Energi Hijau</span>
+        <h1 class="hero-title" data-translate="sp_hero_title">
+          Investasi Masa Depan: Kemitraan <span>SPKLU</span> Berskala <em>Nasional</em>
+        </h1>
+        <p class="hero-description" data-translate="sp_hero_desc">
+          Dapatkan *passive income* bulanan dengan mengajukan lahan strategis Anda menjadi Stasiun Pengisian Kendaraan Listrik Umum (SPKLU). Seluruh operasional, pengadaan mesin *fast charging*, hingga izin PLN ditangani langsung oleh PT TCS secara tepercaya.
+        </p>
+        <div class="hero-btns">
+          <a href="#proposal" class="btn btn-primary">
+            <span data-translate="sp_hero_btn_propose">Ajukan Lahan Sekarang</span>
+            <svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+            </svg>
+          </a>
+          <a href="#scheme" class="btn btn-secondary" data-translate="sp_hero_btn_scheme">Pelajari Skema</a>
+        </div>
+      </div>
+      
+      <div class="hero-visual">
+        <div class="timelapse-container" id="timelapse-wrapper">
+          <!-- Floating Play Button Mockup -->
+          <div class="timelapse-play-btn" id="timelapse-play-btn">▶</div>
+          <div class="timelapse-wrapper">
+            <div class="timelapse-preview" id="timelapse-preview">
+              <!-- Background cover visual representing a site undergoing SPKLU installation -->
+              <img src="images/ev.png" alt="Timelapse Cover PT TCS SPKLU" class="timelapse-cover-img">
+              
+              <!-- Floating Text Overlay -->
+              <div style="position: absolute; bottom: 30px; z-index: 5; text-align: center; width: 100%; padding: 0 20px;">
+                <span class="section-tag" style="font-size: 11px; margin-bottom: 5px; color: var(--electric-amber);" data-translate="sp_timelapse_tag">Timelapse Eksklusif</span>
+                <p style="font-family:'Outfit'; font-size: 16px; color:#fff; font-weight:800; text-shadow: 0 2px 4px rgba(0,0,0,0.8);" data-translate="sp_timelapse_desc">Konstruksi Lahan Kosong &rarr; SPKLU Aktif</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ------------------- LIVE REVENUE SIMULATOR COUNTER SECTION ------------------- -->
+  <section style="position: relative; z-index: 10; margin-top: -60px; padding: 0 20px;">
+    <div class="container">
+      <div class="glass-card revenue-card">
+        <span class="live-revenue-label" data-translate="sp_live_rev_label">⚡ Live Net Revenue SPKLU PT TCS Nasional (Real-Time)</span>
+        <h2 id="live-revenue-val">Rp 1.482.900.000</h2>
+        <p style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;" data-translate="sp_live_rev_desc">
+          Setiap detikan di atas menyimulasikan transaksi pengisian daya kendaraan listrik aktif di seluruh jaringan SPKLU PT TCS secara nasional.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ------------------- TRUST & KREDIBILITAS SECTION ------------------- -->
+  <section class="trust-section" id="trust">
+    <div class="container">
+      <div class="trust-intro">
+        <span class="section-tag" data-translate="sp_trust_tag">Mengapa Bermitra dengan PT TCS?</span>
+        <h2 class="trust-intro-title" data-translate="sp_trust_title">Didukung oleh Infrastruktur Kontraktor MEP Nasional</h2>
+        <p class="trust-intro-desc" data-translate="sp_trust_desc">
+          Membangun bisnis SPKLU membutuhkan keahlian mekanikal dan elektrikal tingkat tinggi agar aman dan memenuhi regulasi pemerintah. Sebagai kontraktor MEP nasional terpercaya, PT TCS menjamin keandalan teknis 100%.
+        </p>
+      </div>
+      
+      <div class="grid-3">
+        <!-- Card 1 -->
+        <div class="glass-card trust-card">
+          <div class="trust-icon-box">
+            <svg style="width:22px;height:22px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
+          </div>
+          <h3 class="trust-card-title" data-translate="sp_trust_card_1_title">Kontraktor MEP Nasional</h3>
+          <p class="trust-card-desc" data-translate="sp_trust_card_1_desc">
+            Sejak 2020 telah merancang dan membangun 50+ proyek infrastruktur vital berskala besar untuk pabrik farmasi, manufaktur, dan gedung bertingkat di Indonesia.
+          </p>
+        </div>
+        
+        <!-- Card 2 -->
+        <div class="glass-card trust-card">
+          <div class="trust-icon-box">
+            <svg style="width:22px;height:22px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            </svg>
+          </div>
+          <h3 class="trust-card-title" data-translate="sp_trust_card_2_title">Insinyur Ahli & Berlisensi</h3>
+          <p class="trust-card-desc" data-translate="sp_trust_card_2_desc">
+            Instalasi kelistrikan daya tinggi SPKLU (sistem gardu, proteksi arus pendek, dan sistem kontrol cerdas) dikerjakan oleh tim insinyur ahli berlisensi nasional.
+          </p>
+        </div>
+        
+        <!-- Card 3 -->
+        <div class="glass-card trust-card">
+          <div class="trust-icon-box">
+            <svg style="width:22px;height:22px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+            </svg>
+          </div>
+          <h3 class="trust-card-title" data-translate="sp_trust_card_3_title">Mitra Industri Terkemuka</h3>
+          <p class="trust-card-desc" data-translate="sp_trust_card_3_desc">
+            Kami dipercaya oleh perusahaan multinasional seperti Akebono Brake Astra, Tempo Group, Olam Food Ingredients, BT Cocoa, dan Fahrenheit Synthon.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ------------------- PARTNERSHIP SCHEME SECTION ------------------- -->
+  <section class="section scheme-section" id="scheme">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag" data-translate="sp_scheme_tag">Skema Kerja Sama</span>
+        <h2 class="section-title" data-translate="sp_scheme_title">Kolaborasi Transparan & Saling Menguntungkan</h2>
+        <p class="section-desc" data-translate="sp_scheme_desc">
+          Kami membagi tanggung jawab kerja sama secara berimbang guna mempercepat terwujudnya stasiun pengisian daya dengan manajemen aset profesional.
+        </p>
+      </div>
+      
+      <div class="grid-2">
+        <!-- Investor Column -->
+        <div class="glass-card">
+          <h3 class="scheme-column-title investor">
+            <span class="bullet"></span> <span data-translate="sp_inv_duty_title">Kewajiban Mitra Investor</span>
+          </h3>
+          <ul class="scheme-list">
+            <li class="scheme-item">
+              <span class="scheme-num">1</span>
+              <div>
+                <h4 class="scheme-item-title" data-translate="sp_inv_duty_1_title">Lahan Strategis</h4>
+                <p class="scheme-item-desc" data-translate="sp_inv_duty_1_desc">Menyediakan lokasi berukuran minimal muat 2-4 mobil di tepi jalan raya utama, pusat belanja, rest area, atau perkantoran.</p>
+              </div>
+            </li>
+            <li class="scheme-item">
+              <span class="scheme-num">2</span>
+              <div>
+                <h4 class="scheme-item-title" data-translate="sp_inv_duty_2_title">Tanah Clean & Clear</h4>
+                <p class="scheme-item-desc" data-translate="sp_inv_duty_2_desc">Menjamin status kepemilikan tanah legal (SHM/HGB) dan bebas dari sengketa/permasalahan hukum.</p>
+              </div>
+            </li>
+            <li class="scheme-item">
+              <span class="scheme-num">3</span>
+              <div>
+                <h4 class="scheme-item-title" data-translate="sp_inv_duty_3_title">Investasi Sipil Awal</h4>
+                <p class="scheme-item-desc" data-translate="sp_inv_duty_3_desc">Menyediakan modal dasar untuk pekerjaan sipil penunjang lokasi seperti pembuatan kanopi, marka jalan parkir, dan pos.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+        
+        <!-- PT TCS Column -->
+        <div class="glass-card">
+          <h3 class="scheme-column-title tcs">
+            <span class="bullet"></span> <span data-translate="sp_tcs_duty_title">Kewajiban PT TCS (Kontraktor)</span>
+          </h3>
+          <ul class="scheme-list">
+            <li class="scheme-item">
+              <span class="scheme-num">1</span>
+              <div>
+                <h4 class="scheme-item-title" data-translate="sp_tcs_duty_1_title">Penyediaan Mesin Charger</h4>
+                <p class="scheme-item-desc" data-translate="sp_tcs_duty_1_desc">Menyediakan perangkat mesin charger SPKLU berteknologi tinggi (tipe AC charging maupun DC Fast Charging).</p>
+              </div>
+            </li>
+            <li class="scheme-item">
+              <span class="scheme-num">2</span>
+              <div>
+                <h4 class="scheme-item-title" data-translate="sp_tcs_duty_2_title">Pemasangan & Sistem Pembayaran</h4>
+                <p class="scheme-item-desc" data-translate="sp_tcs_duty_2_desc">Pekerjaan fisik kelistrikan, integrasi gateway pembayaran otomatis (QRIS/E-Wallet), dan aplikasi monitoring.</p>
+              </div>
+            </li>
+            <li class="scheme-item">
+              <span class="scheme-num">3</span>
+              <div>
+                <h4 class="scheme-item-title" data-translate="sp_tcs_duty_3_title">Perizinan & Legalitas Lengkap</h4>
+                <p class="scheme-item-desc" data-translate="sp_tcs_duty_3_desc">Mengurus seluruh regulasi perizinan operasional SPKLU ke Kementerian ESDM dan PLN hingga siap beroperasi.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ------------------- INTERACTIVE PROFIT SIMULATOR SECTION ------------------- -->
+  <section class="section simulator-section" id="simulator">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag" data-translate="sp_sim_tag">Simulator Finansial</span>
+        <h2 class="section-title" data-translate="sp_sim_title">Simulator Arus Kas & Kelayakan Finansial</h2>
+        <p class="section-desc" data-translate="sp_sim_desc">
+          Atur skenario mesin pengisi daya dan jumlah utilisasi transaksi harian untuk melihat proyeksi akumulasi arus kas, nilai pengembalian investasi (Payback Period), serta perhitungan kelayakan finansial.
+        </p>
+      </div>
+
+      <div class="glass-card simulator-card" style="padding: 40px; position: relative; z-index: 2;">
+        <div class="grid-2" style="align-items: stretch; gap: 40px;">
+          <!-- Control Panel (Left Side) -->
+          <div class="simulator-controls" style="display: flex; flex-direction: column; justify-content: space-between; gap: 24px;">
+            <div class="control-group">
+              <label class="form-label" style="text-transform: uppercase; font-size: 12px; letter-spacing: 0.05em; color: var(--text-secondary); margin-bottom: 12px;" data-translate="sp_sim_label_type">PILIH TIPE MESIN & SKENARIO INVESTASI</label>
+              <div class="scenario-buttons" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <button id="scenACBtn" class="btn btn-secondary scenario-btn active" style="flex-direction: column; border-radius: var(--border-radius-md); padding: 18px 10px; border-width: 2px; align-items: center; width: 100%; border-color: var(--primary-lime); box-shadow: 0 0 15px var(--primary-lime-glow);">
+                  <strong style="font-size: 15px; color: #fff;" data-translate="sp_sim_btn_ac_title">Tipe AC (22 kW)</strong>
+                  <span style="font-size: 12px; font-weight: 500; color: var(--text-secondary); margin-top: 4px;" data-translate="sp_sim_btn_ac_capex">Capex: Rp 150 Juta</span>
+                </button>
+                <button id="scenDCBtn" class="btn btn-secondary scenario-btn" style="flex-direction: column; border-radius: var(--border-radius-md); padding: 18px 10px; border-width: 1px; align-items: center; width: 100%;">
+                  <strong style="font-size: 15px; color: #fff;" data-translate="sp_sim_btn_dc_title">Tipe DC (50 kW)</strong>
+                  <span style="font-size: 12px; font-weight: 500; color: var(--text-secondary); margin-top: 4px;" data-translate="sp_sim_btn_dc_capex">Capex: Rp 850 Juta</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <div class="slider-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <label class="form-label" style="text-transform: uppercase; font-size: 12px; letter-spacing: 0.05em; color: var(--text-secondary); margin: 0;" data-translate="sp_sim_label_session">JUMLAH TRANSAKSI (SESI / HARI)</label>
+                <span id="sessionValue" style="background: rgba(0, 229, 117, 0.1); border: 1px solid rgba(0, 229, 117, 0.2); color: var(--primary-lime); font-size: 12px; font-weight: 800; padding: 4px 12px; border-radius: 50px;">15 Sesi</span>
+              </div>
+              <input id="sessionSlider" type="range" min="5" max="50" step="1" value="15" class="form-input slider-input" style="padding: 0; height: 8px; cursor: pointer;">
+              <div class="slider-range-labels" style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); font-weight: 600; margin-top: 8px;">
+                <span data-translate="sp_sim_sessions_conservative">5 Sesi (Konservatif)</span>
+                <span data-translate="sp_sim_sessions_crowded">50 Sesi (Sangat Padat)</span>
+              </div>
+            </div>
+
+            <div class="financial-summary" style="background: rgba(3, 7, 18, 0.4); border: 1px solid var(--border-card); border-radius: var(--border-radius-md); padding: 20px; display: flex; flex-direction: column; gap: 14px;">
+              <div class="summary-row" style="display: flex; justify-content: space-between; align-items: center; font-size: 14px;">
+                <span style="color: var(--text-secondary); font-weight: 500;" data-translate="sp_sim_label_capex">Estimasi CAPEX Awal</span>
+                <span id="capexValue" style="color: #fff; font-weight: 700; font-family: 'Outfit';">Rp 150.000.000</span>
+              </div>
+              <div class="summary-row" style="display: flex; justify-content: space-between; align-items: center; font-size: 14px;">
+                <span style="color: var(--text-secondary); font-weight: 500;" data-translate="sp_sim_label_monthly">Pendapatan Kotor Bulanan</span>
+                <span id="grossMonthly" style="color: #fff; font-weight: 700; font-family: 'Outfit';">Rp 15.750.000</span>
+              </div>
+              <div class="summary-row border-highlight" style="display: flex; justify-content: space-between; align-items: center; font-size: 14px; border-top: 1px dashed var(--border-card); padding-top: 14px; margin-top: 4px;">
+                <span style="color: var(--primary-lime); font-weight: 800;" data-translate="sp_sim_label_pbp">Payback Period (PBP)</span>
+                <span id="pbpValue" style="color: var(--primary-lime); font-weight: 900; font-size: 20px; font-family: 'Outfit'; text-shadow: 0 0 10px var(--primary-lime-glow);">2.8 Tahun</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chart Display (Right Side) -->
+          <div class="simulator-chart-pane" style="display: flex; flex-direction: column; justify-content: space-between; gap: 15px;">
+            <div class="chart-header-pane">
+              <span style="color: var(--primary-teal); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em;" data-translate="sp_sim_chart_tag">Proyeksi Saldo Kas</span>
+              <h4 style="font-size: 18px; color: #fff; font-family: 'Outfit'; margin-top: 4px;" data-translate="sp_sim_chart_title">Visualisasi Arus Kas Kumulatif (5 Tahun - Juta Rp)</h4>
+            </div>
+            <div class="simulator-chart-container" style="position: relative; width: 100%; height: 260px;">
+              <canvas id="roiChartCanvas"></canvas>
+            </div>
+            <div class="simulator-disclaimer" style="font-size: 11px; color: var(--text-muted); line-height: 1.5; border-top: 1px solid var(--border-card); padding-top: 12px; margin-top: 10px;" data-translate="sp_sim_disclaimer">
+              💡 <em>Formula dihitung menggunakan standar kelayakan finansial: NPV & IRR diskonto 10% dengan O&M 15% dipotong dari omzet harian otomatis.</em>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ------------------- INTERACTIVE FEASIBILITY SCANNER SECTION ------------------- -->
+  <section class="section scanner-section" id="scanner" style="background: rgba(3, 7, 18, 0.4); border-top: 1px solid var(--border-card); border-bottom: 1px solid var(--border-card);">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag" data-translate="sp_scan_tag" style="color: var(--primary-lime);">Radar Feasibility</span>
+        <h2 class="section-title" data-translate="sp_scan_title">Pemindai Kelayakan Properti (Radar Feasibility Scanner)</h2>
+        <p class="section-desc" data-translate="sp_scan_desc">
+          Masukkan alamat atau titik koordinat properti Anda untuk meluncurkan audit kelayakan wilayah secara <em>real-time</em>. Sistem kami akan memindai gardu PLN terdekat, mengukur kepadatan kompetitor SPKLU, serta memetakan amenitas komersial di sekitar lahan Anda.
+        </p>
+      </div>
+
+      <div class="glass-card simulator-card" style="padding: 40px; position: relative; z-index: 2;">
+        <div class="grid-2" style="align-items: stretch; gap: 40px;">
+          <!-- Controls Panel (Left Side) -->
+          <div class="scanner-controls" style="display: flex; flex-direction: column; justify-content: space-between; gap: 24px;">
+            <div class="control-group">
+              <label class="form-label" style="text-transform: uppercase; font-size: 12px; letter-spacing: 0.05em; color: var(--text-secondary); margin-bottom: 12px;" data-translate="sp_scan_label_input">LOKASI LAHAN ATAU KOORDINAT GPS</label>
+              <div style="position: relative; display: flex; gap: 10px;">
+                <div style="position: relative; flex: 1;">
+                  <input type="text" id="spScanInput" class="form-input" style="width: 100%; padding: 14px 16px 14px 42px; border-radius: var(--border-radius-md); background: rgba(3, 7, 18, 0.6); border: 1px solid var(--border-card); color: #fff; font-size: 12px; font-weight: 600;" placeholder="Masukkan alamat lengkap atau link koordinat Google Maps lahan Anda..." data-translate-placeholder="sp_scan_placeholder">
+                  <span style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); font-size: 16px; color: var(--primary-lime);">📍</span>
+                </div>
+              </div>
+            </div>
+ 
+            <div class="control-group" style="margin-top: -10px; margin-bottom: 5px;">
+              <div class="slider-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <label class="form-label" style="text-transform: uppercase; font-size: 11px; letter-spacing: 0.05em; color: var(--text-secondary); margin: 0;" data-translate="sp_scan_label_radius">RADIUS PEMINDAIAN RADAR</label>
+                <span id="spRadiusValue" style="background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.2); color: #c084fc; font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 50px;">3.0 KM</span>
+              </div>
+              <input id="spRadiusSlider" type="range" min="1.0" max="5.0" step="0.5" value="3.0" class="form-input slider-input" style="padding: 0; height: 6px; cursor: pointer; background: var(--border-card);">
+              <div class="slider-range-labels" style="display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted); font-weight: 600; margin-top: 6px;">
+                <span>1.0 KM</span>
+                <span>5.0 KM</span>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <div class="scanner-actions" style="display: flex; gap: 12px;">
+                <button type="button" id="spScanBtnRun" class="btn btn-primary" style="flex: 1; padding: 14px; font-weight: 700; border-radius: var(--border-radius-md); cursor: pointer;" data-translate="sp_scan_btn_run">Mulai Pemindaian Radar</button>
+                <button type="button" id="spScanBtnReset" class="btn btn-secondary" style="flex: 1; padding: 14px; font-weight: 700; border-radius: var(--border-radius-md); display: none; cursor: pointer;" data-translate="sp_scan_btn_reset">Pindai Lokasi Baru</button>
+              </div>
+            </div>
+
+            <!-- Courier-style Terminal Console Log -->
+            <div class="scanner-console-panel" style="background: rgba(3, 7, 18, 0.7); border: 1px solid var(--border-card); border-radius: var(--border-radius-md); padding: 16px; flex-grow: 1; display: flex; flex-direction: column;">
+              <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); font-weight: 800; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px; margin-bottom: 8px;">TCS Radar Audit v1.0</div>
+              <div id="spScanLogConsole" style="font-family: 'Courier New', monospace; font-size: 11px; color: var(--text-secondary); line-height: 1.6; height: 120px; overflow-y: auto; scrollbar-width: thin;">
+                <div style="color: var(--primary-lime); font-weight: bold;">> [SYS] READY. ENTER ADDRESS & CLICK SCAN.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Radar Visual Pane (Right Side) -->
+          <div class="scanner-radar-pane" style="background: rgba(3, 7, 18, 0.5); border: 1px solid var(--border-card); border-radius: var(--border-radius-lg); position: relative; min-height: 340px; overflow: hidden; padding: 0; display: flex; flex-direction: column; justify-content: stretch;">
+            <!-- Real-Time Leaflet Interactive Map Container -->
+            <div id="spRadarMap" style="width: 100%; height: 100%; min-height: 340px; background: #030712; z-index: 1;"></div>
+            
+            <!-- Transparent Overlay Canvas for Rotating Radar Scan Beam -->
+            <canvas id="spRadarSweepCanvas" style="width: 100%; height: 100%; position: absolute; inset: 0; z-index: 10; pointer-events: none; background: rgba(3, 7, 18, 0.4); display: none;"></canvas>
+            
+            <!-- Radar Distance Circles Indicator Overlay (Premium Float Glass) -->
+            <div style="position: absolute; right: 15px; top: 15px; display: flex; flex-direction: column; gap: 6px; font-size: 9px; font-weight: 700; font-family: 'Courier New', monospace; color: #fff; background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(255,255,255,0.08); padding: 8px 12px; border-radius: var(--border-radius-sm); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 20;">
+              <span style="display: flex; align-items: center; gap: 6px;"><span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #00f2fe; box-shadow: 0 0 6px #00f2fe;"></span> PLN (1.5KM)</span>
+              <span style="display: flex; align-items: center; gap: 6px;"><span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #a855f7; box-shadow: 0 0 6px #a855f7;"></span> <span id="spLegendEvZone">EV ZONE (3.0KM)</span></span>
+              <span style="display: flex; align-items: center; gap: 6px;"><span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #ef4444; box-shadow: 0 0 6px #ef4444;"></span> SPKLU (COMPETITORS)</span>
+              <span style="display: flex; align-items: center; gap: 6px;"><span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #00e575; box-shadow: 0 0 6px #00e575;"></span> HUBS (3.0KM)</span>
+              <span style="display: flex; align-items: center; gap: 6px;"><span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #06b6d4; box-shadow: 0 0 6px #06b6d4;"></span> REST AREA (TOLL CORRIDOR)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Glowing Feasibility Scorecard Overlay (Fades/Slides in once scan complete) -->
+        <div id="spScannerScoreCard" style="display: none; margin-top: 30px; padding: 24px; background: rgba(0, 229, 117, 0.05); border: 1.5px solid var(--primary-lime); border-radius: var(--border-radius-lg); box-shadow: 0 0 30px rgba(0, 229, 117, 0.1); animation: scanFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;">
+          <div style="display: grid; grid-template-columns: 1fr; gap: 20px; align-items: center;">
+            <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: center; justify-content: space-between;">
+              <div style="display: flex; align-items: center; gap: 18px;">
+                <!-- Glowing Score Ring Gauge -->
+                <div style="position: relative; width: 70px; height: 70px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: rgba(0,229,117,0.1); border: 3px solid var(--primary-lime); box-shadow: 0 0 15px var(--primary-lime-glow);">
+                  <span id="spFeasibilityScoreText" style="font-family: 'Outfit'; font-size: 20px; font-weight: 900; color: #fff;">94%</span>
+                </div>
+                <div>
+                  <span style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--text-secondary);" data-translate="sp_score_label">Skor Kelayakan Lahan:</span>
+                  <h4 id="spFeasibilityScoreStatus" style="font-size: 20px; font-weight: 900; color: var(--primary-lime); margin-top: 2px;" data-translate="sp_score_status">SANGAT LAYAK (HI-POTENTIAL)</h4>
+                </div>
+              </div>
+              <div style="display: flex; gap: 14px; flex-wrap: wrap; align-items: center;">
+                <button type="button" id="spScoreBtnClaim" class="btn btn-primary" style="padding: 14px 28px; font-size: 13px; font-weight: 800; border-radius: var(--border-radius-md);" data-translate="sp_score_btn_claim">Klaim Kuota Wilayah Sekarang 🚀</button>
+                <button type="button" id="spScoreBtnDownload" class="btn btn-secondary" style="padding: 14px 24px; font-size: 13px; font-weight: 800; border-radius: var(--border-radius-md); border-color: var(--primary-lime); color: var(--primary-lime); display: inline-flex; align-items: center; gap: 8px; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.boxShadow='0 0 15px rgba(0, 229, 117, 0.2)'; this.style.background='rgba(0, 229, 117, 0.05)';" onmouseout="this.style.boxShadow='none'; this.style.background='transparent';">
+                  <svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                  </svg>
+                  <span data-translate="sp_score_btn_download">Unduh Proposal Kelayakan Pro (PDF)</span>
+                </button>
+              </div>
+            </div>
+            <div style="border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 16px; font-size: 12px; color: var(--text-secondary); line-height: 1.6;" id="spFeasibilityScoreRec" data-translate="sp_score_rec">
+              Lokasi Anda bebas dari kompetitor dalam radius aman dan memiliki jaringan grid PLN yang mumpuni. **Klaim kuota kemitraan wilayah Anda sekarang** pada form registrasi di bawah sebelum didahului kompetitor lain.
+            </div>
+            
+            <!-- SaaS Strategic Location Analysis Report -->
+            <div id="spScannerSaaSCard" style="border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 20px; margin-top: 10px; display: flex; flex-direction: column; gap: 20px;">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <h5 style="font-family: 'Outfit'; font-size: 13px; font-weight: 800; color: #fff; margin: 0; display: flex; align-items: center; gap: 8px;">
+                  <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--primary-lime); box-shadow: 0 0 6px var(--primary-lime);"></span>
+                  TCS SaaS Location Analytics v1.0
+                </h5>
+                <span style="background: rgba(0, 242, 254, 0.1); border: 1px solid rgba(0, 242, 254, 0.2); color: #00f2fe; font-size: 9px; font-weight: 800; padding: 2px 8px; border-radius: 4px; text-transform: uppercase;">Pro Report</span>
+              </div>
+              
+              <!-- Analytics Grid -->
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px;">
+                <!-- Recommended Charger -->
+                <div style="background: rgba(3, 7, 18, 0.4); border: 1px solid rgba(255,255,255,0.03); border-radius: var(--border-radius-sm); padding: 14px; text-align: center;">
+                  <span style="font-size: 9px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;" id="saasRecommendedChargerLabel">Recommended Charger</span>
+                  <div id="saasRecommendedCharger" style="font-family: 'Outfit'; font-size: 14px; font-weight: 800; color: var(--primary-lime); margin-top: 6px;">AC Charger (22 kW)</div>
+                </div>
+                <!-- Installed Power Needed -->
+                <div style="background: rgba(3, 7, 18, 0.4); border: 1px solid rgba(255,255,255,0.03); border-radius: var(--border-radius-sm); padding: 14px; text-align: center;">
+                  <span style="font-size: 9px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;" id="saasRequiredGridPowerLabel">Required Grid Power</span>
+                  <div id="saasRequiredGridPower" style="font-family: 'Outfit'; font-size: 14px; font-weight: 800; color: #fff; margin-top: 6px;">22 kVA (Standard Connection)</div>
+                </div>
+                <!-- Est Sessions/Day -->
+                <div style="background: rgba(3, 7, 18, 0.4); border: 1px solid rgba(255,255,255,0.03); border-radius: var(--border-radius-sm); padding: 14px; text-align: center;">
+                  <span style="font-size: 9px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;" id="saasSessionsPerDayLabel">Projected Sessions/Day</span>
+                  <div id="saasSessionsPerDay" style="font-family: 'Outfit'; font-size: 14px; font-weight: 800; color: #fff; margin-top: 6px;">18 Sessions / Day</div>
+                </div>
+                <!-- Payback BEP -->
+                <div style="background: rgba(3, 7, 18, 0.4); border: 1px solid rgba(255,255,255,0.03); border-radius: var(--border-radius-sm); padding: 14px; text-align: center; border-color: rgba(0, 229, 117, 0.15); box-shadow: 0 0 10px rgba(0, 229, 117, 0.02);">
+                  <span style="font-size: 9px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;" id="saasPaybackPeriodLabel">Projected Payback (BEP)</span>
+                  <div id="saasPaybackPeriod" style="font-family: 'Outfit'; font-size: 16px; font-weight: 900; color: var(--primary-lime); margin-top: 4px; text-shadow: 0 0 8px var(--primary-lime-glow);">2.3 Years</div>
+                </div>
+              </div>
+              
+              <!-- Consultant Narrative -->
+              <div id="saasConsultantNarrative" style="background: rgba(15, 23, 42, 0.3); border-left: 3px solid #00f2fe; padding: 12px 16px; border-radius: 0 var(--border-radius-sm) var(--border-radius-sm) 0; font-size: 11.5px; color: var(--text-secondary); line-height: 1.5; font-style: italic;">
+                "Dwell-time tinggi di zona perkantoran dan hunian premium mendukung pengisian daya AC Charger 22 kW agar kendaraan dapat terisi penuh selagi pemiliknya bekerja atau beristirahat, meminimalisir beban grid PLN lokal."
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ------------------- MARKET ANALYSIS & CHARTS SECTION ------------------- -->
+  <section class="section analysis-section" id="analysis">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag" data-translate="sp_an_tag">Analisis Pasar & Keuangan</span>
+        <h2 class="section-title" data-translate="sp_an_title">Mengapa Sekarang Waktu Terbaik untuk Berinvestasi?</h2>
+        <p class="section-desc" data-translate="sp_an_desc">
+          Data berikut menggambarkan lonjakan pertumbuhan adopsi mobil listrik di Indonesia serta simulasi titik balik modal (ROI) proyek kemitraan secara konservatif.
+        </p>
+      </div>
+
+      <!-- Charts Grid -->
+      <div class="grid-3" style="margin-bottom: 50px;">
+        <!-- Chart 1: EV Growth -->
+        <div class="glass-card chart-card">
+          <div class="chart-card-header">
+            <span class="chart-tag" data-translate="sp_ch_1_tag">Ribu Unit</span>
+            <h3 class="chart-title" data-translate="sp_ch_1_title">Pertumbuhan Populasi EV Nasional</h3>
+          </div>
+          <div class="chart-canvas-container">
+            <canvas id="evGrowthChart"></canvas>
+          </div>
+          <p class="chart-footer-desc" data-translate="sp_ch_1_footer">
+            Adopsi mobil listrik nasional meningkat secara eksponensial menciptakan permintaan ruang pengisian daya yang kritis.
+          </p>
+        </div>
+
+        <!-- Chart 2: Responsibility Breakdown -->
+        <div class="glass-card chart-card">
+          <div class="chart-card-header">
+            <span class="chart-tag" data-translate="sp_ch_2_tag">Persentase</span>
+            <h3 class="chart-title" data-translate="sp_ch_2_title">Distribusi Tugas & Modal Kemitraan</h3>
+          </div>
+          <div class="chart-canvas-container">
+            <canvas id="responsibilityChart"></canvas>
+          </div>
+          <p class="chart-footer-desc" data-translate="sp_ch_2_footer">
+            Skema bagi hasil berimbang dengan pemisahan beban modal infrastruktur berat agar investor bebas pusing operasional.
+          </p>
+        </div>
+
+        <!-- Chart 3: ROI Cashflow -->
+        <div class="glass-card chart-card">
+          <div class="chart-card-header">
+            <span class="chart-tag" data-translate="sp_ch_3_tag">Juta Rupiah</span>
+            <h3 class="chart-title" data-translate="sp_ch_3_title">Proyeksi Aliran Kas Kumulatif 5 Tahun</h3>
+          </div>
+          <div class="chart-canvas-container">
+            <canvas id="roiChart"></canvas>
+          </div>
+          <p class="chart-footer-desc" data-translate="sp_ch_3_footer">
+            Berdasarkan survei kelayakan lalu lintas, modal awal (Sipil/Lahan) diproyeksikan Break-Even Point (BEP) pada tahun ke-3.
+          </p>
+        </div>
+      </div>
+
+      <!-- Analyst Insight Card -->
+      <div class="glass-card" style="border-left: 4px solid var(--primary-lime); padding: 24px; display: flex; align-items: flex-start; gap: 20px;">
+        <span style="font-size: 32px; line-height: 1;">💡</span>
+        <div>
+          <h4 style="font-family:'Outfit'; font-size: 16px; font-weight:800; color:#fff; margin-bottom: 6px;" data-translate="sp_note_title">Catatan Kelayakan dari Tim Riset Kemitraan PT TCS</h4>
+          <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.7;" data-translate="sp_note_desc">
+            Infrastruktur SPKLU bersifat sangat hiper-lokal. Jika lokasi strategis Anda sudah ditempati oleh kompetitor dalam radius 3 KM, peluang memonopoli arus pengisian daya kendaraan listrik akan hilang. Oleh karena itu, langkah pengamanan kuota wilayah serta survei kelayakan fisik menjadi sangat mendesak demi melindungi keuntungan jangka panjang (10+ tahun).
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ------------------- LEAD CAPTURE FORM SECTION ------------------- -->
+  <section class="section form-section" id="proposal">
+    <div class="container grid-2">
+      <!-- Info Left Side -->
+      <div class="form-visual-side">
+        <span class="form-visual-badge" data-translate="sp_form_tag">💰 Passive Income Real</span>
+        <h2 class="form-visual-title" data-translate="sp_form_title">Unduh Proposal & Ajukan Lahan Anda Hari Ini</h2>
+        <p class="form-visual-desc" data-translate="sp_form_desc">
+          Setelah Anda mengisi formulir pengajuan, sistem kami akan langsung mengirimkan Proposal Kemitraan SPKLU komprehensif ke email Anda. Tim analis kelayakan lokasi kami akan meninjau titik koordinat lahan Anda dalam 1x24 jam.
+        </p>
+        
+        <div class="benefit-pill">
+          <svg style="width:20px;height:20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+          </svg>
+          <span data-translate="sp_benefit_1">Gratis Survei & Analisis Kelayakan Lalu Lintas EV</span>
+        </div>
+        <div class="benefit-pill">
+          <svg style="width:20px;height:20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+          </svg>
+          <span data-translate="sp_benefit_2">Pembagian Bagi Hasil Ditransfer Otomatis Bulanan</span>
+        </div>
+        <div class="benefit-pill">
+          <svg style="width:20px;height:20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+          </svg>
+          <span data-translate="sp_benefit_3">Aplikasi Pemantau Pendapatan Real-time (SaaS)</span>
+        </div>
+      </div>
+      
+      <!-- Glassmorphic Form Card -->
+      <div class="glass-card spklu-form-card">
+        <!-- Lead Capture Form -->
+        <form id="spklu-lead-form">
+          <h3 style="margin-bottom: 24px; text-align: center; color: #fff;" data-translate="sp_form_card_title">Formulir Pengajuan Mitra SPKLU</h3>
+          
+          <div class="form-group">
+            <label class="form-label" for="lead-name" data-translate="sp_form_label_name">Nama Lengkap Investor *</label>
+            <input type="text" id="lead-name" class="form-input" placeholder="Contoh: Hermawan Wijaya" data-translate="sp_form_placeholder_name" required>
+          </div>
+          
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label" for="lead-email" data-translate="sp_form_label_email">Alamat Email Aktif *</label>
+              <input type="email" id="lead-email" class="form-input" placeholder="Contoh: investor@tcs.com" data-translate="sp_form_placeholder_email" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="lead-phone" data-translate="sp_form_label_phone">No. WhatsApp Aktif *</label>
+              <input type="tel" id="lead-phone" class="form-input" placeholder="Contoh: 0812345678" data-translate="sp_form_placeholder_phone" required>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label" for="lead-address" data-translate="sp_form_label_address">Alamat Lengkap & Koordinat Google Maps Lahan *</label>
+            <textarea id="lead-address" class="form-input" placeholder="Contoh: Jl. Raya Sudirman No. 42 (Koordinat: -6.2088, 106.8456)" data-translate="sp_form_placeholder_address" required></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label" for="lead-notes" data-translate="sp_form_label_notes">Keterangan Pendukung / Ukuran Lahan (Opsional)</label>
+            <textarea id="lead-notes" class="form-input" placeholder="Contoh: Lahan parkir ruko 3 lantai muat 4 mobil, daya terpasang 33kVA..." data-translate="sp_form_placeholder_notes"></textarea>
+          </div>
+          
+          <button type="submit" class="btn btn-primary" style="width: 100%; border-radius: var(--border-radius-sm); margin-top: 10px;">
+            <span data-translate="sp_form_btn_submit">Unduh Proposal & Ajukan Lahan</span>
+            <svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+            </svg>
+          </button>
+          
+          <label class="form-checkbox-label">
+            <input type="checkbox" checked required>
+            <span data-translate="sp_form_agreement">Saya setuju untuk menerima proposal penawaran kemitraan dan bersedia dihubungi oleh tim representatif PT TCS melalui WhatsApp/Email.</span>
+          </label>
+        </form>
+        
+        <!-- Loading State Pane -->
+        <div class="form-loader" id="form-loader-pane">
+          <div class="spinner"></div>
+          <h3 style="color:#fff; margin-bottom:10px;" data-translate="sp_loader_title">Memproses Pengajuan Lahan...</h3>
+          <p style="color:var(--text-secondary); font-size:14px;" data-translate="sp_loader_desc">Kami sedang menyiapkan database pendaftaran Anda secara aman.</p>
+        </div>
+        
+        <!-- Success State Pane -->
+        <div class="form-success-pane" id="form-success-pane">
+          <div class="success-icon-box">
+            <svg style="width:36px;height:36px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+            </svg>
+          </div>
+          <h2 class="success-title" id="success-title-text" data-translate="sp_success_title">Pengajuan Terkirim!</h2>
+          <p class="success-msg" id="success-msg-text"></p>
+          
+          <a href="#" id="success-wa-btn" class="btn btn-primary whatsapp-btn" target="_blank">
+            <svg style="width:20px;height:20px;" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.262 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.457L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.966C16.59 2.016 14.11 1.01 11.999 1.01c-5.45 0-9.876 4.373-9.88 9.8.001 1.83.503 3.616 1.454 5.176l-1.01 3.685 3.774-.977zm11.517-5.837c-.31-.155-1.837-.894-2.126-1.002-.29-.107-.5-.16-.71.155-.21.316-.816 1.002-.998 1.213-.183.21-.365.237-.675.081-.31-.155-1.31-.476-2.497-1.522-.924-.813-1.547-1.817-1.728-2.126-.183-.31-.02-.477.136-.632.14-.139.31-.36.464-.54.155-.18.207-.31.31-.516.104-.207.052-.387-.026-.54-.078-.155-.71-1.687-.972-2.316-.255-.615-.515-.53-.71-.54-.183-.01-.39-.01-.599-.01-.21 0-.55.077-.837.387-.288.31-1.1.1.066-1.1 2.378 0 3.633.29.5 2.126.31 2.296.082 1.468 1.135 2.28 2.222 3.197 2.087 1.91 4.156 2.651 5.756 2.08.38-.135 1.16-.47 1.32-.93.16-.456.16-.846.11-.93-.05-.084-.18-.135-.49-.29z"/>
+            </svg>
+            <span data-translate="sp_btn_wa">Hubungi WA Sekarang</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ------------------- QUICK CONTACT WA CTAs ------------------- -->
+  <section class="quick-contact-section">
+    <div class="container glass-card quick-contact-card">
+      <div class="quick-contact-info">
+        <h2 class="quick-contact-title" data-translate="sp_quick_title">Masih Ragu / Butuh Informasi Lebih Cepat?</h2>
+        <p class="quick-contact-desc" data-translate="sp_quick_desc">
+          Konsultasikan potensi kelayakan lahan dan estimasi perhitungan bagi hasil SPKLU Anda langsung bersama tim representatif bisnis kami melalui chat WhatsApp sekarang (Gratis).
+        </p>
+      </div>
+      <a href="https://wa.me/628111460707?text=Halo%20Admin%20TCS%2C%20saya%20tertarik%20dengan%20kemitraan%20SPKLU%20PT%20TCS%20dan%20ingin%20berkonsultasi%20langsung." class="btn whatsapp-btn" target="_blank">
+        <svg style="width:20px;height:20px;" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.262 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.457L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.966C16.59 2.016 14.11 1.01 11.999 1.01c-5.45 0-9.876 4.373-9.88 9.8.001 1.83.503 3.616 1.454 5.176l-1.01 3.685 3.774-.977zm11.517-5.837c-.31-.155-1.837-.894-2.126-1.002-.29-.107-.5-.16-.71.155-.21.316-.816 1.002-.998 1.213-.183.21-.365.237-.675.081-.31-.155-1.31-.476-2.497-1.522-.924-.813-1.547-1.817-1.728-2.126-.183-.31-.02-.477.136-.632.14-.139.31-.36.464-.54.155-.18.207-.31.31-.516.104-.207.052-.387-.026-.54-.078-.155-.71-1.687-.972-2.316-.255-.615-.515-.53-.71-.54-.183-.01-.39-.01-.599-.01-.21 0-.55.077-.837.387-.288.31-1.1.1.066-1.1 2.378 0 3.633.29.5 2.126.31 2.296.082 1.468 1.135 2.28 2.222 3.197 2.087 1.91 4.156 2.651 5.756 2.08.38-.135 1.16-.47 1.32-.93.16-.456.16-.846.11-.93-.05-.084-.18-.135-.49-.29z"/>
+        </svg>
+        <span data-translate="sp_btn_wa">Hubungi WA Sekarang</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ------------------- FOOTER ------------------- -->
+  <footer class="main-footer">
+    <div class="footer-container">
+      <div class="footer-logo">
+        <svg viewBox="0 0 260 60" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:48px; width:auto; vertical-align:middle; margin-bottom: 10px;">
+          <g transform="translate(5, 5)">
+            <circle cx="25" cy="25" r="22" stroke="url(#logo-grad-sf)" stroke-width="3" fill="none" stroke-dasharray="100" stroke-dashoffset="10"/>
+            <path d="M25 7V17" stroke="#00F2FE" stroke-width="3" stroke-linecap="round"/>
+            <path d="M25 33V43" stroke="#00F2FE" stroke-width="3" stroke-linecap="round"/>
+            <path d="M7 25H17" stroke="#00F2FE" stroke-width="3" stroke-linecap="round"/>
+            <path d="M33 25H43" stroke="#00F2FE" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="25" cy="25" r="7" fill="#00F2FE"/>
+            <circle cx="25" cy="25" r="3" fill="#FFFFFF"/>
+          </g>
+          <text x="62" y="26" font-family="'Outfit', sans-serif" font-weight="800" font-size="18" fill="#FFFFFF" letter-spacing="1.5">TITIS CAHAYA</text>
+          <text x="62" y="41" font-family="'Outfit', sans-serif" font-weight="800" font-size="14" fill="#00F2FE" letter-spacing="4">SEJAHTERA</text>
+          <text x="62" y="52" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600" font-size="7.5" fill="#94A3B8" letter-spacing="0.5">MEP NATIONAL CONTRACTOR</text>
+          <defs>
+            <linearGradient id="logo-grad-sf" x1="0" y1="0" x2="50" y2="50" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#00F2FE"/>
+              <stop offset="1" stop-color="#00E575"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <p class="footer-text" data-translate="footer_text">
+        PT. Titis Cahaya Sejahtera &copy; 2020 - 2026. MEP Contractor & SPKLU Operator.
+      </p>
+      <ul class="footer-nav">
+        <li><a href="?page=index" data-translate="footer_home_mep">Beranda MEP</a></li>
+        <li><a href="#home" data-translate="footer_top">Atas</a></li>
+        <li><a href="#trust" data-translate="footer_credibility">Kredibilitas</a></li>
+        <li><a href="#scheme" data-translate="footer_scheme">Skema</a></li>
+        <li><a href="#proposal" data-translate="footer_propose">Ajukan Lahan</a></li>
+      </ul>
+    </div>
+  <!-- ------------------- PASSCODE MODAL FOR PDF DOWNLOAD ------------------- -->
+  <div id="spPasscodeModal" style="display: none; position: fixed; inset: 0; background: rgba(3, 7, 18, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 9999; align-items: center; justify-content: center; padding: 20px; transition: opacity 0.3s ease;">
+    <div class="glass-card" style="max-width: 480px; width: 100%; padding: 40px; border-radius: var(--border-radius-lg); border: 1.5px solid rgba(0, 229, 117, 0.15); box-shadow: 0 0 40px rgba(0, 229, 117, 0.05); position: relative; animation: scanFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;">
+      <!-- Close Button -->
+      <button type="button" id="spPassCloseBtn" style="position: absolute; right: 20px; top: 20px; background: transparent; border: none; color: var(--text-muted); font-size: 20px; cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--text-muted)'">&times;</button>
+      
+      <div style="text-align: center; margin-bottom: 24px;">
+        <span style="font-size: 40px; display: inline-block; margin-bottom: 12px; filter: drop-shadow(0 0 10px rgba(0, 242, 254, 0.3));">🔒</span>
+        <h3 style="font-family: 'Outfit'; font-size: 20px; font-weight: 800; color: #fff; margin: 0;" data-translate="sp_pass_title">Unduh Proposal Analisis Kelayakan Usaha</h3>
+        <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.6; margin-top: 10px;" data-translate="sp_pass_desc">
+          Proposal ini dilindungi oleh kata sandi dinamis dari panel admin Google Sheets. Silakan hubungi tim Sales MEP PT TCS melalui WhatsApp untuk mendapatkan kode sandi akses secara gratis.
+        </p>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 20px;">
+        <div class="form-group" style="margin: 0;">
+          <label class="form-label" style="text-transform: uppercase; font-size: 10.5px; letter-spacing: 0.05em; color: var(--text-secondary); margin-bottom: 8px;" data-translate="sp_pass_label">Masukkan Kode Sandi Akses *</label>
+          <input type="password" id="spPasscodeInput" class="form-input" placeholder="xxxxxx" style="width: 100%; padding: 14px; text-align: center; font-size: 16px; font-weight: 800; letter-spacing: 0.2em; border-color: rgba(255,255,255,0.08); background: rgba(3, 7, 18, 0.4);" required>
+          <span id="spPassError" style="color: #ef4444; font-size: 11px; font-weight: 700; display: none; text-align: center; margin-top: 6px;" data-translate="sp_pass_error_wrong">❌ KODE SANDI SALAH. SILAKAN HUBUNGI SALES TCS.</span>
+        </div>
+
+        <button type="button" id="spPassSubmitBtn" class="btn btn-primary" style="width: 100%; padding: 14px; font-weight: 800; border-radius: var(--border-radius-md); font-size: 13px;" data-translate="sp_pass_btn_submit">Verifikasi & Unduh Proposal PDF</button>
+      </div>
+
+      <div style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px; text-align: center;">
+        <a id="spPassWaBtn" href="https://wa.me/628111978888?text=Halo%20Sales%20TCS%2C%20saya%20tertarik%20mengunduh%20Proposal%20Kelayakan%20SPKLU%20PT%20TCS.%20Boleh%20saya%20minta%20Password%20aksesnya%3F" target="_blank" class="btn btn-secondary" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; border-color: #25d366; color: #25d366; font-size: 12.5px; font-weight: 800; padding: 12px;" onmouseover="this.style.background='rgba(37,211,102,0.1)'" onmouseout="this.style.background='transparent'">
+          <svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.501-5.733-1.451L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.859-4.42 9.863-9.864.002-2.634-1.02-5.11-2.88-6.973C16.593 1.905 14.12 .88 11.487.88c-5.438 0-9.863 4.42-9.867 9.864-.001 1.776.463 3.51 1.344 5.04L1.936 21.68l6.027-1.579.002-.001z"/>
+          </svg>
+          <span data-translate="sp_pass_btn_wa">Hubungi Sales via WhatsApp untuk Password</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  </footer>
+
+  <!-- JavaScript Client-side Injection (Google Apps Script Scriptlet) -->
+  <?!= include('TranslationJS'); ?>
+  <?!= include('SpkluJS'); ?>
+
+  <!-- Fallback Loader for Local Live Server Preview -->
+  <script>
+    if (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost') {
+      // Load local TranslationJS fallback first
+      fetch('TranslationJS.html')
+        .then(response => response.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, 'text/html');
+          const originalScript = doc.querySelector('script');
+          if (originalScript) {
+            const script = document.createElement('script');
+            script.textContent = originalScript.textContent;
+            document.body.appendChild(script);
+          }
+        })
+        .catch(err => console.error('Failed to load local TranslationJS fallback:', err));
+
+      // Load local SpkluJS fallback
+      fetch('SpkluJS.html')
+        .then(response => response.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, 'text/html');
+          const originalScript = doc.querySelector('script');
+          if (originalScript) {
+            const script = document.createElement('script');
+            script.textContent = originalScript.textContent;
+            document.body.appendChild(script);
+          }
+        })
+        .catch(err => console.error('Failed to load local SpkluJS fallback:', err));
+    }
+  </script>
+</body>
+</html>
+

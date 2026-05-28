@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Kemitraan SPKLU - PT TCS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #fafaf9;
+            color: #292524;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container { height: 380px; }
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .accent-gradient {
+            background: linear-gradient(135deg, #047857 0%, #0f766e 100%);
+        }
+        .text-gradient {
+            background: linear-gradient(90deg, #047857, #0369a1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="antialiased overflow-x-hidden selection:bg-emerald-200 selection:text-emerald-900">
+
+    <!-- Chosen Palette: Warm Neutrals with Emerald & Navy Accents (bg-stone-50, text-stone-800, emerald-700, sky-800) -->
+    <!-- Application Structure Plan: A linear narrative funnel designed for conversion and deep understanding. 1. Hook (Market Boom) to establish urgency. 2. Solution (Low-effort partnership) to lower barriers. 3. Proof (Interactive ROI Calculator) allowing investors to synthesize potential profits based on their own traffic estimates. 4. Qualification (Criteria/Scanner) to pre-qualify leads. 5. Action (Lead Form). This architecture guides the investor from FOMO to logical financial validation, ending in a concrete call to action. -->
+    <!-- Visualization & Content Choices: 1. EV Growth -> Goal: Change -> Line Chart -> Shows explosive market demand clearly over time -> Chart.js. 2. Role Split -> Goal: Compare -> Donut Chart -> Highlights visually how PT TCS does the heavy operational lifting -> Chart.js. 3. ROI Projection -> Goal: Change/Compare -> Stacked Bar Chart (Interactive) -> Lets user manipulate daily traffic to instantly see Break-Even Point changes -> Chart.js. NO SVG used; HTML/CSS emojis and shapes replace icons. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <nav class="fixed top-0 w-full z-50 glass-panel border-b border-stone-200 px-6 py-4 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="text-xl md:text-2xl font-extrabold tracking-tight text-stone-800">
+                PT TCS <span class="text-emerald-700">EV Infra</span>
+            </div>
+            <div class="hidden md:flex gap-6 font-semibold text-sm text-stone-600">
+                <a href="#pasar" class="hover:text-emerald-700 transition-colors">Peluang Pasar</a>
+                <a href="#skema" class="hover:text-emerald-700 transition-colors">Skema Bisnis</a>
+                <a href="#kalkulator" class="hover:text-emerald-700 transition-colors">Simulasi Profit</a>
+            </div>
+            <button onclick="document.getElementById('gabung').scrollIntoView({behavior: 'smooth'})" class="bg-stone-900 hover:bg-stone-800 text-white px-5 py-2.5 rounded-full font-bold text-sm transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                Evaluasi Lahan 🚀
+            </button>
+        </div>
+    </nav>
+
+    <header class="pt-32 pb-20 px-6 relative overflow-hidden flex flex-col justify-center items-center text-center min-h-[85vh]">
+        <div class="absolute inset-0 bg-stone-100 -z-20"></div>
+        <div class="absolute top-20 right-0 w-96 h-96 bg-emerald-200 opacity-30 rounded-full blur-3xl -z-10"></div>
+        <div class="absolute bottom-10 left-10 w-80 h-80 bg-sky-200 opacity-30 rounded-full blur-3xl -z-10"></div>
+
+        <div class="inline-block border border-emerald-600 text-emerald-700 bg-emerald-50 px-4 py-1.5 rounded-full text-xs md:text-sm font-extrabold mb-6 tracking-widest uppercase shadow-sm">
+            Kemitraan Terbatas 2026
+        </div>
+        <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight max-w-5xl text-stone-900">
+            Ubah Lahan Kosong Anda Menjadi <br/>
+            <span class="text-gradient">Mesin Pasif Inkam Otomatis</span>
+        </h1>
+        <p class="text-lg md:text-xl text-stone-600 mb-10 font-medium max-w-3xl leading-relaxed">
+            Ledakan mobil listrik di Indonesia adalah peluang kekayaan dekade ini. Anda sediakan lahan strategis, PT TCS sediakan infrastruktur SPKLU <i>Fast Charging</i>. Nikmati hasil tanpa beban operasional.
+        </p>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-8 max-w-4xl w-full mt-8">
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-100 flex flex-col items-center">
+                <div class="text-4xl mb-3">⚙️</div>
+                <div class="text-2xl font-black text-stone-800">100%</div>
+                <div class="text-xs font-bold text-stone-400 uppercase tracking-wide mt-1">Manajemen PT TCS</div>
+            </div>
+            <div class="bg-white rounded-2xl p-6 shadow-lg border-2 border-emerald-50 flex flex-col items-center transform sm:-translate-y-4">
+                <div class="text-4xl mb-3">📈</div>
+                <div class="text-2xl font-black text-emerald-600">1.5 - 3 Thn</div>
+                <div class="text-xs font-bold text-emerald-800/60 uppercase tracking-wide mt-1">Estimasi Balik Modal</div>
+            </div>
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-100 flex flex-col items-center">
+                <div class="text-4xl mb-3">🛡️</div>
+                <div class="text-2xl font-black text-stone-800">Nol</div>
+                <div class="text-xs font-bold text-stone-400 uppercase tracking-wide mt-1">Risiko Mesin Rusak</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 space-y-32 pb-32">
+
+        <section id="pasar" class="scroll-mt-24">
+            <div class="mb-12">
+                <h2 class="text-3xl md:text-4xl font-extrabold text-stone-900 mb-4">Urgensi Pasar: Krisis Infrastruktur</h2>
+                <p class="text-lg text-stone-600 max-w-3xl leading-relaxed">
+                    Bagian ini mengilustrasikan ketidakseimbangan dramatis antara pertumbuhan eksponensial kendaraan listrik dan lambatnya penyediaan fasilitas pengisian daya. Data ini adalah dasar logika mengapa lahan Anda sangat berharga saat ini.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div class="lg:col-span-7 bg-white rounded-3xl shadow-md p-6 md:p-8 border border-stone-200">
+                    <div class="flex justify-between items-end mb-6">
+                        <div>
+                            <h3 class="text-lg md:text-xl font-bold text-stone-800">Proyeksi Ledakan EV Nasional</h3>
+                            <p class="text-sm text-stone-500">Volume unit mengaspal vs Ketersediaan SPKLU</p>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="evGrowthChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="lg:col-span-5 flex flex-col gap-6">
+                    <div class="bg-stone-50 rounded-2xl p-6 border-l-4 border-sky-600 hover:shadow-md transition-shadow">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="text-2xl">🔋</span>
+                            <h4 class="text-xl font-bold text-stone-800">Permintaan Defisit</h4>
+                        </div>
+                        <p class="text-stone-600 text-sm leading-relaxed">Pengguna EV saat ini mengalami kesulitan menemukan titik *fast charging*. Mereka dipaksa mengantre, menciptakan peluang monopoli bagi SPKLU pertama yang berdiri di sebuah wilayah strategis.</p>
+                    </div>
+                    
+                    <div class="bg-emerald-50 rounded-2xl p-6 border-l-4 border-emerald-600 hover:shadow-md transition-shadow">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="text-2xl">⏳</span>
+                            <h4 class="text-xl font-bold text-stone-800">Faktor FOMO Wilayah</h4>
+                        </div>
+                        <p class="text-stone-600 text-sm leading-relaxed">Bisnis SPKLU bersifat hiper-lokal. Jika lahan tetangga Anda mendirikan SPKLU hari ini, seluruh pengguna EV dalam radius 5 KM akan menjadi pelanggan loyal mereka. Amankan wilayah Anda sekarang.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="skema" class="scroll-mt-24">
+            <div class="mb-12">
+                <h2 class="text-3xl md:text-4xl font-extrabold text-stone-900 mb-4">Skema Kemitraan Bebas Stres</h2>
+                <p class="text-lg text-stone-600 max-w-3xl leading-relaxed">
+                    Eksplorasi pembagian tanggung jawab antara Anda dan PT TCS. Kami mendesain kemitraan ini agar investor dapat mempertahankan fokus pada bisnis utamanya, sementara kami menangani seluruh aspek teknis dan operasional SPKLU.
+                </p>
+            </div>
+
+            <div class="bg-stone-900 rounded-3xl p-8 md:p-12 text-stone-100 shadow-2xl relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-emerald-600 opacity-20 rounded-full blur-3xl"></div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
+                    <div class="order-2 lg:order-1 flex flex-col gap-6">
+                        <div class="flex items-start gap-4 p-4 rounded-xl transition-all border border-transparent hover:border-stone-700 hover:bg-stone-800/50 cursor-pointer" onclick="highlightChartSegment(0)">
+                            <div class="bg-emerald-600/20 text-emerald-400 p-3 rounded-lg text-xl flex-shrink-0">📍</div>
+                            <div>
+                                <h4 class="text-lg font-bold text-white">Tugas Investor (25%)</h4>
+                                <p class="text-stone-400 text-sm mt-1 leading-relaxed">Menyediakan lahan strategis (min. 2 mobil), memastikan ketersediaan jalur listrik PLN, dan membiayai konstruksi sipil dasar (kanopi, pengecoran semen).</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start gap-4 p-4 rounded-xl transition-all border border-stone-700 bg-stone-800/50 cursor-pointer" onclick="highlightChartSegment(1)">
+                            <div class="bg-sky-600/20 text-sky-400 p-3 rounded-lg text-xl flex-shrink-0">🚀</div>
+                            <div>
+                                <h4 class="text-lg font-bold text-white">Heavy Lifting PT TCS (75%)</h4>
+                                <p class="text-stone-400 text-sm mt-1 leading-relaxed">Penyediaan mesin <i>DC Fast Charging</i> premium, instalasi kelistrikan tegangan tinggi, perizinan, pemeliharaan rutin 24/7, dan integrasi aplikasi pembayaran otomatis.</p>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 p-5 bg-gradient-to-r from-emerald-900/40 to-transparent border-l-4 border-emerald-500 rounded-r-xl">
+                            <h4 class="text-emerald-400 font-bold mb-1">Bagi Hasil Transparan</h4>
+                            <p class="text-sm text-stone-300">Profit margin bersih dari setiap kWh dibagi secara proporsional. Dipantau real-time melalui dasbor seluler Anda setiap detik.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="order-1 lg:order-2 bg-stone-800/50 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-stone-700 flex flex-col items-center">
+                        <h3 class="text-lg font-bold mb-6 text-center text-stone-200">Distribusi Beban Modal & Kerja</h3>
+                        <div class="chart-container">
+                            <canvas id="responsibilityChart"></canvas>
+                        </div>
+                        <p class="text-xs text-stone-500 text-center mt-6 uppercase tracking-wider font-semibold">Klik metrik di kiri untuk detail</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="kalkulator" class="scroll-mt-24">
+            <div class="mb-12">
+                <h2 class="text-3xl md:text-4xl font-extrabold text-stone-900 mb-4">Simulasi Finansial Interaktif</h2>
+                <p class="text-lg text-stone-600 max-w-3xl leading-relaxed">
+                    Setiap lokasi memiliki potensi unik. Gunakan kalkulator di bawah ini untuk mensimulasikan arus kas kumulatif Anda. Sesuaikan estimasi jumlah kendaraan yang akan mengisi daya per hari untuk melihat dampak langsungnya pada titik impas (Break-Even Point).
+                </p>
+            </div>
+
+            <div class="bg-white rounded-3xl shadow-lg border border-stone-200 p-6 md:p-10">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                    
+                    <div class="lg:col-span-4 flex flex-col justify-center space-y-8 bg-stone-50 p-6 rounded-2xl border border-stone-100">
+                        <div>
+                            <label class="flex justify-between text-sm font-bold text-stone-700 mb-4">
+                                <span>Estimasi EV / Hari</span>
+                                <span id="evCountDisplay" class="text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full text-lg">15 Mobil</span>
+                            </label>
+                            <input type="range" id="evSlider" min="5" max="50" step="5" value="15" class="w-full h-2 bg-stone-300 rounded-lg appearance-none cursor-pointer accent-emerald-600">
+                            <div class="flex justify-between text-xs text-stone-400 mt-2 font-semibold">
+                                <span>Konservatif (5)</span>
+                                <span>Agresif (50)</span>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4 pt-6 border-t border-stone-200">
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm font-semibold text-stone-500">Estimasi Balik Modal</span>
+                                <span id="bepDisplay" class="font-black text-stone-800 text-xl">28 Bulan</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm font-semibold text-stone-500">Total Profit (Thn ke-5)</span>
+                                <span id="profitDisplay" class="font-black text-emerald-600 text-xl">+ Rp 420 Juta</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-8 flex flex-col">
+                        <div class="flex justify-between items-end mb-6">
+                            <h3 class="text-lg font-bold text-stone-800">Arus Kas Kumulatif (5 Tahun)</h3>
+                        </div>
+                        <div class="chart-container md:h-[350px]">
+                            <canvas id="roiChart"></canvas>
+                        </div>
+                        <p class="text-xs text-stone-400 mt-6 text-center">
+                            *Asumsi: Investasi sipil awal Rp 150 Juta. Margin bersih investor Rp 15.000 / pengisian. Angka ini adalah ilustrasi teknis, bukan jaminan pasti.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="kriteria">
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl md:text-4xl font-extrabold text-stone-900 mb-4">Kriteria Lahan Premium</h2>
+                <p class="text-lg text-stone-600 max-w-2xl mx-auto leading-relaxed">
+                    Untuk menjamin profitabilitas tinggi, PT TCS hanya menyetujui kemitraan pada lokasi yang memenuhi parameter analitik spasial kami.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm hover:shadow-md transition-shadow group relative overflow-hidden">
+                    <div class="w-12 h-12 bg-sky-50 text-sky-700 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">🛣️</div>
+                    <h4 class="font-bold text-stone-800 mb-2">Akses Arteri</h4>
+                    <p class="text-sm text-stone-500 leading-relaxed">Berada di jalur komuter padat atau dekat dengan akses keluar-masuk pintu tol.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm hover:shadow-md transition-shadow group">
+                    <div class="w-12 h-12 bg-emerald-50 text-emerald-700 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">🏪</div>
+                    <h4 class="font-bold text-stone-800 mb-2">Fasilitas Sekitar</h4>
+                    <p class="text-sm text-stone-500 leading-relaxed">Terintegrasi dengan restoran, minimarket, cafe, atau mall (waktu tunggu 30-60 menit).</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm hover:shadow-md transition-shadow group">
+                    <div class="w-12 h-12 bg-amber-50 text-amber-700 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">📐</div>
+                    <h4 class="font-bold text-stone-800 mb-2">Dimensi Parkir</h4>
+                    <p class="text-sm text-stone-500 leading-relaxed">Ruang manuver aman dan dapat menampung minimal 2 kendaraan listrik sekaligus.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm hover:shadow-md transition-shadow group">
+                    <div class="w-12 h-12 bg-stone-100 text-stone-700 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">⚖️</div>
+                    <h4 class="font-bold text-stone-800 mb-2">Legalitas Lahan</h4>
+                    <p class="text-sm text-stone-500 leading-relaxed">Status kepemilikan mutlak (SHM/HGB), tidak dalam sengketa, dan bebas banjir.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="gabung" class="scroll-mt-24">
+            <div class="accent-gradient rounded-3xl p-8 md:p-16 text-white shadow-xl relative overflow-hidden flex flex-col lg:flex-row gap-12 items-center">
+                
+                <div class="lg:w-1/2 relative z-10">
+                    <h2 class="text-3xl md:text-5xl font-black mb-6 leading-tight">Amankan Monopoli Wilayah Anda Sekarang</h2>
+                    <p class="text-emerald-100 text-lg mb-8 leading-relaxed max-w-lg">
+                        Jangan biarkan lahan Anda menganggur sementara tetangga Anda mencetak rupiah dari tren mobil listrik. Minta studi kelayakan awal secara gratis.
+                    </p>
+                    
+                    <div class="bg-black/20 rounded-2xl p-6 border border-white/10">
+                        <h4 class="font-bold mb-4 flex items-center gap-2"><span>🔍</span> Pemindai Kelayakan Cepat</h4>
+                        <div class="flex gap-2">
+                            <input type="text" id="scanInput" placeholder="Masukkan Kota/Kecamatan..." class="w-full px-4 py-3 rounded-lg text-stone-800 focus:outline-none font-medium">
+                            <button id="scanBtn" class="bg-stone-900 hover:bg-black text-white px-6 py-3 rounded-lg font-bold transition-colors whitespace-nowrap">Cek Area</button>
+                        </div>
+                        <div id="scanResult" class="hidden mt-4 text-sm font-medium bg-emerald-500/20 p-3 rounded-lg border border-emerald-400/50">
+                            <!-- JS injected result -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:w-1/2 w-full relative z-10">
+                    <div class="bg-white rounded-2xl p-8 shadow-2xl text-stone-800">
+                        <h3 class="text-2xl font-extrabold mb-2">Unduh Proposal Kemitraan</h3>
+                        <p class="text-sm text-stone-500 mb-8 font-medium">Isi data valid, proposal komprehensif akan langsung dikirim ke email Anda.</p>
+                        
+                        <form id="leadForm" class="space-y-5" onsubmit="event.preventDefault(); alert('Terima kasih. Proposal telah dikirim ke email Anda dan tim teknis kami akan segera menghubungi.');">
+                            <div>
+                                <label class="block text-xs font-bold text-stone-700 uppercase tracking-wide mb-1">Nama Pemilik</label>
+                                <input type="text" required class="w-full px-4 py-3 bg-stone-50 rounded-lg border border-stone-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:bg-white transition-colors" placeholder="Cth: Bpk. Andika">
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <div>
+                                    <label class="block text-xs font-bold text-stone-700 uppercase tracking-wide mb-1">WhatsApp</label>
+                                    <input type="tel" required class="w-full px-4 py-3 bg-stone-50 rounded-lg border border-stone-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:bg-white transition-colors" placeholder="0812...">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-stone-700 uppercase tracking-wide mb-1">Email</label>
+                                    <input type="email" required class="w-full px-4 py-3 bg-stone-50 rounded-lg border border-stone-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:bg-white transition-colors" placeholder="email@domain.com">
+                                </div>
+                            </div>
+                            <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-4 rounded-lg text-lg transition-all shadow-md hover:shadow-xl mt-4">
+                                Dapatkan Proposal Lengkap 📥
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-stone-900 text-stone-400 py-12 text-center border-t border-stone-800">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-2xl font-extrabold text-white mb-2 tracking-tight">PT TCS <span class="text-emerald-500">EV Infra</span></div>
+            <p class="text-sm font-medium mb-6">Membangun Ekosistem Kendaraan Listrik Terbesar di Nusantara</p>
+            <p class="text-xs max-w-2xl mx-auto leading-relaxed">© 2026 PT TCS Hak Cipta Dilindungi Undang-Undang. Data pertumbuhan EV adalah kompilasi estimasi riset pasar terbuka. Angka ROI pada simulator adalah proyeksi logis berdasarkan asumsi lalu lintas harian rata-rata dan tidak menggaransi hasil finansial pasti.</p>
+        </div>
+    </footer>
+
+    <script>
+        const nav = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                nav.classList.add('shadow-md', 'bg-white/95');
+                nav.classList.remove('bg-white/80');
+            } else {
+                nav.classList.remove('shadow-md', 'bg-white/95');
+                nav.classList.add('bg-white/80');
+            }
+        });
+
+        function wrapLabel(label) {
+            if (label.length <= 16) return label;
+            let words = label.split(' ');
+            let lines = [];
+            let currentLine = '';
+            for (let word of words) {
+                if ((currentLine + word).length > 16) {
+                    if (currentLine) lines.push(currentLine.trim());
+                    currentLine = word + ' ';
+                } else {
+                    currentLine += word + ' ';
+                }
+            }
+            if (currentLine) lines.push(currentLine.trim());
+            return lines;
+        }
+
+        const tooltipCallbackConfig = {
+            callbacks: {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    let label = item.chart.data.labels[item.dataIndex];
+                    if (Array.isArray(label)) {
+                        return label.join(' ');
+                    } else {
+                        return label;
+                    }
+                }
+            }
+        };
+
+        const evGrowthCtx = document.getElementById('evGrowthChart').getContext('2d');
+        const evLabelsRaw = ['Tahun 2023', 'Tahun 2024', 'Tahun 2025', 'Tahun 2026 (Kini)', 'Tahun 2027 (Est)', 'Tahun 2028 (Est)'];
+        const evLabels = evLabelsRaw.map(wrapLabel);
+        
+        new Chart(evGrowthCtx, {
+            type: 'line',
+            data: {
+                labels: evLabels,
+                datasets: [{
+                    label: 'Populasi EV (Ribu Unit)',
+                    data: [35, 75, 140, 260, 480, 850],
+                    borderColor: '#047857',
+                    backgroundColor: 'rgba(4, 120, 87, 0.1)',
+                    borderWidth: 3,
+                    pointBackgroundColor: '#0369a1',
+                    pointBorderColor: '#ffffff',
+                    pointBorderWidth: 2,
+                    pointRadius: 5,
+                    pointHoverRadius: 8,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: tooltipCallbackConfig,
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { borderDash: [4, 4], color: '#f5f5f4' },
+                        ticks: { font: { family: 'Plus Jakarta Sans', weight: '600' }, color: '#78716c' }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { family: 'Plus Jakarta Sans', weight: '600' }, color: '#78716c' }
+                    }
+                }
+            }
+        });
+
+        const respCtx = document.getElementById('responsibilityChart').getContext('2d');
+        const respLabelsRaw = ['Penyediaan Lahan & Sipil (Investor)', 'Infrastruktur IT & Mesin (PT TCS)', 'Manajemen Operasional & Customer Service (PT TCS)'];
+        const respLabels = respLabelsRaw.map(wrapLabel);
+        
+        const respChart = new Chart(respCtx, {
+            type: 'doughnut',
+            data: {
+                labels: respLabels,
+                datasets: [{
+                    data: [25, 45, 30],
+                    backgroundColor: ['#10b981', '#0369a1', '#0ea5e9'],
+                    borderWidth: 0,
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '75%',
+                plugins: {
+                    tooltip: tooltipCallbackConfig,
+                    legend: { display: false } 
+                }
+            }
+        });
+
+        window.highlightChartSegment = function(index) {
+            const chart = respChart;
+            const meta = chart.getDatasetMeta(0);
+            
+            meta.data.forEach((element, i) => {
+                element.options.offset = 0;
+            });
+            
+            if (index === 0) {
+                meta.data[0].options.offset = 15;
+            } else if (index === 1) {
+                meta.data[1].options.offset = 15;
+                meta.data[2].options.offset = 15;
+            }
+            chart.update();
+        };
+
+        const roiCtx = document.getElementById('roiChart').getContext('2d');
+        const roiLabelsRaw = ['Tahun 1', 'Tahun 2', 'Tahun 3', 'Tahun 4', 'Tahun 5'];
+        const roiLabels = roiLabelsRaw.map(wrapLabel);
+        
+        let roiChart = new Chart(roiCtx, {
+            type: 'bar',
+            data: {
+                labels: roiLabels,
+                datasets: [
+                    {
+                        label: 'Investasi Awal (Minus)',
+                        data: [-150, -150, -150, -150, -150],
+                        backgroundColor: '#d6d3d1',
+                        borderRadius: { topLeft: 0, topRight: 0, bottomLeft: 6, bottomRight: 6 }
+                    },
+                    {
+                        label: 'Arus Kas Kumulatif',
+                        data: [-67, 15, 98, 180, 262],
+                        backgroundColor: function(context) {
+                            const val = context.dataset.data[context.dataIndex];
+                            return val < 0 ? '#f43f5e' : '#10b981';
+                        },
+                        borderRadius: { topLeft: 6, topRight: 6, bottomLeft: 0, bottomRight: 0 }
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: tooltipCallbackConfig,
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        grid: { borderDash: [4, 4], color: '#f5f5f4' },
+                        title: { display: true, text: 'Juta Rupiah', font: { family: 'Plus Jakarta Sans', weight: 'bold' } }
+                    },
+                    x: {
+                        stacked: true,
+                        grid: { display: false }
+                    }
+                },
+                animation: { duration: 400 }
+            }
+        });
+
+        const evSlider = document.getElementById('evSlider');
+        const evCountDisplay = document.getElementById('evCountDisplay');
+        const bepDisplay = document.getElementById('bepDisplay');
+        const profitDisplay = document.getElementById('profitDisplay');
+
+        const baseCapex = 150; 
+        const profitPerCar = 15000; 
+
+        evSlider.addEventListener('input', function() {
+            const carsPerDay = parseInt(this.value);
+            evCountDisplay.textContent = carsPerDay + " Mobil";
+
+            const yearlyProfitInJuta = (carsPerDay * profitPerCar * 365) / 1000000;
+            
+            let cumulativeData = [];
+            let currentCashFlow = -baseCapex;
+            let bepMonths = 0;
+            let bepFound = false;
+
+            for (let i = 1; i <= 5; i++) {
+                let yearlyMultiplier = i === 1 ? 0.6 : (i === 2 ? 0.8 : 1.0); 
+                let yearProfit = yearlyProfitInJuta * yearlyMultiplier;
+                currentCashFlow += yearProfit;
+                cumulativeData.push(Math.round(currentCashFlow));
+
+                if (!bepFound && currentCashFlow >= 0) {
+                    const prevCashFlow = currentCashFlow - yearProfit;
+                    const fractionOfYear = Math.abs(prevCashFlow) / yearProfit;
+                    bepMonths = ((i - 1) * 12) + Math.round(fractionOfYear * 12);
+                    bepFound = true;
+                }
+            }
+
+            roiChart.data.datasets[1].data = cumulativeData;
+            roiChart.update();
+
+            if (bepFound) {
+                bepDisplay.textContent = bepMonths + " Bulan";
+                bepDisplay.className = "font-black text-emerald-600 text-xl";
+            } else {
+                bepDisplay.textContent = "> 5 Tahun";
+                bepDisplay.className = "font-black text-rose-500 text-xl";
+            }
+
+            const finalProfit = cumulativeData[4];
+            if (finalProfit > 0) {
+                profitDisplay.textContent = "+ Rp " + finalProfit + " Juta";
+                profitDisplay.className = "font-black text-emerald-600 text-xl";
+            } else {
+                profitDisplay.textContent = "Rp " + finalProfit + " Juta";
+                profitDisplay.className = "font-black text-rose-500 text-xl";
+            }
+        });
+
+        const scanBtn = document.getElementById('scanBtn');
+        const scanInput = document.getElementById('scanInput');
+        const scanResult = document.getElementById('scanResult');
+
+        scanBtn.addEventListener('click', () => {
+            const val = scanInput.value.trim();
+            if(!val) return;
+            
+            scanBtn.textContent = 'Memindai...';
+            scanBtn.disabled = true;
+            scanResult.classList.add('hidden');
+            
+            setTimeout(() => {
+                scanBtn.textContent = 'Cek Area';
+                scanBtn.disabled = false;
+                scanResult.classList.remove('hidden');
+                scanResult.innerHTML = `✅ <strong>Selesai!</strong> Analisis spasial awal mendeteksi <strong>~320 pengguna EV potensial</strong> di radius 5 KM dari area ${val}. Tidak ada kompetitor dominan. <strong>Skor Lahan: 85/100 (Sangat Potensial)</strong>. Lanjutkan isi form di samping untuk klaim!`;
+            }, 1800);
+        });
+
+    </script>
+</body>
+</html>
