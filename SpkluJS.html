@@ -1036,8 +1036,8 @@ function initFeasibilityScanner() {
       bepYears = Math.max(1.8, Math.min(5.2, parseFloat(bepYears.toFixed(1))));
 
       narrativeText = isEn
-        ? `"Dynamic retail mall traffic and transit hubs require rapid DC Fast Charging (50 kW, <1 hour dwell time) to optimize session turnover and maximize daily commercial revenue."`
-        : `"Trafik pengunjung mall yang dinamis dan hub transit memerlukan pengisian daya cepat DC Fast Charging 50 kW (durasi pengisian <1 jam), mengoptimalkan perputaran sesi charger dan memaksimalkan pendapatan per hari."`;
+        ? `"Dynamic commercial traffic (Mall/Plaza/Hub) and transit hubs require rapid DC Fast Charging (50 kW, <1 hour dwell time) to optimize session turnover and maximize daily commercial revenue."`
+        : `"Trafik komersial yang dinamis (Mall/Plaza/Hub) dan hub transit memerlukan pengisian daya cepat DC Fast Charging 50 kW (durasi pengisian <1 jam), mengoptimalkan perputaran sesi charger dan memaksimalkan pendapatan per hari."`;
     }
 
     const elRecommended = document.getElementById('saasRecommendedCharger');
@@ -1143,9 +1143,9 @@ function initFeasibilityScanner() {
       const hubsCount = window.tcsScannerState.realHubs ? window.tcsScannerState.realHubs.length : 0;
       const trafficCount = window.tcsScannerState.realTraffic ? window.tcsScannerState.realTraffic.length : 0;
       if (currentLang === 'en') {
-        text = `INFRASTRUCTURE OK: Mapped ${mallsCount || 1} Malls, ${officesCount || 1} Offices, ${hubsCount || 1} Gathering Hubs, ${trafficCount} Rest Areas, and 2 Premium Residential complexes.`;
+        text = `INFRASTRUCTURE OK: Mapped ${mallsCount || 1} Commercial Hubs (Mall/Plaza/Trade Center), ${officesCount || 1} Offices, ${hubsCount || 1} Gathering Hubs, ${trafficCount} Rest Areas, and 2 Premium Residential complexes.`;
       } else {
-        text = `INFRASTRUKTUR OK: Terdeteksi ${mallsCount || 1} Mall, ${officesCount || 1} Perkantoran, ${hubsCount || 1} Sentra Aktivitas, ${trafficCount} Rest Area Tol, dan 2 Kompleks Perumahan Elit.`;
+        text = `INFRASTRUKTUR OK: Terdeteksi ${mallsCount || 1} Commercial Hub (Mall/Plaza/Trade Center), ${officesCount || 1} Perkantoran, ${hubsCount || 1} Sentra Aktivitas, ${trafficCount} Rest Area Tol, dan 2 Kompleks Perumahan Elit.`;
       }
     }
 
@@ -1242,7 +1242,7 @@ function initFeasibilityScanner() {
       const malls = window.tcsScannerState.realMalls || [];
       malls.forEach((mall) => {
         const marker = L.marker([mall.lat, mall.lon], { icon: createGlowIcon('#00e575') });
-        marker.bindPopup(`<div style="color:#030712; font-weight:bold; font-size:11px; margin-bottom:4px;">🛍️ ${mall.name}</div><div style="color:#00e575; font-size:10px; font-weight:bold;">${localStorage.getItem('tcs_lang') === 'en' ? 'Shopping Mall (High Traffic Hub)' : 'Pusat Perbelanjaan (Hub Trafik Tinggi)'}</div>`);
+        marker.bindPopup(`<div style="color:#030712; font-weight:bold; font-size:11px; margin-bottom:4px;">🛍️ ${mall.name}</div><div style="color:#00e575; font-size:10px; font-weight:bold;">${localStorage.getItem('tcs_lang') === 'en' ? 'Mall/Plaza, Trade Center/Commercial Hub' : 'Mall/Plaza, Trade Center/Commercial Hub'}</div>`);
         window.tcsScannerState.markerGroup.addLayer(marker);
       });
 
@@ -1270,7 +1270,7 @@ function initFeasibilityScanner() {
       const scanScore = window.tcsScannerState.score || 95;
       if (malls.length === 0 && offices.length === 0 && hubs.length === 0 && scanScore >= 65) {
         const mockMall = L.marker([lat - 0.0035, lon + 0.0041], { icon: createGlowIcon('#00e575') });
-        mockMall.bindPopup(`<div style="color:#030712; font-weight:bold; font-size:11px; margin-bottom:4px;">🛍️ Commercial Mall Area</div><div style="color:#00e575; font-size:10px; font-weight:bold;">Shopping Mall & Retail</div>`);
+        mockMall.bindPopup(`<div style="color:#030712; font-weight:bold; font-size:11px; margin-bottom:4px;">🛍️ Commercial Hub Area</div><div style="color:#00e575; font-size:10px; font-weight:bold;">Mall/Plaza, Trade Center/Commercial Hub</div>`);
         window.tcsScannerState.markerGroup.addLayer(mockMall);
       }
       window.tcsScannerState.markersAdded.add('amenity1');
@@ -1558,7 +1558,7 @@ out center;`;
               realMalls.push({
                 lat: elLat,
                 lon: elLon,
-                name: name || (localStorage.getItem('tcs_lang') === 'en' ? 'Shopping Mall' : 'Pusat Perbelanjaan')
+                name: name || (localStorage.getItem('tcs_lang') === 'en' ? 'Mall/Plaza, Trade Center/Commercial Hub' : 'Mall/Plaza, Trade Center/Commercial Hub')
               });
             }
           } else if (tags.highway === 'rest_area' || lowerName.includes('rest area') || lowerName.includes('restarea') || lowerName.includes('toll exit') || lowerName.includes('pintu tol') || lowerName.includes('gerbang tol')) {
@@ -2297,7 +2297,7 @@ out center;`;
                 <td style="padding: 10px; color: #64748b;">${isEn ? 'High (8+ Hours Dwell-Time)' : 'Sangat Tinggi (Dwell-Time 8+ Jam)'}</td>
               </tr>
               <tr style="border-bottom: 1px solid #f1f5f9;">
-                <td style="padding: 10px; font-weight: bold; color: #0f172a;">🛍️ ${isEn ? 'Shopping Malls & Retail Plazas' : 'Pusat Perbelanjaan / Retail'}</td>
+                <td style="padding: 10px; font-weight: bold; color: #0f172a;">🛍️ ${isEn ? 'Mall/Plaza, Trade Center/Commercial Hub' : 'Mall/Plaza, Trade Center/Commercial Hub'}</td>
                 <td style="padding: 10px; text-align: center; color: #475569; font-weight: 800;">${malls.length}</td>
                 <td style="padding: 10px; color: #64748b;">${isEn ? 'Excellent (High Commercial Traffic)' : 'Tinggi (Trafik Pengunjung Konsisten)'}</td>
               </tr>
@@ -2712,9 +2712,9 @@ window.addEventListener('tcsLanguageChanged', (e) => {
             const hubsCount = window.tcsScannerState.realHubs ? window.tcsScannerState.realHubs.length : 0;
             const trafficCount = window.tcsScannerState.realTraffic ? window.tcsScannerState.realTraffic.length : 0;
             if (currentLang === 'en') {
-              text = `INFRASTRUCTURE OK: Mapped ${mallsCount || 1} Malls, ${officesCount || 1} Offices, ${hubsCount || 1} Gathering Hubs, ${trafficCount} Rest Areas, and 2 Premium Residential complexes.`;
+              text = `INFRASTRUCTURE OK: Mapped ${mallsCount || 1} Commercial Hubs (Mall/Plaza/Trade Center), ${officesCount || 1} Offices, ${hubsCount || 1} Gathering Hubs, ${trafficCount} Rest Areas, and 2 Premium Residential complexes.`;
             } else {
-              text = `INFRASTRUKTUR OK: Terdeteksi ${mallsCount || 1} Mall, ${officesCount || 1} Perkantoran, ${hubsCount || 1} Sentra Aktivitas, ${trafficCount} Rest Area Tol, dan 2 Kompleks Perumahan Elit.`;
+              text = `INFRASTRUKTUR OK: Terdeteksi ${mallsCount || 1} Commercial Hub (Mall/Plaza/Trade Center), ${officesCount || 1} Perkantoran, ${hubsCount || 1} Sentra Aktivitas, ${trafficCount} Rest Area Tol, dan 2 Kompleks Perumahan Elit.`;
             }
           }
           
