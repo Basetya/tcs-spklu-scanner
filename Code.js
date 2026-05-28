@@ -6,7 +6,7 @@
  * CONFIGURATION: Paste your Google Spreadsheet ID here to sync leads and settings.
  * Pre-populated with your spreadsheet ID from your screenshots!
  */
-var TCS_SPREADSHEET_ID = "1P1G4b34I5CjjYvBxAxYAROn2HjVpUfG6_ziML7PqmSg";
+var TCS_SPREADSHEET_ID = "1AOUFPczcP6ZYFcQnppbdLLaGyXWAnYW6yT2_2et8yPc";
 
 /**
  * Helper to retrieve the target Google Spreadsheet instance.
