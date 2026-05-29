@@ -60,8 +60,8 @@
         .then(html => {
           const parser = new DOMParser();
           const doc = parser.parseFromString(html, 'text/html');
-          const style = doc.querySelector('style');
-          if (style) document.head.appendChild(style);
+          const styleElement = doc.querySelector('style');
+          if (styleElement) document.head.appendChild(styleElement);
 
           // Remove FOUC overlay to smoothly display the fully-styled page
           const fouc = document.getElementById('fouc-style');
