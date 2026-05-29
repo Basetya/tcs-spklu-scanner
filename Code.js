@@ -529,7 +529,9 @@ function doPost(e) {
  */
 function callGeminiSecure(query) {
   try {
-    var apiKey = PropertiesService.getScriptProperties().getProperty("GEMINI_API_KEY");
+    var apiKey = PropertiesService.getScriptProperties().getProperty("GEMINI_API_KEY") || 
+                 PropertiesService.getScriptProperties().getProperty("Gemini API Key") || 
+                 PropertiesService.getScriptProperties().getProperty("GEMINI_API");
     if (!apiKey) {
       return { 
         success: false, 
