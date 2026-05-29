@@ -1439,7 +1439,22 @@ function initTcsChatbot() {
       appendChatBubble(response.text, false);
     } else {
       const errMsg = response.error || response.message || "Gagal mendapatkan balasan dari AI.";
-      appendSystemError(errMsg);
+      
+      // Check if this is a Google Apps Script Permission/OAuth Scope error
+      if (errMsg.includes("izin") || errMsg.includes("permission") || errMsg.includes("external_request") || errMsg.includes("UrlFetchApp")) {
+        const oauthInstruct = 
+          "⚠️ **Izin Akses Eksternal (UrlFetchApp) Belum Diotorisasi!**\n\n" +
+          "Sistem mendeteksi bahwa Google Apps Script Anda memerlukan persetujuan otorisasi sekali saja agar dapat memanggil API Gemini secara eksternal.\n\n" +
+          "**Cara Mengatasi dalam 3 Klik Cepat:**\n" +
+          "1. Buka halaman Editor Google Apps Script Anda.\n" +
+          "2. Di bar menu atas, klik tombol dropdown pilihan fungsi, pilih `getSpkluPasscode` atau `callGeminiSecure`.\n" +
+          "3. Klik tombol **Run (Jalankan)** di sebelah kirinya.\n" +
+          "4. Google akan memunculkan dialog 'Authorization Required'. Klik **Review Permissions** -> Pilih Akun Google Anda -> Klik **Advanced (Lanjutan)** -> Klik **Go to TCS SPKLU Web App (unsafe)** -> Klik **Allow (Izinkan)**.\n" +
+          "5. Setelah berhasil dijalankan sekali di Editor, kembali ke halaman ini dan silakan muat ulang (refresh) halaman! AI Chatbot Anda akan langsung aktif bekerja 100%.";
+        appendSystemError(oauthInstruct);
+      } else {
+        appendSystemError(errMsg);
+      }
     }
   }
   
