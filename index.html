@@ -1239,13 +1239,46 @@
     </div>
   </footer>
 
-  <!-- Floating SPKLU Partnership Badge (Bottom-Left) -->
-  <a href="?page=spklu" class="float-spklu-badge" aria-label="Kemitraan SPKLU">
+  <!-- Floating SPKLU AI Chatbot Badge & Window (Bottom-Left) -->
+  <button id="tcsChatTrigger" class="float-spklu-badge" aria-label="Tanya AI SPKLU" style="border: none; font-family: inherit;">
+    <span class="chat-trigger-dot animate-pulse"></span>
     <svg style="width:20px;height:20px;" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v1.25c0 .346-.28.625-.625.625H6.875A2.625 2.625 0 004.25 7.604v9.75A2.625 2.625 0 006.875 20h10.25a2.625 2.625 0 002.625-2.625v-9.75A2.625 2.625 0 0017.125 5H14.875c-.346 0-.625-.28-.625-.625V3.104M9.75 3.104A1.875 1.875 0 0112 1.25c.895 0 1.642.628 1.83 1.472M9.75 3.104H14.25m-6 6.5h7.5m-7.5 3h7.5" />
     </svg>
-    <span data-translate="nav_spklu">Kemitraan SPKLU</span>
-  </a>
+    <span data-translate="float_bot_title">Tanya AI Kemitraan 🤖</span>
+  </button>
+
+  <!-- Sleek Dark Glassmorphic Chatbot Pop-up Window -->
+  <div id="tcsChatContainer" class="tcs-chat-window-container">
+    <div class="tcs-chat-header">
+      <div class="tcs-chat-header-info">
+        <span class="tcs-chat-bot-icon">🤖</span>
+        <div style="text-align: left;">
+          <h4 class="tcs-chat-bot-title">TCS SPKLU AI Advisor</h4>
+          <span class="tcs-chat-bot-status">
+            <span class="tcs-chat-status-dot animate-pulse"></span> Online 24/7
+          </span>
+        </div>
+      </div>
+      <button id="tcsChatClose" class="tcs-chat-close-btn" aria-label="Tutup Chat">&times;</button>
+    </div>
+    
+    <div id="tcsChatMessages" class="tcs-chat-messages-area">
+      <!-- Bot welcome message -->
+      <div class="tcs-chat-bubble bot">
+        Halo! Saya AI Advisor PT TCS. Saya siap memandu Anda mengenai prospek bisnis kemitraan SPKLU, model kerja sama kepemilikan lahan atau finansial, estimasi ROI, serta perizinan PLN. Ada yang ingin Anda tanyakan?
+      </div>
+    </div>
+    
+    <div class="tcs-chat-input-area">
+      <input type="text" id="tcsChatInput" placeholder="Tulis pertanyaan kemitraan SPKLU..." class="tcs-chat-input-field">
+      <button id="tcsChatSend" class="tcs-chat-send-btn" aria-label="Kirim Pesan">
+        <svg style="width:14px;height:14px; transform: rotate(45deg); display: block;" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M2 21l21-9L2 3v7l15 2-15 2v7z" />
+        </svg>
+      </button>
+    </div>
+  </div>
 
   <!-- ------------------- FLOATING HELPCENTER ------------------- -->
   <div class="floating-container">

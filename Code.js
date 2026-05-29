@@ -484,6 +484,8 @@ function doPost(e) {
       responseData = { success: true, valid: isValid };
     } else if (action === "getContactSettings") {
       responseData = { success: true, settings: getTcsContactSettings() };
+    } else if (action === "callGeminiSecure") {
+      responseData = callGeminiSecure(data.query);
     }
     
     return ContentService.createTextOutput(JSON.stringify(responseData))
@@ -491,5 +493,78 @@ function doPost(e) {
   } catch (err) {
     return ContentService.createTextOutput(JSON.stringify({ success: false, message: err.message }))
       .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+/**
+ * Memanggil Gemini 1.5 Flash API dengan aman dari sisi server Google Apps Script.
+ * Membaca basis pengetahuan secara dinamis dari KnowledgeBase.html.
+ * API Key disimpan secara terproteksi di Project Script Properties.
+ * 
+ * @param {string} query - Pertanyaan dari pengguna
+ * @return {Object} Objek respon berisi status sukses dan teks balasan AI
+ */
+function callGeminiSecure(query) {
+  try {
+    var apiKey = PropertiesService.getScriptProperties().getProperty("GEMINI_API_KEY");
+    if (!apiKey) {
+      return { 
+        success: false, 
+        error: "Google Gemini API Key belum dikonfigurasi di Script Properties. Silakan konfigurasi kunci GEMINI_API_KEY Anda di Settings Google Apps Script." 
+      };
+    }
+    
+    // Baca basis pengetahuan secara dinamis dari file HTML
+    var knowledgeBase = "";
+    try {
+      knowledgeBase = HtmlService.createHtmlOutputFromFile('KnowledgeBase').getContent();
+    } catch (e) {
+      console.warn("Gagal memuat KnowledgeBase.html, menggunakan fallback: " + e.message);
+      knowledgeBase = "Aturan Bisnis Kemitraan SPKLU PT TCS:\n" +
+                      "- Opsi A: Bagi hasil bersih 35% Host (Investor), 65% PT TCS. Luas minimal 2 slot parkir. Kontrak 5+5 tahun.\n" +
+                      "- Opsi B: Finansial Mandiri mulai Rp100 Juta. Autopilot diurus penuh PT TCS (SLO PLN, pemeliharaan, dll).";
+    }
+    
+    var systemInstruction = 
+      "Anda adalah \"TCS EV Consultant\", asisten virtual pintar dan profesional dari PT TCS.\n" +
+      "Tugas utama Anda adalah mendampingi calon investor memahami peluang dan potensi bisnis kemitraan SPKLU PT TCS 2026.\n" +
+      "Gunakan data resmi dari basis pengetahuan berikut untuk menjawab seluruh pertanyaan pengguna secara formal, optimis, ramah, persuasif, dan mendalam:\n\n" +
+      knowledgeBase + "\n\n" +
+      "Aturan Penting Perilaku Anda:\n" +
+      "1. Gunakan bahasa Indonesia yang baik, santun, profesional, dan meyakinkan.\n" +
+      "2. Jangan mengarang atau memanipulasi data di luar cakupan materi yang ada di basis pengetahuan di atas.\n" +
+      "3. Jika ada pertanyaan mengenai analisis atau simulasi kelayakan finansial, tekankan PBP (Payback Period), NPV, dan IRR yang dinilai secara akuntansi hulu.\n" +
+      "4. Tekankan pentingnya mengamankan kuota wilayah dan koordinat lokasi di sistem OSS PLN sekarang juga agar tidak terkunci oleh pihak lain karena kuota zonasi sangat terbatas.\n" +
+      "5. Lakukan Consultative Selling: Di akhir setiap balasan Anda, ajukan satu pertanyaan penutup yang memancing keterlibatan calon investor (Call to Action), misalnya menanyakan ketersediaan lokasi strategis mereka, tipe kemitraan yang mereka minati (Opsi A atau Opsi B), atau mengajak mereka mengisi formulir pendaftaran kemitraan di halaman website.\n" +
+      "6. Jawab secara rapi dengan memformat daftar menggunakan poin-poin sederhana. Hindari pemakaian formatting markdown yang terlalu berlebihan.";
+
+    var url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + apiKey;
+    
+    var payload = {
+      contents: [{ parts: [{ text: query }] }],
+      systemInstruction: { parts: [{ text: systemInstruction }] }
+    };
+    
+    var options = {
+      method: "post",
+      contentType: "application/json",
+      payload: JSON.stringify(payload),
+      muteHttpExceptions: true
+    };
+    
+    var response = UrlFetchApp.fetch(url, options);
+    var json = JSON.parse(response.getContentText());
+    
+    if (json.candidates && json.candidates[0].content.parts[0].text) {
+      return { success: true, text: json.candidates[0].content.parts[0].text };
+    } else {
+      var errDetail = "Format respon AI tidak dikenal.";
+      if (json.error && json.error.message) {
+        errDetail = json.error.message;
+      }
+      return { success: false, error: "Gagal memproses respon dari Gemini API: " + errDetail };
+    }
+  } catch (err) {
+    return { success: false, error: "Kesalahan server internal: " + err.message };
   }
 }
