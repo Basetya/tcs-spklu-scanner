@@ -54,13 +54,12 @@
   
   <!-- Centralized API Configuration for Vercel Static Hosting -> Google Sheets Database Bridge -->
   <script>
-    window.TCS_GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwc6VKuMC6zjqn0QMFwUllYXmPR7Sn4DzzQVaBbWLyjGXLZ_rZtlaBiwdh4uoYDTSlr/exec";
+    window.TCS_GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzw7s_H58jyPYvKgWQxkx_u4_iaikODMdGPEZbXH_52txcUq-nnYFJDYyhYCVpskcjr/exec";
   </script>
 
   <!-- Prevent Flash of Unstyled Content (FOUC) on static hosting platforms like Vercel -->
   <style id="fouc-style">
     html, body { background-color: #030712 !important; }
-    body { opacity: 0 !important; }
   </style>
 
   <!-- Fallback Loader for Local Live Server & Static Hosting Preview -->
@@ -70,6 +69,12 @@
       const fouc = document.getElementById('fouc-style');
       if (fouc) fouc.remove();
     } else {
+      // Apply FOUC prevention style only in local preview
+      const localFouc = document.createElement('style');
+      localFouc.id = 'local-fouc-style';
+      localFouc.textContent = 'body { opacity: 0 !important; }';
+      document.head.appendChild(localFouc);
+
       // On Vercel / Local Preview, dynamically fetch SpkluCSS.html fallback
       if (!window.location.search.includes('page=spklu')) {
         window.location.href = 'index.html' + window.location.search;
@@ -86,11 +91,15 @@
           // Remove FOUC overlay to smoothly display the fully-styled page
           const fouc = document.getElementById('fouc-style');
           if (fouc) fouc.remove();
+          const lf = document.getElementById('local-fouc-style');
+          if (lf) lf.remove();
         })
         .catch(err => {
           console.error('Failed to load local CSS fallback:', err);
           const fouc = document.getElementById('fouc-style');
           if (fouc) fouc.remove();
+          const lf = document.getElementById('local-fouc-style');
+          if (lf) lf.remove();
         });
     }
   </script>
@@ -100,7 +109,7 @@
   <!-- ------------------- HEADER & NAVIGATION ------------------- -->
   <header class="main-header" id="navbar">
     <div class="header-container">
-      <a href="?page=index" class="logo" style="display: flex; align-items: center;">
+      <a href="?page=index" target="_top" class="logo" style="display: flex; align-items: center;">
         <svg viewBox="0 0 260 60" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:48px; width:auto; vertical-align:middle;" id="logo-img">
           <g transform="translate(5, 5)">
             <circle cx="25" cy="25" r="22" stroke="url(#logo-grad)" stroke-width="3" fill="none" stroke-dasharray="100" stroke-dashoffset="10"/>
@@ -138,7 +147,7 @@
               <button type="button" class="lang-btn" data-lang="en" onclick="setLanguage('en')">EN</button>
             </div>
           </li>
-          <li><a href="?page=index" class="nav-link nav-btn" data-translate="nav_contact_mep">Hubungi Kami</a></li>
+          <li><a href="?page=index" target="_top" class="nav-link nav-btn" data-translate="nav_contact_mep">Hubungi Kami</a></li>
         </ul>
       </nav>
       
@@ -537,6 +546,14 @@
                   <div id="saasRequiredGridPower" style="font-family: 'Outfit'; font-size: 14px; font-weight: 800; color: #fff; margin-top: 6px;">22 kVA (Standard Connection)</div>
                 </div>
                 <!-- Est Sessions/Day -->
+                <div style="background: rgba(3, 7, 18, 0.4); border: 1px solid rgba(255,255,255,0.03); border-radius: var(--border-radius-sm); padding: 14px; text-align: center;">
+                  <span style="font-size: 9px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;" id="saasSessionsPerDayLabel">Projected Sessions/Day</span>
+                  <div id="saasSessionsPerDay" style="font-family: 'Outfit'; font-size: 14px; font-weight: 800; color: #fff; margin-top: 6px;">5 Sessions / Day</div>
+                </div>
+                <!-- Projected Payback (BEP) -->
+                <div style="background: rgba(3, 7, 18, 0.4); border: 1px solid rgba(255,255,255,0.03); border-radius: var(--border-radius-sm); padding: 14px; text-align: center;">
+                  <span style="font-size: 9px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;" id="saasPaybackPeriodLabel">Projected Payback (BEP)</span>
+                  <div id="saasPaybackPeriod" style="font-family: 'Outfit'; font-size: 14px; font-weight: 800; color: var(--primary-lime); margin-top: 6px;">2.5 Years</div>
                 </div>
               </div>
 
@@ -580,7 +597,6 @@
                   <li id="fnPrudentNozzle">Mesin SPKLU dual nozzle menerapkan Power Sharing yang membagi daya saat cas bersamaan. Studi kelayakan ini menggunakan pendekatan konservatif berbasis 1 nozzle aktif untuk menjamin proyeksi investasi yang prudent.</li>
                 </ul>
               </div>
-            </div>
             </div>
           </div>
         </div>
@@ -808,7 +824,7 @@
         PT. Titis Cahaya Sejahtera &copy; 2020 - 2026. MEP Contractor & SPKLU Operator.
       </p>
       <ul class="footer-nav">
-        <li><a href="?page=index" data-translate="footer_home_mep">Beranda MEP</a></li>
+        <li><a href="?page=index" target="_top" data-translate="footer_home_mep">Beranda MEP</a></li>
         <li><a href="#home" data-translate="footer_top">Atas</a></li>
         <li><a href="#trust" data-translate="footer_credibility">Kredibilitas</a></li>
         <li><a href="#scheme" data-translate="footer_scheme">Skema</a></li>
@@ -850,6 +866,47 @@
     </div>
   </div>
   </footer>
+
+  <!-- Floating SPKLU AI Chatbot Badge & Window (Bottom-Left) -->
+  <button id="tcsChatTrigger" class="float-spklu-badge" aria-label="Tanya AI SPKLU" style="border: none; font-family: inherit;">
+    <span class="chat-trigger-dot animate-pulse"></span>
+    <svg style="width:20px;height:20px;" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v1.25c0 .346-.28.625-.625.625H6.875A2.625 2.625 0 004.25 7.604v9.75A2.625 2.625 0 006.875 20h10.25a2.625 2.625 0 002.625-2.625v-9.75A2.625 2.625 0 0017.125 5H14.875c-.346 0-.625-.28-.625-.625V3.104M9.75 3.104A1.875 1.875 0 0112 1.25c.895 0 1.642.628 1.83 1.472M9.75 3.104H14.25m-6 6.5h7.5m-7.5 3h7.5" />
+    </svg>
+    <span data-translate="float_bot_title">Tanya AI Kemitraan 🤖</span>
+  </button>
+
+  <!-- Sleek Dark Glassmorphic Chatbot Pop-up Window -->
+  <div id="tcsChatContainer" class="tcs-chat-window-container">
+    <div class="tcs-chat-header">
+      <div class="tcs-chat-header-info">
+        <span class="tcs-chat-bot-icon">🤖</span>
+        <div style="text-align: left;">
+          <h4 class="tcs-chat-bot-title">TCS SPKLU AI Advisor</h4>
+          <span class="tcs-chat-bot-status">
+            <span class="tcs-chat-status-dot animate-pulse"></span> Online 24/7
+          </span>
+        </div>
+      </div>
+      <button id="tcsChatClose" class="tcs-chat-close-btn" aria-label="Tutup Chat">&times;</button>
+    </div>
+    
+    <div id="tcsChatMessages" class="tcs-chat-messages-area">
+      <!-- Bot welcome message -->
+      <div class="tcs-chat-bubble bot">
+        Halo! Saya AI Advisor PT TCS. Saya siap memandu Anda mengenai prospek bisnis kemitraan SPKLU, model kerja sama kepemilikan lahan atau finansial, estimasi ROI, serta perizinan PLN. Ada yang ingin Anda tanyakan?
+      </div>
+    </div>
+    
+    <div class="tcs-chat-input-area">
+      <input type="text" id="tcsChatInput" placeholder="Tulis pertanyaan kemitraan SPKLU..." class="tcs-chat-input-field">
+      <button id="tcsChatSend" class="tcs-chat-send-btn" aria-label="Kirim Pesan">
+        <svg style="width:14px;height:14px; transform: rotate(45deg); display: block;" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M2 21l21-9L2 3v7l15 2-15 2v7z" />
+        </svg>
+      </button>
+    </div>
+  </div>
 
   <!-- JavaScript Client-side Injection (Google Apps Script Scriptlet) -->
   <?!= include('TranslationJS'); ?>

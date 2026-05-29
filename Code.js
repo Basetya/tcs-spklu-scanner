@@ -55,19 +55,42 @@ function getTcsSpreadsheet() {
  * Supports query parameters for routing, e.g. ?page=spklu
  */
 function doGet(e) {
-  var page = e && e.parameter && e.parameter.page ? e.parameter.page : 'index';
-  if (page.toLowerCase() === 'spklu') {
-    return HtmlService.createTemplateFromFile('Spklu')
-      .evaluate()
-      .setTitle('Kemitraan SPKLU - PT. Titis Cahaya Sejahtera')
-      .addMetaTag('viewport', 'width=device-width, initial-scale=1.0')
-      .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+  try {
+    var page = e && e.parameter && e.parameter.page ? e.parameter.page : 'index';
+    if (page.toLowerCase() === 'spklu') {
+      try {
+        return HtmlService.createTemplateFromFile('Spklu')
+          .evaluate()
+          .setTitle('Kemitraan SPKLU - PT. Titis Cahaya Sejahtera')
+          .addMetaTag('viewport', 'width=device-width, initial-scale=1.0')
+          .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+      } catch (err) {
+        console.error("Failed to evaluate Spklu template:", err);
+        return HtmlService.createHtmlOutput(
+          "<html><body style='font-family:sans-serif; padding:30px; background:#fafafa;'><h1 style='color:#dc2626;'>Server-side Template Evaluation Error (Spklu)</h1><p>An error occurred while compiling/rendering <b>Spklu.html</b>:</p><pre style='background:#fee2e2; border:1px solid #fca5a5; padding:15px; border-radius:6px; overflow:auto; font-family:monospace; color:#991b1b;'>" + 
+          err.toString() + "\n\nStack:\n" + err.stack + "</pre></body></html>"
+        );
+      }
+    }
+    try {
+      return HtmlService.createTemplateFromFile('Index')
+        .evaluate()
+        .setTitle('PT. Titis Cahaya Sejahtera - MEP Contractor')
+        .addMetaTag('viewport', 'width=device-width, initial-scale=1.0')
+        .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+    } catch (err) {
+      console.error("Failed to evaluate Index template:", err);
+      return HtmlService.createHtmlOutput(
+        "<html><body style='font-family:sans-serif; padding:30px; background:#fafafa;'><h1 style='color:#dc2626;'>Server-side Template Evaluation Error (Index)</h1><p>An error occurred while compiling/rendering <b>Index.html</b>:</p><pre style='background:#fee2e2; border:1px solid #fca5a5; padding:15px; border-radius:6px; overflow:auto; font-family:monospace; color:#991b1b;'>" + 
+        err.toString() + "\n\nStack:\n" + err.stack + "</pre></body></html>"
+      );
+    }
+  } catch (globalErr) {
+    return HtmlService.createHtmlOutput(
+      "<html><body style='font-family:sans-serif; padding:30px; background:#fafafa;'><h1 style='color:#dc2626;'>Global doGet Error</h1><pre style='background:#fee2e2; border:1px solid #fca5a5; padding:15px; border-radius:6px; overflow:auto; font-family:monospace; color:#991b1b;'>" + 
+      globalErr.toString() + "</pre></body></html>"
+    );
   }
-  return HtmlService.createTemplateFromFile('Index')
-    .evaluate()
-    .setTitle('PT. Titis Cahaya Sejahtera - MEP Contractor')
-    .addMetaTag('viewport', 'width=device-width, initial-scale=1.0')
-    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
 }
 
 /**

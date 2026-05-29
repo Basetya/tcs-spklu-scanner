@@ -680,9 +680,8 @@ function initSimulator() {
   const capexValue = document.getElementById('capexValue');
   const grossMonthly = document.getElementById('grossMonthly');
   const pbpValue = document.getElementById('pbpValue');
-  const roiCtx = document.getElementById('roiChartCanvas');
-  
   if (!scenACBtn || !scenDCBtn || !sessionSlider || !roiCtx) return;
+  if (typeof Chart === 'undefined') return;
 
   let currentScenario = 'AC';
 
@@ -2689,6 +2688,7 @@ function startSpkluApp() {
   initCharts();
   initSimulator();
   initFeasibilityScanner();
+  initTcsChatbot();
 }
 
 /* ==========================================================================
@@ -2983,6 +2983,190 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', startSpkluApp);
 } else {
   startSpkluApp();
+}
+
+/* ==========================================================================
+   10. SECURE GEMINI AI CHATBOT SYSTEM
+   ========================================================================== */
+function initTcsChatbot() {
+  const trigger = document.getElementById('tcsChatTrigger');
+  const container = document.getElementById('tcsChatContainer');
+  const closeBtn = document.getElementById('tcsChatClose');
+  const inputField = document.getElementById('tcsChatInput');
+  const sendBtn = document.getElementById('tcsChatSend');
+  const messagesArea = document.getElementById('tcsChatMessages');
+  
+  if (!trigger || !container || !closeBtn || !inputField || !sendBtn || !messagesArea) return;
+  
+  let chatOpen = false;
+  let isAiResponding = false;
+  
+  // Toggle Chat Popup Window
+  trigger.addEventListener('click', () => {
+    chatOpen = !chatOpen;
+    if (chatOpen) {
+      container.classList.add('open');
+      inputField.focus();
+      // Remove pulsing on button once clicked
+      const dot = trigger.querySelector('.chat-trigger-dot');
+      if (dot) dot.style.display = 'none';
+    } else {
+      container.classList.remove('open');
+    }
+  });
+  
+  closeBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    chatOpen = false;
+    container.classList.remove('open');
+  });
+  
+  // Close chatbot when clicking outside
+  document.addEventListener('click', (e) => {
+    if (chatOpen && !container.contains(e.target) && !trigger.contains(e.target)) {
+      chatOpen = false;
+      container.classList.remove('open');
+    }
+  });
+  
+  // Send message on Enter keypress
+  inputField.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      sendChatMessage();
+    }
+  });
+  
+  // Send message on click
+  sendBtn.addEventListener('click', sendChatMessage);
+  
+  function sendChatMessage() {
+    const text = inputField.value.trim();
+    if (!text || isAiResponding) return;
+    
+    isAiResponding = true;
+    inputField.value = '';
+    
+    // 1. Render User Message bubble
+    appendChatBubble(text, true);
+    
+    // 2. Render Typing Loading Indicator
+    const loaderId = appendChatLoader();
+    
+    // 3. Trigger Secure Gemini Call (environment-aware)
+    if (typeof google !== 'undefined' && google.script && google.script.run) {
+      // Direct call inside Google Apps Script Web App
+      google.script.run
+        .withSuccessHandler((response) => handleChatSuccess(response, loaderId))
+        .withFailureHandler((error) => handleChatFailure(error, loaderId))
+        .callGeminiSecure(text);
+    } else if (window.TCS_GAS_WEB_APP_URL) {
+      // Call secure endpoint via Vercel/Static POST bridge
+      fetch(window.TCS_GAS_WEB_APP_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain"
+        },
+        body: JSON.stringify({
+          action: "callGeminiSecure",
+          data: { query: text }
+        })
+      })
+      .then(res => res.json())
+      .then(response => handleChatSuccess(response, loaderId))
+      .catch(error => handleChatFailure(error, loaderId));
+    } else {
+      // Local/offline developer preview fallback
+      setTimeout(() => {
+        const dummyResponses = [
+          "Berdasarkan **Opsi A (Kemitraan Lahan)**, Anda bisa bermitra dengan modal mesin Rp0. Cukup sediakan lahan minimal muat 2-4 mobil. Bagi hasil bersih yang Anda peroleh adalah **35% untuk Anda (Host)** dan **65% untuk PT TCS**. Kami mengurus unit mesin, instalasi, dan perizinannya.\n\nApakah lahan Anda saat ini berada di area strategis seperti pusat perbelanjaan, rest area, atau jalan utama?",
+          "Untuk **Opsi B (Finansial Mandiri)**, modal awal dimulai dari **Rp100 Juta** (skema Capex AC 22 kW mulai Rp150 Juta, dan Tipe DC 50 kW mulai Rp850 Juta). Skema ini autopilot penuh diurus tim TCS. Anda dapat memantau pendapatan harian secara real-time lewat aplikasi investor.\n\nBerapa kisaran anggaran investasi yang ingin Anda alokasikan untuk jaringan SPKLU ini?",
+          "Legalitas dan izin operasional SPKLU sepenuhnya didampingi dan diurus oleh **PT TCS**. Kami memastikan sistem terintegrasi dengan regulasi PLN hulu-hilir (Permen ESDM No. 7/2024 & Kepmen ESDM 182.K/2023) sehingga bebas biaya rekening minimum selama 2 tahun pertama.\n\nApakah lokasi lahan Anda sudah memiliki daya listrik terpasang yang memadai atau membutuhkan upgrade?"
+        ];
+        
+        let chosenText = dummyResponses[0];
+        if (text.toLowerCase().includes('opsi b') || text.toLowerCase().includes('modal') || text.toLowerCase().includes('mandiri')) {
+          chosenText = dummyResponses[1];
+        } else if (text.toLowerCase().includes('izin') || text.toLowerCase().includes('legal') || text.toLowerCase().includes('pln')) {
+          chosenText = dummyResponses[2];
+        }
+        
+        handleChatSuccess({ success: true, text: chosenText }, loaderId);
+      }, 1500);
+    }
+  }
+  
+  function handleChatSuccess(response, loaderId) {
+    removeChatLoader(loaderId);
+    isAiResponding = false;
+    
+    if (response.success && response.text) {
+      appendChatBubble(response.text, false);
+    } else {
+      const errMsg = response.error || response.message || "Gagal mendapatkan balasan dari AI.";
+      appendSystemError(errMsg);
+    }
+  }
+  
+  function handleChatFailure(error, loaderId) {
+    removeChatLoader(loaderId);
+    isAiResponding = false;
+    appendSystemError("Terjadi kendala jaringan: " + (error.message || error));
+  }
+  
+  function appendChatBubble(messageText, isUser = false) {
+    const bubble = document.createElement('div');
+    bubble.className = isUser ? 'tcs-chat-bubble user' : 'tcs-chat-bubble bot';
+    
+    // Parse simple formatting (markdown replacement for safe linebreaks and bold)
+    let formattedText = messageText
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/\n/g, '<br/>')
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      
+    bubble.innerHTML = formattedText;
+    messagesArea.appendChild(bubble);
+    messagesArea.scrollTop = messagesArea.scrollHeight;
+  }
+  
+  function appendSystemError(errorText) {
+    const errorBubble = document.createElement('div');
+    errorBubble.className = 'tcs-chat-bubble system-error';
+    errorBubble.innerText = errorText;
+    messagesArea.appendChild(errorBubble);
+    messagesArea.scrollTop = messagesArea.scrollHeight;
+  }
+  
+  function appendChatLoader() {
+    const loaderId = 'loader_' + Date.now();
+    
+    const wrapper = document.createElement('div');
+    wrapper.id = loaderId;
+    wrapper.className = 'tcs-chat-bubble bot';
+    wrapper.style.padding = '8px 12px';
+    
+    const loader = document.createElement('div');
+    loader.className = 'tcs-typing-indicator';
+    loader.innerHTML = `
+      <span class="tcs-typing-dot"></span>
+      <span class="tcs-typing-dot"></span>
+      <span class="tcs-typing-dot"></span>
+    `;
+    
+    wrapper.appendChild(loader);
+    messagesArea.appendChild(wrapper);
+    messagesArea.scrollTop = messagesArea.scrollHeight;
+    
+    return loaderId;
+  }
+  
+  function removeChatLoader(loaderId) {
+    const loader = document.getElementById(loaderId);
+    if (loader) {
+      loader.remove();
+    }
+  }
 }
 </script>
 <!-- <body></body> -->
