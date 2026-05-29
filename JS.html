@@ -1438,7 +1438,7 @@ function initTcsChatbot() {
     if (response.success && response.text) {
       appendChatBubble(response.text, false);
     } else {
-      const errMsg = response.error || "Gagal mendapatkan balasan dari AI.";
+      const errMsg = response.error || response.message || "Gagal mendapatkan balasan dari AI.";
       appendSystemError(errMsg);
     }
   }
