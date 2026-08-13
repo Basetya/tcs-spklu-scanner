@@ -1,0 +1,20 @@
+# claspignore file to prevent local dev files from being pushed to GAS
+**/*
+
+# Whitelist allowed Apps Script files
+!appsscript.json
+!Code.js
+!CSS.html
+!index.html
+!JS.html
+!KnowledgeBase.html
+!portal_kemitraan_spklu_pt_tcs (1).html
+!portal_kemitraan_spklu_pt_tcs.html
+!proposal_kemitraan_spklu.html
+!pt_tcs_spklu_interactive_proposal.html
+!pt_tcs_spklu_proposal (1).html
+!pt_tcs_spklu_proposal.html
+!spklu.html
+!SpkluCSS.html
+!SpkluJS.html
+!TranslationJS.html

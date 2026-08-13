@@ -1,0 +1,537 @@
+<script>
+/**
+ * PT. Titis Cahaya Sejahtera (TCS) - Centralized Translation System (EN/ID)
+ * Platform: Google Apps Script Web App Ecosystem
+ * Author: Antigravity AI
+ */
+
+window.TCS_TRANSLATIONS = {
+  // ==========================================
+  // GLOBAL & NAVBAR & FOOTER
+  // ==========================================
+  "contact_top": { "id": "Hubungi Kami: ", "en": "Contact Us: " },
+  "nav_home": { "id": "Beranda", "en": "Home" },
+  "nav_about": { "id": "Profil", "en": "Profile" },
+  "nav_services": { "id": "Services", "en": "Services" },
+  "nav_clients": { "id": "Klien", "en": "Clients" },
+  "nav_spklu": { "id": "Kemitraan SPKLU", "en": "SPKLU Partnership" },
+  "nav_planner": { "id": "Tanya MEP", "en": "Consult MEP" },
+  "nav_credibility": { "id": "Kredibilitas", "en": "Credibility" },
+  "nav_scheme": { "id": "Skema Bisnis", "en": "Business Scheme" },
+  "nav_simulator": { "id": "Simulator ROI", "en": "ROI Simulator" },
+  "nav_analysis": { "id": "Analisis Pasar", "en": "Market Analysis" },
+  "nav_proposal": { "id": "Proposal & Lahan", "en": "Proposal & Land" },
+  "nav_contact_mep": { "id": "Hubungi Kami", "en": "Contact Us" },
+  
+  "footer_text": { 
+    "id": "PT. Titis Cahaya Sejahtera &copy; 2020 - 2026. MEP Contractor & SPKLU Operator.", 
+    "en": "PT. Titis Cahaya Sejahtera &copy; 2020 - 2026. MEP Contractor & SPKLU Operator." 
+  },
+  "footer_home_mep": { "id": "Beranda MEP", "en": "MEP Home" },
+  "footer_top": { "id": "Atas", "en": "Top" },
+  "footer_credibility": { "id": "Kredibilitas", "en": "Credibility" },
+  "footer_scheme": { "id": "Skema", "en": "Scheme" },
+  "footer_propose": { "id": "Ajukan Lahan", "en": "Propose Land" },
+  "footer_desc": { 
+    "id": "Mechanical Electrical Plumbing (MEP) Contractor bersertifikasi nasional. Menghadirkan efisiensi energi, tata letak pipa presisi tinggi, sirkulasi udara bersih industri sejak 2020.", 
+    "en": "Nationally certified Mechanical Electrical Plumbing (MEP) Contractor. Delivering energy efficiency, high-precision piping layouts, and clean industrial air circulation since 2020." 
+  },
+  "footer_nav_title": { "id": "Navigasi Cepat", "en": "Quick Navigation" },
+  "footer_contact_title": { "id": "Kontak & Kantor Pusat", "en": "Contact & Headquarters" },
+  "footer_office_title": { "id": "Kantor Pusat", "en": "Headquarters" },
+  "footer_map_title": { "id": "Peta Lokasi Kantor", "en": "Office Location Map" },
+  "footer_link_home": { "id": "Beranda Utama", "en": "Home Page" },
+  "footer_link_about": { "id": "Tentang TCS", "en": "About TCS" },
+  "footer_link_services": { "id": "Layanan MEP", "en": "MEP Services" },
+  "footer_link_clients": { "id": "Mitra Klien", "en": "Partner Clients" },
+  "footer_link_planner": { "id": "Kalkulator Proyek", "en": "Project Planner" },
+  "footer_contact_phone": { "id": "Telepon Kantor", "en": "Office Phone" },
+  "footer_contact_email": { "id": "Surat Elektronik", "en": "Email Address" },
+  "footer_bottom_credit": { 
+    "id": "Didesain dengan estetika gelap premium oleh Antigravity AI. Didukung oleh Ekosistem Web GAS.", 
+    "en": "Designed with premium dark aesthetic by Antigravity AI. Powered by GAS Web Ecosystem." 
+  },
+  "footer_privacy": { "id": "Kebijakan Privasi", "en": "Privacy Policy" },
+  "footer_terms": { "id": "Syarat Ketentuan", "en": "Terms & Conditions" },
+
+  // ==========================================
+  // INDEX / LANDING PAGE MAIN
+  // ==========================================
+  // Hero
+  "hero_tag_tcs": { "id": "#KawanTCS MEP Contractor", "en": "#KawanTCS MEP Contractor" },
+  "hero_title": { 
+    "id": "Sophisticated <span>Engineering</span> For National <span>Prestige</span>.", 
+    "en": "Sophisticated <span>Engineering</span> For National <span>Prestige</span>." 
+  },
+  "hero_desc": { 
+    "id": "Kontraktor Mechanical, Electrical, dan Plumbing (MEP) berskala nasional. Kami menghadirkan solusi instalasi, desain, pemeliharaan HVAC, kelistrikan, pemipaan, proteksi kebakaran, dan pengolahan air bersih dengan presisi tinggi sejak 2020.", 
+    "en": "National-scale Mechanical, Electrical, and Plumbing (MEP) contractor. We deliver high-precision installation, design, and maintenance solutions for HVAC, electrical, piping, utilities, fire protection, and water treatment since 2020." 
+  },
+  "hero_btn_plan": { "id": "Rancang Proyek", "en": "Design Project" },
+  "hero_btn_services": { "id": "Pelajari Jasa", "en": "Explore Services" },
+  "hero_sphere_text": { "id": "Proyek Sukses", "en": "Successful Projects" },
+  
+  // Stats
+  "stat_year_label": { "id": "Tahun Berdiri", "en": "Year Established" },
+  "stat_proj_label": { "id": "Proyek Nasional", "en": "National Projects" },
+  "stat_satisfy_label": { "id": "Sertifikasi & Kualitas", "en": "Certificates & Quality" },
+  "stat_expert_label": { "id": "Insinyur Ahli", "en": "Expert Engineers" },
+
+  // Profile Section
+  "prof_section_tag": { "id": "Profil Perusahaan", "en": "Company Profile" },
+  "prof_title": { "id": "Berbekal Pengalaman & Presisi Tinggi", "en": "Equipped with Experience & High Precision" },
+  "prof_desc_1": { 
+    "id": "PT. Titis Cahaya Sejahtera (TCS) telah dipercaya mengerjakan berbagai proyek MEP (Mechanical, Electrical, Plumbing) berskala nasional. Kami menyediakan layanan integrasi satu pintu (One Stop Service Solution) dari tahap rancangan, instalasi fisik, komisioning, pemeliharaan rutin, hingga perbaikan cepat (after sales service).", 
+    "en": "PT. Titis Cahaya Sejahtera (TCS) has been trusted to execute various national-scale MEP (Mechanical, Electrical, Plumbing) projects. We provide a comprehensive One-Stop Service Solution from design, physical installation, commissioning, routine maintenance, to rapid after-sales services." 
+  },
+  "prof_quote": { 
+    "id": "\"Berawal dari kesederhanaan, kami tumbuh melalui kerja keras dan kepercayaan penuh dari pelanggan. Bagi kami, setiap sambungan pipa, kabel daya, dan sirkulasi udara bukan sekadar pekerjaan teknis, melainkan wujud dedikasi untuk kesuksesan jangka panjang mitra kami.\"", 
+    "en": "\"Originating from simplicity, we grow through hard work and the absolute trust of our customers. For us, every pipe joint, power cable, and air circulation is not just a technical job, but a form of dedication for our partners' long-term success.\"" 
+  },
+  "prof_floating_title": { "id": "Bekerja Sejak 2020", "en": "Serving Since 2020" },
+  "prof_floating_desc": { "id": "Dipercaya puluhan korporasi besar di Indonesia untuk infrastruktur vital.", "en": "Trusted by dozens of major corporations in Indonesia for vital infrastructure." },
+  
+  "dna_one_stop_title": { "id": "One Stop Solution", "en": "One Stop Solution" },
+  "dna_one_stop_desc": { "id": "Layanan berkelanjutan, mulai dari desain awal, fabrikasi, instalasi fisik, hingga perawatan preventif jangka panjang.", "en": "Sustainable service, starting from initial design, fabrication, physical installation, to long-term preventive maintenance." },
+  "dna_team_title": { "id": "Tim Profesional", "en": "Professional Team" },
+  "dna_team_desc": { "id": "Didukung oleh tim insinyur ahli dan bersertifikat teknis nasional di bidang kelistrikan, mekanikal, dan pemipaan gas/air.", "en": "Supported by a team of expert and nationally certified technical engineers in electrical, mechanical, and gas/water piping." },
+  "dna_trust_title": { "id": "Terpercaya & Handal", "en": "Trusted & Reliable" },
+  "dna_trust_desc": { "id": "Rekam jejak pengerjaan infrastruktur vital di pabrik manufaktur obat, makanan, kosmetik, perkantoran, dan industri otomotif.", "en": "Track record of constructing vital infrastructure in pharmaceutical, food, cosmetic, office, and automotive industries." },
+  "dna_heart_title": { "id": "Sepenuh Hati", "en": "With All Heart" },
+  "dna_heart_desc": { "id": "Kami percaya bahwa komunikasi yang transparan dan after sales service yang cepat merupakan kunci kesuksesan bersama.", "en": "We believe that transparent communication and rapid after-sales service are the keys to mutual success." },
+  
+  "cert_section_title": { "id": "Standar Sertifikasi & Kepatuhan Industri PT TCS", "en": "PT TCS Certification Standards & Industrial Compliance" },
+  "cert_lpjk_desc": { "id": "Mekanikal & Elektrikal", "en": "Mechanical & Electrical" },
+  "cert_iso9_desc": { "id": "Manajemen Mutu", "en": "Quality Management" },
+  "cert_iso45_desc": { "id": "Manajemen Keselamatan K3", "en": "HSE Safety Management" },
+  "cert_csms_desc": { "id": "Kontraktor K3 Industri", "en": "Industrial HSE Contractor" },
+
+  // Services
+  "srv_section_tag": { "id": "Spesialisasi MEP", "en": "MEP Specialization" },
+  "srv_title": { "id": "Layanan Teknik Tingkat Tinggi", "en": "High-Level Engineering Services" },
+  "srv_desc": { "id": "Eksplorasi modul keahlian teknik kami yang didesain secara modular, terstandarisasi, dan memenuhi regulasi industri nasional.", "en": "Explore our engineering expertise modules designed in a modular, standardized manner that complies with national industrial regulations." },
+  
+  "srv_pane_tag_mech": { "id": "Mechanical", "en": "Mechanical" },
+  "srv_pane_tag_elec": { "id": "Electrical", "en": "Electrical" },
+  "srv_pane_tag_plumb": { "id": "Plumbing", "en": "Plumbing" },
+  "srv_pane_tag_safety": { "id": "Safety", "en": "Safety" },
+  "srv_pane_tag_util": { "id": "Utilities", "en": "Utilities" },
+  "srv_pane_tag_chem": { "id": "Chemistry", "en": "Chemistry" },
+  "srv_pane_tag_ev": { "id": "EV Infrastructure", "en": "EV Infrastructure" },
+  "srv_pane_tag_eng": { "id": "Engineering", "en": "Engineering" },
+  
+  "srv_hvac_title": { "id": "Heating, Ventilation & Air Conditioning (HVAC)", "en": "Heating, Ventilation & Air Conditioning (HVAC)" },
+  "srv_hvac_desc": { "id": "Sistem tata udara presisi tinggi dengan sertifikasi ISO 14644 untuk *cleanroom* steril industri farmasi, kosmetik, dan makanan (F&B). Kami mengintegrasikan unit AHU & Chiller hemat energi dengan sistem filtrasi udara berlapis (Pre-filter, Medium, HEPA) untuk menjamin kebersihan sirkulasi udara bebas kontaminasi mikroba.", "en": "High-precision climate control systems with ISO 14644 certification for sterile cleanrooms in pharmaceutical, cosmetic, and food & beverage (F&B) industries. We integrate energy-efficient AHU & Chiller units with multi-layer air filtration (Pre-filter, Medium, HEPA) to guarantee clean air circulation free from microbial contamination." },
+  
+  "srv_elec_title": { "id": "Power Distribution & Electrical Engineering", "en": "Power Distribution & Electrical Engineering" },
+  "srv_elec_desc": { "id": "Perancangan sistem distribusi daya listrik bertegangan menengah (TM) dan rendah (TR) berkeandalan tinggi sesuai regulasi PUIL/SNI. Insinyur kami ahli merancang panel kontrol LVMDP/SDP otomatis, sistem penangkal petir elektrostatis, kapasitor bank, serta pengkabelan terstruktur tahan beban tinggi.", "en": "Design of high-reliability medium voltage (MV) and low voltage (LV) electrical distribution systems complying with PUIL/SNI regulations. Our engineers are experts in designing automatic LVMDP/SDP control panels, electrostatic lightning protection systems, capacitor banks, and structured cabling built for high load tolerances." },
+  
+  "srv_plumb_title": { "id": "High Precision Plumbing & Piping Network", "en": "High Precision Plumbing & Piping Network" },
+  "srv_plumb_desc": { "id": "Perancangan layout distribusi air bersih, pengolahan air kotor, pipa air panas/dingin, serta instalasi pipa gas industri tanpa kebocoran menggunakan material bersertifikat (PPR, PVC, Galvanis). Seluruh sambungan diuji keandalannya melalui pengujian tekanan tinggi (*hydrostatic test*).", "en": "Layout design for clean water distribution, wastewater treatment, hot/cold water pipes, and leak-free industrial gas pipe installation using certified materials (PPR, PVC, Galvanized). All connections are verified for durability using high-pressure hydrostatic testing." },
+  
+  "srv_util_title": { "id": "Process Utilities & Plant Auxiliary System", "en": "Process Utilities & Plant Auxiliary System" },
+  "srv_util_desc": { "id": "Infrastruktur utilitas penunjang mesin produksi pabrik meliputi instalasi perpipaan uap (*steam boiler*), udara bertekanan (*compressed air*), dan sistem sirkulasi air pendingin (*cooling tower*). Proses pengelasan menggunakan mesin las argon bersertifikat resmi DEPNAKER/MIGAS (M.I.G/T.I.G).", "en": "Utility infrastructure supporting plant production machinery including steam boiler piping, compressed air networks, and cooling tower circulation loops. Welding processes utilize DEPNAKER/MIGAS certified argon welding machines (M.I.G/T.I.G)." },
+  
+  "srv_fire_title": { "id": "Industrial Fire Protection & Suppression", "en": "Industrial Fire Protection & Suppression" },
+  "srv_fire_desc": { "id": "Perlindungan struktur bangunan dan aset penting melalui sistem proteksi kebakaran otomatis sesuai standar NFPA. Layanan kami meliputi instalasi pipa hydrant basah/kering dengan diesel pump handal, master control alarm kebakaran (MCFA), sprinkler otomatis, hingga sistem penjinak api gas FM200 steril untuk ruang server sensitif.", "en": "Protection of building structures and critical assets through automatic fire protection systems in accordance with NFPA standards. Our services include wet/dry hydrant piping installation with reliable diesel pumps, master control fire alarms (MCFA), automatic sprinklers, and sterile FM200 gas suppression systems for sensitive server rooms." },
+  
+  "srv_water_title": { "id": "Advanced Water Filtration & Treatment Plant", "en": "Advanced Water Filtration & Treatment Plant" },
+  "srv_water_desc": { "id": "Pengolahan air tanah menjadi air bersih layak guna melalui teknologi pemurnian tingkat lanjut. Sangat vital untuk pasokan air umpan ketel uap (*boiler feeding water*), pemurnian air bersih industri farmasi, kosmetik, serta penunjang proses manufaktur skala besar.", "en": "Treatment of ground water into usable clean water using advanced purification technologies. Highly critical for boiler feeding water supply, sterile water purification in pharmaceutical and cosmetic industries, and large-scale manufacturing processes." },
+  
+  "srv_ev_title": { "id": "EV Charging & SPKLU Infrastructure", "en": "EV Charging & SPKLU Infrastructure" },
+  "srv_ev_desc": { "id": "Infrastruktur pengisian daya kendaraan listrik terintegrasi sesuai standar keselamatan SNI dan NFPA. Melayani pengerjaan instalasi AC Charging (Home Charging rumahan) serta pembangunan stasiun publik DC Fast Charging (SPKLU) untuk area ruko komersial, pusat perbelanjaan, hotel, dan rest area yang dilengkapi sistem pembayaran QRIS otomatis.", "en": "Integrated electric vehicle charging infrastructure built to SNI and NFPA safety standards. Providing AC Charging (Home Charging) installations and construction of public DC Fast Charging stations (SPKLU) for commercial shophouses, shopping malls, hotels, and rest areas equipped with automatic QRIS payment gateways." },
+  
+  "srv_design_title": { "id": "Layout Engineering & 3D MEP Designing", "en": "Layout Engineering & 3D MEP Designing" },
+  "srv_design_desc": { "id": "Perancangan tata letak dan visualisasi 3D MEP berbasis B.I.M (Building Information Modeling) menggunakan Autodesk Revit dan AutoCAD. Kami membantu meminimalkan bentrokan jalur pipa (*clash detection*), menghitung beban pendinginan udara (*cooling load*), dan merancang single line diagram panel daya secara akurat.", "en": "Layout design and 3D MEP visualization based on B.I.M (Building Information Modeling) using Autodesk Revit and AutoCAD. We help minimize pipe routing interference (clash detection), calculate heating/cooling loads, and design accurate single-line power panel diagrams." },
+
+  "srv_btn_select": { "id": "Pilih Jasa Ini", "en": "Select This Service" },
+
+  "srv_hvac_f1": { "id": "Pemasangan Chiller & AHU", "en": "Chiller & AHU Installation" },
+  "srv_hvac_f2": { "id": "Fabrikasi & Isolasi Ducting", "en": "Ducting Fabrication & Insulation" },
+  "srv_hvac_f3": { "id": "Cleanroom Kelas ISO 7 & 8", "en": "Cleanroom Class ISO 7 & 8" },
+  "srv_hvac_f4": { "id": "Perawatan & Kalibrasi Chiller", "en": "Chiller Maintenance & Calibration" },
+  "srv_hvac_f5": { "id": "VRF / VRV System Installation", "en": "VRF / VRV System Installation" },
+  "srv_hvac_f6": { "id": "Fan Filter Unit (FFU)", "en": "Fan Filter Unit (FFU)" },
+  "srv_hvac_f7": { "id": "Cooling Tower & Exhaust Fan", "en": "Cooling Tower & Exhaust Fan" },
+  "srv_hvac_f8": { "id": "Make-Up Air Handling", "en": "Make-Up Air Handling" },
+  "srv_hvac_cap": { "id": "Instalasi Ducting & AHU Pabrik", "en": "Factory AHU & Ducting Installation" },
+
+  "srv_elec_f1": { "id": "Panel Listrik LVMDP & SDP", "en": "LVMDP & SDP Electrical Panels" },
+  "srv_elec_f2": { "id": "Instalasi Jalur Kabel Tray", "en": "Cable Tray Route Installation" },
+  "srv_elec_f3": { "id": "Penangkal Petir & Grounding", "en": "Lightning Protection & Grounding" },
+  "srv_elec_f4": { "id": "Kalibrasi & Audit Daya Listrik", "en": "Power Quality Audit & Calibration" },
+  "srv_elec_f5": { "id": "Emergency Power & Genset", "en": "Emergency Power & Generator" },
+  "srv_elec_f6": { "id": "Sistem Penerangan Industri", "en": "Industrial Lighting Systems" },
+  "srv_elec_f7": { "id": "Structured Cabling & Data", "en": "Structured Cabling & Data Networks" },
+  "srv_elec_f8": { "id": "Uninterruptible Power (UPS)", "en": "Uninterruptible Power Supply (UPS)" },
+  "srv_elec_cap": { "id": "Instalasi Panel & Grounding Gedung", "en": "Building Panel & Grounding Assembly" },
+
+  "srv_plumb_f1": { "id": "Pipa PPR, PVC, & Galvanis", "en": "PPR, PVC, & Galvanized Piping" },
+  "srv_plumb_f2": { "id": "Pompa Booster & Transfer", "en": "Booster & Transfer Pump Stations" },
+  "srv_plumb_f3": { "id": "Pemipaan Air Kotor & Bekas", "en": "Soil & Wastewater Piping Loops" },
+  "srv_plumb_f4": { "id": "Hydrostatic & Leakage Testing", "en": "Hydrostatic & Leakage Testing" },
+  "srv_plumb_f5": { "id": "Air Bersih & Air Hujan", "en": "Clean Water & Stormwater Piping" },
+  "srv_plumb_f6": { "id": "Sewage Treatment Plant (STP)", "en": "Sewage Treatment Plant (STP)" },
+  "srv_plumb_f7": { "id": "Wastewater Treatment (WWT)", "en": "Industrial Wastewater Treatment (WWT)" },
+  "srv_plumb_f8": { "id": "Air Panas & Dingin", "en": "Hot & Cold Water Supply Piping" },
+  "srv_plumb_cap": { "id": "Pemetaan & Distribusi Pipa Booster", "en": "Booster Piping Layout & Distribution" },
+
+  "srv_util_f1": { "id": "Pipa Steam / Boiler", "en": "Steam & Boiler Piping Systems" },
+  "srv_util_f2": { "id": "Piping Compressed Air", "en": "Compressed Air Distribution Loops" },
+  "srv_util_f3": { "id": "Las Stainless Argon (MIG/TIG)", "en": "Argon Stainless Welding (MIG/TIG)" },
+  "srv_util_f4": { "id": "Boiler & Cooling Tower", "en": "Boiler & Cooling Tower Hookups" },
+  "srv_util_f5": { "id": "Process Cooling Water Loop", "en": "Process Cooling Water Loop" },
+  "srv_util_f6": { "id": "Process Vacuum Piping", "en": "Process Vacuum Piping Network" },
+  "srv_util_f7": { "id": "Process Exhaust & Ventilation", "en": "Process Exhaust & Ventilation" },
+  "srv_util_f8": { "id": "High Pressure Industrial Gas", "en": "High Pressure Industrial Gas Lines" },
+  "srv_util_cap": { "id": "Fabrikasi Jalur Pipa Stainless", "en": "Stainless Piping Fabrication" },
+
+  "srv_fire_f1": { "id": "Hidran & Pompa Pemadam Diesel", "en": "Hydrants & Diesel Fire Pumps" },
+  "srv_fire_f2": { "id": "Sprinkler Otomatis Wet-Pipe", "en": "Wet-Pipe Automatic Sprinklers" },
+  "srv_fire_f3": { "id": "Panel Master Alarm MCFA", "en": "Master Fire Alarm Panel (MCFA)" },
+  "srv_fire_f4": { "id": "Gas Suppression FM200 Steril", "en": "Sterile FM200 Gas Suppression" },
+  "srv_fire_f5": { "id": "Alat Pemadam Portabel APAR", "en": "Portable Fire Extinguishers (APAR)" },
+  "srv_fire_f6": { "id": "Dry Riser System Installation", "en": "Dry Riser System Installation" },
+  "srv_fire_f7": { "id": "Fire Barrier & Sealant", "en": "Fire Barriers & Sealant Penetration" },
+  "srv_fire_f8": { "id": "Jockey Pump & Duty Pump Control", "en": "Jockey & Duty Pump Panel Control" },
+  "srv_fire_cap": { "id": "Instalasi Pipa Sprinkler & Alarm", "en": "Sprinkler Pipe & Alarm Assembly" },
+
+  "srv_water_f1": { "id": "Reverse Osmosis", "en": "Reverse Osmosis (RO) Plants" },
+  "srv_water_f2": { "id": "Demineralisasi", "en": "Water Demineralization (Demin)" },
+  "srv_water_f3": { "id": "Water Treatment Plant", "en": "Water Treatment Plant (WTP)" },
+  "srv_water_f4": { "id": "Sewage Treatment Plant", "en": "Sewage Treatment Plant (STP)" },
+  "srv_water_f5": { "id": "Wastewater Treatment", "en": "Wastewater Treatment Plant (WWTP)" },
+  "srv_water_f6": { "id": "Softener", "en": "Water Softener Systems" },
+  "srv_water_f7": { "id": "Carbon Filter", "en": "Activated Carbon Media Filters" },
+  "srv_water_f8": { "id": "Sand Filter", "en": "High-Flow Silica Sand Filters" },
+  "srv_water_cap": { "id": "Instalasi Bak Purifikasi & Sand Filter", "en": "Purification Tank & Sand Filter" },
+
+  "srv_ev_f1": { "id": "AC Charging (Home Charging)", "en": "AC Charging (Home Charger Station)" },
+  "srv_ev_f2": { "id": "DC Fast Charging (SPKLU)", "en": "DC Fast Charging (SPKLU Station)" },
+  "srv_ev_f3": { "id": "Pedestal & Wall Charger", "en": "Pedestal & Wall-Mount Chargers" },
+  "srv_ev_f4": { "id": "Gateway QRIS & E-Wallet", "en": "QRIS & E-Wallet Payment Gateway" },
+  "srv_ev_f5": { "id": "SaaS Billing & Monitoring App", "en": "SaaS Billing & Telemetry App" },
+  "srv_ev_f6": { "id": "Gardu Hubung & Upgrade PLN", "en": "Substation Integration & PLN Upgrades" },
+  "srv_ev_f7": { "id": "Sertifikat Laik Operasi (SLO)", "en": "Laik Operasi Safety Certificates (SLO)" },
+  "srv_ev_f8": { "id": "EV Grounding & Protection", "en": "EV Grounding & Surge Protections" },
+  "srv_ev_cap": { "id": "Instalasi Charger Mobil Listrik SPKLU", "en": "Public SPKLU Charger Assembly" },
+
+  "srv_design_f1": { "id": "Gambar 3D BIM MEP (Revit/CAD)", "en": "3D BIM MEP Drafting (Revit/CAD)" },
+  "srv_design_f2": { "id": "Clash Detection & Koordinasi 3D", "en": "Clash Detection & 3D Coordination" },
+  "srv_design_f3": { "id": "Perhitungan Cooling Load & Udara", "en": "Cooling & Ventilation Load Calculation" },
+  "srv_design_f4": { "id": "SLD Panel & Layout Kelistrikan", "en": "Single Line Diagram & Power Layouts" },
+  "srv_design_f5": { "id": "Pembuatan As-Built Drawings", "en": "As-Built Layout & Drafting" },
+  "srv_design_f6": { "id": "Fluid Dynamics & Pump Head", "en": "Fluid Dynamics & Pump Head Design" },
+  "srv_design_f7": { "id": "Konsultasi Teknik MEP", "en": "MEP Engineering Consultations" },
+  "srv_design_f8": { "id": "Desain Cleanroom BPOM / GMP", "en": "BPOM / GMP Cleanroom Design Layout" },
+  "srv_design_cap": { "id": "Visualisasi Pemodeling 3D MEP Pabrik", "en": "3D MEP Industrial Model Visualization" },
+  
+  // Tab Labels
+  "tab_hvac": { "id": "HVAC System", "en": "HVAC System" },
+  "tab_elec": { "id": "Electrical System", "en": "Electrical System" },
+  "tab_plumb": { "id": "Plumbing System", "en": "Plumbing System" },
+  "tab_util": { "id": "Process Utilities", "en": "Process Utilities" },
+  "tab_fire": { "id": "Fire Protection", "en": "Fire Protection" },
+  "tab_water": { "id": "Water Treatment", "en": "Water Treatment" },
+  "tab_ev": { "id": "EV Charging & SPKLU", "en": "EV Charging & SPKLU" },
+  "tab_design": { "id": "Design Facility", "en": "Design Facility" },
+
+  // Workflow
+  "flow_section_tag": { "id": "Alur Kerja Kami", "en": "Our Workflow" },
+  "flow_title": { "id": "Metodologi Integrasi Satu Pintu", "en": "One-Stop Integration Methodology" },
+  "flow_desc": { "id": "Dari konsep, pemetaan digital, pengerjaan fisik di lapangan, hingga perawatan sistem berkala. Kami menjamin ketepatan waktu & kepatuhan standar industri.", "en": "From concept, digital mapping, physical field execution, to routine system maintenance. We guarantee timely delivery and industrial compliance." },
+  
+  "flow_step_1_title": { "id": "Konsultasi & Survei", "en": "Consultation & Survey" },
+  "flow_step_1_desc": { "id": "Tim ahli kami berdiskusi untuk memahami kebutuhan teknis dan melakukan survei tapak langsung guna mengukur kelayakan fisik.", "en": "Our expert team consults to understand technical needs and conducts on-site surveys to measure physical feasibility." },
+  "flow_step_2_title": { "id": "Pemodelan & BIM 3D", "en": "Modeling & BIM 3D" },
+  "flow_step_2_desc": { "id": "Mendesain detail gambar isometric, single-line diagram, layout 2D, dan visualisasi 3D MEP untuk menghindari *clashing* sistem.", "en": "Designing detailed isometric drawings, single-line diagrams, 2D layouts, and 3D MEP models to prevent system clashing." },
+  "flow_step_3_title": { "id": "Pengadaan & Fabrikasi", "en": "Procurement & Fab" },
+  "flow_step_3_desc": { "id": "Pengadaan material pipa, mesin AHU/Chiller bersertifikasi, panel otomatis, dan fabrikasi struktur pipa di workshop internal.", "en": "Procuring pipes, certified AHU/Chiller machines, automatic panels, and fabricating custom piping structures in our internal workshop." },
+  "flow_step_4_title": { "id": "Instalasi Fisik", "en": "Physical Installation" },
+  "flow_step_4_desc": { "id": "Pengerjaan konstruksi mekanikal, penarikan kabel daya tray, pemasangan unit pemadam, pengelasan argon pipa di lapangan secara disiplin K3.", "en": "Mechanical construction, power tray cable pulling, fire protection unit assembly, and field argon welding strictly following HSE disciplines." },
+  "flow_step_5_title": { "id": "Komisioning & SLA", "en": "Commissioning & SLA" },
+  "flow_step_5_desc": { "id": "Uji tekanan hidrostatik pipa, uji isolasi Megger kabel, kalibrasi, serah terima berkas SLO, dan garansi pemeliharaan.", "en": "Pipe hydrostatic pressure testing, cable Megger insulation testing, system calibration, SLO certification handover, and maintenance warranty." },
+
+  // Lead Wizard
+  "wiz_section_tag": { "id": "Planner Proyek", "en": "Project Planner" },
+  "wiz_title": { "id": "Konsultasikan Proyek Anda", "en": "Consult Your Project" },
+  "wiz_desc": { "id": "Rancang kebutuhan Mechanical, Electrical, atau Plumbing Anda bersama insinyur profesional kami. Dapatkan penawaran awal & tata letak solusi gratis.", "en": "Plan your Mechanical, Electrical, or Plumbing needs with our professional engineers. Get an initial estimate & free layout solution." },
+  
+  "wiz_step_1_title": { "id": "Layanan Apa yang Anda Butuhkan?", "en": "Which Service Do You Require?" },
+  "wiz_step_3_title": { "id": "Masukkan Info Kontak Perusahaan", "en": "Enter Company Contact Details" },
+  "wiz_label_name": { "id": "Nama Lengkap Anda *", "en": "Your Full Name *" },
+  "wiz_placeholder_name": { "id": "Contoh: Budi Santoso", "en": "e.g., Budi Santoso" },
+  "wiz_label_company": { "id": "Nama Perusahaan / Instansi", "en": "Company / Institution Name" },
+  "wiz_placeholder_company": { "id": "Contoh: PT. Maju Sentosa", "en": "e.g., PT. Maju Sentosa" },
+  "wiz_label_phone": { "id": "Nomor WhatsApp / Telepon Aktif *", "en": "Active WhatsApp / Phone Number *" },
+  "wiz_placeholder_phone": { "id": "Contoh: 08123456789", "en": "e.g., 08123456789" },
+  "wiz_label_notes": { "id": "Jelaskan Kebutuhan Spesifik Proyek (Opsional)", "en": "Explain Specific Project Needs (Optional)" },
+  "wiz_placeholder_notes": { "id": "Contoh: Butuh relokasi sistem pipa chiller AHU sepanjang 50 meter stainless steel...", "en": "e.g., Relocation of AHU chiller pipe system 50 meters stainless steel..." },
+  
+  "wiz_step_4_title": { "id": "Tinjau Permintaan Konsultasi Anda", "en": "Review Your Consultation Request" },
+  "wiz_sum_service": { "id": "Kategori Jasa", "en": "Service Category" },
+  "wiz_sum_scale": { "id": "Skala Proyek", "en": "Project Scale" },
+  "wiz_sum_name": { "id": "Nama Klien", "en": "Client Name" },
+  "wiz_sum_company": { "id": "Perusahaan", "en": "Company" },
+  "wiz_sum_phone": { "id": "Nomor Kontak", "en": "Contact Number" },
+  
+  "wiz_disclaimer": { 
+    "id": "Dengan mengeklik \"Kirim Rencana\", data Anda akan langsung terkirim secara terenkripsi ke database administrasi TCS. Kami akan merespons dalam waktu 1x24 jam kerja.", 
+    "en": "By clicking \"Submit Plan\", your data will be securely sent to the TCS administration database. We will respond within 1x24 business hours." 
+  },
+  "wiz_btn_prev": { "id": "Sebelumnya", "en": "Previous" },
+  "wiz_btn_next": { "id": "Berikutnya", "en": "Next" },
+  "wiz_btn_submit": { "id": "Kirim Rencana", "en": "Submit Plan" },
+  
+  "wiz_loader_title": { "id": "Mengirim Data Rencana...", "en": "Submitting Plan Data..." },
+  "wiz_loader_desc": { "id": "Insinyur MEP TCS sedang menyiapkan alokasi database Anda.", "en": "TCS MEP engineers are allocating your database entry." },
+  "wiz_success_title": { "id": "Rencana Sukses Terkirim!", "en": "Plan Successfully Submitted!" },
+  "wiz_btn_wa": { "id": "Hubungi WA Sekarang", "en": "Chat on WhatsApp Now" },
+  "wiz_btn_create": { "id": "Buat Baru", "en": "Create New" },
+  "clients_section_tag": { "id": "Klien Kami", "en": "Our Clients" },
+  "clients_section_title": { "id": "Mitra Kolaborasi Skala Nasional", "en": "National Collaborative Partners" },
+  "contact_wa_text": { "id": "+62 811-1460-707 (Hubungi WA)", "en": "+62 811-1460-707 (WhatsApp Us)" },
+  "wiz_step_2_title": { "id": "Berapa Skala Area Proyek Anda?", "en": "What is Your Project Area Scale?" },
+
+  // ==========================================
+  // SPKLU KEMITRAAN PAGE SPECIFIC
+  // ==========================================
+  "sp_hero_tag": { "id": "⚡ Inisiatif Energi Hijau", "en": "⚡ Green Energy Initiative" },
+  "sp_hero_title": { 
+    "id": "Investasi Masa Depan: Kemitraan <span>SPKLU</span> Berskala <em>Nasional</em>", 
+    "en": "Future Investment: National-Scale <span>SPKLU</span> Partnership" 
+  },
+  "sp_hero_desc": { 
+    "id": "Dapatkan *passive income* bulanan dengan mengajukan lahan strategis Anda menjadi Stasiun Pengisian Kendaraan Listrik Umum (SPKLU). Seluruh operasional, pengadaan mesin *fast charging*, hingga izin PLN ditangani langsung oleh PT TCS secara tepercaya.", 
+    "en": "Generate recurring monthly passive income by proposing your strategic land to be a Public Electric Vehicle Charging Station (SPKLU). All operations, fast charging hardware procurement, and PLN permits are managed directly by PT TCS." 
+  },
+  "sp_hero_btn_propose": { "id": "Ajukan Lahan Sekarang", "en": "Propose Land Now" },
+  "sp_hero_btn_scheme": { "id": "Pelajari Skema", "en": "Explore Scheme" },
+  "sp_timelapse_tag": { "id": "Timelapse Eksklusif", "en": "Exclusive Timelapse" },
+  "sp_timelapse_desc": { "id": "Konstruksi Lahan Kosong &rarr; SPKLU Aktif", "en": "Empty Land Construction &rarr; Active SPKLU" },
+  
+  "sp_live_rev_label": { "id": "⚡ Live Net Revenue SPKLU PT TCS Nasional (Real-Time)", "en": "⚡ Live Net Revenue SPKLU PT TCS National (Real-Time)" },
+  "sp_live_rev_desc": { 
+    "id": "Setiap detikan di atas menyimulasikan transaksi pengisian daya kendaraan listrik aktif di seluruh jaringan SPKLU PT TCS secara nasional.", 
+    "en": "Every second above simulates active EV charging transactions across the PT TCS SPKLU national network." 
+  },
+  
+  "sp_trust_tag": { "id": "Mengapa Bermitra dengan PT TCS?", "en": "Why Partner with PT TCS?" },
+  "sp_trust_title": { "id": "Didukung oleh Infrastruktur Kontraktor MEP Nasional", "en": "Backed by National MEP Contractor Infrastructure" },
+  "sp_trust_desc": { 
+    "id": "Membangun bisnis SPKLU membutuhkan keahlian mekanikal dan elektrikal tingkat tinggi agar aman dan memenuhi regulasi pemerintah. Sebagai kontraktor MEP nasional terpercaya, PT TCS menjamin keandalan teknis 100%.", 
+    "en": "Constructing an SPKLU business requires high-level mechanical and electrical engineering expertise for safety and government compliance. As a trusted national MEP contractor, PT TCS guarantees 100% technical reliability." 
+  },
+  
+  "sp_trust_card_1_title": { "id": "Kontraktor MEP Nasional", "en": "National MEP Contractor" },
+  "sp_trust_card_1_desc": { "id": "Sejak 2020 telah merancang dan membangun 50+ proyek infrastruktur vital berskala besar untuk pabrik farmasi, manufaktur, dan gedung bertingkat di Indonesia.", "en": "Since 2020, designing and constructing 50+ vital large-scale infrastructure projects for pharmaceutical, manufacturing, and high-rise buildings in Indonesia." },
+  "sp_trust_card_2_title": { "id": "Insinyur Ahli & Berlisensi", "en": "Expert & Licensed Engineers" },
+  "sp_trust_card_2_desc": { "id": "Instalasi kelistrikan daya tinggi SPKLU (sistem gardu, proteksi arus pendek, dan sistem kontrol cerdas) dikerjakan oleh tim insinyur ahli berlisensi nasional.", "en": "High-power SPKLU electrical installations (substations, short-circuit protections, and smart control systems) are executed by nationally licensed expert engineers." },
+  "sp_trust_card_3_title": { "id": "Mitra Industri Terkemuka", "en": "Leading Industrial Partners" },
+  "sp_trust_card_3_desc": { "id": "Kami dipercaya oleh perusahaan multinasional seperti Akebono Brake Astra, Tempo Group, Olam Food Ingredients, BT Cocoa, dan Fahrenheit Synthon.", "en": "We are trusted by multinational corporations such as Akebono Brake Astra, Tempo Group, Olam Food Ingredients, BT Cocoa, and Fahrenheit Synthon." },
+  
+  "sp_scheme_tag": { "id": "Skema Kerja Sama", "en": "Partnership Scheme" },
+  "sp_scheme_title": { "id": "Kolaborasi Transparan & Saling Menguntungkan", "en": "Transparent & Mutually Beneficial Collaboration" },
+  "sp_scheme_desc": { "id": "Kami membagi tanggung jawab kerja sama secara berimbang guna mempercepat terwujudnya stasiun pengisian daya dengan manajemen aset profesional.", "en": "We divide partnership responsibilities equally to accelerate the realization of charging stations with professional asset management." },
+  
+  "sp_inv_duty_title": { "id": "Kewajiban Mitra Investor", "en": "Investor Partner Obligations" },
+  "sp_inv_duty_1_title": { "id": "Lahan Strategis", "en": "Strategic Land" },
+  "sp_inv_duty_1_desc": { "id": "Menyediakan lokasi berukuran minimal muat 2-4 mobil di tepi jalan raya utama, pusat belanja, rest area, atau perkantoran.", "en": "Provide a location fitting at least 2-4 cars on a main highway side, shopping mall, highway rest area, or office complex." },
+  "sp_inv_duty_2_title": { "id": "Tanah Clean & Clear", "en": "Clean & Clear Property" },
+  "sp_inv_duty_2_desc": { "id": "Menjamin status kepemilikan tanah legal (SHM/HGB) dan bebas dari sengketa/permasalahan hukum.", "en": "Guarantee legal land ownership status (SHM/HGB) and free from disputes/legal issues." },
+  "sp_inv_duty_3_title": { "id": "Investasi Sipil Awal", "en": "Initial Civil Investment" },
+  "sp_inv_duty_3_desc": { "id": "Menyediakan modal dasar untuk pekerjaan sipil penunjang lokasi seperti pembuatan kanopi, marka jalan parkir, dan pos.", "en": "Provide initial capital for supporting civil works such as canopy erection, parking line markings, and booths." },
+  
+  "sp_tcs_duty_title": { "id": "Kewajiban PT TCS (Kontraktor)", "en": "PT TCS (Contractor) Obligations" },
+  "sp_tcs_duty_1_title": { "id": "Penyediaan Mesin Charger", "en": "EV Charger Hardware" },
+  "sp_tcs_duty_1_desc": { "id": "Menyediakan perangkat mesin charger SPKLU berteknologi tinggi (tipe AC charging maupun DC Fast Charging).", "en": "Provide high-tech SPKLU charger machines (AC charging type or DC Fast Charging hardware)." },
+  "sp_tcs_duty_2_title": { "id": "Pemasangan & Sistem Pembayaran", "en": "Installation & Payment Systems" },
+  "sp_tcs_duty_2_desc": { "id": "Pekerjaan fisik kelistrikan, integrasi gateway pembayaran otomatis (QRIS/E-Wallet), dan aplikasi monitoring.", "en": "Physical electrical works, automatic payment gateway integration (QRIS/E-Wallet), and SaaS monitoring application." },
+  "sp_tcs_duty_3_title": { "id": "Perizinan & Legalitas Lengkap", "en": "Licenses & Compliance" },
+  "sp_tcs_duty_3_desc": { "id": "Mengurus seluruh regulasi perizinan operasional SPKLU ke Kementerian ESDM dan PLN hingga siap beroperasi.", "en": "Manage all SPKLU operational regulatory permits with the Ministry of ESDM and PLN until ready for operation." },
+  
+  "sp_sim_tag": { "id": "Simulator Finansial", "en": "Financial Simulator" },
+  "sp_sim_title": { "id": "Simulator Arus Kas & Kelayakan Finansial", "en": "Cash Flow & Financial Feasibility Simulator" },
+  "sp_sim_desc": { "id": "Atur skenario mesin pengisi daya dan jumlah utilisasi transaksi harian untuk melihat proyeksi akumulasi arus kas, nilai pengembalian investasi (Payback Period), serta perhitungan kelayakan finansial.", "en": "Configure charger type and daily transaction utilization to project cumulative cash flows, investment payback periods, and financial feasibility metrics." },
+  
+  "sp_sim_label_type": { "id": "PILIH TIPE MESIN & SKENARIO INVESTASI", "en": "CHOOSE CHARGER TYPE & CAPEX SCENARIO" },
+  "sp_sim_btn_ac_title": { "id": "Tipe AC (22 kW)", "en": "AC Type (22 kW)" },
+  "sp_sim_btn_ac_capex": { "id": "Capex: Rp 150 Juta", "en": "Capex: 150 Million IDR" },
+  "sp_sim_btn_dc_title": { "id": "Tipe DC (50 kW)", "en": "DC Type (50 kW)" },
+  "sp_sim_btn_dc_capex": { "id": "Capex: Rp 850 Juta", "en": "Capex: 850 Million IDR" },
+  "sp_sim_label_session": { "id": "JUMLAH TRANSAKSI (SESI / HARI)", "en": "DAILY TRANSACTIONS (SESSIONS / DAY)" },
+  "sp_sim_sessions_conservative": { "id": "5 Sesi (Konservatif)", "en": "5 Sessions (Conservative)" },
+  "sp_sim_sessions_crowded": { "id": "50 Sesi (Sangat Padat)", "en": "50 Sessions (Very Crowded)" },
+  "sp_sim_label_capex": { "id": "Estimasi CAPEX Awal", "en": "Initial CAPEX Estimate" },
+  "sp_sim_label_monthly": { "id": "Pendapatan Kotor Bulanan", "en": "Monthly Gross Revenue" },
+  "sp_sim_label_pbp": { "id": "Payback Period (PBP)", "en": "Payback Period (PBP)" },
+  "sp_sim_chart_tag": { "id": "Proyeksi Saldo Kas", "en": "Cash Balance Projection" },
+  "sp_sim_chart_title": { "id": "Visualisasi Arus Kas Kumulatif (5 Tahun - Juta Rp)", "en": "Cumulative Cash Flow Projection (5 Years - Million IDR)" },
+  "sp_sim_disclaimer": { 
+    "id": "💡 <em>Formula dihitung menggunakan standar kelayakan finansial: NPV & IRR diskonto 10% dengan O&M 15% dipotong dari omzet harian otomatis.</em>", 
+    "en": "💡 <em>Formula calculated using financial feasibility standards: NPV & IRR discounted at 10% with 15% O&M auto-deducted from daily revenue.</em>" 
+  },
+  
+  "sp_an_tag": { "id": "Analisis Pasar & Keuangan", "en": "Market & Financial Analysis" },
+  "sp_an_title": { "id": "Mengapa Sekarang Waktu Terbaik untuk Berinvestasi?", "en": "Why Now is the Best Time to Invest?" },
+  "sp_an_desc": { "id": "Data berikut menggambarkan lonjakan pertumbuhan adopsi mobil listrik di Indonesia serta simulasi titik balik modal (ROI) proyek kemitraan secara konservatif.", "en": "The following charts depict the explosive growth of EV adoption in Indonesia and a conservative ROI payback simulation for the partnership project." },
+  
+  "sp_ch_1_tag": { "id": "Ribu Unit", "en": "Thousand Units" },
+  "sp_ch_1_title": { "id": "Pertumbuhan Populasi EV Nasional", "en": "National EV Population Growth" },
+  "sp_ch_1_footer": { "id": "Adopsi mobil listrik nasional meningkat secara eksponensial menciptakan permintaan ruang pengisian daya yang kritis.", "en": "National electric vehicle adoption is growing exponentially, creating a critical demand for charging spaces." },
+  
+  "sp_ch_2_tag": { "id": "Persentase", "en": "Percentage" },
+  "sp_ch_2_title": { "id": "Distribusi Tugas & Modal Kemitraan", "en": "Partnership Capital & Responsibility Share" },
+  "sp_ch_2_footer": { "id": "Skema bagi hasil berimbang dengan pemisahan beban modal infrastruktur berat agar investor bebas pusing operasional.", "en": "Balanced share scheme with heavy capital split to ensure hassle-free operations for the investor partner." },
+  
+  "sp_ch_3_tag": { "id": "Juta Rupiah", "en": "Million Rupiah" },
+  "sp_ch_3_title": { "id": "Proyeksi Aliran Kas Kumulatif 5 Tahun", "en": "5-Year Cumulative Cash Flow Projection" },
+  "sp_ch_3_footer": { "id": "Berdasarkan survei kelayakan lalu lintas, modal awal (Sipil/Lahan) diproyeksikan Break-Even Point (BEP) pada tahun ke-3.", "en": "Based on traffic feasibility surveys, initial civil capital is projected to Break-Even (BEP) in Year 3." },
+  
+  "sp_note_title": { "id": "Catatan Kelayakan dari Tim Riset Kemitraan PT TCS", "en": "Feasibility Note from PT TCS Partnership Research Team" },
+  "sp_note_desc": { "id": "Infrastruktur SPKLU bersifat sangat hiper-lokal. Jika lokasi strategis Anda berada di wilayah dengan kepadatan kepemilikan EV tinggi dan dekat dengan hub komersial, peluang menangkap arus pengisian daya kendaraan listrik akan sangat besar. Oleh karena itu, langkah pengamanan kuota wilayah serta survei kelayakan fisik menjadi sangat mendesak demi melindungi keuntungan jangka panjang (10+ tahun).", "en": "SPKLU infrastructure is highly hyper-local. If your strategic location is within a high EV density zone and near commercial hubs, your potential to capture charging demand is massive. Securing a regional quota and physical survey is urgent to protect long-term profits (10+ years)." },
+  
+  "sp_form_tag": { "id": "💰 Pasif Income Nyata", "en": "💰 Real Passive Income" },
+  "sp_form_title": { "id": "Unduh Proposal & Ajukan Lahan Anda Hari Ini", "en": "Download Proposal & Propose Your Land Today" },
+  "sp_form_desc": { "id": "Setelah Anda mengisi formulir pengajuan, sistem kami akan langsung mengirimkan Proposal Kemitraan SPKLU komprehensif ke email Anda. Tim analis kelayakan lokasi kami akan meninjau titik koordinat lahan Anda dalam 1x24 jam.", "en": "Once you submit, our system will instantly send a comprehensive SPKLU Partnership Proposal to your email. Our feasibility team will review your land coordinates within 1x24 hours." },
+  
+  "sp_benefit_1": { "id": "Gratis Survei & Analisis Kelayakan Lalu Lintas EV", "en": "Free Site Survey & EV Traffic Feasibility Analysis" },
+  "sp_benefit_2": { "id": "Pembagian Bagi Hasil Ditransfer Otomatis Bulanan", "en": "Monthly Profit-Share Transferred Automatically" },
+  "sp_benefit_3": { "id": "Aplikasi Pemantau Pendapatan Real-time (SaaS)", "en": "Real-time Revenue Monitoring SaaS Application" },
+  
+  "sp_form_card_title": { "id": "Formulir Pengajuan Mitra SPKLU", "en": "SPKLU Partner Application Form" },
+  "sp_form_label_name": { "id": "Nama Lengkap Investor *", "en": "Investor Full Name *" },
+  "sp_form_placeholder_name": { "id": "Contoh: Hermawan Wijaya", "en": "e.g., Hermawan Wijaya" },
+  "sp_form_label_email": { "id": "Alamat Email Aktif *", "en": "Active Email Address *" },
+  "sp_form_placeholder_email": { "id": "Contoh: investor@tcs.com", "en": "e.g., investor@tcs.com" },
+  "sp_form_label_phone": { "id": "No. WhatsApp Aktif *", "en": "Active WhatsApp Number *" },
+  "sp_form_placeholder_phone": { "id": "Contoh: 0812345678", "en": "e.g., 0812345678" },
+  "sp_form_label_address": { "id": "Alamat Lengkap & Koordinat Google Maps Lahan *", "en": "Full Land Address & Google Maps Coordinates *" },
+  "sp_form_placeholder_address": { "id": "Contoh: Jl. Raya Sudirman No. 42 (Koordinat: -6.2088, 106.8456)", "en": "e.g., Jl. Raya Sudirman No. 42 (Coordinates: -6.2088, 106.8456)" },
+  "sp_form_label_notes": { "id": "Keterangan Pendukung / Ukuran Lahan (Opsional)", "en": "Supporting Notes / Land Dimensions (Optional)" },
+  "sp_form_placeholder_notes": { "id": "Contoh: Lahan parkir ruko 3 lantai muat 4 mobil, daya terpasang 33kVA...", "en": "e.g., Shophouse parking spaces fitting 4 cars, installed power 33kVA..." },
+  "sp_form_btn_submit": { "id": "Unduh Proposal & Ajukan Lahan", "en": "Download Proposal & Submit Land" },
+  "sp_form_agreement": { "id": "Saya setuju untuk menerima proposal penawaran kemitraan dan bersedia dihubungi oleh tim representatif PT TCS melalui WhatsApp/Email.", "en": "I agree to receive the partnership proposal and consent to be contacted by PT TCS representative team via WhatsApp/Email." },
+  
+  "sp_loader_title": { "id": "Memproses Pengajuan Lahan...", "en": "Processing Land Proposal..." },
+  "sp_loader_desc": { "id": "Kami sedang menyiapkan database pendaftaran Anda secara aman.", "en": "We are securely preparing your registration in our database." },
+  
+  "sp_success_title": { "id": "Pengajuan Terkirim!", "en": "Proposal Submitted!" },
+  "sp_btn_wa": { "id": "Hubungi WA Sekarang", "en": "Chat on WhatsApp Now" },
+  "sp_btn_wa_manual": { "id": "Hubungi Manual via WhatsApp", "en": "Contact Manually via WhatsApp" },
+  
+  "sp_quick_title": { "id": "Masih Ragu / Butuh Informasi Lebih Cepat?", "en": "Still Undecided / Need Faster Information?" },
+  "sp_quick_desc": { "id": "Konsultasikan potensi kelayakan lahan dan estimasi perhitungan bagi hasil SPKLU Anda langsung bersama tim representatif bisnis kami melalui chat WhatsApp sekarang (Gratis).", "en": "Consult your land's potential and profit share estimates directly with our business representative via WhatsApp chat (Free)." },
+
+  // ==========================================
+  // BIM CLASH SIMULATOR SPECIFIC
+  // ==========================================
+  "bim_status_label": { "id": "Status Pemodelan:", "en": "BIM Status:" },
+  "bim_status_clash": { "id": "⚠️ 3 Bentrokan Terdeteksi", "en": "⚠️ 3 Clashes Detected" },
+  "bim_status_clean": { "id": "✔ Bebas Bentrokan (Zero-Clash)", "en": "✔ Zero-Clash Coordinated" },
+  "bim_btn_run": { "id": "Mulai Deteksi Clash", "en": "Run Clash Detection" },
+  "bim_btn_reset": { "id": "Reset Simulasi", "en": "Reset Simulation" },
+  "bim_toggle_plumb": { "id": "Pemipaan (Biru)", "en": "Plumbing (Blue)" },
+  "bim_toggle_hvac": { "id": "Ventilasi (Teal)", "en": "HVAC Duct (Teal)" },
+  "bim_toggle_elec": { "id": "Kelistrikan (Kuning)", "en": "Electrical (Yellow)" },
+  "bim_log_1": { "id": "Memulai audit koordinasi 3D...", "en": "Initializing 3D coordination audit..." },
+  "bim_log_2": { "id": "Memindai grid arsitektur Level 2...", "en": "Scanning architectural grid Level 2..." },
+  "bim_log_3": { "id": "BENTROKAN TERDETEKSI: AHU Ducting vs Pipa Chiller [Node B12]", "en": "CLASH DETECTED: AHU Ducting vs Chiller Pipe [Node B12]" },
+  "bim_log_4": { "id": "BENTROKAN TERDETEKSI: Kabel Tray LVMDP vs Pipa Booster [Node C04]", "en": "CLASH DETECTED: LVMDP Cable Tray vs Booster Pipe [Node C04]" },
+  "bim_log_5": { "id": "Mengkalkulasi ulang toleransi routing offset...", "en": "Recalculating routing offset tolerances..." },
+  "bim_log_6": { "id": "Meresolusi jalur pipa B12 (+45mm deviasi vertikal)...", "en": "Resolving pipeline B12 path (+45mm vertical offset)..." },
+  "bim_log_7": { "id": "Meresolusi jalur kabel C04 (-20mm deviasi lateral)...", "en": "Resolving electrical run C04 path (-20mm lateral offset)..." },
+  "bim_log_8": { "id": "Verifikasi selesai. Desain terkoordinasi 100% bebas bentrokan.", "en": "Verification complete. Coordinated design is 100% clash-free." },
+  
+  // ==========================================
+  // SPKLU FEASIBILITY SCANNER SPECIFIC
+  // ==========================================
+  "sp_scan_tag": { "id": "Radar Kelayakan", "en": "Radar Feasibility" },
+  "sp_scan_label_input": { "id": "LOKASI LAHAN ATAU KOORDINAT GPS", "en": "LAND LOCATION OR GPS COORDINATES" },
+  "sp_scan_label_radius": { "id": "RADIUS PEMINDAIAN RADAR", "en": "RADAR SCANNING RADIUS" },
+  "sp_scan_title": { "id": "Pemindai Kelayakan Properti (Radar Feasibility Scanner)", "en": "Property Feasibility Scanner (Radar Audit)" },
+  "sp_scan_desc": { "id": "Masukkan alamat atau titik koordinat properti Anda untuk meluncurkan audit kelayakan wilayah secara <em>real-time</em>. Sistem kami akan memindai gardu PLN terdekat, mengukur kepadatan adopsi mobil listrik (EV) prospektif, serta memetakan hub aktivitas bernilai tinggi di sekitar lahan Anda.", "en": "Enter your property address or coordinates to launch a <em>real-time</em> regional feasibility audit. Our system will scan the nearest PLN substation capacity, analyze prospective EV density, and map high-traffic commercial hubs around your land." },
+  "sp_scan_placeholder": { "id": "Masukkan alamat lengkap atau link koordinat Google Maps lahan Anda...", "en": "Enter your complete land address or Google Maps coordinate URL..." },
+  "sp_scan_btn_run": { "id": "Mulai Pemindaian Radar", "en": "Run Feasibility Scan" },
+  "sp_scan_btn_reset": { "id": "Pindai Lokasi Baru", "en": "Scan New Location" },
+  "sp_scan_log_1": { "id": "Membangun koneksi telemetri spasial dengan satelit pemetaan...", "en": "Establishing spatial telemetry connection with mapping satellite..." },
+  "sp_scan_log_2": { "id": "Mengunci koordinat lokasi properti & bench-marking wilayah...", "en": "Locking property location coordinates & regional bench-marking..." },
+  "sp_scan_log_3": { "id": "Memindai Gardu Hubung PLN terdekat (Radius Audit 1.5 KM)...", "en": "Scanning nearest PLN connection substation (Audit Radius 1.5 KM)..." },
+  "sp_scan_log_4": { "id": "GRID OK: Gardu memiliki cadangan daya untuk beban tambahan 197 kVA.", "en": "GRID OK: Substation has capacity reserve for an additional 197 kVA load." },
+  "sp_scan_log_5": { "id": "Menganalisis kepadatan populasi kepemilikan EV (Radius 3.0 KM)...", "en": "Analyzing EV ownership population density (Radius 3.0 KM)..." },
+  "sp_scan_log_6": { "id": "DENSITAS EV OK: Terdeteksi konsentrasi adopsi kendaraan listrik tinggi di wilayah ini.", "en": "EV DENSITY OK: High electric vehicle adoption concentration detected in this region." },
+  "sp_scan_log_7": { "id": "Memetakan pusat keramaian: Mall, Perkantoran & Perumahan Premium (Radius 3.0 KM)...", "en": "Mapping activity hubs: Malls, Offices & Premium Residential (Radius 3.0 KM)..." },
+  "sp_scan_log_8": { "id": "HUB AKTIVITAS OK: Terdeteksi pusat keramaian komersial & pemukiman daya beli tinggi.", "en": "ACTIVITY HUBS OK: Commercial centers & high-purchasing power residential detected." },
+  "sp_scan_log_9": { "id": "Audit selesai. Skor kelayakan properti Anda berhasil dihitung!", "en": "Audit complete. Property feasibility score successfully calculated!" },
+  "sp_score_label": { "id": "Skor Kelayakan Lahan:", "en": "Land Feasibility Score:" },
+  "sp_score_status": { "id": "SANGAT LAYAK (HI-POTENTIAL)", "en": "HIGHLY FEASIBLE (HI-POTENTIAL)" },
+  "sp_score_rec": { "id": "Lokasi Anda berada di zona dengan densitas kepemilikan EV sangat tinggi dan memiliki jaringan grid PLN yang mumpuni. **Klaim kuota kemitraan wilayah Anda sekarang** pada form registrasi di bawah sebelum didahului investor lain.", "en": "Your location is situated in a high EV density zone with an exceptional power grid capacity. **Claim your regional partnership quota now** in the registration form below before it is claimed by another investor." },
+  "sp_score_btn_claim": { "id": "Klaim Kuota Wilayah Sekarang 🚀", "en": "Claim Regional Quota Now 🚀" },
+  "sp_score_btn_download": { "id": "Unduh Proposal Kelayakan Pro (PDF)", "en": "Download Pro Feasibility Proposal (PDF)" },
+  "sp_pass_title": { "id": "Unduh Proposal Analisis Kelayakan Usaha", "en": "Download Business Feasibility Proposal" },
+  "sp_pass_desc": { "id": "Proposal ini dilindungi oleh kata sandi dinamis dari panel admin Google Sheets. Silakan hubungi tim Sales MEP PT TCS melalui WhatsApp untuk mendapatkan kode sandi akses secara gratis.", "en": "This proposal is protected by a dynamic passcode managed from the Google Sheets admin panel. Please contact the PT TCS MEP Sales team via WhatsApp to obtain the passcode for free." },
+  "sp_pass_label": { "id": "Masukkan Kode Sandi Akses *", "en": "Enter Access Passcode *" },
+  "sp_pass_error_wrong": { "id": "❌ KODE SANDI SALAH. SILAKAN HUBUNGI SALES TCS.", "en": "❌ INCORRECT PASSCODE. PLEASE CONTACT TCS SALES." },
+  "sp_pass_btn_submit": { "id": "Verifikasi & Unduh Proposal PDF", "en": "Verify & Download PDF Proposal" },
+  "sp_pass_btn_wa": { "id": "Hubungi Sales via WhatsApp untuk Password", "en": "Contact Sales via WhatsApp for Password" }
+};
+
+window.translatePage = function(lang) {
+  const currentLang = lang || localStorage.getItem('tcs_lang') || 'id';
+  
+  document.querySelectorAll('[data-translate]').forEach((element) => {
+    const key = element.getAttribute('data-translate');
+    const translation = window.TCS_TRANSLATIONS[key];
+    
+    if (translation && translation[currentLang] !== undefined) {
+      // If element is input or textarea, translate placeholder
+      if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+        element.setAttribute('placeholder', translation[currentLang]);
+      } else {
+        // Safe innerHTML replacement for structural styling tags like span/strong
+        element.innerHTML = translation[currentLang];
+      }
+    }
+  });
+
+  // Translate document metadata/title
+  if (window.location.search.includes('page=spklu') || window.location.pathname.toLowerCase().includes('spklu.html')) {
+    document.title = currentLang === 'id' 
+      ? 'Kemitraan Bisnis SPKLU - PT. Titis Cahaya Sejahtera' 
+      : 'SPKLU Business Partnership - PT. Titis Cahaya Sejahtera';
+  } else {
+    document.title = currentLang === 'id'
+      ? 'PT. Titis Cahaya Sejahtera - MEP Contractor Nasional'
+      : 'PT. Titis Cahaya Sejahtera - National MEP Contractor';
+  }
+
+  // Update active state in UI Lang Switcher
+  document.querySelectorAll('.lang-btn').forEach((btn) => {
+    btn.classList.remove('active');
+    if (btn.getAttribute('data-lang') === currentLang) {
+      btn.classList.add('active');
+    }
+  });
+  
+  // Fire language changed event for other components (like Chart.js or dynamic text)
+  const event = new CustomEvent('tcsLanguageChanged', { detail: { language: currentLang } });
+  window.dispatchEvent(event);
+};
+
+window.setLanguage = function(lang) {
+  localStorage.setItem('tcs_lang', lang);
+  window.translatePage(lang);
+};
+
+// Auto-run translation immediately on load to prevent flash of untranslated content (FOUC)
+(function() {
+  const savedLang = localStorage.getItem('tcs_lang') || 'id';
+  // Translate when DOM is interactive
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => window.translatePage(savedLang));
+  } else {
+    setTimeout(() => window.translatePage(savedLang), 0);
+  }
+})();
+</script>
+<!-- <body></body> -->
