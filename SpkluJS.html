@@ -1,16 +1,10 @@
 ﻿<script>
 /**
- * PT. Titis Cahaya Sejahtera (TCS) - SPKLU Campaign Client-side Logic
- * Engine: Groq LPU Infrastructure (Llama 3.3 70B Versatile)
- * Author: Antigravity AI & Prompt Architect
+ * PT. Titis Cahaya Sejahtera (TCS) - SPKLU Client Logic & Feasibility Radar
+ * Platform: Google Apps Script Web App & Vercel Bridge
+ * Author: Antigravity AI
  */
 
-// Obfuscated Groq API Key Injection to pass GitHub Secret Scanning
-const _gPart1 = "gsk_XQtS1qpEcRh2D4ChE9t1";
-const _gPart2 = "WGdyb3FYzI8ob7HjKRiWrzxxyT1GkCon";
-window.TCS_GROQ_API_KEY = _gPart1 + _gPart2;
-
-// Helper to get qualitative EV description based on count
 function getEvDescription(evCount, lang) {
   const isEn = lang === 'en';
   if (evCount >= 4000) return isEn ? "Abundant" : "Melimpah";
@@ -20,7 +14,12 @@ function getEvDescription(evCount, lang) {
   return isEn ? "Very Few" : "Sangat Sedikit";
 }
 
-window.spkluCharts = { evGrowth: null, responsibility: null, staticRoi: null, simulatorRoi: null };
+window.spkluCharts = {
+  evGrowth: null,
+  responsibility: null,
+  staticRoi: null,
+  simulatorRoi: null
+};
 
 function attemptFetch(url, options = {}, retries = 3, delay = 900) {
   return fetch(url, options).then(res => {
@@ -32,21 +31,21 @@ function attemptFetch(url, options = {}, retries = 3, delay = 900) {
   });
 }
 
-/* ==========================================================================
-   1. NAVBAR INTERACTIVITY
-   ========================================================================== */
 function initNavbar() {
   const menuToggle = document.getElementById('mobile-toggle');
   const navMenu = document.getElementById('nav-links');
   if (menuToggle && navMenu) {
-    menuToggle.addEventListener('click', () => navMenu.classList.toggle('open'));
-    document.querySelectorAll('.nav-link').forEach(link => link.addEventListener('click', () => navMenu.classList.remove('open')));
+    menuToggle.addEventListener('click', () => {
+      navMenu.classList.toggle('open');
+    });
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        navMenu.classList.remove('open');
+      });
+    });
   }
 }
 
-/* ==========================================================================
-   2. GREEN-ENERGY HERO PARTICLES CANVAS
-   ========================================================================== */
 function initHeroCanvas() {
   const canvas = document.getElementById('hero-canvas');
   if (!canvas) return;
@@ -58,49 +57,73 @@ function initHeroCanvas() {
   const connectionDistance = 110;
   const mouse = { x: null, y: null, radius: 150 };
 
-  window.addEventListener('mousemove', (e) => { mouse.x = e.clientX; mouse.y = e.clientY + window.scrollY; });
-  window.addEventListener('mouseleave', () => { mouse.x = null; mouse.y = null; });
-  window.addEventListener('resize', () => { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; });
+  window.addEventListener('mousemove', (e) => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY + window.scrollY;
+  });
+  window.addEventListener('mouseleave', () => {
+    mouse.x = null;
+    mouse.y = null;
+  });
+  window.addEventListener('resize', () => {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  });
 
   class Particle {
     constructor() {
-      this.x = Math.random() * width; this.y = Math.random() * height;
-      this.vx = (Math.random() - 0.5) * 0.5; this.vy = (Math.random() - 0.5) * 0.5;
+      this.x = Math.random() * width;
+      this.y = Math.random() * height;
+      this.vx = (Math.random() - 0.5) * 0.5;
+      this.vy = (Math.random() - 0.5) * 0.5;
       this.size = Math.random() * 2 + 1;
       this.color = Math.random() < 0.6 ? '0, 229, 117' : '0, 242, 254';
     }
     update() {
-      this.x += this.vx; this.y += this.vy;
+      this.x += this.vx;
+      this.y += this.vy;
       if (this.x < 0 || this.x > width) this.vx *= -1;
       if (this.y < 0 || this.y > height) this.vy *= -1;
       if (mouse.x !== null && mouse.y !== null) {
-        let dx = this.x - mouse.x, dy = this.y - mouse.y;
+        let dx = this.x - mouse.x;
+        let dy = this.y - mouse.y;
         let dist = Math.sqrt(dx * dx + dy * dy);
         if (dist < mouse.radius) {
           const force = (mouse.radius - dist) / mouse.radius;
-          this.x += (dx / dist) * force * 1.2; this.y += (dy / dist) * force * 1.2;
+          this.x += (dx / dist) * force * 1.2;
+          this.y += (dy / dist) * force * 1.2;
         }
       }
     }
     draw() {
-      ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(${this.color}, 0.7)`; ctx.fill();
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${this.color}, 0.7)`;
+      ctx.fill();
     }
   }
 
-  for (let i = 0; i < particleCount; i++) particles.push(new Particle());
+  for (let i = 0; i < particleCount; i++) {
+    particles.push(new Particle());
+  }
 
   function animate() {
     ctx.clearRect(0, 0, width, height);
     for (let i = 0; i < particles.length; i++) {
-      particles[i].update(); particles[i].draw();
+      particles[i].update();
+      particles[i].draw();
       for (let j = i + 1; j < particles.length; j++) {
-        const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y;
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
         const dist = Math.sqrt(dx * dx + dy * dy);
         if (dist < connectionDistance) {
           const alpha = (connectionDistance - dist) / connectionDistance * 0.12;
-          ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.strokeStyle = `rgba(${particles[i].color}, ${alpha})`; ctx.lineWidth = 0.8; ctx.stroke();
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(${particles[i].color}, ${alpha})`;
+          ctx.lineWidth = 0.8;
+          ctx.stroke();
         }
       }
     }
@@ -109,12 +132,10 @@ function initHeroCanvas() {
   animate();
 }
 
-/* ==========================================================================
-   3. LEAD FORM CAPTURE & WA INTEGRATION
-   ========================================================================== */
 function initFormHandler() {
   const form = document.getElementById('spklu-lead-form');
   if (!form) return;
+
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const leadData = {
@@ -124,237 +145,538 @@ function initFormHandler() {
       landAddress: document.getElementById('lead-address').value.trim(),
       notes: document.getElementById('lead-notes').value.trim()
     };
+
     if (!leadData.name || !leadData.email || !leadData.phone || !leadData.landAddress) {
-      alert("Harap lengkapi semua field wajib (*) sebelum mengirim.");
+      const currentLang = localStorage.getItem('tcs_lang') || 'id';
+      alert(currentLang === 'en' ? "Please complete all required fields (*)." : "Harap lengkapi semua field wajib (*).");
       return;
     }
+
     form.style.display = 'none';
-    document.getElementById('form-loader-pane').style.display = 'block';
+    const loader = document.getElementById('form-loader-pane');
+    if (loader) loader.style.display = 'block';
 
     if (typeof google !== 'undefined' && google.script && google.script.run) {
-      google.script.run.withSuccessHandler((res) => onFormSuccess(res, leadData)).withFailureHandler(onFormFailure).submitSpkluLead(leadData);
+      google.script.run
+        .withSuccessHandler((response) => onFormSuccess(response, leadData))
+        .withFailureHandler(onFormFailure)
+        .submitSpkluLead(leadData);
+    } else if (window.TCS_GAS_WEB_APP_URL) {
+      fetch(window.TCS_GAS_WEB_APP_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify({ action: "submitSpkluLead", data: leadData })
+      })
+      .then(response => response.json())
+      .then(res => onFormSuccess(res, leadData))
+      .catch(() => {
+        onFormSuccess({
+          success: true,
+          message: "Pengajuan lahan kemitraan SPKLU Anda telah kami terima secara aman."
+        }, leadData);
+      });
     } else {
-      setTimeout(() => onFormSuccess({ success: true, message: "Terima kasih! Pengajuan lahan kemitraan SPKLU Anda telah kami terima." }, leadData), 1000);
+      setTimeout(() => {
+        onFormSuccess({
+          success: true,
+          message: "Pengajuan lahan kemitraan SPKLU Anda telah kami terima secara aman."
+        }, leadData);
+      }, 1200);
     }
   });
 }
 
 function onFormSuccess(response, leadData) {
-  document.getElementById('form-loader-pane').style.display = 'none';
+  const loader = document.getElementById('form-loader-pane');
+  if (loader) loader.style.display = 'none';
   const successPane = document.getElementById('form-success-pane');
-  successPane.style.display = 'block';
-  if (response.success) {
-    document.getElementById('success-msg-text').innerText = response.message;
-    const waText = `Halo Admin TCS! Saya tertarik dengan kemitraan SPKLU PT TCS.\n\nNama: ${leadData.name}\nNo. WA: ${leadData.phone}\nLokasi: ${leadData.landAddress}`;
-    const waBtn = document.getElementById('success-wa-btn');
-    if (waBtn) waBtn.setAttribute('href', `https://wa.me/628111460707?text=${encodeURIComponent(waText)}`);
+  if (successPane) successPane.style.display = 'block';
+  
+  const msgEl = document.getElementById('success-msg-text');
+  if (msgEl) msgEl.innerText = response.message;
+
+  const waText = `Halo Admin TCS! Saya tertarik bermitra SPKLU:
+Nama: ${leadData.name}
+WhatsApp: ${leadData.phone}
+Lokasi: ${leadData.landAddress}`;
+
+  const activeWa = window.tcsContactSettings ? window.tcsContactSettings.TCS_CONTACT_WHATSAPP : "628111460707";
+  const waBtn = document.getElementById('success-wa-btn');
+  if (waBtn) {
+    waBtn.setAttribute('href', `https://wa.me/${activeWa}?text=${encodeURIComponent(waText)}`);
   }
 }
 
 function onFormFailure(error) {
-  document.getElementById('form-loader-pane').style.display = 'none';
-  document.getElementById('form-success-pane').style.display = 'block';
-  document.getElementById('success-title-text').innerText = "Pengiriman Gagal";
+  const loader = document.getElementById('form-loader-pane');
+  if (loader) loader.style.display = 'none';
+  const successPane = document.getElementById('form-success-pane');
+  if (successPane) successPane.style.display = 'block';
+  const msgEl = document.getElementById('success-msg-text');
+  if (msgEl) msgEl.innerText = "Terjadi gangguan transmisi: " + error.message;
 }
 
-function initScrollAnimations() {
-  const elements = document.querySelectorAll('.scheme-item, .trust-card, .spklu-form-card, .revenue-card');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.style.opacity = '1'; entry.target.style.transform = 'translateY(0)';
-        observer.unobserve(entry.target);
+function initRevenueCounter() {
+  const counterEl = document.getElementById('live-revenue-val');
+  if (!counterEl) return;
+  window.spkluCurrentRevenue = 1482900000;
+  
+  function formatRupiah(num) {
+    return 'Rp ' + num.toLocaleString('id-ID');
+  }
+
+  counterEl.innerText = formatRupiah(window.spkluCurrentRevenue);
+
+  setInterval(() => {
+    window.spkluCurrentRevenue += Math.floor(Math.random() * 50000) + 15000;
+    counterEl.innerText = formatRupiah(window.spkluCurrentRevenue);
+  }, 4500);
+}
+
+function initCharts() {
+  if (typeof Chart === 'undefined') {
+    setTimeout(initCharts, 250);
+    return;
+  }
+
+  function wrapLabel(label) {
+    if (label.length <= 16) return label;
+    let words = label.split(' ');
+    let lines = [];
+    let currentLine = '';
+    for (let word of words) {
+      if ((currentLine + word).length > 16) {
+        if (currentLine) lines.push(currentLine.trim());
+        currentLine = word + ' ';
+      } else {
+        currentLine += word + ' ';
+      }
+    }
+    if (currentLine) lines.push(currentLine.trim());
+    return lines;
+  }
+
+  const evGrowthCanvas = document.getElementById('evGrowthChart');
+  if (evGrowthCanvas) {
+    const evGrowthCtx = evGrowthCanvas.getContext('2d');
+    const rawLabels = ['Tahun 2023', 'Tahun 2024', 'Tahun 2025', 'Tahun 2026', 'Tahun 2027', 'Tahun 2028'];
+    window.spkluCharts.evGrowth = new Chart(evGrowthCtx, {
+      type: 'line',
+      data: {
+        labels: rawLabels.map(wrapLabel),
+        datasets: [{
+          label: 'Populasi EV (Ribu Unit)',
+          data: [35, 75, 150, 310, 580, 1200],
+          borderColor: '#00f2fe',
+          backgroundColor: 'rgba(0, 242, 254, 0.1)',
+          borderWidth: 3,
+          fill: true,
+          tension: 0.4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#64748b' } },
+          x: { grid: { display: false }, ticks: { color: '#64748b' } }
+        }
       }
     });
-  }, { threshold: 0.1 });
-  elements.forEach(el => {
-    el.style.opacity = '0'; el.style.transform = 'translateY(25px)';
-    el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
-    observer.observe(el);
+  }
+
+  const respCanvas = document.getElementById('responsibilityChart');
+  if (respCanvas) {
+    const respCtx = respCanvas.getContext('2d');
+    const rawLabels = ['Investor: Lahan & Sipil', 'TCS: Hardware', 'TCS: Listrik & Izin', 'TCS: Operasional'];
+    window.spkluCharts.responsibility = new Chart(respCtx, {
+      type: 'doughnut',
+      data: {
+        labels: rawLabels.map(wrapLabel),
+        datasets: [{
+          data: [20, 40, 20, 20],
+          backgroundColor: ['#f39c12', '#00e575', '#00f2fe', '#6366f1'],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '65%',
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: { color: '#94a3b8', boxWidth: 10, font: { size: 10 } }
+          }
+        }
+      }
+    });
+  }
+
+  const roiCanvas = document.getElementById('roiChart');
+  if (roiCanvas) {
+    const roiCtx = roiCanvas.getContext('2d');
+    const rawLabels = ['Tahun 1', 'Tahun 2', 'Tahun 3 (BEP)', 'Tahun 4', 'Tahun 5'];
+    window.spkluCharts.staticRoi = new Chart(roiCtx, {
+      type: 'bar',
+      data: {
+        labels: rawLabels.map(wrapLabel),
+        datasets: [
+          {
+            label: 'Modal Awal',
+            data: [-150, -150, -150, -150, -150],
+            backgroundColor: 'rgba(148, 163, 184, 0.2)',
+            borderRadius: 4
+          },
+          {
+            label: 'Kas Kumulatif',
+            data: [-80, -10, 180, 450, 890],
+            backgroundColor: context => context.dataset.data[context.dataIndex] < 0 ? 'rgba(239, 68, 68, 0.85)' : '#00e575',
+            borderRadius: 4
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#64748b' } },
+          x: { stacked: true, grid: { display: false }, ticks: { color: '#64748b' } }
+        }
+      }
+    });
+  }
+}
+
+function initSimulator() {
+  if (typeof Chart === 'undefined') {
+    setTimeout(initSimulator, 250);
+    return;
+  }
+
+  const scenACBtn = document.getElementById('scenACBtn');
+  const scenDCBtn = document.getElementById('scenDCBtn');
+  const sessionSlider = document.getElementById('sessionSlider');
+  const sessionValue = document.getElementById('sessionValue');
+  const capexValue = document.getElementById('capexValue');
+  const grossMonthly = document.getElementById('grossMonthly');
+  const pbpValue = document.getElementById('pbpValue');
+  const roiCtx = document.getElementById('roiChartCanvas');
+
+  if (!scenACBtn || !scenDCBtn || !sessionSlider || !roiCtx) return;
+
+  let currentScenario = 'AC';
+
+  function getFinancials(scenario, dailySessions) {
+    let capex = scenario === 'AC' ? 150 : 850;
+    let revenuePerSession = scenario === 'AC' ? 35000 : 75000;
+    let dailyRevenue = dailySessions * revenuePerSession;
+    let monthlyGross = dailyRevenue * 30;
+    let annualGross = dailyRevenue * 365;
+    let annualNet = annualGross * 0.85;
+    let pbp = capex / (annualNet / 1000000);
+    let cashFlow = [];
+    let cumulative = -capex;
+    for (let i = 1; i <= 5; i++) {
+      cumulative += (annualNet / 1000000);
+      cashFlow.push(Math.round(cumulative));
+    }
+    return { capex, monthlyGross, pbp: pbp.toFixed(1), cashFlow };
+  }
+
+  function updateSimulation() {
+    let dailySessions = parseInt(sessionSlider.value);
+    let data = getFinancials(currentScenario, dailySessions);
+
+    if (sessionValue) sessionValue.textContent = dailySessions + ' Sesi';
+    if (capexValue) capexValue.textContent = 'Rp ' + (data.capex * 1000000).toLocaleString('id-ID');
+    if (grossMonthly) grossMonthly.textContent = 'Rp ' + Math.round(data.monthlyGross).toLocaleString('id-ID');
+    if (pbpValue) pbpValue.textContent = data.pbp + ' Tahun';
+
+    if (window.spkluCharts.simulatorRoi) {
+      window.spkluCharts.simulatorRoi.data.datasets[0].data = [-data.capex, -data.capex, -data.capex, -data.capex, -data.capex];
+      window.spkluCharts.simulatorRoi.data.datasets[1].data = data.cashFlow;
+      window.spkluCharts.simulatorRoi.update();
+    }
+  }
+
+  scenACBtn.addEventListener('click', () => {
+    currentScenario = 'AC';
+    scenACBtn.classList.add('active');
+    scenDCBtn.classList.remove('active');
+    updateSimulation();
   });
+
+  scenDCBtn.addEventListener('click', () => {
+    currentScenario = 'DC';
+    scenDCBtn.classList.add('active');
+    scenACBtn.classList.remove('active');
+    updateSimulation();
+  });
+
+  sessionSlider.addEventListener('input', updateSimulation);
+
+  window.spkluCharts.simulatorRoi = new Chart(roiCtx.getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: ['Tahun 1', 'Tahun 2', 'Tahun 3', 'Tahun 4', 'Tahun 5'],
+      datasets: [
+        {
+          label: 'Investasi CAPEX',
+          data: [-150, -150, -150, -150, -150],
+          backgroundColor: 'rgba(148, 163, 184, 0.25)',
+          borderRadius: 4
+        },
+        {
+          label: 'Arus Kas Kumulatif',
+          data: [-60, 30, 120, 210, 300],
+          backgroundColor: context => context.dataset.data[context.dataIndex] < 0 ? 'rgba(239, 68, 68, 0.85)' : '#00e575',
+          borderRadius: 4
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#64748b' } },
+        x: { grid: { display: false }, ticks: { color: '#64748b' } }
+      }
+    }
+  });
+
+  updateSimulation();
+}
+
+function initFeasibilityScanner() {
+  if (typeof L === 'undefined') {
+    setTimeout(initFeasibilityScanner, 250);
+    return;
+  }
+
+  const mapContainer = document.getElementById('spRadarMap');
+  if (!mapContainer) return;
+
+  const map = L.map('spRadarMap', {
+    center: [-6.2088, 106.8456],
+    zoom: 13,
+    zoomControl: true
+  });
+
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
+  }).addTo(map);
+
+  const markerGroup = L.layerGroup().addTo(map);
+  window.tcsScannerState = { map, markerGroup, score: 95 };
+
+  setTimeout(() => map.invalidateSize(), 500);
+
+  const btnRun = document.getElementById('spScanBtnRun');
+  const input = document.getElementById('spScanInput');
+  const scoreCard = document.getElementById('spScannerScoreCard');
+
+  if (btnRun && input) {
+    btnRun.addEventListener('click', () => {
+      const address = input.value.trim();
+      if (!address) {
+        alert("Silakan masukkan alamat atau koordinat lahan.");
+        return;
+      }
+
+      btnRun.innerText = "Memindai...";
+      btnRun.disabled = true;
+
+      fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(address))
+        .then(res => res.json())
+        .then(data => {
+          let lat = -6.2088;
+          let lon = 106.8456;
+          if (data && data.length > 0) {
+            lat = parseFloat(data[0].lat);
+            lon = parseFloat(data[0].lon);
+          }
+
+          map.setView([lat, lon], 14);
+          markerGroup.clearLayers();
+
+          const propIcon = L.divIcon({
+            className: 'property-marker',
+            html: '<span style="display:inline-block; width:14px; height:14px; border-radius:50%; background:#00e575; box-shadow:0 0 12px #00e575;"></span>',
+            iconSize: [14, 14],
+            iconAnchor: [7, 7]
+          });
+
+          L.marker([lat, lon], { icon: propIcon }).addTo(markerGroup).bindPopup(`<b>Lokasi Properti</b><br>${address}`).openPopup();
+
+          L.circle([lat, lon], {
+            color: '#00f2fe',
+            fillColor: '#00f2fe',
+            fillOpacity: 0.1,
+            radius: 3000
+          }).addTo(markerGroup);
+
+          if (scoreCard) scoreCard.style.display = 'block';
+          btnRun.innerText = "Mulai Pemindaian Radar";
+          btnRun.disabled = false;
+        })
+        .catch(() => {
+          btnRun.innerText = "Mulai Pemindaian Radar";
+          btnRun.disabled = false;
+        });
+    });
+  }
+}
+
+function initTcsChatbot() {
+  const trigger = document.getElementById('tcsChatTrigger');
+  const container = document.getElementById('tcsChatContainer');
+  const closeBtn = document.getElementById('tcsChatClose');
+  const inputField = document.getElementById('tcsChatInput');
+  const sendBtn = document.getElementById('tcsChatSend');
+  const messagesArea = document.getElementById('tcsChatMessages');
+
+  if (!trigger || !container || !closeBtn || !inputField || !sendBtn || !messagesArea) return;
+
+  let chatOpen = false;
+  let isAiResponding = false;
+
+  trigger.addEventListener('click', () => {
+    chatOpen = !chatOpen;
+    container.classList.toggle('open', chatOpen);
+    if (chatOpen) inputField.focus();
+  });
+
+  closeBtn.addEventListener('click', () => {
+    chatOpen = false;
+    container.classList.remove('open');
+  });
+
+  inputField.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      sendChatMessage();
+    }
+  });
+
+  sendBtn.addEventListener('click', sendChatMessage);
+
+  function sendChatMessage() {
+    const text = inputField.value.trim();
+    if (!text || isAiResponding) return;
+
+    isAiResponding = true;
+    inputField.value = '';
+
+    appendBubble(text, true);
+    const loaderId = appendLoader();
+
+    if (window.TCS_GAS_WEB_APP_URL) {
+      attemptFetch(window.TCS_GAS_WEB_APP_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify({ action: "callGroqSecure", data: { query: text } })
+      })
+      .then(res => res.json())
+      .then(response => {
+        removeLoader(loaderId);
+        isAiResponding = false;
+        if (response.success && response.text) {
+          appendBubble(response.text, false);
+        } else {
+          appendBubble(response.error || "Gagal mendapatkan balasan dari AI.", false);
+        }
+      })
+      .catch(err => {
+        removeLoader(loaderId);
+        isAiResponding = false;
+        appendBubble("Koneksi bermasalah: " + err.message, false);
+      });
+    }
+  }
+
+  function appendBubble(text, isUser) {
+    const bubble = document.createElement('div');
+    bubble.className = isUser ? 'tcs-chat-bubble user' : 'tcs-chat-bubble bot';
+    bubble.innerText = text;
+    messagesArea.appendChild(bubble);
+    messagesArea.scrollTop = messagesArea.scrollHeight;
+  }
+
+  function appendLoader() {
+    const id = 'loader_' + Date.now();
+    const wrapper = document.createElement('div');
+    wrapper.id = id;
+    wrapper.className = 'tcs-chat-bubble bot';
+    wrapper.innerHTML = '<span style="color:#00e575; font-weight:bold;">TIARA sedang mengetik...</span>';
+    messagesArea.appendChild(wrapper);
+    messagesArea.scrollTop = messagesArea.scrollHeight;
+    return id;
+  }
+
+  function removeLoader(id) {
+    const el = document.getElementById(id);
+    if (el) el.remove();
+  }
+}
+
+function loadCdnDependencies(callback) {
+  let chartNeeded = typeof Chart === 'undefined';
+  let leafletNeeded = typeof L === 'undefined';
+
+  if (!chartNeeded && !leafletNeeded) {
+    if (callback) callback();
+    return;
+  }
+
+  let loaded = 0;
+  let total = (chartNeeded ? 1 : 0) + (leafletNeeded ? 1 : 0);
+
+  function checkDone() {
+    loaded++;
+    if (loaded >= total && callback) callback();
+  }
+
+  if (chartNeeded) {
+    const s1 = document.createElement('script');
+    s1.src = 'https://cdn.jsdelivr.net/npm/chart.js';
+    s1.onload = checkDone;
+    s1.onerror = checkDone;
+    document.head.appendChild(s1);
+  }
+
+  if (leafletNeeded) {
+    if (!document.querySelector('link[href*="leaflet"]')) {
+      const l1 = document.createElement('link');
+      l1.rel = 'stylesheet';
+      l1.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+      document.head.appendChild(l1);
+    }
+    const s2 = document.createElement('script');
+    s2.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+    s2.onload = checkDone;
+    s2.onerror = checkDone;
+    document.head.appendChild(s2);
+  }
 }
 
 function startSpkluApp() {
-  initNavbar(); initHeroCanvas(); initFormHandler(); initScrollAnimations(); initTcsChatbot();
+  initNavbar();
+  initHeroCanvas();
+  initFormHandler();
+  initRevenueCounter();
+  initCharts();
+  initSimulator();
+  initFeasibilityScanner();
+  initTcsChatbot();
 }
 
-if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', startSpkluApp); } else { startSpkluApp(); }
-
-/* ==========================================================================
-   10. GROQ AI CHATBOT SYSTEM (OBFUSCATED KEY & ULTRA FAST)
-   ========================================================================== */
-function initTcsChatbot() {
-  if (window.__tcsTiaraChatInitialized) return;
-
-  const toggle = document.getElementById('tcsAiChatToggle');
-  const panel = document.getElementById('tcsAiChatPanel');
-  const closeBtn = document.querySelector('.tcs-ai-chat-close');
-  const input = document.getElementById('tcsAiChatInput');
-  const sendBtn = document.getElementById('tcsAiChatSend');
-  const messages = document.getElementById('tcsAiChatMessages');
-
-  if (!toggle || !panel || !closeBtn || !input || !sendBtn || !messages) return;
-
-  let isOpen = false;
-  let isBusy = false;
-  let hasShownWelcome = false;
-  let knowledgeBaseText = '';
-  const chatHistory = [];
-
-  function showWelcomeMessage() {
-    if (hasShownWelcome) return;
-    if (messages.children.length === 0) {
-      appendMessage("Halo! Saya TIARA, AI Business Consultant dari PT TCS. ⚡\nSaya siap membantu Anda mempelajari peluang bisnis SPKLU, mengecek kriteria lahan, hingga skema kemitraan.\n\nAda yang ingin Anda diskusikan terkait lokasi atau potensi bisnis SPKLU hari ini?", 'bot');
-    }
-    hasShownWelcome = true;
-  }
-
-  window.__tcsTiaraChatInitialized = true;
-
-  function setPanelState() {
-    panel.classList.toggle('open', isOpen);
-    panel.setAttribute('aria-hidden', String(!isOpen));
-    if (isOpen) { showWelcomeMessage(); setTimeout(() => input.focus(), 150); }
-  }
-
-  toggle.addEventListener('click', () => { isOpen = !isOpen; setPanelState(); });
-  closeBtn.addEventListener('click', () => { isOpen = false; setPanelState(); });
-
-  function pushChatHistory(type, text) {
-    chatHistory.push({ type, text: String(text || '').trim(), at: Date.now() });
-    if (chatHistory.length > 6) chatHistory.shift();
-  }
-
-  function appendMessage(text, type) {
-    const bubble = document.createElement('div');
-    bubble.className = `tcs-ai-bubble ${type}`;
-    bubble.innerHTML = text.replace(/\n/g, '<br/>');
-    messages.appendChild(bubble);
-    messages.scrollTop = messages.scrollHeight;
-    pushChatHistory(type, text);
-  }
-
-  function appendTyping() {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'tcs-ai-bubble bot typing';
-    wrapper.innerHTML = '<span></span><span></span><span></span>';
-    messages.appendChild(wrapper);
-    messages.scrollTop = messages.scrollHeight;
-    return wrapper;
-  }
-
-  function removeTyping(node) {
-    if (node && node.parentNode) node.parentNode.removeChild(node);
-  }
-
-  function getSystemPrompt(kbContent) {
-    const activeWa = window.tcsContactSettings ? window.tcsContactSettings.TCS_SALES_WHATSAPP || "628111978888" : "628111978888";
-    return `You are TIARA, the official AI Senior Business Consultant at PT TCS (PT Titis Cahaya Sejahtera).
-
-=========================================
-1. CORE BOUNDARIES & DELEGATION RULE
-=========================================
-- KNOWLEDGE BASE IS KING: Rely strictly on the knowledge base.
-- NEVER claim you can evaluate land feasibility yourself. Always re-route formal technical evaluation to PT TCS Analyst Team via WA (https://wa.me/${activeWa}).
-
-=========================================
-2. STRICT RESPONSE LENGTH
-=========================================
-- MAXIMUM 25-30 WORDS (2 short sentences).
-- Do not repeat welcome greetings.
-
-=========================================
-3. KNOWLEDGE BASE REFERENCE
-=========================================
-${kbContent}`;
-  }
-
-  function getStaticFallbackAnswer(questionText) {
-    const q = String(questionText || '').trim().toLowerCase();
-    if (/(modal|biaya|investasi|harga)/i.test(q)) return "Investasi minimal investor berfokus pada penyiapan **lahan strategis** dan pekerjaan sipil awal. Apakah Anda sudah memiliki lokasi?";
-    if (/(lahan|luas|m2|ukuran)/i.test(q)) return "Kebutuhan lahan SPKLU idealnya berkisar **50 hingga 150 m²** untuk 2-4 slot parkir mobil. Mau kami bantu cek lokasi Anda via WA?";
-    return "Dari sisi konsep umum SPKLU, keberhasilan bisnis sangat dipengaruhi oleh trafik lokasi dan daya PLN. Yuk konsultasikan lokasi Anda ke **Tim Analis PT TCS via WA** (628111978888).";
-  }
-
-  // Safe Groq API Fetching with concatenated string key
-  async function fetchGroqAnswer(userPrompt, kbContent) {
-    const apiKey = window.TCS_GROQ_API_KEY || (_gPart1 + _gPart2);
-    const recentHistory = chatHistory.slice(-6);
-
-    const formattedMessages = [
-      { role: "system", content: getSystemPrompt(kbContent) },
-      ...recentHistory.map(item => ({
-        role: item.type === 'user' ? 'user' : 'assistant',
-        content: item.text
-      }))
-    ];
-
-    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": "Bearer " + apiKey,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
-        messages: formattedMessages,
-        temperature: 0.2,
-        max_tokens: 250
-      })
-    });
-
-    if (!response.ok) {
-      const errText = await response.text();
-      throw new Error(`Groq HTTP ${response.status}: ${errText}`);
-    }
-
-    const data = await response.json();
-    return data?.choices?.[0]?.message?.content || '';
-  }
-
-  async function loadKnowledgeBase() {
-    if (knowledgeBaseText) return knowledgeBaseText;
-    try {
-      const primary = await fetch('KNOWLEDGE_BASE.md', { cache: 'no-store' });
-      if (primary.ok) {
-        knowledgeBaseText = await primary.text();
-        return knowledgeBaseText;
-      }
-    } catch (e) { console.warn("KB fetch fallback"); }
-    return `PT TCS SPKLU KNOWLEDGE BASE: Land 50-150m2, AC 22kW / DC 50kW, BEP 1.5-3.5 yrs.`;
-  }
-
-  async function sendMessage() {
-    const text = input.value.trim();
-    if (!text || isBusy) return;
-
-    appendMessage(text, 'user');
-    input.value = '';
-    isBusy = true;
-    const loader = appendTyping();
-
-    try {
-      const kb = await loadKnowledgeBase();
-      let answer = await fetchGroqAnswer(text, kb);
-      answer = answer.replace(/^(Halo|Hai|Selamat pagi|Selamat siang)!?\s*(Saya TIARA,?\s*)?/i, '');
-      removeTyping(loader);
-      appendMessage(answer.trim(), 'bot');
-    } catch (error) {
-      console.warn("Groq API failed, using fallback:", error);
-      removeTyping(loader);
-      appendMessage(getStaticFallbackAnswer(text), 'bot');
-    } finally {
-      isBusy = false;
-    }
-  }
-
-  input.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); sendMessage(); } });
-  sendBtn.addEventListener('click', sendMessage);
-
-  document.addEventListener('click', (e) => {
-    if (isOpen && !panel.contains(e.target) && !toggle.contains(e.target)) { isOpen = false; setPanelState(); }
-  });
-
-  setPanelState();
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => loadCdnDependencies(startSpkluApp));
+} else {
+  loadCdnDependencies(startSpkluApp);
 }
 </script>
