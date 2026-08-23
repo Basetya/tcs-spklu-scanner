@@ -306,14 +306,14 @@
     </div>
   </section>
 
-  <!-- ------------------- RADAR FEASIBILITY SCANNER (DIRECT GOOGLE MAPS EV ENGINE) ------------------- -->
+  <!-- ------------------- RADAR FEASIBILITY SCANNER (SINGLE CLEAN ACTION) ------------------- -->
   <section class="section" id="scanner">
     <div class="container">
       <div class="section-header">
         <span class="section-tag" style="color: var(--primary-teal);">Radar Feasibility</span>
         <h2 class="section-title">Pemindai Kelayakan Lokasi (Google Maps EV Mode)</h2>
         <p class="section-desc">
-          Masukkan alamat properti Anda untuk meluncurkan analisis kelayakan. Sistem kami akan memetakan koordinat dan menyediakan tautan langsung ke navigasi resmi Google Maps EV untuk mengecek keberadaan SPKLU terdekat secara 100% akurat.
+          Masukkan alamat properti Anda untuk meluncurkan analisis kelayakan. Sistem kami akan memetakan koordinat dan membuka navigasi resmi Google Maps EV untuk mengecek keberadaan SPKLU terdekat secara 100% akurat.
         </p>
       </div>
 
@@ -342,6 +342,7 @@
             </div>
 
             <div>
+              <!-- SATU TOMBOL TUNGGAL UTAMA -->
               <button type="button" id="spScanBtnRun" class="btn btn-primary" style="width: 100%; padding: 14px; font-weight: 800; font-size: 14px;">
                 🔍 Analisa Lokasi & Buka Google Maps EV
               </button>
@@ -355,30 +356,24 @@
             </div>
           </div>
 
-          <!-- Peta Google Maps EV Card Visual -->
-          <div style="background: rgba(3, 7, 18, 0.6); border: 1px solid var(--border-card); border-radius: var(--border-radius-lg); padding: 24px; display: flex; flex-direction: column; justify-content: space-between;">
-            <div>
-              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
-                <span style="font-size: 11px; font-weight: 800; color: var(--primary-teal); text-transform: uppercase;">Google Maps EV Telemetry</span>
-                <span style="background: rgba(0, 229, 117, 0.1); color: #00e575; font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 4px;">Verified Protocol</span>
-              </div>
-              <h4 style="font-family: 'Outfit', sans-serif; font-size: 18px; color: #fff; margin-bottom: 8px;">Akurasi Data Stasiun SPKLU 100%</h4>
-              <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
-                Pencarian stasiun charging akan langsung terhubung ke mode navigasi mobil listrik Google Maps untuk mendeteksi SPKLU aktif (PLN, Voltron, Starvo, Shell Recharge, Charge+) di sekitar koordinat properti Anda.
-              </p>
+          <!-- Preview Informasi Telemetri Google Maps EV -->
+          <div style="background: rgba(3, 7, 18, 0.6); border: 1px solid var(--border-card); border-radius: var(--border-radius-lg); padding: 24px; display: flex; flex-direction: column; justify-content: center; gap: 14px;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-size: 11px; font-weight: 800; color: var(--primary-teal); text-transform: uppercase;">Google Maps EV Telemetry</span>
+              <span style="background: rgba(0, 229, 117, 0.1); color: #00e575; font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 4px;">Verified Protocol</span>
             </div>
-
-            <div id="gmapsEvActionContainer" style="margin-top: 20px; padding: 16px; background: rgba(0, 242, 254, 0.04); border: 1px dashed var(--primary-teal); border-radius: 8px; text-align: center;">
-              <span style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 10px;">Tautan Navigasi Google Maps EV:</span>
-              <a id="spGmapsDirectLink" href="https://www.google.com/maps/search/spklu+terdekat/" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="border-color: #00f2fe; color: #00f2fe; width: 100%; font-size: 13px; font-weight: 800; padding: 12px;">
-                🗺️ Buka Peta SPKLU Terdekat di Google Maps
-              </a>
+            <h4 style="font-family: 'Outfit', sans-serif; font-size: 18px; color: #fff;">Akurasi Data Stasiun SPKLU 100%</h4>
+            <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
+              Pencarian stasiun charging akan langsung terhubung ke mode navigasi mobil listrik Google Maps untuk mendeteksi stasiun SPKLU aktif (PLN, Voltron, Starvo, Shell Recharge, Charge+) di sekitar koordinat properti Anda.
+            </p>
+            <div style="padding: 12px; background: rgba(0, 242, 254, 0.03); border-left: 3px solid var(--primary-teal); border-radius: 4px; font-size: 12px; color: var(--text-secondary);">
+              💡 <em>Hasil pemindaian resmi langsung membuka peta Google Maps rute EV di tab baru secara otomatis.</em>
             </div>
           </div>
 
         </div>
 
-        <!-- SCORE RESULT CARD -->
+        <!-- SCORE RESULT CARD (SINGLE CLEAN CALL TO ACTION) -->
         <div id="spScannerScoreCard" style="display: none; margin-top: 25px; padding: 20px; background: rgba(0, 242, 254, 0.05); border: 1.5px solid var(--primary-teal); border-radius: var(--border-radius-lg);">
           <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: space-between;">
             <div style="display: flex; align-items: center; gap: 16px;">
@@ -399,7 +394,7 @@
     </div>
   </section>
 
-  <!-- ANALISIS PASAR -->
+  <!-- ------------------- ANALISIS PASAR ------------------- -->
   <section class="section" id="analysis" style="background-color: var(--bg-surface); border-top: 1px solid var(--border-card); border-bottom: 1px solid var(--border-card);">
     <div class="container">
       <div class="section-header">
@@ -445,19 +440,28 @@
     </div>
   </section>
 
-  <!-- FORM PENGAJUAN LAHAN -->
+  <!-- ------------------- FORM PENGAJUAN LAHAN & PERSUASIF FOMO ------------------- -->
   <section class="section" id="proposal">
     <div class="container grid-2">
       <div>
         <span class="section-tag">💰 Pasif Income Nyata</span>
         <h2 class="section-title" style="font-size: 32px; text-align: left; line-height: 1.25; margin-bottom: 16px;">Unduh Proposal & Ajukan Lahan Anda Hari Ini</h2>
-        <p style="color: var(--text-secondary); margin-bottom: 20px; font-size: 14px; line-height: 1.6;">
-          Setelah Anda mengisi formulir pengajuan, sistem kami akan langsung mengirimkan Proposal Kemitraan SPKLU komprehensif ke email Anda. Tim analis kelayakan lokasi kami akan meninjau titik koordinat lahan Anda dalam 1x24 jam.
+        <p style="color: var(--text-secondary); margin-bottom: 24px; font-size: 14px; line-height: 1.7;">
+          Infrastruktur SPKLU bersifat <strong>hiper-lokal dan memiliki batas zonasi eksklusif</strong>. Setiap hari Anda menunda, potensi arus kendaraan listrik di wilayah Anda akan beralih ke lokasi kompetitor terdekat.
         </p>
-        <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px;">
-          <div class="glass-card" style="padding: 10px 15px; display: flex; align-items: center; gap: 8px;">✅ Gratis Survei & Analisis Kelayakan Lalu Lintas EV</div>
-          <div class="glass-card" style="padding: 10px 15px; display: flex; align-items: center; gap: 8px;">✅ Pembagian Bagi Hasil Ditransfer Otomatis Bulanan</div>
-          <div class="glass-card" style="padding: 10px 15px; display: flex; align-items: center; gap: 8px;">✅ Akses Aplikasi Monitoring Pendapatan Real-time (SaaS)</div>
+        
+        <!-- KOTAK PERSUASIF TINGGI (SCARCITY & REGIONAL MONOPOLY) -->
+        <div class="glass-card" style="padding: 22px; border-left: 4px solid var(--electric-amber); background: rgba(243, 156, 18, 0.04); margin-bottom: 20px;">
+          <h4 style="font-family: 'Outfit', sans-serif; font-size: 16px; color: #fff; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+            <span>⏳</span> Amankan Hak Kuota Wilayah Anda Sebelum Ditutup!
+          </h4>
+          <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin: 0;">
+            Regulasi perizinan PLN dan Kementerian ESDM membatasi kepadatan stasiun pengisian daya dalam radius tertentu demi mencegah saturasi pasar. Begitu koordinat area Anda didaftarkan oleh pihak lain, perizinan titik baru akan dikunci otomatis. <strong>Amankan hak monopoli pengisian daya mobil listrik di area Anda sekarang juga!</strong>
+          </p>
+        </div>
+
+        <div style="font-size: 12.5px; color: var(--text-muted); line-height: 1.5;">
+          * Tim analis spasial PT TCS akan memvalidasi kesiapan gardu PLN dan melakukan survei kelayakan fisik lokasi Anda dalam 1x24 jam kerja.
         </div>
       </div>
 
@@ -486,7 +490,7 @@
             <label class="form-label" for="lead-notes">Keterangan Pendukung / Ukuran Lahan (Opsional)</label>
             <textarea id="lead-notes" class="form-input-text" style="min-height: 60px;" placeholder="Contoh: Lahan parkir ruko muat 4 mobil, daya terpasang 33kVA..."></textarea>
           </div>
-          <button type="submit" class="btn btn-primary" style="width: 100%;">
+          <button type="submit" class="btn btn-primary" style="width: 100%; font-weight: 800; font-size: 14px;">
             Unduh Proposal & Ajukan Lahan
           </button>
         </form>

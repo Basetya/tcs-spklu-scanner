@@ -2,7 +2,7 @@
 /**
  * PT. Titis Cahaya Sejahtera (TCS) - SPKLU Client Logic & Feasibility Radar
  * Platform: Google Apps Script Web App & Vercel Bridge
- * Engine: 8-Year Uncut Chart.js Canvas & Direct Google Maps EV Protocol
+ * Engine: 8-Year Uncut Chart.js Canvas & Streamlined Single-Action Google Maps EV Bridge
  */
 
 function getEvDescription(evCount, lang) {
@@ -276,7 +276,7 @@ function initCharts() {
     window.spkluCharts.staticRoi = new Chart(roiCtx, {
       type: 'bar',
       data: {
-        labels: ['Thn 1', 'Thn 2', 'Thn 3', 'Thn 4', 'Thn 5', 'Thn 6', 'Thn 7', 'Thn 8'],
+        labels: ['Thn 1', 'Thn 2', 'Thn 3 (BEP)', 'Thn 4', 'Thn 5', 'Thn 6', 'Thn 7', 'Thn 8'],
         datasets: [
           {
             label: 'Modal Awal',
@@ -485,7 +485,7 @@ function initSimulator() {
 }
 
 /**
- * Radar Feasibility Scanner: Google Maps EV Mode Direct Bridge
+ * Radar Feasibility Scanner: Single-Action Google Maps EV Mode Bridge
  */
 function initFeasibilityScanner() {
   const btnRun = document.getElementById('spScanBtnRun');
@@ -497,7 +497,6 @@ function initFeasibilityScanner() {
   const scoreText = document.getElementById('spFeasibilityScoreText');
   const scoreStatus = document.getElementById('spFeasibilityScoreStatus');
   const consoleBody = document.getElementById('spScanLogConsole');
-  const gmapsDirectLink = document.getElementById('spGmapsDirectLink');
 
   if (!btnRun || !input) return;
 
@@ -545,12 +544,10 @@ function initFeasibilityScanner() {
       .then(data => {
         let lat = -6.2088;
         let lon = 106.8456;
-        let resolvedName = cleanQuery;
 
         if (data && data.length > 0) {
           lat = parseFloat(data[0].lat);
           lon = parseFloat(data[0].lon);
-          resolvedName = data[0].display_name;
         } else if (cleanQuery.toLowerCase().includes('alfa')) {
           lat = -6.2238;
           lon = 106.7584; // Koordinat Taman Alfa Indah
@@ -558,13 +555,9 @@ function initFeasibilityScanner() {
 
         // Tautan resmi Google Maps mode SPKLU terdekat pada koordinat pengguna
         const gmapsEvUrl = `https://www.google.com/maps/search/spklu+terdekat/@${lat},${lon},14z`;
-        
-        if (gmapsDirectLink) {
-          gmapsDirectLink.setAttribute('href', gmapsEvUrl);
-        }
 
         addLog(`Koordinat terkunci: Lat ${lat.toFixed(4)}, Lon ${lon.toFixed(4)}`, '#00e575');
-        addLog(`Protokol Google Maps EV Mode terpasang. Siap dibuka.`, '#00e575');
+        addLog(`Protokol Google Maps EV Mode terhubung. Membuka navigasi...`, '#00e575');
 
         let score = 92;
         if (scoreText) scoreText.innerText = score + '%';
@@ -574,26 +567,22 @@ function initFeasibilityScanner() {
         }
 
         if (scoreRec) {
-          scoreRec.innerHTML = `Lokasi <b>"${rawAddress}"</b> berada di koridor strategis dengan densitas kendaraan aktif.<br>
-            Silakan klik tombol di bawah untuk melihat rincian stasiun SPKLU terdekat, ketersediaan daya, dan rute navigasi mobil listrik di Google Maps.<br>
-            <a href="${gmapsEvUrl}" target="_blank" rel="noopener noreferrer" style="color:#00f2fe; font-weight:800; text-decoration:underline; display:inline-block; margin-top:8px;">
-              🗺️ Buka Peta SPKLU Terdekat di Google Maps (Akurasi Real-Time)
-            </a>`;
+          scoreRec.innerHTML = `Lokasi <b>"${rawAddress}"</b> berada di koridor strategis dengan potensi adopsi EV tinggi.<br>
+            Peta navigasi Google Maps EV telah dibuka di tab baru untuk memantau sebaran stasiun SPKLU kompetitor secara live.`;
         }
 
         if (scoreCard) scoreCard.style.display = 'block';
 
-        btnRun.innerText = "🔍 Analisa Lokasi Baru";
+        btnRun.innerText = "🔍 Analisa Lokasi & Buka Google Maps EV";
         btnRun.disabled = false;
 
-        // Otomatis buka Google Maps EV di tab baru untuk kenyamanan pengguna
+        // Buka Google Maps EV langsung di tab baru
         window.open(gmapsEvUrl, '_blank');
       })
       .catch(() => {
         const fallbackUrl = `https://www.google.com/maps/search/spklu+terdekat+${encodeURIComponent(cleanQuery)}`;
-        if (gmapsDirectLink) gmapsDirectLink.setAttribute('href', fallbackUrl);
         if (scoreCard) scoreCard.style.display = 'block';
-        btnRun.innerText = "🔍 Analisa Lokasi Baru";
+        btnRun.innerText = "🔍 Analisa Lokasi & Buka Google Maps EV";
         btnRun.disabled = false;
         window.open(fallbackUrl, '_blank');
       });
