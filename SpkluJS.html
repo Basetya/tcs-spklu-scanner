@@ -2,7 +2,7 @@
 /**
  * PT. Titis Cahaya Sejahtera (TCS) - SPKLU Client Logic & Feasibility Radar
  * Platform: Google Apps Script Web App & Vercel Bridge
- * Engine: Realistic Financial Calculator & Interactive Map Scanner
+ * Engine: Dynamic DC/AC Slider, Realistic ESDM Surcharge Formula & Interactive Scanner
  */
 
 function getEvDescription(evCount, lang) {
@@ -351,7 +351,7 @@ function initCharts() {
 }
 
 /**
- * Simulator ROI dengan Rumus Bisnis Nyata Sesuai Regulasi ESDM
+ * Simulator ROI dengan Rumus Bisnis Nyata & Slider Dinamis Sesuai Skenario AC/DC
  */
 function initSimulator() {
   if (typeof Chart === 'undefined') {
@@ -366,6 +366,8 @@ function initSimulator() {
   const capexValue = document.getElementById('capexValue');
   const grossMonthly = document.getElementById('grossMonthly');
   const pbpValue = document.getElementById('pbpValue');
+  const sliderMinLabel = document.getElementById('sliderMinLabel');
+  const sliderMaxLabel = document.getElementById('sliderMaxLabel');
   const roiCtx = document.getElementById('roiChartCanvas');
 
   if (!scenACBtn || !scenDCBtn || !sessionSlider || !roiCtx) return;
@@ -373,15 +375,26 @@ function initSimulator() {
   let currentScenario = 'AC';
 
   function updateSliderRange() {
-    if (currentScenario === 'AC') {
-      sessionSlider.min = 2;
-      sessionSlider.max = 8;
-      if (parseInt(sessionSlider.value) > 8) sessionSlider.value = 5;
-      if (parseInt(sessionSlider.value) < 2) sessionSlider.value = 2;
+    const isAC = currentScenario === 'AC';
+    if (isAC) {
+      sessionSlider.setAttribute('min', '2');
+      sessionSlider.setAttribute('max', '8');
+      sessionSlider.min = '2';
+      sessionSlider.max = '8';
+      if (parseInt(sessionSlider.value) > 8) sessionSlider.value = '5';
+      if (parseInt(sessionSlider.value) < 2) sessionSlider.value = '2';
+      if (sliderMinLabel) sliderMinLabel.innerText = '2 Sesi (Konservatif)';
+      if (sliderMaxLabel) sliderMaxLabel.innerText = '8 Sesi (Maksimal Nozzle AC)';
     } else {
-      sessionSlider.min = 6;
-      sessionSlider.max = 24;
-      if (parseInt(sessionSlider.value) < 6 || parseInt(sessionSlider.value) === 5) sessionSlider.value = 16;
+      sessionSlider.setAttribute('min', '6');
+      sessionSlider.setAttribute('max', '24');
+      sessionSlider.min = '6';
+      sessionSlider.max = '24';
+      if (parseInt(sessionSlider.value) < 6 || parseInt(sessionSlider.value) <= 8) {
+        sessionSlider.value = '16';
+      }
+      if (sliderMinLabel) sliderMinLabel.innerText = '6 Sesi (Konservatif)';
+      if (sliderMaxLabel) sliderMaxLabel.innerText = '24 Sesi (Sangat Padat DC)';
     }
   }
 
@@ -408,7 +421,6 @@ function initSimulator() {
   }
 
   function updateSimulation() {
-    updateSliderRange();
     const dailySessions = parseInt(sessionSlider.value);
     const data = getFinancials(currentScenario, dailySessions);
 
@@ -428,6 +440,7 @@ function initSimulator() {
     currentScenario = 'AC';
     scenACBtn.classList.add('active');
     scenDCBtn.classList.remove('active');
+    updateSliderRange();
     updateSimulation();
   });
 
@@ -435,6 +448,7 @@ function initSimulator() {
     currentScenario = 'DC';
     scenDCBtn.classList.add('active');
     scenACBtn.classList.remove('active');
+    updateSliderRange();
     updateSimulation();
   });
 
@@ -470,11 +484,12 @@ function initSimulator() {
     }
   });
 
+  updateSliderRange();
   updateSimulation();
 }
 
 /**
- * Radar Feasibility Scanner dengan Marker Interaktif & Reset Input Real-time
+ * Radar Feasibility Scanner dengan Marker Interaktif, Reset Form & Link Rute EV Google Maps
  */
 function initFeasibilityScanner() {
   if (typeof L === 'undefined') {
@@ -496,7 +511,7 @@ function initFeasibilityScanner() {
   }).addTo(map);
 
   const markerGroup = L.layerGroup().addTo(map);
-  window.tcsScannerState = { map, markerGroup, score: 95 };
+  window.tcsScannerState = { map, markerGroup, score: 95, isScanning: false };
 
   setTimeout(() => map.invalidateSize(), 500);
 
@@ -507,9 +522,21 @@ function initFeasibilityScanner() {
 
   if (btnRun && input) {
     btnRun.addEventListener('click', () => {
+      if (window.tcsScannerState.isScanning) {
+        // Mode Reset / Pindai Lokasi Baru
+        window.tcsScannerState.isScanning = false;
+        input.value = '';
+        input.focus();
+        markerGroup.clearLayers();
+        map.setView([-6.2088, 106.8456], 13);
+        if (scoreCard) scoreCard.style.display = 'none';
+        btnRun.innerText = "Mulai Pemindaian Radar";
+        return;
+      }
+
       const address = input.value.trim();
       if (!address) {
-        alert("Silakan masukkan alamat atau koordinat lahan.");
+        alert("Silakan masukkan alamat atau koordinat lahan terlebih dahulu.");
         input.focus();
         return;
       }
@@ -565,16 +592,17 @@ function initFeasibilityScanner() {
 
           if (scoreCard) scoreCard.style.display = 'block';
 
-          // Link Google Maps EV Mode
+          // Link Buka Google Maps EV Mode
           const gmapsEvUrl = `https://www.google.com/maps/search/spklu+terdekat/@${lat},${lon},14z`;
           if (scoreRec) {
             scoreRec.innerHTML = `Lokasi Anda berada di zona dengan densitas EV tinggi dan pasokan gardu PLN stabil.<br>
-              <a href="${gmapsEvUrl}" target="_blank" style="color:#00f2fe; font-weight:bold; text-decoration:underline; display:inline-block; margin-top:8px;">
+              <a href="${gmapsEvUrl}" target="_blank" rel="noopener noreferrer" style="color:#00f2fe; font-weight:bold; text-decoration:underline; display:inline-block; margin-top:8px;">
                 🗺️ Buka Peta Rute SPKLU di Google Maps
               </a>`;
           }
 
-          btnRun.innerText = "Pindai Lokasi Baru";
+          window.tcsScannerState.isScanning = true;
+          btnRun.innerText = "Pindai Lokasi Baru 🔄";
           btnRun.disabled = false;
         })
         .catch(() => {
