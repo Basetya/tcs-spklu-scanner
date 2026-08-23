@@ -125,7 +125,7 @@
         </div>
       </div>
 
-      <!-- TIMELAPSE VIDEO CONTAINER (BERSIH TANPA JUDUL, SPEED 0.6x SLOW-MOTION) -->
+      <!-- TIMELAPSE VIDEO CONTAINER (SPEED 0.3x ULTRA SLOW-MOTION) -->
       <div class="hero-visual" style="display: flex; align-items: center; justify-content: center;">
         <div style="width: 100%; max-width: 480px; border-radius: 20px; overflow: hidden; border: 2px solid rgba(0, 242, 254, 0.3); box-shadow: 0 0 35px rgba(0, 242, 254, 0.15); background: rgba(3, 7, 18, 0.8);">
           <video id="tcsTimelapseVideo" autoplay muted loop playsinline style="width: 100%; height: auto; display: block; object-fit: cover;">
@@ -138,12 +138,12 @@
     </div>
   </section>
 
-  <!-- SCRIPT UNTUK MENGATUR KECEPATAN VIDEO (0.6x SLOW-MOTION) -->
+  <!-- SCRIPT UNTUK MENGATUR KECEPATAN VIDEO (0.3x SLOW-MOTION) -->
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       const vid = document.getElementById("tcsTimelapseVideo");
       if (vid) {
-        vid.playbackRate = 0.6; // Memperlambat video agar lebih sinematik
+        vid.playbackRate = 0.3; // Memperlambat video 50% lagi agar lebih halus & sinematik
       }
     });
   </script>
