@@ -1,8 +1,18 @@
 ﻿<script>
 /**
- * PT. Titis Cahaya Sejahtera (TCS) - SPKLU Client Logic
+ * PT. Titis Cahaya Sejahtera (TCS) - SPKLU Client Logic & 8-Year ROI Projection
  * Platform: Google Apps Script Web App & Vercel Bridge
+ * Engine: 8-Year Financial Simulation Array & Dynamic Leaflet Map
  */
+
+function getEvDescription(evCount, lang) {
+  const isEn = lang === 'en';
+  if (evCount >= 4000) return isEn ? "Abundant" : "Melimpah";
+  if (evCount >= 2000) return isEn ? "Quite Many" : "Cukup Banyak";
+  if (evCount >= 1000) return isEn ? "Adequate" : "Cukup";
+  if (evCount >= 500) return isEn ? "Lacking" : "Kurang";
+  return isEn ? "Very Few" : "Sangat Sedikit";
+}
 
 window.spkluCharts = {
   evGrowth: null,
@@ -43,7 +53,7 @@ function initHeroCanvas() {
   let width = canvas.width = window.innerWidth;
   let height = canvas.height = window.innerHeight;
   const particles = [];
-  const particleCount = Math.min(45, Math.floor(width / 30));
+  const particleCount = Math.min(50, Math.floor(width / 30));
   const connectionDistance = 110;
 
   window.addEventListener('resize', () => {
@@ -69,7 +79,7 @@ function initHeroCanvas() {
     draw() {
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(${this.color}, 0.6)`;
+      ctx.fillStyle = `rgba(${this.color}, 0.65)`;
       ctx.fill();
     }
   }
@@ -266,17 +276,17 @@ function initCharts() {
     window.spkluCharts.staticRoi = new Chart(roiCtx, {
       type: 'bar',
       data: {
-        labels: ['Thn 1', 'Thn 2', 'Thn 3', 'Thn 4', 'Thn 5'],
+        labels: ['Thn 1', 'Thn 2', 'Thn 3 (BEP)', 'Thn 4', 'Thn 5', 'Thn 6', 'Thn 7', 'Thn 8'],
         datasets: [
           {
             label: 'Modal Awal',
-            data: [-150, -150, -150, -150, -150],
+            data: [-150, -150, -150, -150, -150, -150, -150, -150],
             backgroundColor: 'rgba(148, 163, 184, 0.2)',
             borderRadius: 4
           },
           {
             label: 'Kas Kumulatif',
-            data: [-80, -10, 180, 450, 890],
+            data: [-80, -10, 180, 450, 890, 1330, 1770, 2210],
             backgroundColor: context => context.dataset.data[context.dataIndex] < 0 ? 'rgba(239, 68, 68, 0.85)' : '#00e575',
             borderRadius: 4
           }
@@ -295,6 +305,9 @@ function initCharts() {
   }
 }
 
+/**
+ * Simulator ROI dengan Proyeksi Lengkap 8 Tahun
+ */
 function initSimulator() {
   if (typeof Chart === 'undefined') {
     setTimeout(initSimulator, 250);
@@ -349,7 +362,9 @@ function initSimulator() {
     const pbp = capex / (annualNet / 1000000);
     const cashFlow = [];
     let cumulative = -capex;
-    for (let i = 1; i <= 5; i++) {
+    
+    // Proyeksi 8 Tahun Penuh
+    for (let i = 1; i <= 8; i++) {
       cumulative += (annualNet / 1000000);
       cashFlow.push(Math.round(cumulative));
     }
@@ -366,7 +381,8 @@ function initSimulator() {
     if (pbpValue) pbpValue.textContent = data.pbp + ' Tahun';
 
     if (window.spkluCharts.simulatorRoi) {
-      window.spkluCharts.simulatorRoi.data.datasets[0].data = [-data.capex, -data.capex, -data.capex, -data.capex, -data.capex];
+      const capexArray = Array(8).fill(-data.capex);
+      window.spkluCharts.simulatorRoi.data.datasets[0].data = capexArray;
       window.spkluCharts.simulatorRoi.data.datasets[1].data = data.cashFlow;
       window.spkluCharts.simulatorRoi.update();
     }
@@ -401,17 +417,17 @@ function initSimulator() {
   window.spkluCharts.simulatorRoi = new Chart(roiCtx.getContext('2d'), {
     type: 'bar',
     data: {
-      labels: ['Tahun 1', 'Tahun 2', 'Tahun 3', 'Tahun 4', 'Tahun 5'],
+      labels: ['Tahun 1', 'Tahun 2', 'Tahun 3', 'Tahun 4', 'Tahun 5', 'Tahun 6', 'Tahun 7', 'Tahun 8'],
       datasets: [
         {
           label: 'Investasi CAPEX',
-          data: [-150, -150, -150, -150, -150],
+          data: [-150, -150, -150, -150, -150, -150, -150, -150],
           backgroundColor: 'rgba(148, 163, 184, 0.25)',
           borderRadius: 4
         },
         {
           label: 'Arus Kas Kumulatif',
-          data: [-60, 30, 120, 210, 300],
+          data: [-60, 30, 120, 210, 300, 390, 480, 570],
           backgroundColor: context => context.dataset.data[context.dataIndex] < 0 ? 'rgba(239, 68, 68, 0.85)' : '#00e575',
           borderRadius: 4
         }
@@ -423,7 +439,7 @@ function initSimulator() {
       plugins: { legend: { display: false } },
       scales: {
         y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#64748b' } },
-        x: { grid: { display: false }, ticks: { color: '#64748b' } }
+        x: { grid: { display: false }, ticks: { color: '#64748b', font: { size: 10 } } }
       }
     }
   });
