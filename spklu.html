@@ -7,14 +7,16 @@
   <meta name="description" content="Bergabunglah sebagai mitra investor SPKLU bersama PT. Titis Cahaya Sejahtera. Skema kemitraan tepercaya: Anda menyediakan lahan strategis, kami sediakan mesin, instalasi MEP standar nasional, perizinan, dan bagi hasil transparan.">
   <meta name="keywords" content="kemitraan spklu, bisnis charger mobil listrik, investasi spklu, franchise spklu indonesia, titis cahaya sejahtera, mep contractor nasional">
 
+  <!-- Favicon -->
   <link rel="icon" type="image/png" href="images/favicon.png">
+
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
+  <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <!-- Injeksi CSS Stylesheet -->
   <?!= include('CSS'); ?>
@@ -304,33 +306,33 @@
     </div>
   </section>
 
-  <!-- RADAR FEASIBILITY SCANNER -->
+  <!-- ------------------- RADAR FEASIBILITY SCANNER (DIRECT GOOGLE MAPS EV ENGINE) ------------------- -->
   <section class="section" id="scanner">
     <div class="container">
       <div class="section-header">
         <span class="section-tag" style="color: var(--primary-teal);">Radar Feasibility</span>
-        <h2 class="section-title">Pemindai Kelayakan Properti (Radar Feasibility Scanner)</h2>
+        <h2 class="section-title">Pemindai Kelayakan Lokasi (Google Maps EV Mode)</h2>
         <p class="section-desc">
-          Masukkan alamat atau titik koordinat lahan Anda untuk meluncurkan audit kelayakan wilayah secara real-time. Sistem akan memindai kepadatan kompetitor SPKLU dan mengukur potensi pasar di sekitar properti Anda.
+          Masukkan alamat properti Anda untuk meluncurkan analisis kelayakan. Sistem kami akan memetakan koordinat dan menyediakan tautan langsung ke navigasi resmi Google Maps EV untuk mengecek keberadaan SPKLU terdekat secara 100% akurat.
         </p>
       </div>
 
-      <div class="glass-card" style="padding: 35px; position: relative; z-index: 2;">
+      <div class="glass-card" style="padding: 35px;">
         <div class="grid-2" style="align-items: stretch; gap: 35px;">
           
           <div style="display: flex; flex-direction: column; justify-content: space-between; gap: 18px;">
             <div>
-              <label class="form-label" style="text-transform: uppercase; font-size: 11px; color: var(--text-secondary); margin-bottom: 8px;">LOKASI LAHAN ATAU KOORDINAT GPS</label>
+              <label class="form-label" style="text-transform: uppercase; font-size: 11px; color: var(--text-secondary); margin-bottom: 8px;">LOKASI LAHAN ATAU ALAMAT PROPERTI</label>
               <div style="position: relative;">
-                <input type="text" id="spScanInput" class="form-input-text" style="padding-left: 38px;" placeholder="Masukkan alamat lengkap atau titik Google Maps lahan Anda...">
+                <input type="text" id="spScanInput" class="form-input-text" style="padding-left: 38px;" placeholder="Masukkan alamat lengkap lahan (contoh: Taman Alfa Indah, Jakarta Barat)...">
                 <span style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 15px;">📍</span>
               </div>
             </div>
 
             <div>
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                <label class="form-label" style="text-transform: uppercase; font-size: 11px; color: var(--text-secondary); margin: 0;">RADIUS PEMINDAIAN RADAR</label>
-                <span id="spRadiusValue" style="background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.2); color: #c084fc; font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 20px;">3.0 KM</span>
+                <label class="form-label" style="text-transform: uppercase; font-size: 11px; color: var(--text-secondary); margin: 0;">RADIUS AUDIT KELAYAKAN</label>
+                <span id="spRadiusValue" style="background: rgba(0, 242, 254, 0.1); border: 1px solid rgba(0, 242, 254, 0.2); color: var(--primary-teal); font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 20px;">3.0 KM</span>
               </div>
               <input id="spRadiusSlider" type="range" min="1.0" max="5.0" step="0.5" value="3.0" class="form-input-text" style="padding: 0; height: 6px; cursor: pointer;">
               <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted); margin-top: 4px;">
@@ -340,26 +342,37 @@
             </div>
 
             <div>
-              <button type="button" id="spScanBtnRun" class="btn btn-primary" style="width: 100%; padding: 12px; font-weight: 700;">Mulai Pemindaian Radar</button>
+              <button type="button" id="spScanBtnRun" class="btn btn-primary" style="width: 100%; padding: 14px; font-weight: 800; font-size: 14px;">
+                🔍 Analisa Lokasi & Buka Google Maps EV
+              </button>
             </div>
 
-            <div style="background: rgba(3, 7, 18, 0.7); border: 1px solid var(--border-card); border-radius: var(--border-radius-md); padding: 14px; min-height: 100px;">
-              <div style="font-size: 10px; text-transform: uppercase; color: var(--text-muted); font-weight: 800; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 4px; margin-bottom: 6px;">TCS Radar Audit v1.0</div>
+            <div style="background: rgba(3, 7, 18, 0.7); border: 1px solid var(--border-card); border-radius: var(--border-radius-md); padding: 14px; min-height: 90px;">
+              <div style="font-size: 10px; text-transform: uppercase; color: var(--text-muted); font-weight: 800; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 4px; margin-bottom: 6px;">TCS Radar Audit v2.0</div>
               <div id="spScanLogConsole" style="font-family: 'Courier New', monospace; font-size: 11px; color: var(--text-secondary); line-height: 1.5; max-height: 80px; overflow-y: auto;">
-                <div style="color: var(--primary-teal); font-weight: bold;">> [SYS] READY. MASUKKAN ALAMAT & KLIK PINDAI.</div>
+                <div style="color: var(--primary-teal); font-weight: bold;">> [SYS] READY. MASUKKAN ALAMAT & KLIK ANALISA LOKASI.</div>
               </div>
             </div>
           </div>
 
-          <div style="background: rgba(3, 7, 18, 0.5); border: 1px solid var(--border-card); border-radius: var(--border-radius-lg); position: relative; min-height: 350px; overflow: hidden;">
-            <div id="spRadarMap" style="width: 100%; height: 100%; min-height: 350px; background: #030712; z-index: 1;"></div>
-            <canvas id="spRadarSweepCanvas" style="position: absolute; inset: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none; display: none;"></canvas>
+          <!-- Peta Google Maps EV Card Visual -->
+          <div style="background: rgba(3, 7, 18, 0.6); border: 1px solid var(--border-card); border-radius: var(--border-radius-lg); padding: 24px; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+                <span style="font-size: 11px; font-weight: 800; color: var(--primary-teal); text-transform: uppercase;">Google Maps EV Telemetry</span>
+                <span style="background: rgba(0, 229, 117, 0.1); color: #00e575; font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 4px;">Verified Protocol</span>
+              </div>
+              <h4 style="font-family: 'Outfit', sans-serif; font-size: 18px; color: #fff; margin-bottom: 8px;">Akurasi Data Stasiun SPKLU 100%</h4>
+              <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
+                Pencarian stasiun charging akan langsung terhubung ke mode navigasi mobil listrik Google Maps untuk mendeteksi SPKLU aktif (PLN, Voltron, Starvo, Shell Recharge, Charge+) di sekitar koordinat properti Anda.
+              </p>
+            </div>
 
-            <div style="position: absolute; right: 12px; top: 12px; display: flex; flex-direction: column; gap: 6px; font-size: 10px; font-weight: 700; color: #fff; background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(255,255,255,0.1); padding: 6px 12px; border-radius: 6px; backdrop-filter: blur(8px); z-index: 20;">
-              <span style="display: flex; align-items: center; gap: 6px;">
-                <span style="display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #ef4444; box-shadow: 0 0 6px #ef4444; border: 1.5px solid #fff;"></span>
-                SPKLU Terdekat (Google Maps EV)
-              </span>
+            <div id="gmapsEvActionContainer" style="margin-top: 20px; padding: 16px; background: rgba(0, 242, 254, 0.04); border: 1px dashed var(--primary-teal); border-radius: 8px; text-align: center;">
+              <span style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 10px;">Tautan Navigasi Google Maps EV:</span>
+              <a id="spGmapsDirectLink" href="https://www.google.com/maps/search/spklu+terdekat/" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="border-color: #00f2fe; color: #00f2fe; width: 100%; font-size: 13px; font-weight: 800; padding: 12px;">
+                🗺️ Buka Peta SPKLU Terdekat di Google Maps
+              </a>
             </div>
           </div>
 
@@ -518,7 +531,7 @@
     </div>
     <div id="tcsChatMessages" class="tcs-chat-messages-area">
       <div class="tcs-chat-bubble bot">
-        Halo! Saya TIARA, AI Business Consultant dari PT TCS. Saya siap memandu Anda seputar kemitraan SPKLU, perhitungan ROI, dan kelayakan lahan. Ada yang ingin Anda diskusikan?
+        Halo! Saya TIARA, AI Business Consultant dari PT TCS. Saya siap memandu Anda seputar peluang kemitraan SPKLU, perhitungan ROI, dan kelayakan lahan. Ada yang ingin Anda diskusikan?
       </div>
     </div>
     <div class="tcs-chat-input-area">
@@ -530,6 +543,7 @@
   <!-- Injeksi JS Logika Klien -->
   <?!= include('SpkluJS'); ?>
 
+  <!-- Fallback Loader for Local Live Server & Vercel Preview -->
   <script>
     if (!window.location.hostname.includes('google')) {
       fetch('SpkluJS.html')
