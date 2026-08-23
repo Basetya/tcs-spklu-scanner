@@ -2,7 +2,7 @@
 /**
  * PT. Titis Cahaya Sejahtera (TCS) - SPKLU Client Logic & Feasibility Radar
  * Platform: Google Apps Script Web App & Vercel Bridge
- * Engine: 8-Year Uncut Chart.js Canvas & Streamlined Single-Action Google Maps EV Bridge
+ * Engine: Hourly Passive Income Ticker, 8-Year Uncut Chart.js Canvas & Google Maps EV Bridge
  */
 
 function getEvDescription(evCount, lang) {
@@ -194,21 +194,26 @@ function onFormFailure(error) {
   if (msgEl) msgEl.innerText = "Terjadi gangguan: " + error.message;
 }
 
+/**
+ * Counter Animasi Realistis: Pemasukan Per Jam Charger DC 50 kW
+ */
 function initRevenueCounter() {
   const counterEl = document.getElementById('live-revenue-val');
   if (!counterEl) return;
-  window.spkluCurrentRevenue = 1482900000;
   
-  function formatRupiah(num) {
-    return 'Rp ' + num.toLocaleString('id-ID');
-  }
-
-  counterEl.innerText = formatRupiah(window.spkluCurrentRevenue);
+  const rates = [
+    "Rp 75.000 / Jam",
+    "Rp 82.500 / Jam",
+    "Rp 90.000 / Jam",
+    "Rp 78.000 / Jam",
+    "Rp 85.000 / Jam"
+  ];
+  let idx = 0;
 
   setInterval(() => {
-    window.spkluCurrentRevenue += Math.floor(Math.random() * 50000) + 15000;
-    counterEl.innerText = formatRupiah(window.spkluCurrentRevenue);
-  }, 4500);
+    idx = (idx + 1) % rates.length;
+    counterEl.innerText = rates[idx];
+  }, 4000);
 }
 
 function initCharts() {
@@ -252,10 +257,10 @@ function initCharts() {
     window.spkluCharts.responsibility = new Chart(respCtx, {
       type: 'doughnut',
       data: {
-        labels: ['Investor', 'TCS Mesin', 'TCS Listrik', 'TCS O&M'],
+        labels: ['Pemilik Lahan', 'Investor Modal', 'TCS Mesin & MEP', 'TCS Izin & O&M'],
         datasets: [{
           data: [20, 40, 20, 20],
-          backgroundColor: ['#f39c12', '#00e575', '#00f2fe', '#6366f1'],
+          backgroundColor: ['#f39c12', '#00f2fe', '#00e575', '#6366f1'],
           borderWidth: 0
         }]
       },
@@ -553,7 +558,6 @@ function initFeasibilityScanner() {
           lon = 106.7584; // Koordinat Taman Alfa Indah
         }
 
-        // Tautan resmi Google Maps mode SPKLU terdekat pada koordinat pengguna
         const gmapsEvUrl = `https://www.google.com/maps/search/spklu+terdekat/@${lat},${lon},14z`;
 
         addLog(`Koordinat terkunci: Lat ${lat.toFixed(4)}, Lon ${lon.toFixed(4)}`, '#00e575');
@@ -576,7 +580,6 @@ function initFeasibilityScanner() {
         btnRun.innerText = "🔍 Analisa Lokasi & Buka Google Maps EV";
         btnRun.disabled = false;
 
-        // Buka Google Maps EV langsung di tab baru
         window.open(gmapsEvUrl, '_blank');
       })
       .catch(() => {
