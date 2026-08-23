@@ -1,18 +1,8 @@
 ﻿<script>
 /**
- * PT. Titis Cahaya Sejahtera (TCS) - SPKLU Client Logic & Feasibility Radar
+ * PT. Titis Cahaya Sejahtera (TCS) - SPKLU Client Logic
  * Platform: Google Apps Script Web App & Vercel Bridge
- * Engine: Accurate Single-Category SPKLU EV Extraction & Dynamic Radar
  */
-
-function getEvDescription(evCount, lang) {
-  const isEn = lang === 'en';
-  if (evCount >= 4000) return isEn ? "Abundant" : "Melimpah";
-  if (evCount >= 2000) return isEn ? "Quite Many" : "Cukup Banyak";
-  if (evCount >= 1000) return isEn ? "Adequate" : "Cukup";
-  if (evCount >= 500) return isEn ? "Lacking" : "Kurang";
-  return isEn ? "Very Few" : "Sangat Sedikit";
-}
 
 window.spkluCharts = {
   evGrowth: null,
@@ -53,18 +43,9 @@ function initHeroCanvas() {
   let width = canvas.width = window.innerWidth;
   let height = canvas.height = window.innerHeight;
   const particles = [];
-  const particleCount = Math.min(50, Math.floor(width / 30));
+  const particleCount = Math.min(45, Math.floor(width / 30));
   const connectionDistance = 110;
-  const mouse = { x: null, y: null, radius: 150 };
 
-  window.addEventListener('mousemove', (e) => {
-    mouse.x = e.clientX;
-    mouse.y = e.clientY + window.scrollY;
-  });
-  window.addEventListener('mouseleave', () => {
-    mouse.x = null;
-    mouse.y = null;
-  });
   window.addEventListener('resize', () => {
     width = canvas.width = window.innerWidth;
     height = canvas.height = window.innerHeight;
@@ -84,28 +65,16 @@ function initHeroCanvas() {
       this.y += this.vy;
       if (this.x < 0 || this.x > width) this.vx *= -1;
       if (this.y < 0 || this.y > height) this.vy *= -1;
-      if (mouse.x !== null && mouse.y !== null) {
-        let dx = this.x - mouse.x;
-        let dy = this.y - mouse.y;
-        let dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < mouse.radius) {
-          const force = (mouse.radius - dist) / mouse.radius;
-          this.x += (dx / dist) * force * 1.2;
-          this.y += (dy / dist) * force * 1.2;
-        }
-      }
     }
     draw() {
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(${this.color}, 0.7)`;
+      ctx.fillStyle = `rgba(${this.color}, 0.6)`;
       ctx.fill();
     }
   }
 
-  for (let i = 0; i < particleCount; i++) {
-    particles.push(new Particle());
-  }
+  for (let i = 0; i < particleCount; i++) particles.push(new Particle());
 
   function animate() {
     ctx.clearRect(0, 0, width, height);
@@ -180,7 +149,7 @@ function initFormHandler() {
           success: true,
           message: "Pengajuan lahan kemitraan SPKLU Anda telah kami terima secara aman."
         }, leadData);
-      }, 1200);
+      }, 1000);
     }
   });
 }
@@ -212,7 +181,7 @@ function onFormFailure(error) {
   const successPane = document.getElementById('form-success-pane');
   if (successPane) successPane.style.display = 'block';
   const msgEl = document.getElementById('success-msg-text');
-  if (msgEl) msgEl.innerText = "Terjadi gangguan transmisi: " + error.message;
+  if (msgEl) msgEl.innerText = "Terjadi gangguan: " + error.message;
 }
 
 function initRevenueCounter() {
@@ -238,31 +207,13 @@ function initCharts() {
     return;
   }
 
-  function wrapLabel(label) {
-    if (label.length <= 16) return label;
-    let words = label.split(' ');
-    let lines = [];
-    let currentLine = '';
-    for (let word of words) {
-      if ((currentLine + word).length > 16) {
-        if (currentLine) lines.push(currentLine.trim());
-        currentLine = word + ' ';
-      } else {
-        currentLine += word + ' ';
-      }
-    }
-    if (currentLine) lines.push(currentLine.trim());
-    return lines;
-  }
-
   const evGrowthCanvas = document.getElementById('evGrowthChart');
   if (evGrowthCanvas) {
     const evGrowthCtx = evGrowthCanvas.getContext('2d');
-    const rawLabels = ['Tahun 2023', 'Tahun 2024', 'Tahun 2025', 'Tahun 2026', 'Tahun 2027', 'Tahun 2028'];
     window.spkluCharts.evGrowth = new Chart(evGrowthCtx, {
       type: 'line',
       data: {
-        labels: rawLabels.map(wrapLabel),
+        labels: ['2023', '2024', '2025', '2026', '2027', '2028'],
         datasets: [{
           label: 'Populasi EV (Ribu Unit)',
           data: [35, 75, 150, 310, 580, 1200],
@@ -288,11 +239,10 @@ function initCharts() {
   const respCanvas = document.getElementById('responsibilityChart');
   if (respCanvas) {
     const respCtx = respCanvas.getContext('2d');
-    const rawLabels = ['Investor: Lahan & Sipil', 'TCS: Hardware', 'TCS: Listrik & Izin', 'TCS: Operasional'];
     window.spkluCharts.responsibility = new Chart(respCtx, {
       type: 'doughnut',
       data: {
-        labels: rawLabels.map(wrapLabel),
+        labels: ['Investor', 'TCS Mesin', 'TCS Listrik', 'TCS O&M'],
         datasets: [{
           data: [20, 40, 20, 20],
           backgroundColor: ['#f39c12', '#00e575', '#00f2fe', '#6366f1'],
@@ -304,10 +254,7 @@ function initCharts() {
         maintainAspectRatio: false,
         cutout: '65%',
         plugins: {
-          legend: {
-            position: 'bottom',
-            labels: { color: '#94a3b8', boxWidth: 10, font: { size: 10 } }
-          }
+          legend: { position: 'bottom', labels: { color: '#94a3b8', boxWidth: 10, font: { size: 10 } } }
         }
       }
     });
@@ -316,11 +263,10 @@ function initCharts() {
   const roiCanvas = document.getElementById('roiChart');
   if (roiCanvas) {
     const roiCtx = roiCanvas.getContext('2d');
-    const rawLabels = ['Tahun 1', 'Tahun 2', 'Tahun 3 (BEP)', 'Tahun 4', 'Tahun 5'];
     window.spkluCharts.staticRoi = new Chart(roiCtx, {
       type: 'bar',
       data: {
-        labels: rawLabels.map(wrapLabel),
+        labels: ['Thn 1', 'Thn 2', 'Thn 3', 'Thn 4', 'Thn 5'],
         datasets: [
           {
             label: 'Modal Awal',
@@ -373,17 +319,13 @@ function initSimulator() {
   function updateSliderRange() {
     const isAC = currentScenario === 'AC';
     if (isAC) {
-      sessionSlider.setAttribute('min', '2');
-      sessionSlider.setAttribute('max', '8');
       sessionSlider.min = '2';
       sessionSlider.max = '8';
       if (parseInt(sessionSlider.value) > 8) sessionSlider.value = '5';
       if (parseInt(sessionSlider.value) < 2) sessionSlider.value = '2';
       if (sliderMinLabel) sliderMinLabel.innerText = '2 Sesi (Konservatif)';
-      if (sliderMaxLabel) sliderMaxLabel.innerText = '8 Sesi (Maksimal Nozzle AC)';
+      if (sliderMaxLabel) sliderMaxLabel.innerText = '8 Sesi (Maksimal AC)';
     } else {
-      sessionSlider.setAttribute('min', '6');
-      sessionSlider.setAttribute('max', '24');
       sessionSlider.min = '6';
       sessionSlider.max = '24';
       if (parseInt(sessionSlider.value) < 6 || parseInt(sessionSlider.value) <= 8) {
@@ -397,7 +339,6 @@ function initSimulator() {
   function getFinancials(scenario, dailySessions) {
     const isAC = scenario === 'AC';
     const capex = isAC ? 150 : 850;
-    
     const revenuePerSession = isAC ? 35000 : 75000;
     const netPerSession = isAC ? 18000 : 48000;
 
@@ -435,6 +376,10 @@ function initSimulator() {
     currentScenario = 'AC';
     scenACBtn.classList.add('active');
     scenDCBtn.classList.remove('active');
+    scenACBtn.style.background = 'rgba(0, 242, 254, 0.08)';
+    scenACBtn.style.borderColor = 'var(--primary-teal)';
+    scenDCBtn.style.background = 'transparent';
+    scenDCBtn.style.borderColor = 'var(--border-card)';
     updateSliderRange();
     updateSimulation();
   });
@@ -443,6 +388,10 @@ function initSimulator() {
     currentScenario = 'DC';
     scenDCBtn.classList.add('active');
     scenACBtn.classList.remove('active');
+    scenDCBtn.style.background = 'rgba(0, 242, 254, 0.08)';
+    scenDCBtn.style.borderColor = 'var(--primary-teal)';
+    scenACBtn.style.background = 'transparent';
+    scenACBtn.style.borderColor = 'var(--border-card)';
     updateSliderRange();
     updateSimulation();
   });
@@ -481,301 +430,6 @@ function initSimulator() {
 
   updateSliderRange();
   updateSimulation();
-}
-
-/**
- * Radar Feasibility Scanner: Murni Memetakan Stasiun SPKLU Sesuai Google Maps EV Mode
- */
-function initFeasibilityScanner() {
-  if (typeof L === 'undefined') {
-    setTimeout(initFeasibilityScanner, 250);
-    return;
-  }
-
-  const mapContainer = document.getElementById('spRadarMap');
-  const canvas = document.getElementById('spRadarSweepCanvas');
-  const consoleBody = document.getElementById('spScanLogConsole');
-  if (!mapContainer || !canvas) return;
-
-  const ctx = canvas.getContext('2d');
-
-  canvas.style.position = 'absolute';
-  canvas.style.inset = '0';
-  canvas.style.zIndex = '5';
-  canvas.style.pointerEvents = 'none';
-
-  const map = L.map('spRadarMap', {
-    center: [-6.2088, 106.8456],
-    zoom: 13,
-    zoomControl: true
-  });
-
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
-  }).addTo(map);
-
-  const markerGroup = L.layerGroup().addTo(map);
-
-  window.tcsScannerState = {
-    map: map,
-    markerGroup: markerGroup,
-    isScanning: false,
-    radarAngle: 0,
-    radarAnimationId: null
-  };
-
-  setTimeout(() => map.invalidateSize(), 500);
-
-  const btnRun = document.getElementById('spScanBtnRun');
-  const input = document.getElementById('spScanInput');
-  const radiusSlider = document.getElementById('spRadiusSlider');
-  const radiusValue = document.getElementById('spRadiusValue');
-  const scoreCard = document.getElementById('spScannerScoreCard');
-  const scoreRec = document.getElementById('spFeasibilityScoreRec');
-  const scoreText = document.getElementById('spFeasibilityScoreText');
-  const scoreStatus = document.getElementById('spFeasibilityScoreStatus');
-
-  if (radiusSlider && radiusValue) {
-    radiusSlider.addEventListener('input', () => {
-      const rad = parseFloat(radiusSlider.value) || 3.0;
-      radiusValue.innerText = rad.toFixed(1) + ' KM';
-    });
-  }
-
-  function addLog(msg, color = '#00f2fe') {
-    if (!consoleBody) return;
-    const div = document.createElement('div');
-    div.style.marginBottom = "4px";
-    div.innerHTML = `<span style="color:${color}; font-weight:bold;">> [RADAR]</span> ${msg}`;
-    consoleBody.appendChild(div);
-    consoleBody.scrollTop = consoleBody.scrollHeight;
-  }
-
-  function startRadarSweepAnimation() {
-    canvas.width = mapContainer.clientWidth;
-    canvas.height = mapContainer.clientHeight;
-    canvas.style.display = 'block';
-    canvas.style.opacity = '1';
-
-    function draw() {
-      if (!window.tcsScannerState.isScanning) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        return;
-      }
-
-      const cx = canvas.width / 2;
-      const cy = canvas.height / 2;
-      const maxRadius = Math.min(cx, cy) - 20;
-
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      ctx.strokeStyle = 'rgba(0, 229, 117, 0.25)';
-      ctx.lineWidth = 1;
-      [0.35, 0.7, 1.0].forEach(r => {
-        ctx.beginPath();
-        ctx.arc(cx, cy, maxRadius * r, 0, Math.PI * 2);
-        ctx.stroke();
-      });
-
-      ctx.strokeStyle = 'rgba(0, 229, 117, 0.2)';
-      ctx.beginPath();
-      ctx.moveTo(cx - maxRadius, cy); ctx.lineTo(cx + maxRadius, cy);
-      ctx.moveTo(cx, cy - maxRadius); ctx.lineTo(cx, cy + maxRadius);
-      ctx.stroke();
-
-      window.tcsScannerState.radarAngle += 0.045;
-      ctx.save();
-      ctx.translate(cx, cy);
-      ctx.rotate(window.tcsScannerState.radarAngle);
-
-      const sweepGrad = ctx.createRadialGradient(0, 0, 0, 0, 0, maxRadius);
-      sweepGrad.addColorStop(0, 'rgba(0, 229, 117, 0.4)');
-      sweepGrad.addColorStop(0.6, 'rgba(0, 229, 117, 0.12)');
-      sweepGrad.addColorStop(1, 'rgba(0, 229, 117, 0)');
-      ctx.fillStyle = sweepGrad;
-
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.arc(0, 0, maxRadius, -Math.PI / 4, 0);
-      ctx.closePath();
-      ctx.fill();
-
-      ctx.strokeStyle = '#00e575';
-      ctx.lineWidth = 2.5;
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.lineTo(maxRadius, 0);
-      ctx.stroke();
-      ctx.restore();
-
-      window.tcsScannerState.radarAnimationId = requestAnimationFrame(draw);
-    }
-
-    draw();
-  }
-
-  function stopRadarSweepAnimation() {
-    canvas.style.opacity = '0';
-    setTimeout(() => {
-      canvas.style.display = 'none';
-      if (window.tcsScannerState.radarAnimationId) {
-        cancelAnimationFrame(window.tcsScannerState.radarAnimationId);
-      }
-    }, 300);
-  }
-
-  function renderStationMarkers(lat, lon, address, radKm, stations) {
-    const createMarkerIcon = (color, size = 12) => L.divIcon({
-      className: 'custom-poi-dot',
-      html: `<div style="width:${size}px; height:${size}px; border-radius:50%; background:${color}; box-shadow:0 0 10px ${color}; border:2px solid #ffffff; z-index:1000;"></div>`,
-      iconSize: [size, size],
-      iconAnchor: [size / 2, size / 2]
-    });
-
-    // 1. Marker Lokasi Lahan Properti Anda (Putih)
-    L.marker([lat, lon], { icon: createMarkerIcon('#ffffff', 16) }).addTo(markerGroup)
-      .bindPopup(`<b>📍 Lokasi Lahan Anda:</b><br>${address}`).openPopup();
-
-    // 2. Lingkaran Radius Pemindaian (Hijau Neon)
-    L.circle([lat, lon], {
-      color: '#00e575',
-      fillColor: '#00e575',
-      fillOpacity: 0.08,
-      radius: radKm * 1000,
-      weight: 2,
-      dashArray: '6, 6'
-    }).addTo(markerGroup);
-
-    // 3. Render Murni Titik SPKLU Terdekat Nyata (Merah)
-    let spkluCount = 0;
-    stations.forEach(st => {
-      const stLat = st.lat;
-      const stLon = st.lon;
-      if (!stLat || !stLon) return;
-
-      spkluCount++;
-      const name = st.name || "Stasiun SPKLU EV";
-      const op = st.operator || "Public Charging Network";
-
-      L.marker([stLat, stLon], { icon: createMarkerIcon('#ef4444', 13) }).addTo(markerGroup)
-        .bindPopup(`<b>⚡ ${name}</b><br>Operator: ${op}<br><span style="color:#ef4444; font-size:10px; font-weight:bold;">SPKLU Terdekat Terpetakan</span>`);
-    });
-
-    addLog(`Audit Selesai: Terpetakan ${spkluCount} Stasiun SPKLU dalam radius ${radKm.toFixed(1)} KM.`, '#00e575');
-
-    let score = 95 - (spkluCount * 3);
-    score = Math.max(70, Math.min(98, score));
-
-    if (scoreText) scoreText.innerText = score + '%';
-    if (scoreStatus) {
-      scoreStatus.innerText = score >= 85 ? "SANGAT LAYAK (HI-POTENTIAL)" : "LAYAK DENGAN CATATAN";
-      scoreStatus.style.color = score >= 85 ? "var(--primary-lime)" : "var(--electric-amber)";
-    }
-
-    const gmapsEvUrl = `https://www.google.com/maps/search/spklu+terdekat/@${lat},${lon},14z`;
-    if (scoreRec) {
-      scoreRec.innerHTML = `Terdeteksi <b>${spkluCount} stasiun SPKLU</b> dalam radius ${radKm.toFixed(1)} KM dari lahan Anda.<br>
-        ${spkluCount <= 2 ? 'Persaingan sangat rendah, potensi monopoli trafik pengisian EV di zona ini sangat tinggi.' : 'Zona trafik EV aktif, potensi konversi omzet komersial terbuka lebar.'}<br>
-        <a href="${gmapsEvUrl}" target="_blank" rel="noopener noreferrer" style="color:#00f2fe; font-weight:bold; text-decoration:underline; display:inline-block; margin-top:8px;">
-          🗺️ Buka Peta Rute SPKLU di Google Maps
-        </a>`;
-    }
-
-    if (scoreCard) scoreCard.style.display = 'block';
-    stopRadarSweepAnimation();
-    btnRun.innerText = "Pindai Lokasi Baru 🔄";
-    btnRun.disabled = false;
-  }
-
-  if (btnRun && input) {
-    btnRun.addEventListener('click', () => {
-      if (window.tcsScannerState.isScanning) {
-        window.tcsScannerState.isScanning = false;
-        stopRadarSweepAnimation();
-        input.value = '';
-        input.focus();
-        markerGroup.clearLayers();
-        map.setView([-6.2088, 106.8456], 13);
-        if (scoreCard) scoreCard.style.display = 'none';
-        if (consoleBody) consoleBody.innerHTML = '<div style="color:#00e575; font-weight:bold;">> [SYS] READY. MASUKKAN ALAMAT & KLIK PINDAI.</div>';
-        btnRun.innerText = "Mulai Pemindaian Radar";
-        return;
-      }
-
-      const address = input.value.trim();
-      if (!address) {
-        alert("Silakan masukkan alamat atau koordinat lahan terlebih dahulu.");
-        input.focus();
-        return;
-      }
-
-      const radKm = radiusSlider ? parseFloat(radiusSlider.value) || 3.0 : 3.0;
-      const radiusMeters = radKm * 1000;
-
-      window.tcsScannerState.isScanning = true;
-      btnRun.innerText = "Memindai Radar...";
-      btnRun.disabled = true;
-
-      startRadarSweepAnimation();
-      addLog(`Mengunci titik koordinat: "${address}"...`);
-
-      fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(address))
-        .then(res => res.json())
-        .then(data => {
-          let lat = -6.2088;
-          let lon = 106.8456;
-          if (data && data.length > 0) {
-            lat = parseFloat(data[0].lat);
-            lon = parseFloat(data[0].lon);
-          }
-
-          map.setView([lat, lon], 14);
-          markerGroup.clearLayers();
-
-          addLog(`Memindai stasiun charging dalam radius ${radKm.toFixed(1)} KM...`, '#a855f7');
-
-          // Titik Verified SPKLU di sekitar koordinat
-          const fallbackStations = [
-            { lat: lat + 0.0042, lon: lon - 0.0035, name: 'PLN SPKLU Fast Charging Station', operator: 'PLN UID' },
-            { lat: lat - 0.0038, lon: lon + 0.0048, name: 'Voltron EV Fast Charger', operator: 'Voltron' },
-            { lat: lat + 0.0025, lon: lon + 0.0055, name: 'Starvo EV Hub Charger', operator: 'Starvo' }
-          ];
-
-          const overpassQuery = `[out:json][timeout:10];(node["amenity"="charging_station"](around:${radiusMeters},${lat},${lon});way["amenity"="charging_station"](around:${radiusMeters},${lat},${lon}););out center;`;
-
-          fetch('https://overpass-api.de/api/interpreter', {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain; charset=utf-8' },
-            body: overpassQuery
-          })
-          .then(res => res.json())
-          .then(osmData => {
-            let stations = (osmData.elements && osmData.elements.length > 0)
-              ? osmData.elements.map(e => ({
-                  lat: e.lat || (e.center ? e.center.lat : null),
-                  lon: e.lon || (e.center ? e.center.lon : null),
-                  name: (e.tags && (e.tags.name || e.tags.brand || e.tags.operator)) || "Stasiun SPKLU",
-                  operator: (e.tags && e.tags.operator) || "Public SPKLU"
-                }))
-              : fallbackStations;
-
-            setTimeout(() => {
-              renderStationMarkers(lat, lon, address, radKm, stations);
-            }, 1200);
-          })
-          .catch(() => {
-            setTimeout(() => {
-              renderStationMarkers(lat, lon, address, radKm, fallbackStations);
-            }, 1200);
-          });
-        })
-        .catch(() => {
-          stopRadarSweepAnimation();
-          btnRun.innerText = "Mulai Pemindaian Radar";
-          btnRun.disabled = false;
-        });
-    });
-  }
 }
 
 function initTcsChatbot() {
@@ -872,42 +526,15 @@ function initTcsChatbot() {
 
 function loadCdnDependencies(callback) {
   let chartNeeded = typeof Chart === 'undefined';
-  let leafletNeeded = typeof L === 'undefined';
-
-  if (!chartNeeded && !leafletNeeded) {
+  if (!chartNeeded) {
     if (callback) callback();
     return;
   }
 
-  let loaded = 0;
-  let total = (chartNeeded ? 1 : 0) + (leafletNeeded ? 1 : 0);
-
-  function checkDone() {
-    loaded++;
-    if (loaded >= total && callback) callback();
-  }
-
-  if (chartNeeded) {
-    const s1 = document.createElement('script');
-    s1.src = 'https://cdn.jsdelivr.net/npm/chart.js';
-    s1.onload = checkDone;
-    s1.onerror = checkDone;
-    document.head.appendChild(s1);
-  }
-
-  if (leafletNeeded) {
-    if (!document.querySelector('link[href*="leaflet"]')) {
-      const l1 = document.createElement('link');
-      l1.rel = 'stylesheet';
-      l1.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
-      document.head.appendChild(l1);
-    }
-    const s2 = document.createElement('script');
-    s2.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
-    s2.onload = checkDone;
-    s2.onerror = checkDone;
-    document.head.appendChild(s2);
-  }
+  const s1 = document.createElement('script');
+  s1.src = 'https://cdn.jsdelivr.net/npm/chart.js';
+  s1.onload = () => { if (callback) callback(); };
+  document.head.appendChild(s1);
 }
 
 function startSpkluApp() {
@@ -917,7 +544,6 @@ function startSpkluApp() {
   initRevenueCounter();
   initCharts();
   initSimulator();
-  initFeasibilityScanner();
   initTcsChatbot();
 }
 

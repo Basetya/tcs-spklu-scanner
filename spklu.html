@@ -15,8 +15,8 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-  <!-- Injeksi CSS SPKLU -->
-  <?!= include('SpkluCSS'); ?>
+  <!-- Injeksi CSS Stylesheet -->
+  <?!= include('CSS'); ?>
 
   <script>
     window.TCS_GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyShEEFSwaLqZY-aG8msDmTt_iVdun2j6Q4kT7AQhHXu434g-4V89kI3oLLZ26FdxMV/exec";
@@ -28,7 +28,7 @@
 
   <script>
     if (!window.location.hostname.includes('google')) {
-      fetch('SpkluCSS.html')
+      fetch('CSS.html')
         .then(response => response.text())
         .then(html => {
           const parser = new DOMParser();
@@ -39,7 +39,7 @@
           if (fouc) fouc.remove();
         })
         .catch(err => {
-          console.error('Failed to load local CSS fallback:', err);
+          console.error('Failed to load CSS fallback:', err);
           const fouc = document.getElementById('fouc-style');
           if (fouc) fouc.remove();
         });
@@ -80,7 +80,6 @@
           <li><a href="#trust" class="nav-link">Kredibilitas</a></li>
           <li><a href="#scheme" class="nav-link">Skema Bisnis</a></li>
           <li><a href="#simulator" class="nav-link">Simulator ROI</a></li>
-          <li><a href="#scanner" class="nav-link">Radar Feasibility</a></li>
           <li><a href="#analysis" class="nav-link">Analisis Pasar</a></li>
           <li><a href="#proposal" class="nav-link">Proposal & Lahan</a></li>
           <li><a href="index.html" class="nav-link nav-btn">Hubungi Kami</a></li>
@@ -125,7 +124,7 @@
         <div class="hero-sphere">
           <div class="hero-sphere-content">
             <span class="hero-sphere-num">100%</span>
-            <span class="hero-sphere-title">Autopilot</span>
+            <span class="hero-sphere-title" style="font-size:32px; font-weight:800; font-family:'Outfit'; color:#00e575; display:block;">Autopilot</span>
             <span class="hero-sphere-text">Managed by PT TCS</span>
           </div>
         </div>
@@ -136,112 +135,69 @@
   <!-- LIVE REVENUE BANNER -->
   <section style="position: relative; z-index: 10; margin-top: -40px; padding: 0 20px;">
     <div class="container">
-      <div class="glass-card revenue-card">
-        <span class="live-revenue-label">⚡ Live Net Revenue SPKLU PT TCS Nasional (Real-Time)</span>
-        <h2 id="live-revenue-val">Rp 1.482.900.000</h2>
-        <p style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;">
-          Setiap detikan menyimulasikan akumulasi transaksi pengisian daya kendaraan listrik aktif di jaringan SPKLU PT TCS.
+      <div class="glass-card revenue-card" style="text-align: center; max-width: 900px; margin: 0 auto; padding: 30px;">
+        <span style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--primary-teal); font-weight: 800; display: block; margin-bottom: 8px;">⚡ Live Net Revenue SPKLU PT TCS Nasional (Real-Time)</span>
+        <h2 id="live-revenue-val" style="font-size: 42px; font-weight: 800; font-family: 'Outfit'; color: #00e575;">Rp 1.482.900.000</h2>
+        <p style="font-size: 12px; color: var(--text-secondary); margin-top: 6px;">
+          Simulasi akumulasi transaksi pengisian daya aktif di jaringan SPKLU PT TCS.
         </p>
       </div>
     </div>
   </section>
 
   <!-- KREDIBILITAS -->
-  <section class="trust-section" id="trust">
+  <section class="section" id="trust" style="background-color: var(--bg-surface);">
     <div class="container">
-      <div class="trust-intro">
+      <div class="section-header">
         <span class="section-tag">Mengapa Bermitra dengan PT TCS?</span>
-        <h2 class="trust-intro-title">Didukung oleh Infrastruktur Kontraktor MEP Nasional</h2>
-        <p class="trust-intro-desc">
-          Membangun bisnis SPKLU membutuhkan keahlian mekanikal dan elektrikal tingkat tinggi agar aman dan memenuhi regulasi pemerintah. Sebagai kontraktor MEP nasional terpercaya, PT TCS menjamin keandalan teknis 100%.
+        <h2 class="section-title">Didukung oleh Infrastruktur Kontraktor MEP Nasional</h2>
+        <p class="section-desc">
+          Membangun bisnis SPKLU membutuhkan keahlian mekanikal dan elektrikal tingkat tinggi agar aman dan memenuhi regulasi pemerintah. PT TCS menjamin keandalan teknis 100%.
         </p>
       </div>
 
       <div class="grid-3">
-        <div class="glass-card trust-card">
-          <div class="trust-icon-box">⚡</div>
-          <h3 class="trust-card-title">Kontraktor MEP Nasional</h3>
-          <p class="trust-card-desc">Berpengalaman merancang dan membangun proyek infrastruktur vital berskala besar untuk industri farmasi, manufaktur, dan gedung bertingkat.</p>
+        <div class="glass-card">
+          <h3 style="font-size: 18px; color: #fff; margin-bottom: 8px;">Kontraktor MEP Nasional</h3>
+          <p style="font-size: 13px; color: var(--text-secondary);">Berpengalaman merancang dan membangun proyek infrastruktur vital berskala besar untuk industri farmasi, manufaktur, dan gedung bertingkat.</p>
         </div>
-        <div class="glass-card trust-card">
-          <div class="trust-icon-box">🛡️</div>
-          <h3 class="trust-card-title">Insinyur Ahli & Berlisensi</h3>
-          <p class="trust-card-desc">Instalasi kelistrikan daya tinggi SPKLU (sistem gardu, proteksi arus pendek, dan sistem kontrol cerdas) dikerjakan oleh tim insinyur bersertifikat resmi.</p>
+        <div class="glass-card">
+          <h3 style="font-size: 18px; color: #fff; margin-bottom: 8px;">Insinyur Ahli & Berlisensi</h3>
+          <p style="font-size: 13px; color: var(--text-secondary);">Instalasi kelistrikan daya tinggi SPKLU dikerjakan oleh tim insinyur bersertifikat resmi PUIL dan ESDM.</p>
         </div>
-        <div class="glass-card trust-card">
-          <div class="trust-icon-box">🤝</div>
-          <h3 class="trust-card-title">Mitra Industri Terkemuka</h3>
-          <p class="trust-card-desc">Dipercaya oleh berbagai korporasi multinasional untuk pemeliharaan sistem kelistrikan berstandar keselamatan tinggi.</p>
+        <div class="glass-card">
+          <h3 style="font-size: 18px; color: #fff; margin-bottom: 8px;">Mitra Industri Terkemuka</h3>
+          <p style="font-size: 13px; color: var(--text-secondary);">Dipercaya oleh puluhan korporasi multinasional untuk infrastruktur vital dan ketahanan operasional.</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- SKEMA KERJA SAMA -->
-  <section class="section scheme-section" id="scheme">
+  <section class="section" id="scheme">
     <div class="container">
       <div class="section-header">
         <span class="section-tag">Skema Kerja Sama</span>
         <h2 class="section-title">Kolaborasi Transparan & Saling Menguntungkan</h2>
-        <p class="section-desc">Kami membagi tanggung jawab kerja sama secara berimbang guna mempercepat terwujudnya stasiun pengisian daya dengan manajemen aset profesional.</p>
+        <p class="section-desc">Kami membagi tanggung jawab kerja sama secara berimbang guna mempercepat pengoperasian stasiun pengisian daya dengan manajemen profesional.</p>
       </div>
 
       <div class="grid-2">
         <div class="glass-card">
-          <h3 class="scheme-column-title investor">
-            <span class="bullet"></span> Kewajiban Mitra Investor
-          </h3>
-          <ul class="scheme-list">
-            <li class="scheme-item">
-              <span class="scheme-num">1</span>
-              <div>
-                <h4 class="scheme-item-title">Lahan Strategis</h4>
-                <p class="scheme-item-desc">Menyediakan lokasi berukuran minimal muat 2-4 mobil di tepi jalan raya utama, pusat belanja, rest area, atau perkantoran.</p>
-              </div>
-            </li>
-            <li class="scheme-item">
-              <span class="scheme-num">2</span>
-              <div>
-                <h4 class="scheme-item-title">Tanah Clean & Clear</h4>
-                <p class="scheme-item-desc">Menjamin status kepemilikan tanah legal (SHM/HGB) dan bebas dari sengketa/permasalahan hukum.</p>
-              </div>
-            </li>
-            <li class="scheme-item">
-              <span class="scheme-num">3</span>
-              <div>
-                <h4 class="scheme-item-title">Investasi Sipil Awal</h4>
-                <p class="scheme-item-desc">Menyediakan modal dasar untuk pekerjaan sipil penunjang lokasi seperti pembuatan kanopi, marka jalan parkir, dan pos.</p>
-              </div>
-            </li>
+          <h3 style="font-size: 20px; color: var(--electric-amber); margin-bottom: 16px;">Kewajiban Mitra Investor</h3>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 14px;">
+            <li><strong>1. Lahan Strategis:</strong> Minimal muat 2-4 mobil di area publik/komersial.</li>
+            <li><strong>2. Status Clean & Clear:</strong> Tanah legal bebas sengketa (SHM/HGB).</li>
+            <li><strong>3. Investasi Sipil Awal:</strong> Persiapan dasar kanopi & lantai parkir.</li>
           </ul>
         </div>
 
         <div class="glass-card">
-          <h3 class="scheme-column-title tcs">
-            <span class="bullet"></span> Kewajiban PT TCS (Kontraktor)
-          </h3>
-          <ul class="scheme-list">
-            <li class="scheme-item">
-              <span class="scheme-num">1</span>
-              <div>
-                <h4 class="scheme-item-title">Penyediaan Mesin Charger</h4>
-                <p class="scheme-item-desc">Menyediakan perangkat mesin charger SPKLU berteknologi tinggi (tipe AC charging maupun DC Fast Charging).</p>
-              </div>
-            </li>
-            <li class="scheme-item">
-              <span class="scheme-num">2</span>
-              <div>
-                <h4 class="scheme-item-title">Pemasangan & Sistem Pembayaran</h4>
-                <p class="scheme-item-desc">Pekerjaan fisik kelistrikan, integrasi gateway pembayaran otomatis (QRIS/E-Wallet), dan aplikasi monitoring.</p>
-              </div>
-            </li>
-            <li class="scheme-item">
-              <span class="scheme-num">3</span>
-              <div>
-                <h4 class="scheme-item-title">Perizinan & Legalitas Lengkap</h4>
-                <p class="scheme-item-desc">Mengurus seluruh regulasi perizinan operasional SPKLU ke Kementerian ESDM dan PLN hingga siap beroperasi.</p>
-              </div>
-            </li>
+          <h3 style="font-size: 20px; color: var(--primary-teal); margin-bottom: 16px;">Kewajiban PT TCS</h3>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 14px;">
+            <li><strong>1. Unit Charger:</strong> Pengadaan mesin charger AC/DC Fast Charging.</li>
+            <li><strong>2. Instalasi & Integrasi:</strong> Pengerjaan MEP & payment gateway otomatis.</li>
+            <li><strong>3. Perizinan Penuh:</strong> Pengurusan izin SLO & integrasi PLN hulu-hilir.</li>
           </ul>
         </div>
       </div>
@@ -249,274 +205,181 @@
   </section>
 
   <!-- SIMULATOR ROI -->
-  <section class="section simulator-section" id="simulator">
+  <section class="section" id="simulator" style="background-color: var(--bg-surface);">
     <div class="container">
       <div class="section-header">
         <span class="section-tag">Simulator Finansial</span>
         <h2 class="section-title">Simulator Arus Kas & Kelayakan Finansial</h2>
-        <p class="section-desc">Atur skenario mesin pengisi daya dan jumlah utilisasi transaksi harian untuk melihat proyeksi akumulasi arus kas, nilai pengembalian investasi (Payback Period), serta perhitungan kelayakan finansial.</p>
+        <p class="section-desc">Sesuaikan tipe mesin dan estimasi sesi per hari untuk melihat proyeksi titik impas (Break-Even Point) dan arus kas kumulatif.</p>
       </div>
 
-      <div class="glass-card simulator-card" style="padding: 40px;">
-        <div class="grid-2" style="align-items: stretch; gap: 40px;">
+      <div class="glass-card" style="padding: 35px;">
+        <div class="grid-2" style="align-items: stretch; gap: 35px;">
           
-          <div class="simulator-controls" style="display: flex; flex-direction: column; justify-content: space-between; gap: 24px;">
-            <div class="control-group">
-              <label class="form-label" style="text-transform: uppercase; font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">PILIH TIPE MESIN & SKENARIO INVESTASI</label>
-              <div class="scenario-buttons" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                <button id="scenACBtn" class="btn btn-secondary scenario-btn active" style="flex-direction: column; border-radius: var(--border-radius-md); padding: 18px 10px; border-width: 2px; align-items: center; width: 100%; border-color: var(--primary-lime);">
-                  <strong style="font-size: 15px; color: #fff;">Tipe AC (22 kW)</strong>
-                  <span style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">Capex: Rp 150 Juta</span>
+          <div style="display: flex; flex-direction: column; justify-content: space-between; gap: 20px;">
+            <div>
+              <label class="form-label" style="text-transform: uppercase; font-size: 11px; color: var(--text-secondary); margin-bottom: 10px;">PILIH TIPE MESIN</label>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <button id="scenACBtn" type="button" class="btn btn-secondary active" style="flex-direction: column; padding: 14px; border-color: var(--primary-teal); background: rgba(0, 242, 254, 0.08);">
+                  <strong style="font-size: 14px; color: #fff;">Tipe AC (22 kW)</strong>
+                  <span style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Capex: Rp 150 Juta</span>
                 </button>
-                <button id="scenDCBtn" class="btn btn-secondary scenario-btn" style="flex-direction: column; border-radius: var(--border-radius-md); padding: 18px 10px; border-width: 1px; align-items: center; width: 100%;">
-                  <strong style="font-size: 15px; color: #fff;">Tipe DC (50 kW)</strong>
-                  <span style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">Capex: Rp 850 Juta</span>
+                <button id="scenDCBtn" type="button" class="btn btn-secondary" style="flex-direction: column; padding: 14px;">
+                  <strong style="font-size: 14px; color: #fff;">Tipe DC (50 kW)</strong>
+                  <span style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Capex: Rp 850 Juta</span>
                 </button>
               </div>
             </div>
 
-            <div class="control-group">
-              <div class="slider-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                <label class="form-label" style="text-transform: uppercase; font-size: 12px; color: var(--text-secondary); margin: 0;">JUMLAH TRANSAKSI (SESI / HARI)</label>
-                <span id="sessionValue" style="background: rgba(0, 229, 117, 0.1); border: 1px solid rgba(0, 229, 117, 0.2); color: var(--primary-lime); font-size: 12px; font-weight: 800; padding: 4px 12px; border-radius: 50px;">5 Sesi</span>
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <label class="form-label" style="text-transform: uppercase; font-size: 11px; color: var(--text-secondary); margin: 0;">JUMLAH TRANSAKSI / HARI</label>
+                <span id="sessionValue" style="background: rgba(0, 242, 254, 0.1); color: var(--primary-teal); font-size: 12px; font-weight: 800; padding: 3px 10px; border-radius: 20px;">5 Sesi</span>
               </div>
-              <input id="sessionSlider" type="range" min="2" max="8" step="1" value="5" class="form-input slider-input" style="padding: 0; height: 8px; cursor: pointer;">
-              <div class="slider-range-labels" style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); font-weight: 600; margin-top: 8px;">
-                <span id="sliderMinLabel">2 Sesi (Konservatif)</span>
-                <span id="sliderMaxLabel">8 Sesi (Maksimal Nozzle AC)</span>
+              <input id="sessionSlider" type="range" min="2" max="8" step="1" value="5" class="form-input" style="padding: 0; height: 8px; cursor: pointer;">
+              <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted); margin-top: 6px;">
+                <span id="sliderMinLabel">2 Sesi</span>
+                <span id="sliderMaxLabel">8 Sesi</span>
               </div>
             </div>
 
-            <div class="financial-summary" style="background: rgba(3, 7, 18, 0.4); border: 1px solid var(--border-card); border-radius: var(--border-radius-md); padding: 20px; display: flex; flex-direction: column; gap: 14px;">
-              <div class="summary-row" style="display: flex; justify-content: space-between; align-items: center; font-size: 14px;">
-                <span style="color: var(--text-secondary); font-weight: 500;">Estimasi CAPEX Awal</span>
-                <span id="capexValue" style="color: #fff; font-weight: 700; font-family: 'Outfit';">Rp 150.000.000</span>
+            <div style="background: rgba(3, 7, 18, 0.4); border: 1px solid var(--border-card); border-radius: var(--border-radius-md); padding: 16px; display: flex; flex-direction: column; gap: 10px;">
+              <div style="display: flex; justify-content: space-between; font-size: 13px;">
+                <span style="color: var(--text-secondary);">CAPEX Investasi</span>
+                <span id="capexValue" style="color: #fff; font-weight: 700;">Rp 150.000.000</span>
               </div>
-              <div class="summary-row" style="display: flex; justify-content: space-between; align-items: center; font-size: 14px;">
-                <span style="color: var(--text-secondary); font-weight: 500;">Pendapatan Kotor Bulanan</span>
-                <span id="grossMonthly" style="color: #fff; font-weight: 700; font-family: 'Outfit';">Rp 5.250.000</span>
+              <div style="display: flex; justify-content: space-between; font-size: 13px;">
+                <span style="color: var(--text-secondary);">Omzet Kotor / Bulan</span>
+                <span id="grossMonthly" style="color: #fff; font-weight: 700;">Rp 5.250.000</span>
               </div>
-              <div class="summary-row border-highlight" style="display: flex; justify-content: space-between; align-items: center; font-size: 14px; border-top: 1px dashed var(--border-card); padding-top: 14px;">
-                <span style="color: var(--primary-lime); font-weight: 800;">Payback Period (PBP)</span>
-                <span id="pbpValue" style="color: var(--primary-lime); font-weight: 900; font-size: 20px; font-family: 'Outfit';">2.8 Tahun</span>
+              <div style="display: flex; justify-content: space-between; font-size: 14px; border-top: 1px dashed var(--border-card); padding-top: 10px;">
+                <span style="color: var(--primary-teal); font-weight: 800;">Payback Period (BEP)</span>
+                <span id="pbpValue" style="color: var(--primary-teal); font-weight: 900; font-size: 18px;">2.8 Tahun</span>
               </div>
             </div>
           </div>
 
-          <div class="simulator-chart-pane" style="display: flex; flex-direction: column; justify-content: space-between; gap: 15px;">
-            <div class="chart-header-pane">
+          <div style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div style="margin-bottom: 10px;">
               <span style="color: var(--primary-teal); font-size: 11px; font-weight: 800; text-transform: uppercase;">Proyeksi Saldo Kas</span>
-              <h4 style="font-size: 18px; color: #fff; font-family: 'Outfit'; margin-top: 4px;">Visualisasi Arus Kas Kumulatif (5 Tahun - Juta Rp)</h4>
+              <h4 style="font-size: 16px; color: #fff; margin-top: 2px;">Visualisasi Arus Kas Kumulatif (5 Tahun)</h4>
             </div>
-            <div class="simulator-chart-container" style="position: relative; width: 100%; height: 260px;">
+            <div style="position: relative; width: 100%; height: 240px;">
               <canvas id="roiChartCanvas"></canvas>
             </div>
-            <div class="simulator-disclaimer" style="font-size: 11px; color: var(--text-muted); line-height: 1.5; border-top: 1px solid var(--border-card); padding-top: 12px;">
-              💡 <em>Formula dihitung menggunakan standar kelayakan finansial: NPV & IRR diskonto 10% dengan O&M 15% dipotong dari omzet harian otomatis.</em>
+            <div style="font-size: 10px; color: var(--text-muted); border-top: 1px solid var(--border-card); padding-top: 8px; margin-top: 8px;">
+              💡 <em>Perhitungan estimasi berbasis O&M 15% dari omzet harian.</em>
             </div>
           </div>
 
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- RADAR FEASIBILITY SCANNER -->
-  <section class="section scanner-section" id="scanner" style="background: rgba(3, 7, 18, 0.4); border-top: 1px solid var(--border-card); border-bottom: 1px solid var(--border-card);">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-tag" style="color: var(--primary-lime);">Radar Feasibility</span>
-        <h2 class="section-title">Pemindai Kelayakan Properti (Radar Feasibility Scanner)</h2>
-        <p class="section-desc">
-          Masukkan alamat atau titik koordinat properti Anda untuk meluncurkan audit kelayakan wilayah secara real-time. Sistem kami akan memindai kepadatan kompetitor SPKLU dan mengukur potensi pasar di sekitar lahan Anda.
-        </p>
-      </div>
-
-      <div class="glass-card simulator-card" style="padding: 40px; position: relative; z-index: 2;">
-        <div class="grid-2" style="align-items: stretch; gap: 40px;">
-          
-          <div class="scanner-controls" style="display: flex; flex-direction: column; justify-content: space-between; gap: 20px;">
-            <div class="control-group">
-              <label class="form-label" style="text-transform: uppercase; font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">LOKASI LAHAN ATAU KOORDINAT GPS</label>
-              <div style="position: relative;">
-                <input type="text" id="spScanInput" class="form-input" style="width: 100%; padding: 14px 16px 14px 42px; border-radius: var(--border-radius-md); background: rgba(3, 7, 18, 0.6); border: 1px solid var(--border-card); color: #fff; font-size: 13px;" placeholder="Masukkan alamat lengkap atau link Google Maps lahan Anda...">
-                <span style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); font-size: 16px; color: var(--primary-lime);">📍</span>
-              </div>
-            </div>
-
-            <div class="control-group">
-              <div class="slider-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <label class="form-label" style="text-transform: uppercase; font-size: 11px; color: var(--text-secondary); margin: 0;">RADIUS PEMINDAIAN RADAR</label>
-                <span id="spRadiusValue" style="background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.2); color: #c084fc; font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 50px;">3.0 KM</span>
-              </div>
-              <input id="spRadiusSlider" type="range" min="1.0" max="5.0" step="0.5" value="3.0" class="form-input slider-input" style="padding: 0; height: 6px; cursor: pointer;">
-              <div class="slider-range-labels" style="display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted); font-weight: 600; margin-top: 6px;">
-                <span>1.0 KM</span>
-                <span>5.0 KM</span>
-              </div>
-            </div>
-
-            <div class="control-group">
-              <button type="button" id="spScanBtnRun" class="btn btn-primary" style="width: 100%; padding: 14px; font-weight: 700; border-radius: var(--border-radius-md); cursor: pointer;">Mulai Pemindaian Radar</button>
-            </div>
-
-            <div class="scanner-console-panel" style="background: rgba(3, 7, 18, 0.7); border: 1px solid var(--border-card); border-radius: var(--border-radius-md); padding: 16px; min-height: 110px;">
-              <div style="font-size: 10px; text-transform: uppercase; color: var(--text-muted); font-weight: 800; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 6px; margin-bottom: 8px;">TCS Radar Audit v1.0</div>
-              <div id="spScanLogConsole" style="font-family: 'Courier New', monospace; font-size: 11px; color: var(--text-secondary); line-height: 1.5; max-height: 90px; overflow-y: auto;">
-                <div style="color: var(--primary-lime); font-weight: bold;">> [SYS] READY. MASUKKAN ALAMAT & KLIK PINDAI.</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="scanner-radar-pane" style="background: rgba(3, 7, 18, 0.5); border: 1px solid var(--border-card); border-radius: var(--border-radius-lg); position: relative; min-height: 350px; overflow: hidden;">
-            <div id="spRadarMap" style="width: 100%; height: 100%; min-height: 350px; background: #030712; z-index: 1;"></div>
-            <canvas id="spRadarSweepCanvas" style="position: absolute; inset: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none; display: none;"></canvas>
-
-            <!-- SINGLE CLEAN LEGEND -->
-            <div style="position: absolute; right: 15px; top: 15px; display: flex; flex-direction: column; gap: 6px; font-size: 10px; font-weight: 700; font-family: 'Plus Jakarta Sans', sans-serif; color: #fff; background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(255,255,255,0.1); padding: 8px 14px; border-radius: 8px; backdrop-filter: blur(8px); z-index: 20;">
-              <span style="display: flex; align-items: center; gap: 8px;">
-                <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #ef4444; box-shadow: 0 0 8px #ef4444; border: 1.5px solid #fff;"></span>
-                SPKLU Terdekat (Google Maps EV)
-              </span>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- SCORE RESULT CARD -->
-        <div id="spScannerScoreCard" style="display: none; margin-top: 30px; padding: 24px; background: rgba(0, 229, 117, 0.05); border: 1.5px solid var(--primary-lime); border-radius: var(--border-radius-lg);">
-          <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: center; justify-content: space-between;">
-            <div style="display: flex; align-items: center; gap: 18px;">
-              <div style="width: 65px; height: 65px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: rgba(0,229,117,0.1); border: 3px solid var(--primary-lime);">
-                <span id="spFeasibilityScoreText" style="font-family: 'Outfit'; font-size: 20px; font-weight: 900; color: #fff;">94%</span>
-              </div>
-              <div>
-                <span style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--text-secondary);">Skor Kelayakan Lahan:</span>
-                <h4 id="spFeasibilityScoreStatus" style="font-size: 18px; font-weight: 900; color: var(--primary-lime); margin-top: 2px;">SANGAT LAYAK (HI-POTENTIAL)</h4>
-              </div>
-            </div>
-            <a href="#proposal" class="btn btn-primary" style="padding: 12px 24px; font-size: 13px; font-weight: 800;">Klaim Kuota Wilayah Sekarang 🚀</a>
-          </div>
-          <div id="spFeasibilityScoreRec" style="border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 14px; margin-top: 16px; font-size: 13px; color: var(--text-secondary); line-height: 1.6;"></div>
-        </div>
-
       </div>
     </div>
   </section>
 
   <!-- ANALISIS PASAR -->
-  <section class="section analysis-section" id="analysis">
+  <section class="section" id="analysis">
     <div class="container">
       <div class="section-header">
-        <span class="section-tag">Analisis Pasar & Keuangan</span>
-        <h2 class="section-title">Mengapa Sekarang Waktu Terbaik untuk Berinvestasi?</h2>
-        <p class="section-desc">Data berikut menggambarkan lonjakan pertumbuhan adopsi mobil listrik di Indonesia serta simulasi titik balik modal (ROI) proyek kemitraan secara konservatif.</p>
+        <span class="section-tag">Analisis Pasar</span>
+        <h2 class="section-title">Mengapa Sekarang Waktu Terbaik?</h2>
+        <p class="section-desc">Lonjakan pertumbuhan adopsi mobil listrik di Indonesia membuka peluang pendapatan pasif jangka panjang.</p>
       </div>
 
-      <div class="grid-3" style="margin-bottom: 50px;">
-        <div class="glass-card chart-card">
-          <div class="chart-card-header">
-            <span class="chart-tag">Ribu Unit</span>
-            <h3 class="chart-title">Pertumbuhan Populasi EV Nasional</h3>
-          </div>
-          <div class="chart-canvas-container" style="height: 240px; position: relative;">
+      <div class="grid-3">
+        <div class="glass-card">
+          <h3 style="font-size: 16px; color: #fff; margin-bottom: 12px;">Populasi EV Nasional</h3>
+          <div style="height: 200px; position: relative;">
             <canvas id="evGrowthChart"></canvas>
           </div>
-          <p class="chart-footer-desc">Adopsi mobil listrik nasional meningkat secara eksponensial menciptakan permintaan ruang pengisian daya yang kritis.</p>
         </div>
-
-        <div class="glass-card chart-card">
-          <div class="chart-card-header">
-            <span class="chart-tag">Persentase</span>
-            <h3 class="chart-title">Distribusi Tugas & Modal Kemitraan</h3>
-          </div>
-          <div class="chart-canvas-container" style="height: 240px; position: relative;">
+        <div class="glass-card">
+          <h3 style="font-size: 16px; color: #fff; margin-bottom: 12px;">Bagi Beban Kemitraan</h3>
+          <div style="height: 200px; position: relative;">
             <canvas id="responsibilityChart"></canvas>
           </div>
-          <p class="chart-footer-desc">Skema bagi hasil berimbang dengan pemisahan beban modal infrastruktur berat agar investor bebas pusing operasional.</p>
         </div>
-
-        <div class="glass-card chart-card">
-          <div class="chart-card-header">
-            <span class="chart-tag">Juta Rupiah</span>
-            <h3 class="chart-title">Proyeksi Aliran Kas Kumulatif 5 Tahun</h3>
-          </div>
-          <div class="chart-canvas-container" style="height: 240px; position: relative;">
+        <div class="glass-card">
+          <h3 style="font-size: 16px; color: #fff; margin-bottom: 12px;">Arus Kas Pasif (5 Tahun)</h3>
+          <div style="height: 200px; position: relative;">
             <canvas id="roiChart"></canvas>
           </div>
-          <p class="chart-footer-desc">Berdasarkan survei kelayakan lalu lintas, modal awal (Sipil/Lahan) diproyeksikan Break-Even Point (BEP) pada tahun ke-3.</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- FORM PENGAJUAN LAHAN -->
-  <section class="section form-section" id="proposal">
+  <section class="section" id="proposal" style="background-color: var(--bg-surface);">
     <div class="container grid-2">
-      <div class="form-visual-side">
-        <span class="form-visual-badge">💰 Passive Income Real</span>
-        <h2 class="form-visual-title">Unduh Proposal & Ajukan Lahan Anda Hari Ini</h2>
-        <p class="form-visual-desc">Setelah Anda mengisi formulir pengajuan, sistem kami akan langsung mengirimkan Proposal Kemitraan SPKLU komprehensif ke email Anda. Tim analis kelayakan lokasi kami akan meninjau titik koordinat lahan Anda dalam 1x24 jam.</p>
-        <div class="benefit-pill"><span>✅</span> Gratis Survei & Analisis Kelayakan Lalu Lintas EV</div>
-        <div class="benefit-pill"><span>✅</span> Pembagian Bagi Hasil Ditransfer Otomatis Bulanan</div>
-        <div class="benefit-pill"><span>✅</span> Aplikasi Pemantau Pendapatan Real-time (SaaS)</div>
+      <div>
+        <span class="section-tag">💰 Peluang Usaha SPKLU</span>
+        <h2 class="section-title" style="font-size: 32px; text-align: left;">Unduh Proposal & Ajukan Lahan Anda</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 20px; font-size: 14px;">
+          Isi formulir untuk mendapatkan proposal resmi. Tim analis kami akan meninjau koordinat lahan Anda dalam 1x24 jam kerja.
+        </p>
+        <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px;">
+          <div>✅ Gratis Survei & Analisis Kelayakan Lalu Lintas EV</div>
+          <div>✅ Bagi Hasil Bersih Transparan Bulanan</div>
+          <div>✅ Akses Aplikasi Monitoring Transaksi (SaaS)</div>
+        </div>
       </div>
 
-      <div class="glass-card spklu-form-card">
+      <div class="glass-card" style="padding: 30px;">
         <form id="spklu-lead-form">
-          <h3 style="margin-bottom: 24px; text-align: center; color: #fff;">Formulir Pengajuan Mitra SPKLU</h3>
-          <div class="form-group">
-            <label class="form-label" for="lead-name">Nama Lengkap Investor *</label>
-            <input type="text" id="lead-name" class="form-input" placeholder="Contoh: Hermawan Wijaya" required>
+          <h3 style="margin-bottom: 20px; text-align: center; color: #fff; font-size: 18px;">Formulir Pengajuan Lahan</h3>
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label class="form-label" for="lead-name">Nama Lengkap *</label>
+            <input type="text" id="lead-name" class="form-input-text" placeholder="Contoh: Budi Santoso" required>
           </div>
-          <div class="form-grid-2">
-            <div class="form-group">
-              <label class="form-label" for="lead-email">Alamat Email Aktif *</label>
-              <input type="email" id="lead-email" class="form-input" placeholder="investor@tcs.com" required>
+          <div class="grid-2" style="gap: 12px; margin-bottom: 14px;">
+            <div>
+              <label class="form-label" for="lead-email">Email Aktif *</label>
+              <input type="email" id="lead-email" class="form-input-text" placeholder="email@domain.com" required>
             </div>
-            <div class="form-group">
-              <label class="form-label" for="lead-phone">No. WhatsApp Aktif *</label>
-              <input type="tel" id="lead-phone" class="form-input" placeholder="0812345678" required>
+            <div>
+              <label class="form-label" for="lead-phone">WhatsApp *</label>
+              <input type="tel" id="lead-phone" class="form-input-text" placeholder="0812345678" required>
             </div>
           </div>
-          <div class="form-group">
-            <label class="form-label" for="lead-address">Alamat Lengkap & Koordinat Google Maps Lahan *</label>
-            <textarea id="lead-address" class="form-input" placeholder="Contoh: Jl. Raya Sudirman No. 42 (Koordinat: -6.2088, 106.8456)" required></textarea>
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label class="form-label" for="lead-address">Alamat & Titik Koordinat Lahan *</label>
+            <textarea id="lead-address" class="form-input-text" style="min-height: 80px;" placeholder="Jl. Raya Utama No. 12 (Titik Google Maps)" required></textarea>
           </div>
-          <div class="form-group">
-            <label class="form-label" for="lead-notes">Keterangan Pendukung / Ukuran Lahan (Opsional)</label>
-            <textarea id="lead-notes" class="form-input" placeholder="Contoh: Lahan parkir ruko muat 4 mobil, daya 33 kVA..."></textarea>
+          <div class="form-group" style="margin-bottom: 18px;">
+            <label class="form-label" for="lead-notes">Catatan Tambahan (Opsional)</label>
+            <textarea id="lead-notes" class="form-input-text" style="min-height: 60px;" placeholder="Kapasitas parkir 4 mobil, daya 33 kVA..."></textarea>
           </div>
-          <button type="submit" class="btn btn-primary" style="width: 100%; border-radius: var(--border-radius-sm); margin-top: 10px;">
+          <button type="submit" class="btn btn-primary" style="width: 100%;">
             Unduh Proposal & Ajukan Lahan
           </button>
         </form>
 
-        <div class="form-loader" id="form-loader-pane" style="display: none; text-align: center; padding: 40px 20px;">
-          <h3 style="color:#fff; margin-bottom:10px;">Memproses Pengajuan Lahan...</h3>
-          <p style="color:var(--text-secondary); font-size:14px;">Kami sedang menyiapkan pendaftaran Anda.</p>
+        <div id="form-loader-pane" style="display: none; text-align: center; padding: 30px;">
+          <div class="spinner"></div>
+          <p style="color: var(--text-secondary); font-size: 13px;">Menyimpan data pengajuan Anda...</p>
         </div>
 
-        <div class="form-success-pane" id="form-success-pane" style="display: none; text-align: center; padding: 30px 10px;">
-          <h2 class="success-title" style="color: #00e575; font-size: 22px; margin-bottom: 12px;">Pengajuan Terkirim!</h2>
-          <p class="success-msg" id="success-msg-text" style="color: var(--text-secondary); font-size: 14px; margin-bottom: 24px;"></p>
-          <a href="#" id="success-wa-btn" class="btn btn-primary" target="_blank" style="background:#25d366;">Hubungi WA Sekarang</a>
+        <div id="form-success-pane" style="display: none; text-align: center; padding: 25px;">
+          <h3 style="color: #00e575; margin-bottom: 10px;">Pengajuan Terkirim!</h3>
+          <p id="success-msg-text" style="color: var(--text-secondary); font-size: 13px; margin-bottom: 20px;"></p>
+          <a href="#" id="success-wa-btn" class="btn btn-primary" target="_blank" style="background: #25d366;">Hubungi WA Sekarang</a>
         </div>
       </div>
     </div>
   </section>
 
   <!-- FOOTER -->
-  <footer class="main-footer">
-    <div class="footer-container">
-      <p class="footer-text">PT. Titis Cahaya Sejahtera &copy; 2020 - 2026. MEP Contractor & SPKLU Operator.</p>
-    </div>
+  <footer class="main-footer" style="padding: 40px 20px; text-align: center;">
+    <p style="font-size: 12px; color: var(--text-muted);">
+      PT. Titis Cahaya Sejahtera &copy; 2020 - 2026. MEP Contractor & SPKLU Operator.
+    </p>
   </footer>
 
-  <!-- FLOATING CHATBOT TIARA -->
-  <button id="tcsChatTrigger" class="float-spklu-badge" aria-label="Tanya AI SPKLU" style="border: none; cursor: pointer;">
-    <span>🤖</span>
-    <span>Tanya TIARA</span>
+  <!-- FLOATING CHATBOT WIDGET TIARA -->
+  <button id="tcsChatTrigger" class="float-spklu-badge" aria-label="Tanya AI SPKLU" style="border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
+    <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#00e575;"></span>
+    <span>Tanya TIARA 🤖</span>
   </button>
 
   <div id="tcsChatContainer" class="tcs-chat-window-container">
@@ -532,7 +395,7 @@
     </div>
     <div id="tcsChatMessages" class="tcs-chat-messages-area">
       <div class="tcs-chat-bubble bot">
-        Halo! Saya TIARA, AI Business Consultant dari PT TCS. Saya siap memandu Anda mengenai kemitraan SPKLU, estimasi ROI, dan kelayakan lahan. Ada yang ingin Anda diskusikan?
+        Halo! Saya TIARA, AI Business Consultant dari PT TCS. Saya siap memandu Anda seputar kemitraan SPKLU, perhitungan ROI, dan kesiapan lahan. Ada yang ingin Anda diskusikan?
       </div>
     </div>
     <div class="tcs-chat-input-area">
