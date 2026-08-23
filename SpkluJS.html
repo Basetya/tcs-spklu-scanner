@@ -2,7 +2,7 @@
 /**
  * PT. Titis Cahaya Sejahtera (TCS) - SPKLU Client Logic & Feasibility Radar
  * Platform: Google Apps Script Web App & Vercel Bridge
- * Engine: Dynamic DC/AC Slider, Realistic ESDM Surcharge Formula & Interactive Scanner
+ * Engine: Real OpenStreetMap Overpass EV Station Extraction & Dynamic Google Maps Bridge
  */
 
 function getEvDescription(evCount, lang) {
@@ -489,7 +489,7 @@ function initSimulator() {
 }
 
 /**
- * Radar Feasibility Scanner dengan Marker Interaktif, Reset Form & Link Rute EV Google Maps
+ * Radar Feasibility Scanner dengan Real OSM Overpass EV Station Extraction & Dynamic Reset
  */
 function initFeasibilityScanner() {
   if (typeof L === 'undefined') {
@@ -517,8 +517,19 @@ function initFeasibilityScanner() {
 
   const btnRun = document.getElementById('spScanBtnRun');
   const input = document.getElementById('spScanInput');
+  const radiusSlider = document.getElementById('spRadiusSlider');
+  const radiusValue = document.getElementById('spRadiusValue');
   const scoreCard = document.getElementById('spScannerScoreCard');
   const scoreRec = document.getElementById('spFeasibilityScoreRec');
+  const scoreText = document.getElementById('spFeasibilityScoreText');
+  const scoreStatus = document.getElementById('spFeasibilityScoreStatus');
+
+  if (radiusSlider && radiusValue) {
+    radiusSlider.addEventListener('input', () => {
+      const rad = parseFloat(radiusSlider.value) || 3.0;
+      radiusValue.innerText = rad.toFixed(1) + ' KM';
+    });
+  }
 
   if (btnRun && input) {
     btnRun.addEventListener('click', () => {
@@ -541,9 +552,13 @@ function initFeasibilityScanner() {
         return;
       }
 
-      btnRun.innerText = "Memindai...";
+      const radKm = radiusSlider ? parseFloat(radiusSlider.value) || 3.0 : 3.0;
+      const radiusMeters = radKm * 1000;
+
+      btnRun.innerText = "Memindai Data Real...";
       btnRun.disabled = true;
 
+      // 1. Geocoding Lokasi Target
       fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(address))
         .then(res => res.json())
         .then(data => {
@@ -557,53 +572,98 @@ function initFeasibilityScanner() {
           map.setView([lat, lon], 14);
           markerGroup.clearLayers();
 
-          const createDotIcon = (color) => L.divIcon({
+          const createIcon = (color) => L.divIcon({
             className: 'custom-dot',
-            html: `<span style="display:inline-block; width:12px; height:12px; border-radius:50%; background:${color}; box-shadow:0 0 10px ${color}; border: 2px solid #fff;"></span>`,
-            iconSize: [12, 12],
-            iconAnchor: [6, 6]
+            html: `<span style="display:inline-block; width:13px; height:13px; border-radius:50%; background:${color}; box-shadow:0 0 10px ${color}; border: 2px solid #fff;"></span>`,
+            iconSize: [13, 13],
+            iconAnchor: [6.5, 6.5]
           });
 
-          // 1. Properti Utama
-          L.marker([lat, lon], { icon: createDotIcon('#ffffff') }).addTo(markerGroup)
-            .bindPopup(`<b>📍 Lokasi Anda:</b><br>${address}`).openPopup();
+          // Pin Target Lokasi Lahan
+          L.marker([lat, lon], { icon: createIcon('#ffffff') }).addTo(markerGroup)
+            .bindPopup(`<b>📍 Lokasi Lahan Anda:</b><br>${address}`).openPopup();
 
-          // 2. Gardu PLN
-          L.marker([lat + 0.005, lon - 0.004], { icon: createDotIcon('#00f2fe') }).addTo(markerGroup)
-            .bindPopup(`<b>⚡ Gardu PLN Substation</b><br>Kapasitas Daya Cadangan: 197 kVA (Aman)`);
-
-          // 3. Kompetitor SPKLU
-          L.marker([lat - 0.006, lon + 0.005], { icon: createDotIcon('#ef4444') }).addTo(markerGroup)
-            .bindPopup(`<b>🚨 SPKLU Kompetitor</b><br>Jarak 1.2 KM`);
-
-          // 4. Commercial Hub / Rest Area
-          L.marker([lat + 0.004, lon + 0.006], { icon: createDotIcon('#00e575') }).addTo(markerGroup)
-            .bindPopup(`<b>🛍️ Commercial Hub / Mall</b><br>Trafik Pengunjung Tinggi`);
-
-          // 5. Radius EV Coverage (3 KM)
+          // Lingkaran Radius Pemindaian
           L.circle([lat, lon], {
-            color: '#a855f7',
-            fillColor: '#a855f7',
-            fillOpacity: 0.12,
-            radius: 3000,
+            color: '#00e575',
+            fillColor: '#00e575',
+            fillOpacity: 0.08,
+            radius: radiusMeters,
             weight: 2,
             dashArray: '5, 5'
           }).addTo(markerGroup);
 
-          if (scoreCard) scoreCard.style.display = 'block';
+          // 2. Query Data Real Stasiun SPKLU dari OpenStreetMap Overpass API
+          const overpassQuery = `[out:json][timeout:15];
+(
+  node["amenity"="charging_station"](around:${radiusMeters},${lat},${lon});
+  way["amenity"="charging_station"](around:${radiusMeters},${lat},${lon});
+  relation["amenity"="charging_station"](around:${radiusMeters},${lat},${lon});
+);
+out center;`;
 
-          // Link Buka Google Maps EV Mode
-          const gmapsEvUrl = `https://www.google.com/maps/search/spklu+terdekat/@${lat},${lon},14z`;
-          if (scoreRec) {
-            scoreRec.innerHTML = `Lokasi Anda berada di zona dengan densitas EV tinggi dan pasokan gardu PLN stabil.<br>
-              <a href="${gmapsEvUrl}" target="_blank" rel="noopener noreferrer" style="color:#00f2fe; font-weight:bold; text-decoration:underline; display:inline-block; margin-top:8px;">
-                🗺️ Buka Peta Rute SPKLU di Google Maps
-              </a>`;
-          }
+          fetch('https://overpass-api.de/api/interpreter', {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+            body: overpassQuery
+          })
+          .then(res => res.json())
+          .then(osmData => {
+            const stations = osmData.elements || [];
+            let spkluCount = 0;
 
-          window.tcsScannerState.isScanning = true;
-          btnRun.innerText = "Pindai Lokasi Baru 🔄";
-          btnRun.disabled = false;
+            stations.forEach(st => {
+              const stLat = st.lat || (st.center ? st.center.lat : null);
+              const stLon = st.lon || (st.center ? st.center.lon : null);
+              if (!stLat || !stLon) return;
+
+              spkluCount++;
+              const name = st.tags && (st.tags.name || st.tags.brand || st.tags.operator) ? (st.tags.name || st.tags.brand || st.tags.operator) : "Stasiun SPKLU EV";
+              const operator = st.tags && st.tags.operator ? `<br>Operator: ${st.tags.operator}` : "";
+
+              L.marker([stLat, stLon], { icon: createIcon('#ef4444') }).addTo(markerGroup)
+                .bindPopup(`<b>⚡ ${name}</b>${operator}<br><span style="color:#ef4444; font-size:10px; font-weight:bold;">SPKLU Real Terdeteksi</span>`);
+            });
+
+            // Hitung Skor Kelayakan
+            let score = 95 - (spkluCount * 4);
+            score = Math.max(65, Math.min(98, score));
+
+            if (scoreText) scoreText.innerText = score + '%';
+            if (scoreStatus) {
+              scoreStatus.innerText = score >= 85 ? "SANGAT LAYAK (HI-POTENTIAL)" : "LAYAK DENGAN CATATAN";
+              scoreStatus.style.color = score >= 85 ? "var(--primary-lime)" : "var(--electric-amber)";
+            }
+
+            // Google Maps Link (Mode Roda Empat EV Charging)
+            const gmapsEvUrl = `https://www.google.com/maps/search/SPKLU+charging+station/@${lat},${lon},14z`;
+            if (scoreRec) {
+              scoreRec.innerHTML = `Terdeteksi <b>${spkluCount} stasiun SPKLU nyata</b> dalam radius ${radKm.toFixed(1)} KM dari lokasi Anda.<br>
+                ${spkluCount <= 2 ? 'Persaingan sangat rendah, potensi monopoli trafik EV di zona ini sangat tinggi.' : 'Zona trafik EV aktif, peluang menangkap pasar komersial terbuka lebar.'}<br>
+                <a href="${gmapsEvUrl}" target="_blank" rel="noopener noreferrer" style="color:#00f2fe; font-weight:bold; text-decoration:underline; display:inline-block; margin-top:8px;">
+                  🗺️ Buka Peta Rute SPKLU di Google Maps
+                </a>`;
+            }
+
+            if (scoreCard) scoreCard.style.display = 'block';
+            window.tcsScannerState.isScanning = true;
+            btnRun.innerText = "Pindai Lokasi Baru 🔄";
+            btnRun.disabled = false;
+          })
+          .catch(() => {
+            // Fallback bila Overpass mengalami pembatasan jaringan
+            const gmapsEvUrl = `https://www.google.com/maps/search/SPKLU+charging+station/@${lat},${lon},14z`;
+            if (scoreRec) {
+              scoreRec.innerHTML = `Analisis kelayakan lokasi selesai.<br>
+                <a href="${gmapsEvUrl}" target="_blank" rel="noopener noreferrer" style="color:#00f2fe; font-weight:bold; text-decoration:underline; display:inline-block; margin-top:8px;">
+                  🗺️ Buka Peta Rute SPKLU di Google Maps
+                </a>`;
+            }
+            if (scoreCard) scoreCard.style.display = 'block';
+            window.tcsScannerState.isScanning = true;
+            btnRun.innerText = "Pindai Lokasi Baru 🔄";
+            btnRun.disabled = false;
+          });
         })
         .catch(() => {
           btnRun.innerText = "Mulai Pemindaian Radar";
