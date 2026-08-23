@@ -305,9 +305,6 @@ function initCharts() {
   }
 }
 
-/**
- * Simulator ROI dengan Rumus Bisnis Nyata & Render 8 Batang Tahun Tanpa Terpotong
- */
 function initSimulator() {
   if (typeof Chart === 'undefined') {
     setTimeout(initSimulator, 250);
@@ -367,7 +364,6 @@ function initSimulator() {
     const cashFlow = [];
     let cumulative = -capex;
     
-    // Proyeksi 8 Tahun Penuh
     for (let i = 1; i <= 8; i++) {
       cumulative += (annualNet / 1000000);
       cashFlow.push(Math.round(cumulative));
@@ -480,9 +476,6 @@ function initSimulator() {
   updateSimulation();
 }
 
-/**
- * Radar Feasibility Scanner: Geocoding Presisi Wilayah Indonesia & Multi-SPKLU Real Pinpoint
- */
 function initFeasibilityScanner() {
   if (typeof L === 'undefined') {
     setTimeout(initFeasibilityScanner, 250);
@@ -629,11 +622,9 @@ function initFeasibilityScanner() {
       iconAnchor: [size / 2, size / 2]
     });
 
-    // 1. Marker Lokasi Lahan Properti (Putih)
     L.marker([lat, lon], { icon: createMarkerIcon('#ffffff', 16) }).addTo(markerGroup)
       .bindPopup(`<b>📍 Lokasi Lahan Anda:</b><br>${address}`).openPopup();
 
-    // 2. Lingkaran Radius Zona Pemindaian EV (Hijau Neon)
     L.circle([lat, lon], {
       color: '#00e575',
       fillColor: '#00e575',
@@ -643,7 +634,6 @@ function initFeasibilityScanner() {
       dashArray: '6, 6'
     }).addTo(markerGroup);
 
-    // 3. Render Marker Stasiun SPKLU Terdekat Nyata (Merah)
     let spkluCount = 0;
     stations.forEach(st => {
       const stLat = st.lat;
@@ -706,7 +696,6 @@ function initFeasibilityScanner() {
         return;
       }
 
-      // Normalisasi Typo Pencarian Populer Indonesia
       let cleanQuery = rawAddress
         .replace(/allfa/gi, 'Alfa')
         .replace(/jak-bar|jakbar/gi, 'Jakarta Barat')
@@ -723,7 +712,6 @@ function initFeasibilityScanner() {
       startRadarSweepAnimation();
       addLog(`Mengunci titik koordinat: "${cleanQuery}"...`);
 
-      // Geocoding Nominatim Khusus Teritorial Indonesia
       const nominatimUrl = `https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=id&q=${encodeURIComponent(cleanQuery)}`;
 
       fetch(nominatimUrl)
@@ -736,10 +724,9 @@ function initFeasibilityScanner() {
             lat = parseFloat(data[0].lat);
             lon = parseFloat(data[0].lon);
           } else {
-            // Fallback khusus bila pencarian area spesifik Jakarta Barat / Taman Alfa Indah
             if (cleanQuery.toLowerCase().includes('alfa')) {
               lat = -6.2238;
-              lon = 106.7584; // Koordinat Presisi Taman Alfa Indah, Joglo/Kembangan
+              lon = 106.7584;
             }
           }
 
@@ -748,7 +735,6 @@ function initFeasibilityScanner() {
 
           addLog(`Memindai stasiun charging dalam radius ${radKm.toFixed(1)} KM...`, '#a855f7');
 
-          // Titik Verified SPKLU Nyata di Sekitar Lokasi Target
           const fallbackStations = [
             { lat: lat + 0.0072, lon: lon - 0.0045, name: 'SPKLU PLN UID Jakarta Raya (Kebon Jeruk)', operator: 'PLN' },
             { lat: lat - 0.0068, lon: lon + 0.0058, name: 'Voltron Ultra Fast Charger (Puri Indah)', operator: 'Voltron' },

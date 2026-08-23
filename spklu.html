@@ -7,43 +7,28 @@
   <meta name="description" content="Bergabunglah sebagai mitra investor SPKLU bersama PT. Titis Cahaya Sejahtera. Skema kemitraan tepercaya: Anda menyediakan lahan strategis, kami sediakan mesin, instalasi MEP standar nasional, perizinan, dan bagi hasil transparan.">
   <meta name="keywords" content="kemitraan spklu, bisnis charger mobil listrik, investasi spklu, franchise spklu indonesia, titis cahaya sejahtera, mep contractor nasional">
 
-  <!-- Favicon -->
   <link rel="icon" type="image/png" href="images/favicon.png">
-
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Chart.js & Leaflet.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-  <!-- CSS Stylesheet Injection (Google Apps Script Scriptlet) -->
+  <!-- Injeksi CSS Stylesheet -->
   <?!= include('CSS'); ?>
 
-  <!-- Centralized API Configuration for Vercel Static Hosting -> Google Sheets Database Bridge -->
   <script>
     window.TCS_GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyShEEFSwaLqZY-aG8msDmTt_iVdun2j6Q4kT7AQhHXu434g-4V89kI3oLLZ26FdxMV/exec";
   </script>
 
-  <!-- Prevent Flash of Unstyled Content (FOUC) on static hosting platforms like Vercel -->
   <style id="fouc-style">
     html, body { background-color: #030712 !important; }
   </style>
 
-  <!-- Fallback Loader for Local Live Server & Static Hosting Preview -->
   <script>
-    if (window.location.hostname.includes('google')) {
-      const fouc = document.getElementById('fouc-style');
-      if (fouc) fouc.remove();
-    } else {
-      const localFouc = document.createElement('style');
-      localFouc.id = 'local-fouc-style';
-      localFouc.textContent = 'body { opacity: 0 !important; }';
-      document.head.appendChild(localFouc);
-
+    if (!window.location.hostname.includes('google')) {
       fetch('CSS.html')
         .then(response => response.text())
         .then(html => {
@@ -51,25 +36,20 @@
           const doc = parser.parseFromString(html, 'text/html');
           const styleElement = doc.querySelector('style');
           if (styleElement) document.head.appendChild(styleElement);
-
           const fouc = document.getElementById('fouc-style');
           if (fouc) fouc.remove();
-          const lf = document.getElementById('local-fouc-style');
-          if (lf) lf.remove();
         })
         .catch(err => {
-          console.error('Failed to load local CSS fallback:', err);
+          console.error('Failed to load CSS fallback:', err);
           const fouc = document.getElementById('fouc-style');
           if (fouc) fouc.remove();
-          const lf = document.getElementById('local-fouc-style');
-          if (lf) lf.remove();
         });
     }
   </script>
 </head>
 <body>
 
-  <!-- ------------------- MAIN HEADER & NAVIGATION ------------------- -->
+  <!-- HEADER -->
   <header class="main-header" id="navbar">
     <div class="header-container">
       <a href="index.html" class="logo" style="display: flex; align-items: center;">
@@ -116,7 +96,7 @@
     </div>
   </header>
 
-  <!-- ------------------- HERO SECTION ------------------- -->
+  <!-- HERO SECTION -->
   <section class="hero" id="home">
     <canvas id="hero-canvas"></canvas>
     <div class="hero-glow-1"></div>
@@ -154,7 +134,7 @@
     </div>
   </section>
 
-  <!-- ------------------- LIVE REVENUE BANNER ------------------- -->
+  <!-- LIVE REVENUE BANNER -->
   <section style="position: relative; z-index: 10; margin-top: -50px; padding: 0 20px;">
     <div class="container">
       <div class="glass-card" style="text-align: center; max-width: 900px; margin: 0 auto; padding: 30px; border-color: rgba(0, 242, 254, 0.2); box-shadow: 0 0 30px rgba(0, 242, 254, 0.05);">
@@ -167,7 +147,7 @@
     </div>
   </section>
 
-  <!-- ------------------- KREDIBILITAS ------------------- -->
+  <!-- KREDIBILITAS -->
   <section class="section" id="trust" style="background-color: var(--bg-surface); border-top: 1px solid var(--border-card); border-bottom: 1px solid var(--border-card);">
     <div class="container">
       <div class="section-header">
@@ -198,7 +178,7 @@
     </div>
   </section>
 
-  <!-- ------------------- SKEMA KERJA SAMA ------------------- -->
+  <!-- SKEMA KERJA SAMA -->
   <section class="section" id="scheme">
     <div class="container">
       <div class="section-header">
@@ -251,7 +231,7 @@
     </div>
   </section>
 
-  <!-- ------------------- SIMULATOR ROI (8 TAHUN) ------------------- -->
+  <!-- SIMULATOR ROI (8 TAHUN) -->
   <section class="section" id="simulator" style="background-color: var(--bg-surface); border-top: 1px solid var(--border-card); border-bottom: 1px solid var(--border-card);">
     <div class="container">
       <div class="section-header">
@@ -324,7 +304,7 @@
     </div>
   </section>
 
-  <!-- ------------------- RADAR FEASIBILITY SCANNER ------------------- -->
+  <!-- RADAR FEASIBILITY SCANNER -->
   <section class="section" id="scanner">
     <div class="container">
       <div class="section-header">
@@ -375,7 +355,6 @@
             <div id="spRadarMap" style="width: 100%; height: 100%; min-height: 350px; background: #030712; z-index: 1;"></div>
             <canvas id="spRadarSweepCanvas" style="position: absolute; inset: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none; display: none;"></canvas>
 
-            <!-- SINGLE CLEAN LEGEND -->
             <div style="position: absolute; right: 12px; top: 12px; display: flex; flex-direction: column; gap: 6px; font-size: 10px; font-weight: 700; color: #fff; background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(255,255,255,0.1); padding: 6px 12px; border-radius: 6px; backdrop-filter: blur(8px); z-index: 20;">
               <span style="display: flex; align-items: center; gap: 6px;">
                 <span style="display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #ef4444; box-shadow: 0 0 6px #ef4444; border: 1.5px solid #fff;"></span>
@@ -407,7 +386,7 @@
     </div>
   </section>
 
-  <!-- ------------------- ANALISIS PASAR ------------------- -->
+  <!-- ANALISIS PASAR -->
   <section class="section" id="analysis" style="background-color: var(--bg-surface); border-top: 1px solid var(--border-card); border-bottom: 1px solid var(--border-card);">
     <div class="container">
       <div class="section-header">
@@ -453,7 +432,7 @@
     </div>
   </section>
 
-  <!-- ------------------- FORM PENGAJUAN LAHAN ------------------- -->
+  <!-- FORM PENGAJUAN LAHAN -->
   <section class="section" id="proposal">
     <div class="container grid-2">
       <div>
@@ -513,14 +492,14 @@
     </div>
   </section>
 
-  <!-- ------------------- FOOTER ------------------- -->
+  <!-- FOOTER -->
   <footer class="main-footer" style="padding: 40px 20px; text-align: center; border-top: 1px solid var(--border-card);">
     <p style="font-size: 12px; color: var(--text-muted);">
       PT. Titis Cahaya Sejahtera &copy; 2020 - 2026. MEP Contractor & SPKLU Operator. All rights reserved.
     </p>
   </footer>
 
-  <!-- ------------------- FLOATING CHATBOT WIDGET TIARA ------------------- -->
+  <!-- FLOATING CHATBOT WIDGET TIARA -->
   <button id="tcsChatTrigger" class="float-spklu-badge" aria-label="Tanya AI SPKLU" style="border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
     <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#00e575; box-shadow: 0 0 6px #00e575;"></span>
     <span>Tanya TIARA 🤖</span>
@@ -535,23 +514,22 @@
           <span class="tcs-chat-bot-status"><span class="tcs-chat-status-dot"></span> Online 24/7</span>
         </div>
       </div>
-      <button id="tcsChatClose" class="tcs-chat-close-btn">&times;</button>
+      <button id="tcsChatClose" class="tcs-chat-close-btn" aria-label="Tutup Chat">&times;</button>
     </div>
     <div id="tcsChatMessages" class="tcs-chat-messages-area">
       <div class="tcs-chat-bubble bot">
-        Halo! Saya TIARA, AI Business Consultant dari PT TCS. Saya siap memandu Anda seputar peluang kemitraan SPKLU, perhitungan ROI, dan kelayakan lahan. Ada yang ingin Anda diskusikan?
+        Halo! Saya TIARA, AI Business Consultant dari PT TCS. Saya siap memandu Anda seputar kemitraan SPKLU, perhitungan ROI, dan kelayakan lahan. Ada yang ingin Anda diskusikan?
       </div>
     </div>
     <div class="tcs-chat-input-area">
       <input type="text" id="tcsChatInput" placeholder="Tanya seputar SPKLU..." class="tcs-chat-input-field">
-      <button id="tcsChatSend" class="tcs-chat-send-btn">➤</button>
+      <button id="tcsChatSend" class="tcs-chat-send-btn" aria-label="Kirim Pesan">➤</button>
     </div>
   </div>
 
   <!-- Injeksi JS Logika Klien -->
   <?!= include('SpkluJS'); ?>
 
-  <!-- Fallback Loader for Local Live Server & Vercel Preview -->
   <script>
     if (!window.location.hostname.includes('google')) {
       fetch('SpkluJS.html')
