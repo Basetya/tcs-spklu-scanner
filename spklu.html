@@ -61,7 +61,6 @@
       scroll-behavior: smooth;
     }
 
-    /* Container Dasar */
     .container {
       width: 100%;
       max-width: 1200px;
@@ -69,7 +68,6 @@
       padding: 0 16px;
     }
 
-    /* Typography Fluid */
     h1, h2, h3, h4 {
       font-family: 'Outfit', sans-serif;
       font-weight: 800;
@@ -100,7 +98,7 @@
     }
 
     .nav-menu {
-      display: none; /* Default tersembunyi di mobile */
+      display: none;
       list-style: none;
       gap: 16px;
       align-items: center;
@@ -221,7 +219,6 @@
       background: rgba(0, 242, 254, 0.08);
     }
 
-    /* Card & Glass UI */
     .glass-card {
       background: var(--bg-card);
       border: 1px solid var(--border-card);
@@ -265,14 +262,12 @@
       margin: 0 auto;
     }
 
-    /* Grids Mobile-First */
     .grid-2, .grid-3 {
       display: flex;
       flex-direction: column;
       gap: 16px;
     }
 
-    /* Form Mobile Layout */
     .form-label {
       display: block;
       font-size: 12px;
@@ -299,16 +294,16 @@
       box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
     }
 
-    /* Floating Buttons Mobile-Ready */
+    /* Floating Action Buttons (Higher Z-Index & Touch Optimized) */
     .float-wa-btn {
       position: fixed;
       bottom: 20px;
       right: 16px;
-      z-index: 9998;
+      z-index: 10001;
       background: #25d366;
       color: #ffffff;
       padding: 12px 18px;
-      min-height: 44px;
+      min-height: 46px;
       border-radius: 50px;
       font-weight: 700;
       font-size: 13px;
@@ -317,25 +312,28 @@
       gap: 6px;
       box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
       text-decoration: none;
+      touch-action: manipulation;
     }
 
     .float-spklu-badge {
       position: fixed;
       bottom: 20px;
       left: 16px;
-      z-index: 9998;
+      z-index: 10001;
       background: rgba(15, 23, 42, 0.95);
-      border: 1px solid var(--primary-teal);
+      border: 1.5px solid var(--primary-teal);
       color: #fff;
-      padding: 12px 16px;
-      min-height: 44px;
+      padding: 12px 18px;
+      min-height: 46px;
       border-radius: 50px;
       font-weight: 700;
       font-size: 13px;
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      box-shadow: 0 4px 15px rgba(0, 242, 254, 0.25);
+      box-shadow: 0 4px 15px rgba(0, 242, 254, 0.35);
+      cursor: pointer;
+      touch-action: manipulation;
     }
 
     /* Chatbot Window Container Mobile Responsive */
@@ -351,14 +349,14 @@
       border-radius: var(--radius-lg);
       display: none;
       flex-direction: column;
-      z-index: 10000;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+      z-index: 10002;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.85);
       overflow: hidden;
     }
 
     .tcs-chat-header {
       padding: 14px 16px;
-      background: rgba(3, 7, 18, 0.9);
+      background: rgba(3, 7, 18, 0.95);
       border-bottom: 1px solid var(--border-card);
       display: flex;
       justify-content: space-between;
@@ -398,7 +396,7 @@
 
     .tcs-chat-input-area {
       padding: 10px;
-      background: rgba(3, 7, 18, 0.9);
+      background: rgba(3, 7, 18, 0.95);
       border-top: 1px solid var(--border-card);
       display: flex;
       gap: 8px;
@@ -406,28 +404,31 @@
 
     .tcs-chat-input-field {
       flex: 1;
-      min-height: 40px;
-      padding: 8px 12px;
+      min-height: 42px;
+      padding: 8px 14px;
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid var(--border-card);
       border-radius: 20px;
       color: #fff;
-      font-size: 13px;
+      font-size: 13.5px;
       outline: none;
     }
 
     .tcs-chat-send-btn {
-      width: 40px;
-      height: 40px;
+      width: 42px;
+      height: 42px;
       background: var(--primary-teal);
       border: none;
       border-radius: 50%;
       cursor: pointer;
       color: #030712;
       font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      touch-action: manipulation;
     }
 
-    /* DESKTOP & TABLET ENHANCEMENT (Min-Width 768px+) */
     @media (min-width: 768px) {
       .container { padding: 0 24px; }
       .nav-menu { display: flex; }
@@ -576,7 +577,7 @@
         <div class="glass-card" style="border-left: 4px solid var(--primary-teal);">
           <div style="font-size: 26px; margin-bottom: 10px;">🛡️</div>
           <h3 style="font-size: 17px; color: #fff; margin-bottom: 6px;">Insinyur Ahli & Berlisensi</h3>
-          <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">Instalasi kelistrikan daya tinggi SPKLU dikerjakan oleh tim insinyur bersertifikasi resmi sesuai standar PUIL dan ESDM.</p>
+          <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">Instalasi kelistrikan daya tinggi SPKLU dikerjakan oleh tim insinyur bersertifikat resmi sesuai standar PUIL dan ESDM.</p>
         </div>
         <div class="glass-card" style="border-left: 4px solid var(--primary-teal);">
           <div style="font-size: 26px; margin-bottom: 10px;">🤝</div>
@@ -710,7 +711,7 @@
             </div>
           </div>
 
-          <!-- GRAFIK 8 TAHUN LENGKAP TANPA TERPOTONG -->
+          <!-- GRAFIK 8 TAHUN LENGKAP -->
           <div style="display: flex; flex-direction: column; justify-content: space-between;">
             <div style="margin-bottom: 8px;">
               <span style="color: var(--primary-teal); font-size: 10.5px; font-weight: 800; text-transform: uppercase;">Proyeksi Saldo Kas Kumulatif</span>
@@ -910,12 +911,13 @@
     <span>WhatsApp</span>
   </a>
 
-  <!-- FLOATING CHATBOT WIDGET TIARA (POJOK KIRI BAWAH) -->
-  <button id="tcsChatTrigger" class="float-spklu-badge" aria-label="Tanya AI SPKLU" style="border: 1px solid var(--primary-teal); cursor: pointer;">
+  <!-- FLOATING CHATBOT TRIGGER BUTTON (POJOK KIRI BAWAH) -->
+  <button id="tcsChatTrigger" class="float-spklu-badge" type="button" aria-label="Tanya AI SPKLU">
     <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#00e575; box-shadow: 0 0 6px #00e575;"></span>
     <span>Tanya TIARA 🤖</span>
   </button>
 
+  <!-- CHAT WINDOW CONTAINER -->
   <div id="tcsChatContainer" class="tcs-chat-window-container">
     <div class="tcs-chat-header">
       <div style="display: flex; align-items: center; gap: 8px;">
@@ -925,7 +927,7 @@
           <span style="font-size: 10.5px; color: #00e575;">● Online 24/7</span>
         </div>
       </div>
-      <button id="tcsChatClose" style="background: none; border: none; color: #94a3b8; font-size: 22px; cursor: pointer;">&times;</button>
+      <button id="tcsChatClose" type="button" style="background: none; border: none; color: #94a3b8; font-size: 24px; cursor: pointer; line-height: 1; padding: 4px;">&times;</button>
     </div>
     <div id="tcsChatMessages" class="tcs-chat-messages-area">
       <div class="tcs-chat-bubble bot">
@@ -934,9 +936,109 @@
     </div>
     <div class="tcs-chat-input-area">
       <input type="text" id="tcsChatInput" placeholder="Tanya seputar SPKLU..." class="tcs-chat-input-field">
-      <button id="tcsChatSend" class="tcs-chat-send-btn">➤</button>
+      <button id="tcsChatSend" type="button" class="tcs-chat-send-btn">➤</button>
     </div>
   </div>
+
+  <!-- INLINE ROBUST TRIGGER & FALLBACK CHAT HANDLER -->
+  <script>
+    (function() {
+      function setupTiaraEvents() {
+        const trigger = document.getElementById('tcsChatTrigger');
+        const container = document.getElementById('tcsChatContainer');
+        const closeBtn = document.getElementById('tcsChatClose');
+        const sendBtn = document.getElementById('tcsChatSend');
+        const inputField = document.getElementById('tcsChatInput');
+        const messagesArea = document.getElementById('tcsChatMessages');
+
+        if (!trigger || !container) return;
+
+        function toggleChat(e) {
+          if (e) { e.preventDefault(); e.stopPropagation(); }
+          const isCurrentlyVisible = window.getComputedStyle(container).display === 'flex';
+          container.style.display = isCurrentlyVisible ? 'none' : 'flex';
+          if (!isCurrentlyVisible && inputField) {
+            setTimeout(() => inputField.focus(), 150);
+          }
+        }
+
+        function closeChat(e) {
+          if (e) { e.preventDefault(); e.stopPropagation(); }
+          container.style.display = 'none';
+        }
+
+        // Bind touch and click to prevent mobile latency
+        trigger.addEventListener('click', toggleChat);
+        trigger.addEventListener('touchend', toggleChat);
+
+        if (closeBtn) {
+          closeBtn.addEventListener('click', closeChat);
+          closeBtn.addEventListener('touchend', closeChat);
+        }
+
+        // Inline Chat Message Dispatcher
+        async function sendMessage() {
+          if (!inputField || !messagesArea) return;
+          const userText = inputField.value.trim();
+          if (!userText) return;
+
+          // Append User Message
+          const userBubble = document.createElement('div');
+          userBubble.className = 'tcs-chat-bubble user';
+          userBubble.textContent = userText;
+          messagesArea.appendChild(userBubble);
+          inputField.value = '';
+          messagesArea.scrollTop = messagesArea.scrollHeight;
+
+          // Append Bot Loading Placeholder
+          const botBubble = document.createElement('div');
+          botBubble.className = 'tcs-chat-bubble bot';
+          botBubble.textContent = 'Mengetik... ⚡';
+          messagesArea.appendChild(botBubble);
+          messagesArea.scrollTop = messagesArea.scrollHeight;
+
+          try {
+            const endpoint = window.TCS_GAS_WEB_APP_URL;
+            const payload = {
+              action: "callGroqSecure",
+              data: { query: userText }
+            };
+
+            const response = await fetch(endpoint, {
+              method: 'POST',
+              headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+              body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+            if (result && result.success && result.text) {
+              botBubble.textContent = result.text;
+            } else {
+              botBubble.textContent = result && result.error ? result.error : "Maaf, TIARA sedang memproses data jaringan. Silakan coba lagi.";
+            }
+          } catch (err) {
+            botBubble.textContent = "Koneksi bermasalah: " + err.message;
+          }
+          messagesArea.scrollTop = messagesArea.scrollHeight;
+        }
+
+        if (sendBtn) {
+          sendBtn.addEventListener('click', sendMessage);
+        }
+        if (inputField) {
+          inputField.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') sendMessage();
+          });
+        }
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setupTiaraEvents);
+      } else {
+        setupTiaraEvents();
+      }
+    })();
+  </script>
 
   <!-- Injeksi JS Logika Klien -->
   <?!= include('SpkluJS'); ?>
