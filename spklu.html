@@ -589,7 +589,7 @@
     </div>
   </section>
 
-  <!-- SKEMA KERJA SAMA: 3 PILAR KEMITRAAN (POIN 2 INVESTOR TELAH DIHAPUS) -->
+  <!-- SKEMA KERJA SAMA: 3 PILAR KEMITRAAN -->
   <section class="section" id="scheme">
     <div class="container">
       <div class="section-header">
@@ -616,7 +616,7 @@
           </ul>
         </div>
 
-        <!-- KATEGORI 2: MITRA INVESTOR (DIPERBARUI MENCAKUP UNIT, KONSTRUKSI & PERIZINAN) -->
+        <!-- KATEGORI 2: MITRA INVESTOR -->
         <div class="glass-card" style="border-top: 3px solid var(--primary-teal);">
           <h3 style="font-size: 17px; color: var(--primary-teal); margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
             <span>💰</span> Kewajiban Mitra Investor
@@ -918,16 +918,16 @@
     </p>
   </footer>
 
-  <!-- FLOATING WHATSAPP BUTTON (087832219195) -->
+  <!-- FLOATING WHATSAPP BUTTON -->
   <a href="https://wa.me/6287832219195?text=Halo%20Admin%20TCS,%20saya%20ingin%20berkonsultasi%20mengenai%20kemitraan%20SPKLU." target="_blank" aria-label="WhatsApp" class="float-wa-btn">
     <svg style="width:18px; height:18px; fill:currentColor;" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074--2.978-1.49-4.932-2.651-6.892-6.046-.172-.297-.018-.458.13-.603.135-.135.298-.347.447-.521.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
     <span>WhatsApp</span>
   </a>
 
-  <!-- FLOATING CHATBOT TRIGGER BUTTON -->
+  <!-- FLOATING CHATBOT TRIGGER BUTTON (REBRANDED TO TIARA ADVISOR) -->
   <button id="tcsChatTrigger" class="float-spklu-badge" type="button" aria-label="Tanya AI SPKLU">
     <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#00e575; box-shadow: 0 0 6px #00e575;"></span>
-    <span>Tanya TIARA 🤖</span>
+    <span>Tanya Tiara Advisor 🤖</span>
   </button>
 
   <!-- CHAT WINDOW CONTAINER -->
@@ -936,7 +936,7 @@
       <div style="display: flex; align-items: center; gap: 8px;">
         <span style="font-size: 20px;">🤖</span>
         <div>
-          <h4 style="font-size: 13.5px; color: #fff; margin: 0;">TCS SPKLU AI Advisor</h4>
+          <h4 style="font-size: 13.5px; color: #fff; margin: 0;">Tiara Advisor</h4>
           <span style="font-size: 10.5px; color: #00e575;">● Online 24/7</span>
         </div>
       </div>
@@ -944,7 +944,7 @@
     </div>
     <div id="tcsChatMessages" class="tcs-chat-messages-area">
       <div class="tcs-chat-bubble bot">
-        Halo! Saya TIARA, AI Business Consultant dari PT TCS. Saya siap memandu Anda seputar peluang kemitraan SPKLU, perhitungan ROI, dan kelayakan lahan. Ada yang ingin Anda diskusikan?
+        Halo! Saya Tiara Advisor, AI Business Consultant dari PT TCS. Saya siap memandu Anda seputar peluang kemitraan SPKLU, perhitungan ROI, dan kelayakan lahan. Ada yang ingin Anda diskusikan?
       </div>
     </div>
     <div class="tcs-chat-input-area">
@@ -1131,7 +1131,7 @@
         });
       }
 
-      // TIARA Chat Trigger & Interaction Setup
+      // TIARA ADVISOR CHAT TRIGGER & ROBUST ASYNC MESSAGE DISPATCHER
       function setupTiaraEvents() {
         const trigger = document.getElementById('tcsChatTrigger');
         const container = document.getElementById('tcsChatContainer');
@@ -1169,6 +1169,7 @@
           const userText = inputField.value.trim();
           if (!userText) return;
 
+          // Append User Message
           const userBubble = document.createElement('div');
           userBubble.className = 'tcs-chat-bubble user';
           userBubble.textContent = userText;
@@ -1176,9 +1177,10 @@
           inputField.value = '';
           messagesArea.scrollTop = messagesArea.scrollHeight;
 
+          // Append Bot Loading Placeholder
           const botBubble = document.createElement('div');
           botBubble.className = 'tcs-chat-bubble bot';
-          botBubble.textContent = 'Mengetik... ⚡';
+          botBubble.textContent = 'Tiara Advisor sedang mengetik... ⚡';
           messagesArea.appendChild(botBubble);
           messagesArea.scrollTop = messagesArea.scrollHeight;
 
@@ -1199,16 +1201,17 @@
             if (result && result.success && result.text) {
               botBubble.textContent = result.text;
             } else {
-              botBubble.textContent = result && result.error ? result.error : "Maaf, TIARA sedang memproses data jaringan. Silakan coba lagi.";
+              botBubble.textContent = result && result.error ? result.error : "Maaf, Tiara sedang memproses data jaringan. Silakan coba lagi atau hubungi WhatsApp 087832219195.";
             }
           } catch (err) {
-            botBubble.textContent = "Koneksi bermasalah: " + err.message;
+            botBubble.textContent = "Koneksi jaringan terputus. Silakan hubungi admin langsung via WhatsApp 087832219195.";
           }
           messagesArea.scrollTop = messagesArea.scrollHeight;
         }
 
         if (sendBtn) {
           sendBtn.addEventListener('click', sendMessage);
+          sendBtn.addEventListener('touchend', function(e) { e.preventDefault(); sendMessage(); });
         }
         if (inputField) {
           inputField.addEventListener('keypress', function(e) {
