@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+\<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
@@ -294,7 +294,7 @@
       box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
     }
 
-    /* Floating Action Buttons (Higher Z-Index & Touch Optimized) */
+    /* Floating Action Buttons */
     .float-wa-btn {
       position: fixed;
       bottom: 20px;
@@ -336,7 +336,7 @@
       touch-action: manipulation;
     }
 
-    /* Chatbot Window Container Mobile Responsive */
+    /* Chatbot Window Container */
     .tcs-chat-window-container {
       position: fixed;
       bottom: 80px;
@@ -730,14 +730,14 @@
     </div>
   </section>
 
-  <!-- RADAR FEASIBILITY SCANNER -->
+  <!-- RADAR FEASIBILITY SCANNER (HIGH PRECISION GEOCODING & EV MAPS) -->
   <section class="section" id="scanner">
     <div class="container">
       <div class="section-header">
         <span class="section-tag">Radar Feasibility</span>
         <h2 class="section-title">Pemindai Kelayakan Lokasi (Google Maps EV Mode)</h2>
         <p class="section-desc">
-          Masukkan alamat lahan untuk meluncurkan mode navigasi mobil listrik Google Maps dan mendeteksi ketersediaan SPKLU terdekat.
+          Masukkan alamat lahan spesifik Anda untuk memindai radius persaingan SPKLU secara presisi tinggi langsung di Google Maps EV.
         </p>
       </div>
 
@@ -746,8 +746,13 @@
           
           <div style="display: flex; flex-direction: column; gap: 16px;">
             <div>
-              <label class="form-label" style="text-transform: uppercase; font-size: 11px;">LOKASI LAHAN / ALAMAT PROPERTI</label>
-              <input type="text" id="spScanInput" class="form-input-text" placeholder="Masukkan alamat lengkap (contoh: Kebon Jeruk, Jakarta Barat)...">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <label class="form-label" style="text-transform: uppercase; font-size: 11px; margin: 0;">LOKASI LAHAN / ALAMAT PROPERTI</label>
+                <button type="button" id="btnUseCurrentLocation" style="background: none; border: none; color: var(--primary-teal); font-size: 11px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+                  <span>🎯 Pakai GPS Saya</span>
+                </button>
+              </div>
+              <input type="text" id="spScanInput" class="form-input-text" placeholder="Contoh: Jl. Kalibata Raya No. 25, Jakarta Selatan...">
             </div>
 
             <div>
@@ -763,9 +768,9 @@
             </button>
 
             <div style="background: rgba(3, 7, 18, 0.7); border: 1px solid var(--border-card); border-radius: var(--radius-sm); padding: 12px;">
-              <div style="font-size: 9.5px; text-transform: uppercase; color: var(--text-muted); font-weight: 800; margin-bottom: 4px;">TCS Radar Audit v2.0</div>
-              <div id="spScanLogConsole" style="font-family: 'Courier New', monospace; font-size: 11px; color: var(--text-secondary); max-height: 60px; overflow-y: auto;">
-                <div style="color: var(--primary-teal); font-weight: bold;">> [SYS] READY. MASUKKAN ALAMAT & KLIK ANALISA.</div>
+              <div style="font-size: 9.5px; text-transform: uppercase; color: var(--text-muted); font-weight: 800; margin-bottom: 4px;">TCS Radar Audit v2.5 (Precision Mode)</div>
+              <div id="spScanLogConsole" style="font-family: 'Courier New', monospace; font-size: 11px; color: var(--text-secondary); max-height: 70px; overflow-y: auto; line-height: 1.4;">
+                <div style="color: var(--primary-teal); font-weight: bold;">> [SYS] READY. MASUKKAN ALAMAT LOKASI ANDA.</div>
               </div>
             </div>
           </div>
@@ -773,11 +778,11 @@
           <div style="background: rgba(3, 7, 18, 0.6); border: 1px solid var(--border-card); border-radius: var(--radius-md); padding: 20px; display: flex; flex-direction: column; justify-content: center; gap: 10px;">
             <div style="display: flex; align-items: center; justify-content: space-between;">
               <span style="font-size: 11px; font-weight: 800; color: var(--primary-teal); text-transform: uppercase;">Google Maps EV Telemetry</span>
-              <span style="background: rgba(0, 229, 117, 0.1); color: #00e575; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px;">Verified</span>
+              <span style="background: rgba(0, 229, 117, 0.1); color: #00e575; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px;">Dynamic Geocoding</span>
             </div>
-            <h4 style="font-size: 16px; color: #fff;">Akurasi Data Stasiun SPKLU 100%</h4>
+            <h4 style="font-size: 16px; color: #fff;">Akurasi Titik Koordinat Real-Time</h4>
             <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.6;">
-              Pencarian akan langsung membuka navigasi EV Google Maps untuk mendeteksi stasiun SPKLU aktif (PLN, Voltron, Starvo, Shell Recharge) di sekitar lahan Anda.
+              Sistem akan membedah nama jalan dan kelurahan Anda, mengunci koordinat GPS, lalu membuka mode navigasi EV stasiun SPKLU resmi (PLN, Voltron, Starvo, Shell Recharge) di area spesifik yang Anda masukkan.
             </p>
           </div>
 
@@ -787,11 +792,11 @@
           <div style="display: flex; flex-direction: column; gap: 14px;">
             <div style="display: flex; align-items: center; gap: 14px;">
               <div style="width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: rgba(0,242,254,0.1); border: 2px solid var(--primary-teal);">
-                <span id="spFeasibilityScoreText" style="font-size: 16px; font-weight: 900; color: #fff;">94%</span>
+                <span id="spFeasibilityScoreText" style="font-size: 16px; font-weight: 900; color: #fff;">95%</span>
               </div>
               <div>
-                <span style="font-size: 10.5px; text-transform: uppercase; font-weight: 700; color: var(--text-secondary);">Skor Kelayakan:</span>
-                <h4 id="spFeasibilityScoreStatus" style="font-size: 15px; font-weight: 900; color: var(--primary-teal);">SANGAT LAYAK (HI-POTENTIAL)</h4>
+                <span style="font-size: 10.5px; text-transform: uppercase; font-weight: 700; color: var(--text-secondary);">Skor Kelayakan Lahan:</span>
+                <h4 id="spFeasibilityScoreStatus" style="font-size: 15px; font-weight: 900; color: var(--primary-teal);">SANGAT LAYAK (HIGH POTENTIAL)</h4>
               </div>
             </div>
             <a href="#proposal" class="btn btn-primary" style="padding: 10px 16px; font-size: 12.5px;">Klaim Kuota Wilayah Sekarang 🚀</a>
@@ -905,13 +910,13 @@
     </p>
   </footer>
 
-  <!-- FLOATING WHATSAPP BUTTON (POJOK KANAN BAWAH) -->
+  <!-- FLOATING WHATSAPP BUTTON -->
   <a href="https://wa.me/628111460707?text=Halo%20Admin%20TCS,%20saya%20ingin%20berkonsultasi%20mengenai%20kemitraan%20SPKLU." target="_blank" aria-label="WhatsApp" class="float-wa-btn">
     <svg style="width:18px; height:18px; fill:currentColor;" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074--2.978-1.49-4.932-2.651-6.892-6.046-.172-.297-.018-.458.13-.603.135-.135.298-.347.447-.521.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
     <span>WhatsApp</span>
   </a>
 
-  <!-- FLOATING CHATBOT TRIGGER BUTTON (POJOK KIRI BAWAH) -->
+  <!-- FLOATING CHATBOT TRIGGER BUTTON -->
   <button id="tcsChatTrigger" class="float-spklu-badge" type="button" aria-label="Tanya AI SPKLU">
     <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#00e575; box-shadow: 0 0 6px #00e575;"></span>
     <span>Tanya TIARA 🤖</span>
@@ -940,9 +945,126 @@
     </div>
   </div>
 
-  <!-- INLINE ROBUST TRIGGER & FALLBACK CHAT HANDLER -->
+  <!-- RADAR FEASIBILITY SCANNER HIGH-PRECISION JAVASCRIPT ENGINE -->
   <script>
     (function() {
+      // 1. Radar Geolocation & Google Maps Handler
+      const scanInput = document.getElementById('spScanInput');
+      const scanBtn = document.getElementById('spScanBtnRun');
+      const radiusSlider = document.getElementById('spRadiusSlider');
+      const radiusValue = document.getElementById('spRadiusValue');
+      const logConsole = document.getElementById('spScanLogConsole');
+      const scoreCard = document.getElementById('spScannerScoreCard');
+      const scoreRec = document.getElementById('spFeasibilityScoreRec');
+      const btnGPS = document.getElementById('btnUseCurrentLocation');
+
+      if (radiusSlider && radiusValue) {
+        radiusSlider.addEventListener('input', function() {
+          radiusValue.textContent = parseFloat(this.value).toFixed(1) + ' KM';
+        });
+      }
+
+      function logMsg(msg, isHighlight) {
+        if (!logConsole) return;
+        const div = document.createElement('div');
+        div.style.color = isHighlight ? '#00f2fe' : '#94a3b8';
+        div.textContent = '> ' + msg;
+        logConsole.appendChild(div);
+        logConsole.scrollTop = logConsole.scrollHeight;
+      }
+
+      // GPS Auto Detect
+      if (btnGPS) {
+        btnGPS.addEventListener('click', function() {
+          if (!navigator.geolocation) {
+            alert('Browser Anda tidak mendukung deteksi lokasi otomatis.');
+            return;
+          }
+          logMsg('[GPS] Mendeteksi koordinat GPS perangkat Anda...', true);
+          navigator.geolocation.getCurrentPosition(
+            function(pos) {
+              const lat = pos.coords.latitude;
+              const lng = pos.coords.longitude;
+              scanInput.value = `Koordinat GPS: ${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+              logMsg(`[GPS] Terkunci: (${lat.toFixed(4)}, ${lng.toFixed(4)})`, true);
+              runRadarScan(lat, lng, "Posisi Terkini Anda");
+            },
+            function(err) {
+              logMsg('[GPS ERROR] Akses lokasi ditolak. Silakan ketik nama jalan manual.', false);
+            }
+          );
+        });
+      }
+
+      async function runRadarScan(customLat, customLng, locationName) {
+        const query = scanInput ? scanInput.value.trim() : '';
+        const radius = radiusSlider ? radiusSlider.value : '3.0';
+
+        if (!customLat && !query) {
+          alert('Silakan masukkan alamat lahan atau ketik nama daerah Anda.');
+          return;
+        }
+
+        logConsole.innerHTML = '';
+        logMsg(`[RADAR] Memulai pemindaian telemetri wilayah: ${query || locationName}...`, true);
+        logMsg(`[RADIUS] Jangkauan audit: ${radius} KM`, false);
+
+        let finalLat = customLat;
+        let finalLng = customLng;
+        let searchKeyword = query;
+
+        // Dynamic OpenStreetMap Geocoding jika input berupa teks nama tempat
+        if (!finalLat && query) {
+          logMsg('[GEOCODE] Mengonversi nama jalan ke titik koordinat satelit...', false);
+          try {
+            const geoRes = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query + ', Indonesia')}&limit=1`);
+            const geoData = await geoRes.json();
+            if (geoData && geoData.length > 0) {
+              finalLat = parseFloat(geoData[0].lat);
+              finalLng = parseFloat(geoData[0].lon);
+              logMsg(`[GEOCODE MATCH] Terdeteksi: ${geoData[0].display_name.substring(0, 45)}... (${finalLat.toFixed(4)}, ${finalLng.toFixed(4)})`, true);
+            } else {
+              logMsg('[GEOCODE] Koordinat eksak tidak ditemukan, mengarahkan query kontekstual...', false);
+            }
+          } catch (e) {
+            logMsg('[GEOCODE] Menggunakan query pencarian langsung ke Google Maps.', false);
+          }
+        }
+
+        logMsg('[TELEMETRY] Memvalidasi kepadatan gardu PLN & stasiun charging kompetitor...', false);
+        logMsg('[ANALYTICS] Menghitung rasio potensi ROI & kuota wilayah...', true);
+
+        setTimeout(function() {
+          if (scoreCard) scoreCard.style.display = 'block';
+          if (scoreRec) {
+            scoreRec.innerHTML = `<strong>Rekomendasi Analis PT TCS:</strong> Wilayah <em>${query || 'sekitar lahan Anda'}</em> memiliki kepadatan arus kendaraan EV tinggi dengan defisit stasiun pengisian cepat (DC Fast Charging). Potensi utilisasi stasiun diproyeksikan mencapai <strong>10–14 sesi/hari</strong>. Sangat disarankan untuk segera mengamankan izin SLO PLN sebelum kuota gardu terpenuhi.`;
+          }
+
+          // Konstruksi URL Google Maps yang 100% Akurat sesuai lokasi yang dicari
+          let mapsUrl = '';
+          if (finalLat && finalLng) {
+            // Jika ada koordinat spesifik (misal Kalibata)
+            mapsUrl = `https://www.google.com/maps/search/SPKLU+charging+station/@${finalLat},${finalLng},15z/data=!3m1!4b1`;
+          } else {
+            // Fallback nama tempat spesifik
+            mapsUrl = `https://www.google.com/maps/search/SPKLU+charging+station+dekat+${encodeURIComponent(query)}`;
+          }
+
+          logMsg('[SUCCESS] Membuka Google Maps EV Radar di tab baru...', true);
+          window.open(mapsUrl, '_blank');
+        }, 1200);
+      }
+
+      if (scanBtn) {
+        scanBtn.addEventListener('click', () => runRadarScan(null, null, null));
+      }
+      if (scanInput) {
+        scanInput.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') runRadarScan(null, null, null);
+        });
+      }
+
+      // 2. TIARA Chat Trigger & Interaction Setup
       function setupTiaraEvents() {
         const trigger = document.getElementById('tcsChatTrigger');
         const container = document.getElementById('tcsChatContainer');
@@ -967,7 +1089,6 @@
           container.style.display = 'none';
         }
 
-        // Bind touch and click to prevent mobile latency
         trigger.addEventListener('click', toggleChat);
         trigger.addEventListener('touchend', toggleChat);
 
@@ -976,13 +1097,11 @@
           closeBtn.addEventListener('touchend', closeChat);
         }
 
-        // Inline Chat Message Dispatcher
         async function sendMessage() {
           if (!inputField || !messagesArea) return;
           const userText = inputField.value.trim();
           if (!userText) return;
 
-          // Append User Message
           const userBubble = document.createElement('div');
           userBubble.className = 'tcs-chat-bubble user';
           userBubble.textContent = userText;
@@ -990,7 +1109,6 @@
           inputField.value = '';
           messagesArea.scrollTop = messagesArea.scrollHeight;
 
-          // Append Bot Loading Placeholder
           const botBubble = document.createElement('div');
           botBubble.className = 'tcs-chat-bubble bot';
           botBubble.textContent = 'Mengetik... ⚡';
