@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Kemitraan Bisnis SPKLU - PT. Titis Cahaya Sejahtera</title>
   <meta name="description" content="Bergabunglah sebagai mitra investor dan pemilik lahan SPKLU bersama PT. Titis Cahaya Sejahtera. Skema kemitraan tepercaya: Anda menyediakan lahan atau pendanaan modal, kami sediakan mesin, instalasi MEP standar nasional, perizinan, dan bagi hasil transparan.">
   <meta name="keywords" content="kemitraan spklu, bisnis charger mobil listrik, investasi spklu, franchise spklu indonesia, titis cahaya sejahtera, mep contractor nasional">
@@ -13,7 +13,7 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -26,37 +26,433 @@
     window.TCS_GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwLsg5MwxMv2Oq2auYdwd-dKRmVwlqf25re6Dq8au-6XY9KZZpqnmToml_cqRAMQw/exec";
   </script>
 
-  <style id="fouc-style">
-    html, body { background-color: #030712 !important; }
-  </style>
-
-  <script>
-    if (!window.location.hostname.includes('google')) {
-      fetch('CSS.html')
-        .then(response => response.text())
-        .then(html => {
-          const parser = new DOMParser();
-          const doc = parser.parseFromString(html, 'text/html');
-          const styleElement = doc.querySelector('style');
-          if (styleElement) document.head.appendChild(styleElement);
-          const fouc = document.getElementById('fouc-style');
-          if (fouc) fouc.remove();
-        })
-        .catch(err => {
-          console.error('Failed to load CSS fallback:', err);
-          const fouc = document.getElementById('fouc-style');
-          if (fouc) fouc.remove();
-        });
+  <!-- MOBILE-FIRST DEDICATED STYLESHEET -->
+  <style>
+    :root {
+      --bg-dark: #030712;
+      --bg-surface: #0b132b;
+      --bg-card: rgba(15, 23, 42, 0.75);
+      --border-card: rgba(255, 255, 255, 0.08);
+      --primary-teal: #00f2fe;
+      --primary-lime: #00e575;
+      --electric-amber: #f39c12;
+      --text-main: #ffffff;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --gradient-tech: linear-gradient(135deg, #00f2fe 0%, #00e575 100%);
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
     }
-  </script>
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+      width: 100%;
+      scroll-behavior: smooth;
+    }
+
+    /* Container Dasar */
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    /* Typography Fluid */
+    h1, h2, h3, h4 {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    /* Mobile First Header */
+    .main-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 999;
+      background: rgba(3, 7, 18, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-card);
+      padding: 10px 0;
+    }
+
+    .header-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    .nav-menu {
+      display: none; /* Default tersembunyi di mobile */
+      list-style: none;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .nav-link {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 13.5px;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      color: var(--primary-teal);
+    }
+
+    .nav-btn {
+      padding: 8px 16px;
+      background: rgba(0, 242, 254, 0.1);
+      border: 1px solid var(--primary-teal);
+      border-radius: var(--radius-sm);
+      color: var(--primary-teal) !important;
+    }
+
+    .menu-toggle {
+      display: block;
+      cursor: pointer;
+      color: #fff;
+      padding: 6px;
+    }
+
+    /* Hero Section Mobile-First */
+    .hero {
+      position: relative;
+      padding-top: 100px;
+      padding-bottom: 40px;
+      overflow: hidden;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--primary-teal);
+      background: rgba(0, 242, 254, 0.08);
+      border: 1px solid rgba(0, 242, 254, 0.2);
+      padding: 6px 14px;
+      border-radius: 50px;
+      margin-bottom: 14px;
+    }
+
+    .hero-title {
+      font-size: 32px;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    .hero-title span {
+      background: var(--gradient-tech);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-title em {
+      font-style: normal;
+      color: var(--primary-teal);
+    }
+
+    .hero-description {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+
+    .hero-btns {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 20px;
+      min-height: 48px;
+      border-radius: var(--radius-md);
+      font-weight: 800;
+      font-size: 14px;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+      text-align: center;
+      width: 100%;
+    }
+
+    .btn-primary {
+      background: var(--gradient-tech);
+      color: #030712;
+      box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-card);
+      color: #fff;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--primary-teal);
+      background: rgba(0, 242, 254, 0.08);
+    }
+
+    /* Card & Glass UI */
+    .glass-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      margin-bottom: 20px;
+    }
+
+    .section {
+      padding: 50px 0;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .section-tag {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--primary-teal);
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .section-title {
+      font-size: 24px;
+      line-height: 1.3;
+      margin-bottom: 10px;
+    }
+
+    .section-desc {
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: var(--text-secondary);
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* Grids Mobile-First */
+    .grid-2, .grid-3 {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Form Mobile Layout */
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .form-input-text {
+      width: 100%;
+      min-height: 48px;
+      padding: 12px 14px;
+      background: rgba(3, 7, 18, 0.6);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-sm);
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .form-input-text:focus {
+      border-color: var(--primary-teal);
+      box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+    }
+
+    /* Floating Buttons Mobile-Ready */
+    .float-wa-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 16px;
+      z-index: 9998;
+      background: #25d366;
+      color: #ffffff;
+      padding: 12px 18px;
+      min-height: 44px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 13px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+      text-decoration: none;
+    }
+
+    .float-spklu-badge {
+      position: fixed;
+      bottom: 20px;
+      left: 16px;
+      z-index: 9998;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid var(--primary-teal);
+      color: #fff;
+      padding: 12px 16px;
+      min-height: 44px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 13px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 15px rgba(0, 242, 254, 0.25);
+    }
+
+    /* Chatbot Window Container Mobile Responsive */
+    .tcs-chat-window-container {
+      position: fixed;
+      bottom: 80px;
+      left: 16px;
+      right: 16px;
+      max-width: 380px;
+      height: 460px;
+      background: #0b132b;
+      border: 1px solid var(--primary-teal);
+      border-radius: var(--radius-lg);
+      display: none;
+      flex-direction: column;
+      z-index: 10000;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+      overflow: hidden;
+    }
+
+    .tcs-chat-header {
+      padding: 14px 16px;
+      background: rgba(3, 7, 18, 0.9);
+      border-bottom: 1px solid var(--border-card);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .tcs-chat-messages-area {
+      flex: 1;
+      padding: 14px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 13px;
+    }
+
+    .tcs-chat-bubble {
+      padding: 10px 14px;
+      border-radius: 12px;
+      max-width: 85%;
+      line-height: 1.5;
+    }
+
+    .tcs-chat-bubble.bot {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-card);
+      align-self: flex-start;
+      color: #e2e8f0;
+    }
+
+    .tcs-chat-bubble.user {
+      background: var(--primary-teal);
+      color: #030712;
+      align-self: flex-end;
+      font-weight: 600;
+    }
+
+    .tcs-chat-input-area {
+      padding: 10px;
+      background: rgba(3, 7, 18, 0.9);
+      border-top: 1px solid var(--border-card);
+      display: flex;
+      gap: 8px;
+    }
+
+    .tcs-chat-input-field {
+      flex: 1;
+      min-height: 40px;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-card);
+      border-radius: 20px;
+      color: #fff;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .tcs-chat-send-btn {
+      width: 40px;
+      height: 40px;
+      background: var(--primary-teal);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      color: #030712;
+      font-weight: 900;
+    }
+
+    /* DESKTOP & TABLET ENHANCEMENT (Min-Width 768px+) */
+    @media (min-width: 768px) {
+      .container { padding: 0 24px; }
+      .nav-menu { display: flex; }
+      .menu-toggle { display: none; }
+      .hero { padding-top: 130px; padding-bottom: 70px; }
+      .hero-title { font-size: 48px; }
+      .hero-btns { flex-direction: row; }
+      .btn { width: auto; }
+      .section { padding: 80px 0; }
+      .section-title { font-size: 36px; }
+      .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+      .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+      .tcs-chat-window-container { left: 24px; right: auto; width: 380px; }
+      .float-wa-btn { right: 24px; }
+      .float-spklu-badge { left: 24px; }
+    }
+  </style>
 </head>
 <body>
 
   <!-- HEADER -->
   <header class="main-header" id="navbar">
     <div class="header-container">
-      <a href="index.html" class="logo" style="display: flex; align-items: center;">
-        <svg viewBox="0 0 260 60" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:48px; width:auto; vertical-align:middle;" id="logo-img">
+      <a href="index.html" class="logo" style="display: flex; align-items: center; text-decoration: none;">
+        <svg viewBox="0 0 260 60" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:42px; width:auto; vertical-align:middle;" id="logo-img">
           <g transform="translate(5, 5)">
             <circle cx="25" cy="25" r="22" stroke="url(#logo-grad)" stroke-width="3" fill="none" stroke-dasharray="100" stroke-dashoffset="10"/>
             <path d="M25 7V17" stroke="#00F2FE" stroke-width="3" stroke-linecap="round"/>
@@ -92,7 +488,7 @@
       </nav>
 
       <div class="menu-toggle" id="mobile-toggle">
-        <svg style="width:24px;height:24px;" viewBox="0 0 24 24" fill="currentColor">
+        <svg style="width:26px;height:26px;" viewBox="0 0 24 24" fill="currentColor">
           <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
         </svg>
       </div>
@@ -101,10 +497,6 @@
 
   <!-- HERO SECTION -->
   <section class="hero" id="home">
-    <canvas id="hero-canvas"></canvas>
-    <div class="hero-glow-1"></div>
-    <div class="hero-glow-2"></div>
-
     <div class="container grid-2">
       <div class="hero-content">
         <span class="hero-tag">⚡ Inisiatif Energi Hijau</span>
@@ -125,20 +517,19 @@
         </div>
       </div>
 
-      <!-- TIMELAPSE VIDEO CONTAINER (SPEED 0.3x ULTRA SLOW-MOTION) -->
+      <!-- TIMELAPSE VIDEO CONTAINER (0.3x SLOW-MOTION CINEMATIC) -->
       <div class="hero-visual" style="display: flex; align-items: center; justify-content: center;">
-        <div style="width: 100%; max-width: 480px; border-radius: 20px; overflow: hidden; border: 2px solid rgba(0, 242, 254, 0.3); box-shadow: 0 0 35px rgba(0, 242, 254, 0.15); background: rgba(3, 7, 18, 0.8);">
+        <div style="width: 100%; max-width: 500px; border-radius: var(--radius-lg); overflow: hidden; border: 2px solid rgba(0, 242, 254, 0.3); box-shadow: 0 0 35px rgba(0, 242, 254, 0.15); background: rgba(3, 7, 18, 0.8);">
           <video id="tcsTimelapseVideo" autoplay muted loop playsinline style="width: 100%; height: auto; display: block; object-fit: cover;">
             <source src="assets/SPKLU vid 1.mp4" type="video/mp4">
             Browser Anda tidak mendukung tag video.
           </video>
         </div>
       </div>
-
     </div>
   </section>
 
-  <!-- SCRIPT UNTUK MENGATUR KECEPATAN VIDEO (0.3x SLOW-MOTION) -->
+  <!-- SCRIPT KECEPATAN VIDEO (0.3x) -->
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       const vid = document.getElementById("tcsTimelapseVideo");
@@ -149,17 +540,17 @@
   </script>
 
   <!-- BANNER SIMULASI PEMASUKAN PER JAM -->
-  <section style="position: relative; z-index: 10; margin-top: -50px; padding: 0 20px;">
+  <section style="position: relative; z-index: 10; margin-top: -20px; padding: 0 16px;">
     <div class="container">
-      <div class="glass-card" style="text-align: center; max-width: 900px; margin: 0 auto; padding: 30px; border-color: rgba(0, 242, 254, 0.25); box-shadow: 0 0 35px rgba(0, 242, 254, 0.08);">
-        <span style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--primary-teal); font-weight: 800; display: block; margin-bottom: 8px;">
+      <div class="glass-card" style="text-align: center; max-width: 900px; margin: 0 auto; padding: 24px; border-color: rgba(0, 242, 254, 0.25); box-shadow: 0 0 30px rgba(0, 242, 254, 0.08);">
+        <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--primary-teal); font-weight: 800; display: block; margin-bottom: 8px;">
           ⚡ SIMULASI ESTIMASI PEMASUKAN REAL-TIME (1 UNIT CHARGER DC 50 kW)
         </span>
-        <h2 id="live-revenue-val" style="font-size: 44px; font-weight: 800; font-family: 'Outfit', sans-serif; background: var(--gradient-tech); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+        <h2 id="live-revenue-val" style="font-size: clamp(32px, 6vw, 44px); font-weight: 800; background: var(--gradient-tech); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
           Rp 75.000 / Jam
         </h2>
         <p style="font-size: 13px; color: var(--text-secondary); margin-top: 8px; line-height: 1.6; max-width: 780px; margin-left: auto; margin-right: auto;">
-          Dihitung berbasis skenario moderat <strong>12 sesi pengisian per hari</strong> (rata-rata hanya 1 mobil per jam). Potensi pasif income mencapai <strong>±Rp 27.000.000 / bulan</strong> yang bekerja otomatis 24 jam nonstop di lahan Anda tanpa repot operasional.
+          Dihitung berbasis skenario moderat <strong>12 sesi pengisian per hari</strong> (rata-rata 1 mobil per jam). Potensi pasif income mencapai <strong>±Rp 27.000.000 / bulan</strong> yang bekerja otomatis 24 jam nonstop di lahan Anda.
         </p>
       </div>
     </div>
@@ -172,25 +563,25 @@
         <span class="section-tag">Mengapa Bermitra dengan PT TCS?</span>
         <h2 class="section-title">Didukung oleh Infrastruktur Kontraktor MEP Nasional</h2>
         <p class="section-desc">
-          Membangun bisnis SPKLU membutuhkan keahlian mekanikal dan elektrikal tingkat tinggi agar aman dan memenuhi regulasi pemerintah. Sebagai kontraktor MEP nasional terpercaya, PT TCS menjamin keandalan teknis 100%.
+          Membangun bisnis SPKLU membutuhkan keahlian mekanikal dan elektrikal tingkat tinggi agar aman dan memenuhi regulasi ESDM & PLN.
         </p>
       </div>
 
       <div class="grid-3">
-        <div class="glass-card" style="border-left: 3px solid var(--primary-teal);">
-          <div style="font-size: 28px; margin-bottom: 12px;">⚡</div>
-          <h3 style="font-size: 18px; color: #fff; margin-bottom: 8px;">Kontraktor MEP Nasional</h3>
-          <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">Berpengalaman merancang dan membangun proyek infrastruktur vital berskala besar untuk industri farmasi, manufaktur, dan gedung bertingkat.</p>
+        <div class="glass-card" style="border-left: 4px solid var(--primary-teal);">
+          <div style="font-size: 26px; margin-bottom: 10px;">⚡</div>
+          <h3 style="font-size: 17px; color: #fff; margin-bottom: 6px;">Kontraktor MEP Nasional</h3>
+          <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">Berpengalaman merancang infrastruktur vital skala besar untuk industri manufaktur, gedung bertingkat, dan gardu tegangan tinggi.</p>
         </div>
-        <div class="glass-card" style="border-left: 3px solid var(--primary-teal);">
-          <div style="font-size: 28px; margin-bottom: 12px;">🛡️</div>
-          <h3 style="font-size: 18px; color: #fff; margin-bottom: 8px;">Insinyur Ahli & Berlisensi</h3>
-          <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">Instalasi kelistrikan daya tinggi SPKLU dikerjakan oleh tim insinyur bersertifikat resmi sesuai standar PUIL dan Kementerian ESDM.</p>
+        <div class="glass-card" style="border-left: 4px solid var(--primary-teal);">
+          <div style="font-size: 26px; margin-bottom: 10px;">🛡️</div>
+          <h3 style="font-size: 17px; color: #fff; margin-bottom: 6px;">Insinyur Ahli & Berlisensi</h3>
+          <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">Instalasi kelistrikan daya tinggi SPKLU dikerjakan oleh tim insinyur bersertifikasi resmi sesuai standar PUIL dan ESDM.</p>
         </div>
-        <div class="glass-card" style="border-left: 3px solid var(--primary-teal);">
-          <div style="font-size: 28px; margin-bottom: 12px;">🤝</div>
-          <h3 style="font-size: 18px; color: #fff; margin-bottom: 8px;">Mitra Industri Terkemuka</h3>
-          <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">Dipercaya oleh puluhan korporasi multinasional untuk infrastruktur vital dan jaminan ketahanan operasional sistem.</p>
+        <div class="glass-card" style="border-left: 4px solid var(--primary-teal);">
+          <div style="font-size: 26px; margin-bottom: 10px;">🤝</div>
+          <h3 style="font-size: 17px; color: #fff; margin-bottom: 6px;">Mitra Industri Terkemuka</h3>
+          <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">Dipercaya oleh puluhan korporasi nasional untuk keandalan infrastruktur dan jaminan garansi operasional 24/7.</p>
         </div>
       </div>
     </div>
@@ -202,61 +593,61 @@
       <div class="section-header">
         <span class="section-tag">Skema Kerja Sama</span>
         <h2 class="section-title">Kolaborasi Transparan & Saling Menguntungkan</h2>
-        <p class="section-desc">Kami membagi tanggung jawab kerja sama secara berimbang guna mempercepat pengoperasian stasiun pengisian daya dengan manajemen aset profesional.</p>
+        <p class="section-desc">Pemisahan tanggung jawab yang berimbang demi percepatan penetrasi SPKLU di lokasi strategis Anda.</p>
       </div>
 
-      <div class="grid-3" style="gap: 25px;">
+      <div class="grid-3">
         <!-- KATEGORI 1: MITRA PEMILIK LAHAN -->
         <div class="glass-card" style="border-top: 3px solid var(--electric-amber);">
-          <h3 style="font-size: 18px; color: var(--electric-amber); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
-            <span>📍</span> Kewajiban Mitra Pemilik Lahan
+          <h3 style="font-size: 17px; color: var(--electric-amber); margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+            <span>📍</span> Kewajiban Pemilik Lahan
           </h3>
-          <ul style="list-style: none; display: flex; flex-direction: column; gap: 12px; font-size: 13.5px; line-height: 1.5;">
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 13px; line-height: 1.5;">
             <li style="display: flex; gap: 8px;">
               <strong style="color: var(--electric-amber);">1.</strong>
-              <div><strong>Lahan Strategis:</strong> Menyediakan lokasi minimal muat 2–4 mobil di tepi jalan arteri, kompleks ruko, atau pusat keramaian publik.</div>
+              <div><strong>Lahan Strategis:</strong> Menyediakan area minimal 2–4 slot parkir di tepi jalan arteri atau ruko komersial.</div>
             </li>
             <li style="display: flex; gap: 8px;">
               <strong style="color: var(--electric-amber);">2.</strong>
-              <div><strong>Status Clean & Clear:</strong> Menjamin legalitas tanah sah (SHM/HGB) dan bebas sengketa hukum untuk penempatan stasiun SPKLU.</div>
+              <div><strong>Status Sah:</strong> Menjamin legalitas kepemilikan lahan bebas sengketa (SHM/HGB).</div>
             </li>
           </ul>
         </div>
 
         <!-- KATEGORI 2: MITRA INVESTOR -->
-        <div class="glass-card" style="border-top: 3px solid #00f2fe;">
-          <h3 style="font-size: 18px; color: #00f2fe; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+        <div class="glass-card" style="border-top: 3px solid var(--primary-teal);">
+          <h3 style="font-size: 17px; color: var(--primary-teal); margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
             <span>💰</span> Kewajiban Mitra Investor
           </h3>
-          <ul style="list-style: none; display: flex; flex-direction: column; gap: 12px; font-size: 13.5px; line-height: 1.5;">
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 13px; line-height: 1.5;">
             <li style="display: flex; gap: 8px;">
-              <strong style="color: #00f2fe;">1.</strong>
-              <div><strong>Penyediaan Dana Modal:</strong> Mengalokasikan dana modal investasi pengadaan unit mesin SPKLU (skema AC 22 kW / DC 50 kW).</div>
+              <strong style="color: var(--primary-teal);">1.</strong>
+              <div><strong>Penyediaan Modal:</strong> Mengalokasikan dana pengadaan unit charger SPKLU (AC 22 kW / DC 50 kW).</div>
             </li>
             <li style="display: flex; gap: 8px;">
-              <strong style="color: #00f2fe;">2.</strong>
-              <div><strong>Komitmen Pasif Income:</strong> Menyetujui skema bagi hasil bersih autopilot jangka panjang yang dipantau real-time via aplikasi investor.</div>
+              <strong style="color: var(--primary-teal);">2.</strong>
+              <div><strong>Pasif Income:</strong> Menikmati bagi hasil bersih autopilot yang dipantau real-time via dashboard.</div>
             </li>
           </ul>
         </div>
 
         <!-- KATEGORI 3: KEWAJIBAN PT TCS -->
         <div class="glass-card" style="border-top: 3px solid var(--primary-lime);">
-          <h3 style="font-size: 18px; color: var(--primary-lime); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+          <h3 style="font-size: 17px; color: var(--primary-lime); margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
             <span>⚙️</span> Kewajiban PT TCS
           </h3>
-          <ul style="list-style: none; display: flex; flex-direction: column; gap: 12px; font-size: 13.5px; line-height: 1.5;">
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 13px; line-height: 1.5;">
             <li style="display: flex; gap: 8px;">
               <strong style="color: var(--primary-lime);">1.</strong>
-              <div><strong>Unit & Pemasangan MEP:</strong> Pengadaan mesin charger, panel daya otomatis, instalasi kelistrikan, dan sistem QRIS.</div>
+              <div><strong>MEP & Mesin:</strong> Pengadaan mesin charger, instalasi gardu daya, dan integrasi sistem pembayaran QRIS.</div>
             </li>
             <li style="display: flex; gap: 8px;">
               <strong style="color: var(--primary-lime);">2.</strong>
-              <div><strong>Investasi Sipil Penunjang:</strong> Konstruksi pondasi lantai cor semen, marka parkir, dan kanopi pelindung cuaca.</div>
+              <div><strong>Konstruksi Sipil:</strong> Pondasi lantai cor semen, kanopi pelindung cuaca, dan marka parkir resmi.</div>
             </li>
             <li style="display: flex; gap: 8px;">
               <strong style="color: var(--primary-lime);">3.</strong>
-              <div><strong>Izin & Operasional:</strong> Sertifikasi SLO ESDM, upgrade gardu PLN, dan pemeliharaan mesin rutin 24/7.</div>
+              <div><strong>Izin & Maintenance:</strong> Sertifikasi SLO ESDM, kerja sama PLN, dan pemeliharaan mesin 24/7.</div>
             </li>
           </ul>
         </div>
@@ -264,71 +655,72 @@
     </div>
   </section>
 
-  <!-- SIMULATOR ROI (8 TAHUN) -->
+  <!-- SIMULATOR ROI (8 TAHUN LENGKAP) -->
   <section class="section" id="simulator" style="background-color: var(--bg-surface); border-top: 1px solid var(--border-card); border-bottom: 1px solid var(--border-card);">
     <div class="container">
       <div class="section-header">
         <span class="section-tag">Simulator Finansial</span>
         <h2 class="section-title">Simulator Arus Kas & Kelayakan Finansial</h2>
-        <p class="section-desc">Sesuaikan tipe mesin dan estimasi sesi per hari untuk melihat proyeksi titik impas (Break-Even Point) dan arus kas kumulatif selama 8 tahun penuh.</p>
+        <p class="section-desc">Uji proyeksi Break-Even Point (BEP) dan arus kas kumulatif selama 8 tahun penuh secara real-time.</p>
       </div>
 
-      <div class="glass-card" style="padding: 35px;">
-        <div class="grid-2" style="align-items: stretch; gap: 35px;">
+      <div class="glass-card" style="padding: 24px;">
+        <div class="grid-2" style="gap: 24px;">
           
-          <div style="display: flex; flex-direction: column; justify-content: space-between; gap: 20px;">
+          <div style="display: flex; flex-direction: column; gap: 18px;">
             <div>
-              <label class="form-label" style="text-transform: uppercase; font-size: 11px; color: var(--text-secondary); margin-bottom: 10px;">PILIH TIPE MESIN & SKENARIO INVESTASI</label>
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                <button id="scenACBtn" type="button" class="btn btn-secondary active" style="flex-direction: column; padding: 14px; border-color: var(--primary-teal); background: rgba(0, 242, 254, 0.08);">
-                  <strong style="font-size: 14px; color: #fff;">Tipe AC (22 kW)</strong>
-                  <span style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Capex: Rp 150 Juta</span>
+              <label class="form-label" style="text-transform: uppercase; font-size: 11px;">PILIH TIPE MESIN INVESTASI</label>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <button id="scenACBtn" type="button" class="btn btn-secondary active" style="flex-direction: column; padding: 12px; border-color: var(--primary-teal); background: rgba(0, 242, 254, 0.08);">
+                  <strong style="font-size: 13.5px; color: #fff;">Tipe AC (22 kW)</strong>
+                  <span style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">Capex: Rp 150 Jt</span>
                 </button>
-                <button id="scenDCBtn" type="button" class="btn btn-secondary" style="flex-direction: column; padding: 14px;">
-                  <strong style="font-size: 14px; color: #fff;">Tipe DC (50 kW)</strong>
-                  <span style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Capex: Rp 850 Juta</span>
+                <button id="scenDCBtn" type="button" class="btn btn-secondary" style="flex-direction: column; padding: 12px;">
+                  <strong style="font-size: 13.5px; color: #fff;">Tipe DC (50 kW)</strong>
+                  <span style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">Capex: Rp 850 Jt</span>
                 </button>
               </div>
             </div>
 
             <div>
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <label class="form-label" style="text-transform: uppercase; font-size: 11px; color: var(--text-secondary); margin: 0;">JUMLAH TRANSAKSI (SESI / HARI)</label>
-                <span id="sessionValue" style="background: rgba(0, 242, 254, 0.1); color: var(--primary-teal); font-size: 12px; font-weight: 800; padding: 3px 10px; border-radius: 20px;">5 Sesi</span>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <label class="form-label" style="text-transform: uppercase; font-size: 11px; margin: 0;">SESI TRANSAKSI / HARI</label>
+                <span id="sessionValue" style="background: rgba(0, 242, 254, 0.1); color: var(--primary-teal); font-size: 12px; font-weight: 800; padding: 2px 8px; border-radius: 20px;">5 Sesi</span>
               </div>
-              <input id="sessionSlider" type="range" min="2" max="8" step="1" value="5" class="form-input-text" style="padding: 0; height: 8px; cursor: pointer;">
-              <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted); margin-top: 6px;">
+              <input id="sessionSlider" type="range" min="2" max="8" step="1" value="5" class="form-input-text" style="padding: 0; height: 6px; cursor: pointer;">
+              <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted); margin-top: 4px;">
                 <span id="sliderMinLabel">2 Sesi (Konservatif)</span>
                 <span id="sliderMaxLabel">8 Sesi (Maksimal AC)</span>
               </div>
             </div>
 
-            <div style="background: rgba(3, 7, 18, 0.4); border: 1px solid var(--border-card); border-radius: var(--border-radius-md); padding: 16px; display: flex; flex-direction: column; gap: 10px;">
-              <div style="display: flex; justify-content: space-between; font-size: 13px;">
+            <div style="background: rgba(3, 7, 18, 0.5); border: 1px solid var(--border-card); border-radius: var(--radius-md); padding: 14px; display: flex; flex-direction: column; gap: 8px;">
+              <div style="display: flex; justify-content: space-between; font-size: 12.5px;">
                 <span style="color: var(--text-secondary);">Estimasi CAPEX Awal</span>
-                <span id="capexValue" style="color: #fff; font-weight: 700; font-family: 'Outfit', sans-serif;">Rp 150.000.000</span>
+                <span id="capexValue" style="color: #fff; font-weight: 700;">Rp 150.000.000</span>
               </div>
-              <div style="display: flex; justify-content: space-between; font-size: 13px;">
+              <div style="display: flex; justify-content: space-between; font-size: 12.5px;">
                 <span style="color: var(--text-secondary);">Pendapatan Kotor Bulanan</span>
-                <span id="grossMonthly" style="color: #fff; font-weight: 700; font-family: 'Outfit', sans-serif;">Rp 5.250.000</span>
+                <span id="grossMonthly" style="color: #fff; font-weight: 700;">Rp 5.250.000</span>
               </div>
-              <div style="display: flex; justify-content: space-between; font-size: 14px; border-top: 1px dashed var(--border-card); padding-top: 10px;">
+              <div style="display: flex; justify-content: space-between; font-size: 13.5px; border-top: 1px dashed var(--border-card); padding-top: 8px;">
                 <span style="color: var(--primary-teal); font-weight: 800;">Payback Period (PBP)</span>
-                <span id="pbpValue" style="color: var(--primary-teal); font-weight: 900; font-size: 18px; font-family: 'Outfit', sans-serif;">2.8 Tahun</span>
+                <span id="pbpValue" style="color: var(--primary-teal); font-weight: 900; font-size: 16px;">2.8 Tahun</span>
               </div>
             </div>
           </div>
 
+          <!-- GRAFIK 8 TAHUN LENGKAP TANPA TERPOTONG -->
           <div style="display: flex; flex-direction: column; justify-content: space-between;">
-            <div style="margin-bottom: 10px;">
-              <span style="color: var(--primary-teal); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em;">Proyeksi Saldo Kas</span>
-              <h4 style="font-size: 16px; color: #fff; font-family: 'Outfit', sans-serif; margin-top: 2px;">Visualisasi Arus Kas Kumulatif (8 Tahun - Juta Rp)</h4>
+            <div style="margin-bottom: 8px;">
+              <span style="color: var(--primary-teal); font-size: 10.5px; font-weight: 800; text-transform: uppercase;">Proyeksi Saldo Kas Kumulatif</span>
+              <h4 style="font-size: 15px; color: #fff; margin-top: 2px;">Visualisasi Arus Kas (8 Tahun Penuh - Juta Rp)</h4>
             </div>
-            <div style="position: relative; width: 100%; height: 250px;">
+            <div style="position: relative; width: 100%; height: 240px;">
               <canvas id="roiChartCanvas"></canvas>
             </div>
             <div style="font-size: 10px; color: var(--text-muted); border-top: 1px solid var(--border-card); padding-top: 8px; margin-top: 8px;">
-              💡 <em>Formula dihitung menggunakan standar kelayakan finansial: NPV & IRR diskonto 10% dengan O&M 15% dipotong dari omzet harian otomatis.</em>
+              💡 <em>Perhitungan standar finansial: Diskon faktor 10% dengan O&M 15% dipotong otomatis dari omzet harian.</em>
             </div>
           </div>
 
@@ -341,81 +733,69 @@
   <section class="section" id="scanner">
     <div class="container">
       <div class="section-header">
-        <span class="section-tag" style="color: var(--primary-teal);">Radar Feasibility</span>
+        <span class="section-tag">Radar Feasibility</span>
         <h2 class="section-title">Pemindai Kelayakan Lokasi (Google Maps EV Mode)</h2>
         <p class="section-desc">
-          Masukkan alamat properti Anda untuk meluncurkan analisis kelayakan. Sistem kami akan memetakan koordinat dan membuka navigasi resmi Google Maps EV untuk mengecek keberadaan SPKLU terdekat secara 100% akurat.
+          Masukkan alamat lahan untuk meluncurkan mode navigasi mobil listrik Google Maps dan mendeteksi ketersediaan SPKLU terdekat.
         </p>
       </div>
 
-      <div class="glass-card" style="padding: 35px;">
-        <div class="grid-2" style="align-items: stretch; gap: 35px;">
+      <div class="glass-card" style="padding: 24px;">
+        <div class="grid-2" style="gap: 20px;">
           
-          <div style="display: flex; flex-direction: column; justify-content: space-between; gap: 18px;">
+          <div style="display: flex; flex-direction: column; gap: 16px;">
             <div>
-              <label class="form-label" style="text-transform: uppercase; font-size: 11px; color: var(--text-secondary); margin-bottom: 8px;">LOKASI LAHAN ATAU ALAMAT PROPERTI</label>
-              <div style="position: relative;">
-                <input type="text" id="spScanInput" class="form-input-text" style="padding-left: 38px;" placeholder="Masukkan alamat lengkap lahan (contoh: Taman Alfa Indah, Jakarta Barat)...">
-                <span style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 15px;">📍</span>
-              </div>
+              <label class="form-label" style="text-transform: uppercase; font-size: 11px;">LOKASI LAHAN / ALAMAT PROPERTI</label>
+              <input type="text" id="spScanInput" class="form-input-text" placeholder="Masukkan alamat lengkap (contoh: Kebon Jeruk, Jakarta Barat)...">
             </div>
 
             <div>
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                <label class="form-label" style="text-transform: uppercase; font-size: 11px; color: var(--text-secondary); margin: 0;">RADIUS AUDIT KELAYAKAN</label>
-                <span id="spRadiusValue" style="background: rgba(0, 242, 254, 0.1); border: 1px solid rgba(0, 242, 254, 0.2); color: var(--primary-teal); font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 20px;">3.0 KM</span>
+                <label class="form-label" style="text-transform: uppercase; font-size: 11px; margin: 0;">RADIUS AUDIT KELAYAKAN</label>
+                <span id="spRadiusValue" style="background: rgba(0, 242, 254, 0.1); color: var(--primary-teal); font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 20px;">3.0 KM</span>
               </div>
               <input id="spRadiusSlider" type="range" min="1.0" max="5.0" step="0.5" value="3.0" class="form-input-text" style="padding: 0; height: 6px; cursor: pointer;">
-              <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted); margin-top: 4px;">
-                <span>1.0 KM</span>
-                <span>5.0 KM</span>
-              </div>
             </div>
 
-            <div>
-              <button type="button" id="spScanBtnRun" class="btn btn-primary" style="width: 100%; padding: 14px; font-weight: 800; font-size: 14px;">
-                🔍 Analisa Lokasi & Buka Google Maps EV
-              </button>
-            </div>
+            <button type="button" id="spScanBtnRun" class="btn btn-primary">
+              🔍 Analisa Lokasi & Buka Google Maps EV
+            </button>
 
-            <div style="background: rgba(3, 7, 18, 0.7); border: 1px solid var(--border-card); border-radius: var(--border-radius-md); padding: 14px; min-height: 90px;">
-              <div style="font-size: 10px; text-transform: uppercase; color: var(--text-muted); font-weight: 800; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 4px; margin-bottom: 6px;">TCS Radar Audit v2.0</div>
-              <div id="spScanLogConsole" style="font-family: 'Courier New', monospace; font-size: 11px; color: var(--text-secondary); line-height: 1.5; max-height: 80px; overflow-y: auto;">
-                <div style="color: var(--primary-teal); font-weight: bold;">> [SYS] READY. MASUKKAN ALAMAT & KLIK ANALISA LOKASI.</div>
+            <div style="background: rgba(3, 7, 18, 0.7); border: 1px solid var(--border-card); border-radius: var(--radius-sm); padding: 12px;">
+              <div style="font-size: 9.5px; text-transform: uppercase; color: var(--text-muted); font-weight: 800; margin-bottom: 4px;">TCS Radar Audit v2.0</div>
+              <div id="spScanLogConsole" style="font-family: 'Courier New', monospace; font-size: 11px; color: var(--text-secondary); max-height: 60px; overflow-y: auto;">
+                <div style="color: var(--primary-teal); font-weight: bold;">> [SYS] READY. MASUKKAN ALAMAT & KLIK ANALISA.</div>
               </div>
             </div>
           </div>
 
-          <div style="background: rgba(3, 7, 18, 0.6); border: 1px solid var(--border-card); border-radius: var(--border-radius-lg); padding: 24px; display: flex; flex-direction: column; justify-content: center; gap: 14px;">
+          <div style="background: rgba(3, 7, 18, 0.6); border: 1px solid var(--border-card); border-radius: var(--radius-md); padding: 20px; display: flex; flex-direction: column; justify-content: center; gap: 10px;">
             <div style="display: flex; align-items: center; justify-content: space-between;">
               <span style="font-size: 11px; font-weight: 800; color: var(--primary-teal); text-transform: uppercase;">Google Maps EV Telemetry</span>
-              <span style="background: rgba(0, 229, 117, 0.1); color: #00e575; font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 4px;">Verified Protocol</span>
+              <span style="background: rgba(0, 229, 117, 0.1); color: #00e575; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px;">Verified</span>
             </div>
-            <h4 style="font-family: 'Outfit', sans-serif; font-size: 18px; color: #fff;">Akurasi Data Stasiun SPKLU 100%</h4>
-            <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
-              Pencarian stasiun charging akan langsung terhubung ke mode navigasi mobil listrik Google Maps untuk mendeteksi stasiun SPKLU aktif (PLN, Voltron, Starvo, Shell Recharge, Charge+) di sekitar koordinat properti Anda.
+            <h4 style="font-size: 16px; color: #fff;">Akurasi Data Stasiun SPKLU 100%</h4>
+            <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.6;">
+              Pencarian akan langsung membuka navigasi EV Google Maps untuk mendeteksi stasiun SPKLU aktif (PLN, Voltron, Starvo, Shell Recharge) di sekitar lahan Anda.
             </p>
-            <div style="padding: 12px; background: rgba(0, 242, 254, 0.03); border-left: 3px solid var(--primary-teal); border-radius: 4px; font-size: 12px; color: var(--text-secondary);">
-              💡 <em>Hasil pemindaian resmi langsung membuka peta Google Maps rute EV di tab baru secara otomatis.</em>
-            </div>
           </div>
 
         </div>
 
-        <div id="spScannerScoreCard" style="display: none; margin-top: 25px; padding: 20px; background: rgba(0, 242, 254, 0.05); border: 1.5px solid var(--primary-teal); border-radius: var(--border-radius-lg);">
-          <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: space-between;">
-            <div style="display: flex; align-items: center; gap: 16px;">
-              <div style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: rgba(0,242,254,0.1); border: 3px solid var(--primary-teal);">
-                <span id="spFeasibilityScoreText" style="font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 900; color: #fff;">94%</span>
+        <div id="spScannerScoreCard" style="display: none; margin-top: 20px; padding: 16px; background: rgba(0, 242, 254, 0.05); border: 1.5px solid var(--primary-teal); border-radius: var(--radius-md);">
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <div style="display: flex; align-items: center; gap: 14px;">
+              <div style="width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: rgba(0,242,254,0.1); border: 2px solid var(--primary-teal);">
+                <span id="spFeasibilityScoreText" style="font-size: 16px; font-weight: 900; color: #fff;">94%</span>
               </div>
               <div>
-                <span style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--text-secondary);">Skor Kelayakan Lahan:</span>
-                <h4 id="spFeasibilityScoreStatus" style="font-size: 16px; font-weight: 900; color: var(--primary-teal); margin-top: 2px;">SANGAT LAYAK (HI-POTENTIAL)</h4>
+                <span style="font-size: 10.5px; text-transform: uppercase; font-weight: 700; color: var(--text-secondary);">Skor Kelayakan:</span>
+                <h4 id="spFeasibilityScoreStatus" style="font-size: 15px; font-weight: 900; color: var(--primary-teal);">SANGAT LAYAK (HI-POTENTIAL)</h4>
               </div>
             </div>
-            <a href="#proposal" class="btn btn-primary" style="padding: 10px 20px; font-size: 12px; font-weight: 800;">Klaim Kuota Wilayah Sekarang 🚀</a>
+            <a href="#proposal" class="btn btn-primary" style="padding: 10px 16px; font-size: 12.5px;">Klaim Kuota Wilayah Sekarang 🚀</a>
           </div>
-          <div id="spFeasibilityScoreRec" style="border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 12px; margin-top: 14px; font-size: 12.5px; color: var(--text-secondary); line-height: 1.6;"></div>
+          <div id="spFeasibilityScoreRec" style="border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 10px; margin-top: 12px; font-size: 12px; color: var(--text-secondary); line-height: 1.5;"></div>
         </div>
 
       </div>
@@ -426,146 +806,126 @@
   <section class="section" id="analysis" style="background-color: var(--bg-surface); border-top: 1px solid var(--border-card); border-bottom: 1px solid var(--border-card);">
     <div class="container">
       <div class="section-header">
-        <span class="section-tag">Analisis Pasar & Keuangan</span>
-        <h2 class="section-title">Mengapa Sekarang Waktu Terbaik untuk Berinvestasi?</h2>
-        <p class="section-desc">Data berikut menggambarkan lonjakan pertumbuhan adopsi mobil listrik di Indonesia serta simulasi titik balik modal (ROI) proyek kemitraan secara konservatif.</p>
+        <span class="section-tag">Analisis Pasar</span>
+        <h2 class="section-title">Waktu Terbaik untuk Memulai</h2>
+        <p class="section-desc">Lonjakan populasi kendaraan listrik di Indonesia menciptakan peluang bisnis pengisian daya yang sangat masif.</p>
       </div>
 
-      <div class="grid-3" style="margin-bottom: 40px;">
+      <div class="grid-3">
         <div class="glass-card">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-            <h3 style="font-size: 15px; color: #fff;">Populasi EV Nasional</h3>
-            <span style="font-size: 10px; color: var(--text-muted); background: rgba(255,255,255,0.05); padding: 2px 6px; border-radius: 4px;">Ribu Unit</span>
-          </div>
-          <div style="height: 200px; position: relative;">
+          <h3 style="font-size: 14px; color: #fff; margin-bottom: 10px;">Populasi EV Nasional</h3>
+          <div style="height: 180px; position: relative;">
             <canvas id="evGrowthChart"></canvas>
           </div>
-          <p style="font-size: 11px; color: var(--text-secondary); border-top: 1px solid var(--border-card); padding-top: 8px; margin-top: 8px;">Adopsi mobil listrik nasional meningkat eksponensial menciptakan defisit ruang pengisian daya.</p>
         </div>
 
         <div class="glass-card">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-            <h3 style="font-size: 15px; color: #fff;">Distribusi Modal</h3>
-            <span style="font-size: 10px; color: var(--text-muted); background: rgba(255,255,255,0.05); padding: 2px 6px; border-radius: 4px;">Persentase</span>
-          </div>
-          <div style="height: 200px; position: relative;">
+          <h3 style="font-size: 14px; color: #fff; margin-bottom: 10px;">Distribusi Beban Modal</h3>
+          <div style="height: 180px; position: relative;">
             <canvas id="responsibilityChart"></canvas>
           </div>
-          <p style="font-size: 11px; color: var(--text-secondary); border-top: 1px solid var(--border-card); padding-top: 8px; margin-top: 8px;">Skema bagi hasil berimbang dengan pemisahan beban modal infrastruktur berat agar investor bebas pusing operasional.</p>
         </div>
 
         <div class="glass-card">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-            <h3 style="font-size: 15px; color: #fff;">Arus Kas (8 Tahun)</h3>
-            <span style="font-size: 10px; color: var(--text-muted); background: rgba(255,255,255,0.05); padding: 2px 6px; border-radius: 4px;">Juta Rp</span>
-          </div>
-          <div style="height: 200px; position: relative;">
+          <h3 style="font-size: 14px; color: #fff; margin-bottom: 10px;">Arus Kas (8 Tahun)</h3>
+          <div style="height: 180px; position: relative;">
             <canvas id="roiChart"></canvas>
           </div>
-          <p style="font-size: 11px; color: var(--text-secondary); border-top: 1px solid var(--border-card); padding-top: 8px; margin-top: 8px;">Modal awal sipil/lahan diproyeksikan mencapai Break-Even Point (BEP) di tahun ke-3.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- FORM PENGAJUAN LAHAN & FOMO PERSUASIF -->
+  <!-- FORM PENGAJUAN LAHAN -->
   <section class="section" id="proposal">
     <div class="container grid-2">
       <div>
         <span class="section-tag">💰 Pasif Income Nyata</span>
-        <h2 class="section-title" style="font-size: 32px; text-align: left; line-height: 1.25; margin-bottom: 16px;">Unduh Proposal & Ajukan Lahan Anda Hari Ini</h2>
-        <p style="color: var(--text-secondary); margin-bottom: 24px; font-size: 14px; line-height: 1.7;">
-          Infrastruktur SPKLU bersifat <strong>hiper-lokal dan memiliki batas zonasi eksklusif</strong>. Setiap hari Anda menunda, potensi arus kendaraan listrik di wilayah Anda akan beralih ke lokasi kompetitor terdekat.
+        <h2 class="section-title" style="text-align: left; margin-bottom: 12px;">Unduh Proposal & Ajukan Lahan Anda</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 20px; font-size: 13.5px; line-height: 1.6;">
+          Infrastruktur SPKLU memiliki zonasi eksklusif. Amankan hak monopoli pengisian daya mobil listrik di area Anda sekarang juga sebelum diklaim pihak lain!
         </p>
         
-        <!-- KOTAK PERSUASIF TINGGI (SCARCITY & REGIONAL MONOPOLY) -->
-        <div class="glass-card" style="padding: 22px; border-left: 4px solid var(--electric-amber); background: rgba(243, 156, 18, 0.04); margin-bottom: 20px;">
-          <h4 style="font-family: 'Outfit', sans-serif; font-size: 16px; color: #fff; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
-            <span>⏳</span> Amankan Hak Kuota Wilayah Anda Sebelum Ditutup!
+        <div class="glass-card" style="padding: 16px; border-left: 4px solid var(--electric-amber); background: rgba(243, 156, 18, 0.04);">
+          <h4 style="font-size: 14px; color: #fff; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+            <span>⏳</span> Amankan Kuota Wilayah Anda!
           </h4>
-          <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin: 0;">
-            Regulasi perizinan PLN dan Kementerian ESDM membatasi kepadatan stasiun pengisian daya dalam radius tertentu demi mencegah saturasi pasar. Begitu koordinat area Anda didaftarkan oleh pihak lain, perizinan titik baru akan dikunci otomatis. <strong>Amankan hak monopoli pengisian daya mobil listrik di area Anda sekarang juga!</strong>
+          <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5; margin: 0;">
+            Regulasi PLN membatasi titik gardu SPKLU terdekat untuk mencegah beban berlebih. Pendaftaran lebih awal memastikan titik Anda disetujui pertama kali.
           </p>
-        </div>
-
-        <div style="font-size: 12.5px; color: var(--text-muted); line-height: 1.5;">
-          * Tim analis spasial PT TCS akan memvalidasi kesiapan gardu PLN dan melakukan survei kelayakan fisik lokasi Anda dalam 1x24 jam kerja.
         </div>
       </div>
 
-      <div class="glass-card" style="padding: 30px;">
+      <div class="glass-card" style="padding: 24px;">
         <form id="spklu-lead-form">
-          <h3 style="margin-bottom: 20px; text-align: center; color: #fff; font-size: 18px; font-family: 'Outfit', sans-serif;">Formulir Pengajuan Mitra SPKLU</h3>
-          <div style="margin-bottom: 14px;">
-            <label class="form-label" for="lead-name">Nama Lengkap Investor / Pemilik Lahan *</label>
-            <input type="text" id="lead-name" class="form-input-text" placeholder="Contoh: Hermawan Wijaya" required>
+          <h3 style="margin-bottom: 16px; text-align: center; color: #fff; font-size: 17px;">Formulir Mitra SPKLU</h3>
+          <div style="margin-bottom: 12px;">
+            <label class="form-label" for="lead-name">Nama Lengkap *</label>
+            <input type="text" id="lead-name" class="form-input-text" placeholder="Nama Anda" required>
           </div>
-          <div class="grid-2" style="gap: 12px; margin-bottom: 14px;">
-            <div>
-              <label class="form-label" for="lead-email">Alamat Email Aktif *</label>
-              <input type="email" id="lead-email" class="form-input-text" placeholder="investor@tcs.com" required>
-            </div>
-            <div>
-              <label class="form-label" for="lead-phone">No. WhatsApp Aktif *</label>
-              <input type="tel" id="lead-phone" class="form-input-text" placeholder="0812345678" required>
-            </div>
+          <div style="margin-bottom: 12px;">
+            <label class="form-label" for="lead-email">Email Aktif *</label>
+            <input type="email" id="lead-email" class="form-input-text" placeholder="email@domain.com" required>
           </div>
-          <div style="margin-bottom: 14px;">
-            <label class="form-label" for="lead-address">Alamat Lengkap & Koordinat Google Maps Lahan *</label>
-            <textarea id="lead-address" class="form-input-text" style="min-height: 80px;" placeholder="Contoh: Jl. Raya Sudirman No. 42 (Koordinat: -6.2088, 106.8456)" required></textarea>
+          <div style="margin-bottom: 12px;">
+            <label class="form-label" for="lead-phone">No. WhatsApp *</label>
+            <input type="tel" id="lead-phone" class="form-input-text" placeholder="0812345678" required>
           </div>
-          <div style="margin-bottom: 18px;">
-            <label class="form-label" for="lead-notes">Keterangan Pendukung / Ukuran Lahan (Opsional)</label>
-            <textarea id="lead-notes" class="form-input-text" style="min-height: 60px;" placeholder="Contoh: Lahan parkir ruko muat 4 mobil, daya terpasang 33kVA..."></textarea>
+          <div style="margin-bottom: 12px;">
+            <label class="form-label" for="lead-address">Alamat & Link Google Maps Lahan *</label>
+            <textarea id="lead-address" class="form-input-text" style="min-height: 70px;" placeholder="Alamat lengkap lahan Anda..." required></textarea>
           </div>
-          <button type="submit" class="btn btn-primary" style="width: 100%; font-weight: 800; font-size: 14px;">
+          <div style="margin-bottom: 16px;">
+            <label class="form-label" for="lead-notes">Keterangan Tambahan (Opsional)</label>
+            <textarea id="lead-notes" class="form-input-text" style="min-height: 50px;" placeholder="Contoh: Muat 4 mobil di depan ruko..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%;">
             Unduh Proposal & Ajukan Lahan
           </button>
         </form>
 
-        <div id="form-loader-pane" style="display: none; text-align: center; padding: 30px;">
-          <div class="spinner"></div>
-          <p style="color: var(--text-secondary); font-size: 13px;">Menyimpan database pendaftaran Anda...</p>
+        <div id="form-loader-pane" style="display: none; text-align: center; padding: 25px;">
+          <p style="color: var(--primary-teal); font-size: 13px; font-weight: 700;">Menyimpan data pengajuan Anda...</p>
         </div>
 
-        <div id="form-success-pane" style="display: none; text-align: center; padding: 25px;">
-          <h3 style="color: #00e575; margin-bottom: 10px; font-family: 'Outfit', sans-serif;">Pengajuan Terkirim!</h3>
-          <p id="success-msg-text" style="color: var(--text-secondary); font-size: 13px; margin-bottom: 20px;"></p>
-          <a href="#" id="success-wa-btn" class="btn btn-primary" target="_blank" style="background: #25d366;">Hubungi WA Sekarang</a>
+        <div id="form-success-pane" style="display: none; text-align: center; padding: 20px;">
+          <h3 style="color: #00e575; margin-bottom: 8px;">Pengajuan Terkirim!</h3>
+          <p id="success-msg-text" style="color: var(--text-secondary); font-size: 13px; margin-bottom: 16px;"></p>
+          <a href="#" id="success-wa-btn" class="btn btn-primary" target="_blank" style="background: #25d366;">Hubungi WA Admin</a>
         </div>
       </div>
     </div>
   </section>
 
   <!-- FOOTER -->
-  <footer class="main-footer" style="padding: 40px 20px; text-align: center; border-top: 1px solid var(--border-card);">
-    <p style="font-size: 12px; color: var(--text-muted);">
-      PT. Titis Cahaya Sejahtera &copy; 2020 - 2026. MEP Contractor & SPKLU Operator. All rights reserved.
+  <footer style="padding: 30px 16px; text-align: center; border-top: 1px solid var(--border-card); margin-bottom: 70px;">
+    <p style="font-size: 11.5px; color: var(--text-muted);">
+      PT. Titis Cahaya Sejahtera &copy; 2020 - 2026. MEP Contractor & SPKLU Operator.
     </p>
   </footer>
 
-  <!-- FLOATING WHATSAPP BUTTON (BOTTOM RIGHT) -->
-  <a href="https://wa.me/628111460707?text=Halo%20Admin%20TCS,%20saya%20ingin%20berkonsultasi%20mengenai%20kemitraan%20SPKLU." target="_blank" aria-label="Hubungi WhatsApp" style="position: fixed; bottom: 25px; right: 25px; z-index: 9998; background: #25d366; color: #ffffff; padding: 12px 22px; border-radius: 50px; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4); text-decoration: none; transition: transform 0.2s ease, box-shadow 0.2s ease;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 6px 25px rgba(37, 211, 102, 0.6)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 20px rgba(37, 211, 102, 0.4)';">
-    <svg style="width:20px; height:20px; fill:currentColor;" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074--2.978-1.49-4.932-2.651-6.892-6.046-.172-.297-.018-.458.13-.603.135-.135.298-.347.447-.521.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+  <!-- FLOATING WHATSAPP BUTTON (POJOK KANAN BAWAH) -->
+  <a href="https://wa.me/628111460707?text=Halo%20Admin%20TCS,%20saya%20ingin%20berkonsultasi%20mengenai%20kemitraan%20SPKLU." target="_blank" aria-label="WhatsApp" class="float-wa-btn">
+    <svg style="width:18px; height:18px; fill:currentColor;" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074--2.978-1.49-4.932-2.651-6.892-6.046-.172-.297-.018-.458.13-.603.135-.135.298-.347.447-.521.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
     <span>WhatsApp</span>
   </a>
 
-  <!-- FLOATING CHATBOT WIDGET TIARA -->
-  <button id="tcsChatTrigger" class="float-spklu-badge" aria-label="Tanya AI SPKLU" style="border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
+  <!-- FLOATING CHATBOT WIDGET TIARA (POJOK KIRI BAWAH) -->
+  <button id="tcsChatTrigger" class="float-spklu-badge" aria-label="Tanya AI SPKLU" style="border: 1px solid var(--primary-teal); cursor: pointer;">
     <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#00e575; box-shadow: 0 0 6px #00e575;"></span>
     <span>Tanya TIARA 🤖</span>
   </button>
 
   <div id="tcsChatContainer" class="tcs-chat-window-container">
     <div class="tcs-chat-header">
-      <div class="tcs-chat-header-info">
-        <span class="tcs-chat-bot-icon">🤖</span>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 20px;">🤖</span>
         <div>
-          <h4 class="tcs-chat-bot-title">TCS SPKLU AI Advisor</h4>
-          <span class="tcs-chat-bot-status"><span class="tcs-chat-status-dot"></span> Online 24/7</span>
+          <h4 style="font-size: 13.5px; color: #fff; margin: 0;">TCS SPKLU AI Advisor</h4>
+          <span style="font-size: 10.5px; color: #00e575;">● Online 24/7</span>
         </div>
       </div>
-      <button id="tcsChatClose" class="tcs-chat-close-btn" aria-label="Tutup Chat">&times;</button>
+      <button id="tcsChatClose" style="background: none; border: none; color: #94a3b8; font-size: 22px; cursor: pointer;">&times;</button>
     </div>
     <div id="tcsChatMessages" class="tcs-chat-messages-area">
       <div class="tcs-chat-bubble bot">
@@ -574,7 +934,7 @@
     </div>
     <div class="tcs-chat-input-area">
       <input type="text" id="tcsChatInput" placeholder="Tanya seputar SPKLU..." class="tcs-chat-input-field">
-      <button id="tcsChatSend" class="tcs-chat-send-btn" aria-label="Kirim Pesan">➤</button>
+      <button id="tcsChatSend" class="tcs-chat-send-btn">➤</button>
     </div>
   </div>
 
