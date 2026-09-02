@@ -1717,6 +1717,30 @@
         .catch(err => console.error('Failed to load local JS fallback:', err));
     }
   </script>
+<!-- DYNAMIC WHATSAPP SYNC (TERHUBUNG DENGAN ADMIN.HTML) -->
+<script>
+  (function() {
+    // 1. Ambil nomor tersimpan dari admin.html, atau gunakan default beranda: 628111460707
+    var defaultWaMain = "628111460707";
+    var activeWa = localStorage.getItem('tcs_wa_main') || defaultWaMain;
+
+    // 2. Perbarui seluruh link WhatsApp di halaman index.html (tombol melayang & tombol kontak)
+    document.querySelectorAll('a[href*="wa.me"]').forEach(function(anchor) {
+      var currentHref = anchor.getAttribute('href');
+      if (currentHref) {
+        var updatedHref = currentHref.replace(/wa\.me\/\d+/, 'wa.me/' + activeWa);
+        anchor.setAttribute('href', updatedHref);
+      }
+    });
+
+    // 3. Perbarui teks nomor telepon di topbar jika elemennya ada
+    var topbarWaText = document.querySelector('.topbar-wa-text, a[href*="628111460707"]');
+    if (topbarWaText && activeWa !== defaultWaMain) {
+      topbarWaText.textContent = topbarWaText.textContent.replace(/62\d+/, activeWa);
+    }
+  })();
+</script>
+
 </body>
 
 </html>

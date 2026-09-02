@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Admin Portal - PT. Titis Cahaya Sejahtera</title>
+  <link rel="icon" type="image/png" href="images/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #030712;
+      --bg-card: #0b132b;
+      --border-card: rgba(255, 255, 255, 0.1);
+      --primary-teal: #00f2fe;
+      --primary-lime: #00e575;
+      --danger-red: #ef4444;
+      --text-main: #ffffff;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .admin-card {
+      width: 100%;
+      max-width: 480px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+    }
+
+    .header-logo {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .header-logo h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .header-logo p {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .form-control {
+      width: 100%;
+      min-height: 46px;
+      background: rgba(3, 7, 18, 0.7);
+      border: 1px solid var(--border-card);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary-teal);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 46px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #00f2fe 0%, #00e575 100%);
+      color: #030712;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      margin-top: 10px;
+    }
+
+    .alert-msg {
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 14px;
+      display: none;
+    }
+
+    .alert-danger {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid var(--danger-red);
+      color: #fca5a5;
+    }
+
+    .alert-success {
+      background: rgba(0, 229, 117, 0.15);
+      border: 1px solid var(--primary-lime);
+      color: #86efac;
+    }
+
+    .status-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 12px;
+      background: rgba(0, 242, 254, 0.1);
+      color: var(--primary-teal);
+      border: 1px solid rgba(0, 242, 254, 0.2);
+      margin-bottom: 14px;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border-card);
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="admin-card">
+    <div class="header-logo">
+      <span class="status-badge">TCS Control System</span>
+      <h1>Admin Dashboard</h1>
+      <p>Konfigurasi Layanan & Saluran Komunikasi</p>
+    </div>
+
+    <div id="alertBox" class="alert-msg"></div>
+
+    <!-- TAMPILAN LOGIN -->
+    <div id="loginView">
+      <form id="loginForm">
+        <div class="form-group">
+          <label class="form-label" for="adminPasswordInput">Kata Sandi Administrator</label>
+          <input type="password" id="adminPasswordInput" class="form-control" placeholder="Masukkan sandi..." required>
+        </div>
+        <button type="submit" class="btn btn-primary" id="btnLogin">Masuk ke Panel</button>
+      </form>
+      <a href="index.html" class="btn btn-secondary">Kembali ke Beranda</a>
+    </div>
+
+    <!-- TAMPILAN PENGATURAN (SETELAH LOGIN) -->
+    <div id="dashboardView" style="display: none;">
+      <form id="configForm">
+        <div class="form-group">
+          <label class="form-label" for="waMainInput">1. WhatsApp Halaman Utama (TCS)</label>
+          <input type="text" id="waMainInput" class="form-control" placeholder="Contoh: 628111460707" required>
+          <small style="font-size: 10.5px; color: var(--text-muted); display: block; margin-top: 3px;">Format diawali kode negara 62 tanpa tanda plus/spasi.</small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="waSpkluInput">2. WhatsApp Halaman SPKLU</label>
+          <input type="text" id="waSpkluInput" class="form-control" placeholder="Contoh: 6287832219195" required>
+          <small style="font-size: 10.5px; color: var(--text-muted); display: block; margin-top: 3px;">Nomor aktif untuk konsultasi dan pendaftaran SPKLU.</small>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="btnSaveConfig" style="margin-top: 8px;">Simpan Perubahan Nomor</button>
+      </form>
+
+      <div class="divider"></div>
+
+      <!-- FORM UBAH PASSWORD -->
+      <form id="changePasswordForm">
+        <label class="form-label" style="color: var(--primary-teal);">Ubah Kata Sandi Admin</label>
+        <div class="form-group">
+          <input type="password" id="newPasswordInput" class="form-control" placeholder="Kata sandi baru..." required>
+        </div>
+        <button type="submit" class="btn btn-secondary" id="btnSavePassword">Perbarui Kata Sandi</button>
+      </form>
+
+      <div class="divider"></div>
+
+      <button type="button" class="btn btn-secondary" id="btnLogout" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #fca5a5;">Keluar (Logout)</button>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const GAS_URL = "https://script.google.com/macros/s/AKfycbwLsg5MwxMv2Oq2auYdwd-dKRmVwlqf25re6Dq8au-6XY9KZZpqnmToml_cqRAMQw/exec";
+
+      const DEFAULT_PASS = "Base151264";
+      const DEFAULT_WA_MAIN = "628111460707";
+      const DEFAULT_WA_SPKLU = "6287832219195";
+
+      const loginView = document.getElementById('loginView');
+      const dashboardView = document.getElementById('dashboardView');
+      const alertBox = document.getElementById('alertBox');
+      const loginForm = document.getElementById('loginForm');
+      const configForm = document.getElementById('configForm');
+      const changePasswordForm = document.getElementById('changePasswordForm');
+      const btnLogout = document.getElementById('btnLogout');
+
+      const adminPasswordInput = document.getElementById('adminPasswordInput');
+      const waMainInput = document.getElementById('waMainInput');
+      const waSpkluInput = document.getElementById('waSpkluInput');
+      const newPasswordInput = document.getElementById('newPasswordInput');
+
+      function showAlert(msg, isSuccess) {
+        alertBox.textContent = msg;
+        alertBox.className = 'alert-msg ' + (isSuccess ? 'alert-success' : 'alert-danger');
+        alertBox.style.display = 'block';
+        setTimeout(() => { alertBox.style.display = 'none'; }, 4000);
+      }
+
+      function cleanPhone(phone) {
+        return phone.replace(/[^0-9]/g, '');
+      }
+
+      async function sendGasRequest(action, dataPayload) {
+        try {
+          const response = await fetch(GAS_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({ action: action, data: dataPayload })
+          });
+          return await response.json();
+        } catch (e) {
+          return null;
+        }
+      }
+
+      async function loadCurrentConfig() {
+        const res = await sendGasRequest('getSystemConfig', {});
+        if (res && res.success && res.config) {
+          waMainInput.value = res.config.waMain || DEFAULT_WA_MAIN;
+          waSpkluInput.value = res.config.waSpklu || DEFAULT_WA_SPKLU;
+          localStorage.setItem('tcs_wa_main', waMainInput.value);
+          localStorage.setItem('tcs_wa_spklu', waSpkluInput.value);
+        } else {
+          waMainInput.value = localStorage.getItem('tcs_wa_main') || DEFAULT_WA_MAIN;
+          waSpkluInput.value = localStorage.getItem('tcs_wa_spklu') || DEFAULT_WA_SPKLU;
+        }
+      }
+
+      // LOGIN SUBMISSION
+      loginForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const enteredPass = adminPasswordInput.value.trim();
+        
+        // Pengecekan awal lokal / fallback
+        const localSavedPass = localStorage.getItem('tcs_admin_pass') || DEFAULT_PASS;
+
+        // Validasi ke backend GAS
+        const res = await sendGasRequest('verifyAdminPassword', { password: enteredPass });
+        const isValid = (res && res.success) ? res.valid : (enteredPass === localSavedPass);
+
+        if (isValid) {
+          sessionStorage.setItem('tcs_admin_auth', 'true');
+          loginView.style.display = 'none';
+          dashboardView.style.display = 'block';
+          showAlert('Berhasil masuk sebagai administrator.', true);
+          loadCurrentConfig();
+        } else {
+          showAlert('Kata sandi yang Anda masukkan salah.', false);
+        }
+      });
+
+      // SIMPAN KONFIGURASI WA
+      configForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const mainWa = cleanPhone(waMainInput.value);
+        const spkluWa = cleanPhone(waSpkluInput.value);
+
+        if (!mainWa || !spkluWa) {
+          showAlert('Nomor WhatsApp tidak boleh kosong.', false);
+          return;
+        }
+
+        // Simpan ke localStorage agar klien langsung update
+        localStorage.setItem('tcs_wa_main', mainWa);
+        localStorage.setItem('tcs_wa_spklu', spkluWa);
+
+        // Kirim pembaruan ke Google Apps Script ScriptProperties
+        const res = await sendGasRequest('updateSystemConfig', {
+          waMain: mainWa,
+          waSpklu: spkluWa
+        });
+
+        if (res && res.success) {
+          showAlert('Pengaturan nomor WhatsApp berhasil disimpan ke cloud!', true);
+        } else {
+          showAlert('Pengaturan tersimpan lokal (Cloud offline).', true);
+        }
+      });
+
+      // UBAH KATA SANDI
+      changePasswordForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const newPass = newPasswordInput.value.trim();
+        if (newPass.length < 6) {
+          showAlert('Kata sandi minimal 6 karakter.', false);
+          return;
+        }
+
+        localStorage.setItem('tcs_admin_pass', newPass);
+
+        const res = await sendGasRequest('updateAdminPassword', { newPassword: newPass });
+        if (res && res.success) {
+          showAlert('Kata sandi admin berhasil diperbarui!', true);
+        } else {
+          showAlert('Kata sandi berhasil diperbarui secara lokal.', true);
+        }
+        newPasswordInput.value = '';
+      });
+
+      // LOGOUT
+      btnLogout.addEventListener('click', function() {
+        sessionStorage.removeItem('tcs_admin_auth');
+        dashboardView.style.display = 'none';
+        loginView.style.display = 'block';
+        adminPasswordInput.value = '';
+        showAlert('Anda telah keluar dari panel admin.', true);
+      });
+
+      // CEK STATUS AUTH SAAT PERTAMA LOAD
+      if (sessionStorage.getItem('tcs_admin_auth') === 'true') {
+        loginView.style.display = 'none';
+        dashboardView.style.display = 'block';
+        loadCurrentConfig();
+      }
+    })();
+  </script>
+</body>
+</html>

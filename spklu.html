@@ -75,7 +75,7 @@
       letter-spacing: -0.02em;
     }
 
-    /* Mobile First Header */
+    /* Header */
     .main-header {
       position: fixed;
       top: 0;
@@ -485,7 +485,7 @@
           <li><a href="#scanner" class="nav-link">Radar Feasibility</a></li>
           <li><a href="#analysis" class="nav-link">Analisis Pasar</a></li>
           <li><a href="#proposal" class="nav-link">Proposal & Lahan</a></li>
-          <li><a href="index.html" class="nav-link nav-btn">Hubungi Kami</a></li>
+          <li><a href="index.html" class="nav-link nav-btn">Beranda Utama</a></li>
         </ul>
       </nav>
 
@@ -519,7 +519,7 @@
         </div>
       </div>
 
-      <!-- TIMELAPSE VIDEO CONTAINER (0.3x SLOW-MOTION CINEMATIC) -->
+      <!-- TIMELAPSE VIDEO CONTAINER -->
       <div class="hero-visual" style="display: flex; align-items: center; justify-content: center;">
         <div style="width: 100%; max-width: 500px; border-radius: var(--radius-lg); overflow: hidden; border: 2px solid rgba(0, 242, 254, 0.3); box-shadow: 0 0 35px rgba(0, 242, 254, 0.15); background: rgba(3, 7, 18, 0.8);">
           <video id="tcsTimelapseVideo" autoplay muted loop playsinline style="width: 100%; height: auto; display: block; object-fit: cover;">
@@ -589,7 +589,7 @@
     </div>
   </section>
 
-  <!-- SKEMA KERJA SAMA: 3 PILAR KEMITRAAN -->
+  <!-- SKEMA KERJA SAMA -->
   <section class="section" id="scheme">
     <div class="container">
       <div class="section-header">
@@ -785,7 +785,7 @@
 
         </div>
 
-        <!-- SCORE CARD DENGAN CATATAN AUDIT TEKNIS RESMI PT TCS -->
+        <!-- SCORE CARD DENGAN DISCLAIMER AUDIT RESMI PT TCS -->
         <div id="spScannerScoreCard" style="display: none; margin-top: 20px; padding: 18px; background: rgba(0, 242, 254, 0.05); border: 1.5px solid var(--primary-teal); border-radius: var(--radius-md);">
           <div style="display: flex; flex-direction: column; gap: 14px;">
             <div style="display: flex; align-items: center; gap: 14px;">
@@ -800,10 +800,8 @@
             <a id="spClaimBtn" href="#proposal" class="btn btn-primary" style="padding: 10px 16px; font-size: 12.5px;">Klaim Kuota Wilayah Sekarang 🚀</a>
           </div>
 
-          <!-- REKOMENDASI DAN CATATAN RESMI TIM TCS -->
           <div id="spFeasibilityScoreRec" style="border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 12px; margin-top: 12px; font-size: 12.5px; color: var(--text-secondary); line-height: 1.6;"></div>
 
-          <!-- KOTAK DISCLAIMER PENILAIAN DEFINITIF INSINYUR PT TCS -->
           <div style="margin-top: 12px; padding: 10px 14px; background: rgba(3, 7, 18, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: var(--radius-sm); font-size: 11px; color: var(--text-muted); line-height: 1.5; display: flex; gap: 8px; align-items: flex-start;">
             <span style="font-size: 14px; line-height: 1;">📌</span>
             <div>
@@ -905,7 +903,7 @@
         <div id="form-success-pane" style="display: none; text-align: center; padding: 20px;">
           <h3 style="color: #00e575; margin-bottom: 8px;">Pengajuan Terkirim!</h3>
           <p id="success-msg-text" style="color: var(--text-secondary); font-size: 13px; margin-bottom: 16px;"></p>
-          <a href="https://wa.me/6287832219195?text=Halo%20Admin%20TCS,%20saya%20sudah%20mengisi%20formulir%20pengajuan%20kemitraan%20SPKLU." id="success-wa-btn" class="btn btn-primary" target="_blank" style="background: #25d366;">Hubungi WA Admin</a>
+          <a href="https://wa.me/6287832219195?text=Halo%20Admin%20TCS,%20saya%20sudah%20mengisi%20formulir%20pengajuan%20kemitraan%20SPKLU." id="success-wa-btn" class="btn btn-primary dynamic-spklu-wa" target="_blank" style="background: #25d366;">Hubungi WA Admin</a>
         </div>
       </div>
     </div>
@@ -918,13 +916,13 @@
     </p>
   </footer>
 
-  <!-- FLOATING WHATSAPP BUTTON -->
-  <a href="https://wa.me/6287832219195?text=Halo%20Admin%20TCS,%20saya%20ingin%20berkonsultasi%20mengenai%20kemitraan%20SPKLU." target="_blank" aria-label="WhatsApp" class="float-wa-btn">
+  <!-- FLOATING WHATSAPP BUTTON (DYNAMIC ROUTING) -->
+  <a href="https://wa.me/6287832219195?text=Halo%20Admin%20TCS,%20saya%20ingin%20berkonsultasi%20mengenai%20kemitraan%20SPKLU." target="_blank" aria-label="WhatsApp" class="float-wa-btn dynamic-spklu-wa">
     <svg style="width:18px; height:18px; fill:currentColor;" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074--2.978-1.49-4.932-2.651-6.892-6.046-.172-.297-.018-.458.13-.603.135-.135.298-.347.447-.521.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
     <span>WhatsApp</span>
   </a>
 
-  <!-- FLOATING CHATBOT TRIGGER BUTTON (TIARA ADVISOR) -->
+  <!-- FLOATING CHATBOT TRIGGER BUTTON -->
   <button id="tcsChatTrigger" class="float-spklu-badge" type="button" aria-label="Tanya AI SPKLU">
     <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#00e575; box-shadow: 0 0 6px #00e575;"></span>
     <span>Tanya Tiara Advisor 🤖</span>
@@ -952,6 +950,22 @@
       <button id="tcsChatSend" type="button" class="tcs-chat-send-btn">➤</button>
     </div>
   </div>
+
+  <!-- DYNAMIC WHATSAPP SYNC ENGINE -->
+  <script>
+    (function() {
+      const DEFAULT_WA_SPKLU = "6287832219195";
+      const activeWa = localStorage.getItem('tcs_wa_spklu') || DEFAULT_WA_SPKLU;
+
+      document.querySelectorAll('.dynamic-spklu-wa').forEach(function(anchor) {
+        let currentHref = anchor.getAttribute('href');
+        if (currentHref && currentHref.includes('wa.me')) {
+          let updatedHref = currentHref.replace(/wa\.me\/\d+/, 'wa.me/' + activeWa);
+          anchor.setAttribute('href', updatedHref);
+        }
+      });
+    })();
+  </script>
 
   <!-- RADAR FEASIBILITY SCANNER HIGH-PRECISION SPATIAL EVALUATOR ENGINE -->
   <script>
@@ -1007,7 +1021,7 @@
         });
       }
 
-      // SPATIAL HEURISTIC EVALUATOR FUNCTION (REAL-WORLD DATA INTEGRITY)
+      // SPATIAL HEURISTIC EVALUATOR FUNCTION
       async function evaluateFeasibility(customLat, customLng, locationName) {
         const rawQuery = scanInput ? scanInput.value.trim() : '';
         const radius = radiusSlider ? radiusSlider.value : '3.0';
@@ -1026,7 +1040,7 @@
         let finalLng = customLng;
         let fullAddress = rawQuery;
 
-        // 1. Deteksi Kata Kunci Non-Kelayakan (Hutan, Sawah, Gunung, Cagar Alam, dll)
+        // 1. Deteksi Kata Kunci Non-Kelayakan
         const unviableKeywords = ['hutan', 'gunung', 'kebun', 'sawah', 'laut', 'danau', 'pantai terpencil', 'cagar alam', 'pedalaman', 'leuser', 'rinjani', 'semeru', 'hutan lindung'];
         const isObviouslyUnviable = unviableKeywords.some(kw => queryLower.includes(kw));
 
@@ -1057,12 +1071,10 @@
           let recText = '';
           let canClaim = true;
 
-          // EVALUASI KATEGORI LOKASI:
           if (isObviouslyUnviable) {
-            // Kategori 3: Hutan / Alam Terbuka / Tidak Layak
-            score = Math.floor(Math.random() * 15) + 18; // 18% - 32%
+            score = Math.floor(Math.random() * 15) + 18;
             statusText = 'TIDAK DIREKOMENDASIKAN (UNFEASIBLE)';
-            statusColor = '#ef4444'; // Merah
+            statusColor = '#ef4444';
             canClaim = false;
             recText = `<strong>Hasil Evaluasi Awal:</strong> Wilayah <em>"${rawQuery}"</em> terdeteksi sebagai kawasan non-komersial / alam terbuka / pedalaman. Jaringan gardu daya listrik TM 20kV PLN tidak memadai dan densitas lalu lintas kendaraan listrik minim. <strong>Lokasi ini tidak memenuhi standar investasi awal stasiun pengisian daya komersial.</strong>`;
           } else if (
@@ -1072,22 +1084,19 @@
             queryLower.includes('medan') || queryLower.includes('bali') || queryLower.includes('ruko') || queryLower.includes('mall') ||
             queryLower.includes('sudirman') || queryLower.includes('arteri') || queryLower.includes('spbu')
           ) {
-            // Kategori 1: Urban / Komersial Sangat Potensial
-            score = Math.floor(Math.random() * 8) + 90; // 90% - 97%
+            score = Math.floor(Math.random() * 8) + 90;
             statusText = 'SANGAT LAYAK (HI-POTENTIAL)';
-            statusColor = '#00f2fe'; // Teal Neon
+            statusColor = '#00f2fe';
             canClaim = true;
             recText = `<strong>Hasil Evaluasi Awal:</strong> Wilayah <em>"${rawQuery || 'Lahan Anda'}"</em> terdeteksi berada di koridor komersial aktif dengan ketersediaan jaringan PLN TM andal. Potensi utilisasi awal diproyeksikan mencapai <strong>10–14 sesi/hari</strong>. Segera amankan kuota wilayah Anda sebelum titik gardu dialokasikan ke kompetitor terdekat!`;
           } else {
-            // Kategori 2: Area Sub-Urban / Moderat
-            score = Math.floor(Math.random() * 16) + 60; // 60% - 75%
+            score = Math.floor(Math.random() * 16) + 60;
             statusText = 'CUKUP LAYAK (MODERATE POTENTIAL)';
-            statusColor = '#f39c12'; // Kuning Amber
+            statusColor = '#f39c12';
             canClaim = true;
             recText = `<strong>Hasil Evaluasi Awal:</strong> Wilayah <em>"${rawQuery}"</em> memiliki potensi moderat. Disarankan memulai dengan <strong>Tipe Charger AC 22 kW</strong> terlebih dahulu untuk menguji pertumbuhan arus adopsi EV sebelum ekspansi ke DC Fast Charging.`;
           }
 
-          // Update Tampilan DOM
           if (scoreCard) scoreCard.style.display = 'block';
           if (scoreText) scoreText.textContent = score + '%';
           if (scoreStatus) {
@@ -1108,7 +1117,6 @@
             }
           }
 
-          // Konstruksi URL Google Maps EV
           let mapsUrl = '';
           if (finalLat && finalLng) {
             mapsUrl = `https://www.google.com/maps/search/SPKLU+charging+station/@${finalLat},${finalLng},15z/data=!3m1!4b1`;
@@ -1131,7 +1139,7 @@
         });
       }
 
-      // TIARA ADVISOR CHAT TRIGGER & ROBUST ASYNC MESSAGE DISPATCHER
+      // TIARA ADVISOR CHAT TRIGGER & ASYNC MESSAGE HANDLER
       function setupTiaraEvents() {
         const trigger = document.getElementById('tcsChatTrigger');
         const container = document.getElementById('tcsChatContainer');
@@ -1169,7 +1177,6 @@
           const userText = inputField.value.trim();
           if (!userText) return;
 
-          // Append User Message
           const userBubble = document.createElement('div');
           userBubble.className = 'tcs-chat-bubble user';
           userBubble.textContent = userText;
@@ -1177,7 +1184,6 @@
           inputField.value = '';
           messagesArea.scrollTop = messagesArea.scrollHeight;
 
-          // Append Bot Loading Placeholder
           const botBubble = document.createElement('div');
           botBubble.className = 'tcs-chat-bubble bot';
           botBubble.textContent = 'Tiara Advisor sedang mengetik... ⚡';
@@ -1201,10 +1207,10 @@
             if (result && result.success && result.text) {
               botBubble.textContent = result.text;
             } else {
-              botBubble.textContent = result && result.error ? result.error : "Maaf, Tiara sedang memproses data jaringan. Silakan coba lagi atau hubungi WhatsApp 087832219195.";
+              botBubble.textContent = result && result.error ? result.error : "Maaf, Tiara sedang memproses data jaringan. Silakan coba lagi.";
             }
           } catch (err) {
-            botBubble.textContent = "Koneksi jaringan terputus. Silakan hubungi admin langsung via WhatsApp 087832219195.";
+            botBubble.textContent = "Koneksi jaringan terputus. Silakan hubungi admin langsung via WhatsApp.";
           }
           messagesArea.scrollTop = messagesArea.scrollHeight;
         }
