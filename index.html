@@ -79,6 +79,24 @@
         });
     }
   </script>
+<style id="planner-square-grid-patch">
+  .service-selection-grid, .planner-grid, [class*="planner"][class*="grid"] {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) !important;
+    gap: 18px !important;
+  }
+  .planner-card, .service-choice, .service-card, .plan-option, [class*="planner"][class*="card"] {
+    aspect-ratio: 1 / 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    padding: 16px !important;
+    border-radius: 16px !important;
+    box-sizing: border-box !important;
+  }
+</style>
 </head>
 
 <body>
