@@ -1,4 +1,4 @@
-<script>
+﻿<script>
 /**
  * PT. Titis Cahaya Sejahtera (TCS) - Client-side Interactive Logic
  * Platform: Google Apps Script Web App Ecosystem
@@ -282,7 +282,7 @@ window.selectWizardService = function(serviceName) {
    4. LEADS CONSULTATION WIZARD STATE MACHINE & DYNAMIC STEP QUESTIONS
    ========================================================================== */
 const serviceWizardConfigs = {
-  "HVAC System": {
+  "perpipaan industri System": {
     id: {
       title: "Berapa Kapasitas AC & Skala Ruangan Anda?",
       options: [
@@ -430,7 +430,7 @@ const serviceWizardConfigs = {
 
 function updateStep2Questions(serviceName) {
   const currentLang = localStorage.getItem('tcs_lang') || 'id';
-  const serviceConfig = serviceWizardConfigs[serviceName] || serviceWizardConfigs["HVAC System"];
+  const serviceConfig = serviceWizardConfigs[serviceName] || serviceWizardConfigs["perpipaan industri System"];
   const config = serviceConfig[currentLang] || serviceConfig['id'];
   
   // Update Step 2 Title
@@ -466,7 +466,7 @@ let wizardStep = 1;
 const totalSteps = 4;
 
 function initWizard() {
-  updateStep2Questions("HVAC System");
+  updateStep2Questions("perpipaan industri System");
   updateWizardUI();
   
   // Dynamic language listener to re-render step 2 questions and next/prev button texts
@@ -475,7 +475,7 @@ function initWizard() {
     if (currentService) {
       updateStep2Questions(currentService);
     } else {
-      updateStep2Questions("HVAC System");
+      updateStep2Questions("perpipaan industri System");
     }
     updateWizardUI();
   });
@@ -554,7 +554,7 @@ window.moveWizardStep = function(direction) {
     // Check tab keys to see if we can easily map the service name
     let localizedService = rawService;
     if (currentLang === 'en') {
-      if (rawService === "HVAC System") localizedService = "HVAC System";
+      if (rawService === "perpipaan industri System") localizedService = "perpipaan industri System";
       else if (rawService === "Electrical System") localizedService = "Electrical System";
       else if (rawService === "Plumbing System") localizedService = "Plumbing System";
       else if (rawService === "Process Utilities") localizedService = "Process Process Utilities";
@@ -1104,8 +1104,8 @@ function initBimSimulator() {
       if (window.tcsBimState.progress >= 0.98) addConsoleLine('bim_log_8', 'resolve');
     }
     
-    // --- 1. Draw HVAC Ducting (STATIC - TEAL) ---
-    // Complies with real-life standards: volumetric HVAC ducts
+    // --- 1. Draw perpipaan industri Ducting (STATIC - TEAL) ---
+    // Complies with real-life standards: volumetric perpipaan industri ducts
     if (toggleHvac.checked) {
       drawIsoBox(
         -100, -60, 40,   // Position (X, Y, Z)
@@ -1150,13 +1150,13 @@ function initBimSimulator() {
     const electricalActive = window.tcsBimState.state !== 'resolved';
     
     if (toggleHvac.checked && togglePlumb.checked) {
-      // Clash Node 1: Plumbing crossing HVAC duct boundary
+      // Clash Node 1: Plumbing crossing perpipaan industri duct boundary
       drawClashNode(-50, -40, 30, 'CLASH-B12A', plumbingActive);
       drawClashNode(50, -40, 30, 'CLASH-B12B', plumbingActive);
     }
     
     if (toggleHvac.checked && toggleElec.checked) {
-      // Clash Node 2: Electrical tray crossing HVAC top clearance boundary
+      // Clash Node 2: Electrical tray crossing perpipaan industri top clearance boundary
       drawClashNode(-40, -50, 52, 'CLASH-C04', electricalActive);
     }
     
@@ -1202,7 +1202,7 @@ function initBimSimulator() {
     addConsoleLine(togglePlumb.checked ? 'Plumbing Layer Enabled.' : 'Plumbing Layer Disabled.', 'system');
   });
   toggleHvac.addEventListener('change', () => {
-    addConsoleLine(toggleHvac.checked ? 'HVAC Duct Layer Enabled.' : 'HVAC Duct Layer Disabled.', 'system');
+    addConsoleLine(toggleHvac.checked ? 'perpipaan industri Duct Layer Enabled.' : 'perpipaan industri Duct Layer Disabled.', 'system');
   });
   toggleElec.addEventListener('change', () => {
     addConsoleLine(toggleElec.checked ? 'Electrical Layer Enabled.' : 'Electrical Layer Disabled.', 'system');
