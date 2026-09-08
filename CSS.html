@@ -2535,3 +2535,22 @@ textarea.form-input-text {
   transform: scale(1.06) translateY(-8px);
 }
 </style>
+/* RESPONSIVE 3D OOB MOBILE OPTIMIZATION */
+@media (max-width: 768px) {
+  .pane-visual.oob-3d-card {
+    height: 320px;
+  }
+  /* Aktifkan animasi mengambang otomatis di HP pengganti mouse move */
+  .oob-3d-card {
+    animation: mobileAutoTilt 6s ease-in-out infinite;
+  }
+}
+
+@keyframes mobileAutoTilt {
+  0%, 100% {
+    transform: perspective(1000px) rotateX(2deg) rotateY(-3deg);
+  }
+  50% {
+    transform: perspective(1000px) rotateX(-2deg) rotateY(3deg);
+  }
+}
