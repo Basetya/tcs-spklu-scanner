@@ -89,7 +89,7 @@ function initScrollspy() {
 }
 
 /* ==========================================================================
-   2. HERO INTERACTIVE CANVAS (INDUSTRIAL WELDING SPARKS & ARGON ARC ENGINE)
+   2. HERO INTERACTIVE CANVAS (SILVER METALLIC RUNNING TEXT ENGINE)
    ========================================================================== */
 function initHeroCanvas() {
   const canvas = document.getElementById('hero-canvas');
@@ -97,8 +97,13 @@ function initHeroCanvas() {
 
   const ctx = canvas.getContext('2d');
   let width, height;
-  const particles = [];
-  const mouse = { x: null, y: null, isActive: false };
+  const targetText = "One-stop engineering solution";
+  
+  let mouseX = -1000;
+  let mouseY = -1000;
+  let textAlpha = 0;
+  let fadeTimeout = null;
+  let currentOffset = 0;
 
   function resize() {
     width = canvas.width = window.innerWidth;
@@ -107,92 +112,48 @@ function initHeroCanvas() {
   window.addEventListener('resize', resize);
   resize();
 
-  class Spark {
-    constructor(x, y, isBurst = false) {
-      this.x = x || (width > 768 ? width * 0.72 : width * 0.5);
-      this.y = y || (height > 768 ? height * 0.52 : height * 0.65);
-
-      const angle = isBurst 
-        ? Math.random() * Math.PI * 2 
-        : (Math.PI * 1.05 + Math.random() * Math.PI * 0.9);
-      const speed = isBurst ? (Math.random() * 6 + 2) : (Math.random() * 5 + 1.2);
-
-      this.vx = Math.cos(angle) * speed;
-      this.vy = Math.sin(angle) * speed;
-      this.gravity = 0.14;
-      this.life = Math.random() * 45 + 25;
-      this.maxLife = this.life;
-      this.size = Math.random() * 2 + 1;
-
-      const colors = ['#ffffff', '#00f2fe', '#38bdf8', '#f59e0b', '#fbbf24', '#ef4444'];
-      this.color = colors[Math.floor(Math.random() * colors.length)];
-    }
-
-    update() {
-      this.x += this.vx;
-      this.y += this.vy;
-      this.vy += this.gravity;
-      this.life--;
-    }
-
-    draw() {
-      const alpha = Math.max(0, this.life / this.maxLife);
-      ctx.save();
-      ctx.globalAlpha = alpha;
-      ctx.shadowBlur = 9;
-      ctx.shadowColor = this.color;
-      ctx.fillStyle = this.color;
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.restore();
-    }
-  }
-
   window.addEventListener('mousemove', (e) => {
     const rect = canvas.getBoundingClientRect();
     if (e.clientY >= rect.top && e.clientY <= rect.bottom) {
-      mouse.x = e.clientX - rect.left;
-      mouse.y = e.clientY - rect.top;
-      mouse.isActive = true;
-      for (let i = 0; i < 2; i++) {
-        particles.push(new Spark(mouse.x, mouse.y, true));
-      }
+      mouseX = e.clientX - rect.left;
+      mouseY = e.clientY - rect.top;
+      
+      textAlpha = 0.38;
+      currentOffset += 2.5;
+
+      if (fadeTimeout) clearTimeout(fadeTimeout);
+      
+      fadeTimeout = setTimeout(() => {
+        let fadeInterval = setInterval(() => {
+          textAlpha -= 0.02;
+          if (textAlpha <= 0) {
+            textAlpha = 0;
+            clearInterval(fadeInterval);
+          }
+        }, 50);
+      }, 800);
     }
   });
 
-  window.addEventListener('mouseleave', () => { mouse.isActive = false; });
-
   function animate() {
-    ctx.fillStyle = 'rgba(3, 7, 18, 0.22)';
+    ctx.fillStyle = 'rgba(3, 7, 18, 0.25)';
     ctx.fillRect(0, 0, width, height);
 
-    const arcX = width > 768 ? width * 0.72 : width * 0.5;
-    const arcY = height > 768 ? height * 0.52 : height * 0.65;
-
-    if (Math.random() > 0.88) {
+    if (textAlpha > 0) {
       ctx.save();
-      const gradient = ctx.createRadialGradient(arcX, arcY, 2, arcX, arcY, 70);
-      gradient.addColorStop(0, 'rgba(0, 242, 254, 0.45)');
-      gradient.addColorStop(0.4, 'rgba(14, 165, 233, 0.18)');
-      gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-      ctx.fillStyle = gradient;
-      ctx.beginPath();
-      ctx.arc(arcX, arcY, 70, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.font = '600 24px "Outfit", sans-serif';
+      
+      const grad = ctx.createLinearGradient(mouseX - 150, mouseY, mouseX + 150, mouseY);
+      grad.addColorStop(0, `rgba(168, 182, 204, ${textAlpha * 0.4})`);
+      grad.addColorStop(0.5, `rgba(241, 245, 249, ${textAlpha})`);
+      grad.addColorStop(1, `rgba(148, 163, 184, ${textAlpha * 0.4})`);
+      
+      ctx.fillStyle = grad;
+      ctx.shadowBlur = 12;
+      ctx.shadowColor = 'rgba(226, 232, 240, 0.3)';
+      
+      ctx.fillText(targetText, mouseX - 140 + (Math.sin(currentOffset * 0.05) * 15), mouseY - 25);
       ctx.restore();
-    }
-
-    if (Math.random() > 0.35) {
-      particles.push(new Spark(arcX, arcY));
-    }
-
-    for (let i = particles.length - 1; i >= 0; i--) {
-      particles[i].update();
-      particles[i].draw();
-      if (particles[i].life <= 0) {
-        particles.splice(i, 1);
-      }
     }
 
     requestAnimationFrame(animate);
@@ -260,24 +221,6 @@ window.selectWizardService = function(serviceName) {
    4. LEADS CONSULTATION WIZARD STATE MACHINE & DYNAMIC STEP QUESTIONS
    ========================================================================== */
 const serviceWizardConfigs = {
-  "perpipaan industri System": {
-    id: {
-      title: "Berapa Kapasitas AC & Skala Ruangan Anda?",
-      options: [
-        { val: "Skala Kecil (Ruko/Kantor < 500 m2, AC Split/Multi-Split)", icon: "🏢", title: "Skala Kecil", desc: "&lt; 500 m&sup2;<br>(Split / Multi-Split)" },
-        { val: "Skala Menengah (Gedung 500 - 2000 m2, AC VRV/VRF)", icon: "🏭", title: "Skala Menengah", desc: "500 - 2.000 m&sup2;<br>(Sistem VRV / VRF)" },
-        { val: "Skala Industri (Pabrik/RS > 2000 m2, Chiller & AHU)", icon: "🏗️", title: "Skala Industri", desc: "&gt; 2.000 m&sup2;<br>(Chiller & AHU)" }
-      ]
-    },
-    en: {
-      title: "What is Your AC Capacity & Room Scale?",
-      options: [
-        { val: "Small Scale (Shophouse/Office < 500 m2, AC Split/Multi-Split)", icon: "🏢", title: "Small Scale", desc: "&lt; 500 m&sup2;<br>(Split / Multi-Split)" },
-        { val: "Medium Scale (Building 500 - 2000 m2, AC VRV/VRF)", icon: "🏭", title: "Medium Scale", desc: "500 - 2,000 m&sup2;<br>(VRV / VRF System)" },
-        { val: "Industrial Scale (Factory/Hospital > 2000 m2, Chiller & AHU)", icon: "🏗️", title: "Industrial Scale", desc: "&gt; 2,000 m&sup2;<br>(Chiller & AHU)" }
-      ]
-    }
-  },
   "Electrical System": {
     id: {
       title: "Berapa Kebutuhan Kapasitas Daya Listrik Anda?",
@@ -408,7 +351,7 @@ const serviceWizardConfigs = {
 
 function updateStep2Questions(serviceName) {
   const currentLang = localStorage.getItem('tcs_lang') || 'id';
-  const serviceConfig = serviceWizardConfigs[serviceName] || serviceWizardConfigs["perpipaan industri System"];
+  const serviceConfig = serviceWizardConfigs[serviceName] || serviceWizardConfigs["Electrical System"];
   const config = serviceConfig[currentLang] || serviceConfig['id'];
   
   const titleEl = document.getElementById('wizard-step-2-title');
@@ -441,7 +384,7 @@ let wizardStep = 1;
 const totalSteps = 4;
 
 function initWizard() {
-  updateStep2Questions("perpipaan industri System");
+  updateStep2Questions("Electrical System");
   updateWizardUI();
   
   window.addEventListener('tcsLanguageChanged', () => {
@@ -449,7 +392,7 @@ function initWizard() {
     if (currentService) {
       updateStep2Questions(currentService);
     } else {
-      updateStep2Questions("perpipaan industri System");
+      updateStep2Questions("Electrical System");
     }
     updateWizardUI();
   });
@@ -1067,7 +1010,7 @@ function initBimSimulator() {
     addConsoleLine(togglePlumb.checked ? 'Plumbing Layer Enabled.' : 'Plumbing Layer Disabled.', 'system');
   });
   toggleHvac.addEventListener('change', () => {
-    addConsoleLine(toggleHvac.checked ? 'perpipaan industri Duct Layer Enabled.' : 'perpipaan industri Duct Layer Disabled.', 'system');
+    addConsoleLine(toggleHvac.checked ? 'Duct Layer Enabled.' : 'Duct Layer Disabled.', 'system');
   });
   toggleElec.addEventListener('change', () => {
     addConsoleLine(toggleElec.checked ? 'Electrical Layer Enabled.' : 'Electrical Layer Disabled.', 'system');
