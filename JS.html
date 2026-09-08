@@ -89,7 +89,7 @@ function initScrollspy() {
 }
 
 /* ==========================================================================
-   2. HERO INTERACTIVE CANVAS (SILVER METALLIC RUNNING TEXT ENGINE)
+   2. HERO INTERACTIVE CANVAS (RIGHT-TO-LEFT SILVER RUNNING TEXT ENGINE)
    ========================================================================== */
 function initHeroCanvas() {
   const canvas = document.getElementById('hero-canvas');
@@ -103,11 +103,12 @@ function initHeroCanvas() {
   let mouseY = -1000;
   let textAlpha = 0;
   let fadeTimeout = null;
-  let currentOffset = 0;
+  let textXPos = 0; // Posisi x untuk running text
 
   function resize() {
     width = canvas.width = window.innerWidth;
     height = canvas.height = canvas.parentElement ? canvas.parentElement.offsetHeight : window.innerHeight;
+    textXPos = width; // Inisialisasi awal di sebelah kanan layar
   }
   window.addEventListener('resize', resize);
   resize();
@@ -118,8 +119,7 @@ function initHeroCanvas() {
       mouseX = e.clientX - rect.left;
       mouseY = e.clientY - rect.top;
       
-      textAlpha = 0.38;
-      currentOffset += 2.5;
+      textAlpha = 0.38; // Opasitas lembut agar terlihat di background hitam tanpa menutup teks landing page
 
       if (fadeTimeout) clearTimeout(fadeTimeout);
       
@@ -143,7 +143,15 @@ function initHeroCanvas() {
       ctx.save();
       ctx.font = '600 24px "Outfit", sans-serif';
       
-      const grad = ctx.createLinearGradient(mouseX - 150, mouseY, mouseX + 150, mouseY);
+      // Hitung pergerakan teks dari kanan ke kiri
+      textXPos -= 3.5;
+      const textMetrics = ctx.measureText(targetText);
+      if (textXPos < -textMetrics.width - 100) {
+        textXPos = width + 50; // Reset ke ujung kanan saat teks sudah lewat habis ke kiri
+      }
+
+      // Efek kilau perak metalik (Silver Metallic Gradient) mengikuti posisi teks yang bergerak
+      const grad = ctx.createLinearGradient(textXPos, mouseY, textXPos + 350, mouseY);
       grad.addColorStop(0, `rgba(168, 182, 204, ${textAlpha * 0.4})`);
       grad.addColorStop(0.5, `rgba(241, 245, 249, ${textAlpha})`);
       grad.addColorStop(1, `rgba(148, 163, 184, ${textAlpha * 0.4})`);
@@ -152,7 +160,8 @@ function initHeroCanvas() {
       ctx.shadowBlur = 12;
       ctx.shadowColor = 'rgba(226, 232, 240, 0.3)';
       
-      ctx.fillText(targetText, mouseX - 140 + (Math.sin(currentOffset * 0.05) * 15), mouseY - 25);
+      // Render teks mengalir dari kanan ke kiri pada ketinggian kursor
+      ctx.fillText(targetText, textXPos, mouseY);
       ctx.restore();
     }
 
@@ -163,7 +172,7 @@ function initHeroCanvas() {
 }
 
 /* ==========================================================================
-   3. SERVICES EXPLORER TABS
+   3. SERVICES EXPLORER TABS & ELECTRICAL VIDEO INTEGRATION
    ========================================================================== */
 function initServiceTabs() {
   const tabButtons = document.querySelectorAll('.service-tab-btn');
