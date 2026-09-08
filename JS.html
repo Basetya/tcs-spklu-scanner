@@ -14,6 +14,7 @@ function startApp() {
   initScrollspy();
   initBimSimulator();
   initTcsChatbot();
+  init3DParallaxCard();
 }
 
 // Global retrying fetch helper for remote services (Overpass/Nominatim/GAS bridge)
@@ -169,7 +170,6 @@ function initHeroCanvas() {
     const arcX = width > 768 ? width * 0.72 : width * 0.5;
     const arcY = height > 768 ? height * 0.52 : height * 0.65;
 
-    // Flash busur listrik argon
     if (Math.random() > 0.88) {
       ctx.save();
       const gradient = ctx.createRadialGradient(arcX, arcY, 2, arcX, arcY, 70);
@@ -203,7 +203,7 @@ function initHeroCanvas() {
 
 /* ==========================================================================
    3. SERVICES EXPLORER TABS
-   ========================================================================= */
+   ========================================================================== */
 function initServiceTabs() {
   const tabButtons = document.querySelectorAll('.service-tab-btn');
   const tabPanes = document.querySelectorAll('.service-content-pane');
@@ -805,7 +805,7 @@ function initBimSimulator() {
   function drawIsoBox(x, y, z, wx, wy, wz, colorGradients) {
     const p1 = toIso(x, y, z);
     const p2 = toIso(x + wx, y, z);
-    const p3 = toIso(x + wx, y + wy, z);
+    const p3 = toIso(x + wx, y, z);
     const p4 = toIso(x, y + wy, z);
     const p5 = toIso(x, y, z + wz);
     const p6 = toIso(x + wx, y, z + wz);
@@ -1301,6 +1301,39 @@ function initTcsChatbot() {
     const loader = document.getElementById(loaderId);
     if (loader) loader.remove();
   }
+}
+
+/* ==========================================================================
+   10. OUT-OF-BOUNDS 3D PARALLAX INTERACTION
+   ========================================================================== */
+function init3DParallaxCard() {
+  const card = document.getElementById('plumbing3dCard');
+  if (!card) return;
+
+  const bgLayer = card.querySelector('.oob-bg-layer');
+  const cutoutLayer = card.querySelector('.oob-cutout-layer');
+
+  card.addEventListener('mousemove', (e) => {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = ((y - centerY) / centerY) * -12;
+    const rotateY = ((x - centerX) / centerX) * 12;
+
+    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    
+    if (bgLayer) bgLayer.style.transform = `translateX(${rotateY * -0.6}px) translateY(${rotateX * 0.6}px)`;
+    if (cutoutLayer) cutoutLayer.style.transform = `translateZ(55px) translateX(${rotateY * 1.2}px) translateY(${rotateX * -1.2}px)`;
+  });
+
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+    if (bgLayer) bgLayer.style.transform = 'translateX(0) translateY(0)';
+    if (cutoutLayer) cutoutLayer.style.transform = 'translateZ(45px) translateX(0) translateY(0)';
+  });
 }
 
 if (document.readyState === 'loading') {

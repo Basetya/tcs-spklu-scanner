@@ -2446,4 +2446,92 @@ textarea.form-input-text {
     height: 420px;
   }
 }
+/* ==========================================================================
+   OUT-OF-BOUNDS (OOB) 3D ILLUSION & PARALLAX ENGINE
+   ========================================================================== */
+.pane-visual.oob-3d-card {
+  position: relative;
+  height: 380px;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  background: #030712;
+  border-radius: var(--border-radius-lg);
+  border: 1px solid rgba(0, 242, 254, 0.25);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7), 0 0 25px rgba(0, 242, 254, 0.1);
+  overflow: visible !important; /* Memungkinkan subjek menembus bingkai atas */
+  cursor: pointer;
+}
+
+/* Layer Latar Belakang (Terkunci di dalam frame) */
+.oob-bg-layer {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  z-index: 1;
+  transform: translateZ(0);
+  transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.oob-bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: contrast(120%) brightness(0.65) saturate(110%);
+  transform: scale(1.05);
+  transition: transform 0.4s ease;
+}
+
+/* Layer Objek Cutout (Melompat ke depan & menembus batas atas) */
+.oob-cutout-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  transform: translateZ(45px); /* Memberikan kedalaman 3D fisik */
+  transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.oob-cutout-img {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 114%; /* Lebih tinggi dari kartu agar pipa & helm menembus bingkai atas */
+  object-fit: contain;
+  object-position: bottom center;
+  filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 15px rgba(0, 242, 254, 0.3));
+  transform-origin: bottom center;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Pijar Cahaya Las Dinamis di Titik Torch */
+.torch-glint {
+  position: absolute;
+  top: 48%;
+  left: 62%;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 20px 8px rgba(0, 242, 254, 0.9), 0 0 45px 20px rgba(0, 150, 255, 0.5);
+  animation: glintPulse 1.2s infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes glintPulse {
+  0% { transform: scale(0.8); opacity: 0.6; }
+  50% { transform: scale(1.4); opacity: 1; }
+  100% { transform: scale(0.9); opacity: 0.7; }
+}
+
+/* Hover Dynamics */
+.oob-3d-card:hover .oob-bg-img {
+  transform: scale(1.12);
+  filter: contrast(125%) brightness(0.75) saturate(115%);
+}
+
+.oob-3d-card:hover .oob-cutout-img {
+  transform: scale(1.06) translateY(-8px);
+}
 </style>

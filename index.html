@@ -94,7 +94,6 @@
       box-sizing: border-box !important;
     }
 
-    /* INJEKSI STYLING NEON JALUR PIPA UNTUK ALUR KERJA */
     .timeline-container {
       position: relative;
       display: grid;
@@ -552,7 +551,7 @@
             </div>
           </div>
 
-          <!-- Plumbing Pane -->
+          <!-- Plumbing Pane (OUT-OF-BOUNDS 3D PARALLAX EFFECT) -->
           <div class="service-content-pane" id="pane-plumbing">
             <div class="pane-info">
               <span class="pane-service-tag" data-translate="srv_pane_tag_plumb">Plumbing</span>
@@ -575,11 +574,23 @@
                 <a href="#planner" class="btn btn-primary" onclick="selectWizardService('Plumbing System')" data-translate="srv_btn_select">Pilih Jasa Ini</a>
               </div>
             </div>
-            <div class="pane-visual">
-              <img src="images/plumbing.jpg" alt="Instalasi Plumbing & Pompa PT TCS">
+
+            <div class="pane-visual oob-3d-card" id="plumbing3dCard">
+              <!-- Background Layer (Clipped inside card) -->
+              <div class="oob-bg-layer">
+                <img src="images/plumbing-bg.jpg" alt="Bengkel Fabrikasi TCS" class="oob-bg-img">
+              </div>
+
+              <!-- Out-of-Bounds Cutout Subject (Breaks through top boundary) -->
+              <div class="oob-cutout-layer">
+                <img src="images/plumbing-cutout.png" alt="Instalasi Plumbing & Pompa PT TCS" class="oob-cutout-img">
+                <!-- Live Torch Glint / Glow Spot -->
+                <div class="torch-glint"></div>
+              </div>
+
               <div class="pane-visual-caption">
-                <span class="pane-visual-tag">Plumbing System</span>
-                <p class="pane-visual-title" data-translate="srv_plumb_cap">Pemetaan & Distribusi Pipa Booster</p>
+                <span class="pane-visual-tag">Plumbing & Heavy Piping</span>
+                <p class="pane-visual-title" data-translate="srv_plumb_cap">Pemetaan & Fabrikasi Jalur Pipa Presisi</p>
               </div>
             </div>
           </div>
