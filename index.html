@@ -41,17 +41,14 @@
   <!-- Fallback Loader for Local Live Server & Static Hosting Preview -->
   <script>
     if (window.location.hostname.includes('google')) {
-      // In Google Apps Script ecosystem, the CSS is already injected, so show body immediately
       const fouc = document.getElementById('fouc-style');
       if (fouc) fouc.remove();
     } else {
-      // Apply FOUC prevention style only in local preview
       const localFouc = document.createElement('style');
       localFouc.id = 'local-fouc-style';
       localFouc.textContent = 'body { opacity: 0 !important; }';
       document.head.appendChild(localFouc);
 
-      // On Vercel / Local Preview, dynamically fetch CSS.html fallback
       if (window.location.search.includes('page=spklu')) {
         window.location.href = 'spklu.html' + window.location.search;
       }
@@ -64,7 +61,6 @@
           const styleElement = doc.querySelector('style');
           if (styleElement) document.head.appendChild(styleElement);
 
-          // Remove FOUC overlay to smoothly display the fully-styled page
           const fouc = document.getElementById('fouc-style');
           if (fouc) fouc.remove();
           const lf = document.getElementById('local-fouc-style');
@@ -79,24 +75,81 @@
         });
     }
   </script>
-<style id="planner-square-grid-patch">
-  .service-selection-grid, .planner-grid, [class*="planner"][class*="grid"] {
-    display: grid !important;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) !important;
-    gap: 18px !important;
-  }
-  .planner-card, .service-choice, .service-card, .plan-option, [class*="planner"][class*="card"] {
-    aspect-ratio: 1 / 1 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    text-align: center !important;
-    padding: 16px !important;
-    border-radius: 16px !important;
-    box-sizing: border-box !important;
-  }
-</style>
+
+  <style id="planner-square-grid-patch">
+    .service-selection-grid, .planner-grid, [class*="planner"][class*="grid"] {
+      display: grid !important;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) !important;
+      gap: 18px !important;
+    }
+    .planner-card, .service-choice, .service-card, .plan-option, [class*="planner"][class*="card"] {
+      aspect-ratio: 1 / 1 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+      text-align: center !important;
+      padding: 16px !important;
+      border-radius: 16px !important;
+      box-sizing: border-box !important;
+    }
+
+    /* INJEKSI STYLING NEON JALUR PIPA UNTUK ALUR KERJA */
+    .timeline-container {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      z-index: 1;
+    }
+    @media (min-width: 992px) {
+      .timeline-container::before {
+        content: '';
+        position: absolute;
+        top: 38px;
+        left: 40px;
+        right: 40px;
+        height: 3px;
+        background: linear-gradient(90deg, #00f2fe, #00e575, #f59e0b, #00f2fe);
+        background-size: 300% 100%;
+        animation: pipeFlowNeon 4s linear infinite;
+        box-shadow: 0 0 12px rgba(0, 242, 254, 0.7);
+        z-index: 0;
+      }
+    }
+    @keyframes pipeFlowNeon {
+      0% { background-position: 100% 0; }
+      100% { background-position: 0 0; }
+    }
+    .timeline-card {
+      position: relative;
+      z-index: 2;
+      background: rgba(15, 23, 42, 0.75) !important;
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .timeline-card:hover {
+      transform: translateY(-6px);
+      border-color: #00f2fe !important;
+      box-shadow: 0 10px 25px rgba(0, 242, 254, 0.2);
+    }
+    .timeline-step {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: #030712;
+      border: 2px solid #00f2fe;
+      color: #00f2fe;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+      margin-bottom: 16px;
+    }
+  </style>
 </head>
 
 <body>
@@ -105,7 +158,7 @@
   <div class="header-top">
     <div class="header-top-container">
       <div class="header-top-left">
-        <span><span></span>
+        <span></span>
       </div>
       <div class="social-icons">
         <a href="https://www.instagram.com/titiscahayasejahtera/" target="_blank" aria-label="Instagram">
@@ -140,11 +193,9 @@
   <header class="main-header" id="navbar">
     <div class="header-container">
       <a href="index.html" class="logo" style="display: inline-flex; align-items: center; gap: 16px; text-decoration: none;">
-        <!-- Container Crop: Menyembunyikan tulisan bawah bawaan gambar dan memperbesar emblem 2x -->
         <div style="width: 78px; height: 78px; border-radius: 16px; overflow: hidden; display: flex; align-items: flex-start; justify-content: center; background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.15); box-shadow: 0 8px 24px rgba(0,0,0,0.6); flex-shrink: 0;">
           <img src="images/logo-tcs.png" alt="Logo PT TCS" style="width: 105px; height: 105px; max-width: none; object-fit: cover; object-position: center 14%; margin-top: -6px; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.4)); display: block;" class="brand-logo-img">
         </div>
-        <!-- Tipografi Korporat Kanan -->
         <div class="brand-text-block" style="display: flex; flex-direction: column; justify-content: center; line-height: 1.15;">
           <span style="font-family: 'Outfit', sans-serif; font-size: 23px; font-weight: 800; color: #ffffff; letter-spacing: 0.04em; text-transform: uppercase;">TITIS CAHAYA</span>
           <span style="font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 800; color: #00f2fe; letter-spacing: 0.12em; text-transform: uppercase;">SEJAHTERA</span>
@@ -158,7 +209,6 @@
           <li><a href="#profil" class="nav-link" data-translate="nav_about">Profil</a></li>
           <li><a href="#services" class="nav-link" data-translate="nav_services">Services</a></li>
           <li><a href="#marquee" class="nav-link" data-translate="nav_clients">Klien</a></li>
-          
           <li>
             <div class="lang-switcher">
               <button type="button" class="lang-btn active" data-lang="id" onclick="setLanguage('id')">ID</button>
@@ -244,7 +294,6 @@
     <div class="container grid-2">
       <div class="about-visual">
         <div class="about-img-frame">
-          <!-- Premium Technical Industrial Image representation -->
           <img src="images/profil.png" alt="PT. Titis Cahaya Sejahtera Industrial Work">
           <div class="about-floating-card">
             <h4 class="about-floating-title" data-translate="prof_floating_title">Bekerja Sejak 2020</h4>
@@ -387,7 +436,11 @@
         <!-- Tab menu left side -->
         <ul class="services-tab-menu">
           <li>
-            </li>
+            <button class="service-tab-btn active" data-tab="perpipaan industri">
+              <span class="tab-icon">💨</span>
+              <span data-translate="tab_hvac">perpipaan industri System</span>
+            </button>
+          </li>
           <li>
             <button class="service-tab-btn" data-tab="electrical">
               <span class="tab-icon">⚡</span>
@@ -445,31 +498,18 @@
                 unit AHU & Chiller hemat energi dengan sistem filtrasi udara berlapis (Pre-filter, Medium, HEPA) untuk
                 menjamin kebersihan sirkulasi udara bebas kontaminasi mikroba.</p>
               <ul class="pane-features-list">
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_hvac_f1">Pemasangan Chiller & AHU</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_hvac_f2">Fabrikasi & Isolasi Ducting</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_hvac_f3">Cleanroom Kelas ISO 7 & 8</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_hvac_f4">Perawatan & Kalibrasi Chiller</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_hvac_f5">VRF / VRV System Installation</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_hvac_f6">Fan Filter Unit (FFU)</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_hvac_f7">Cooling Tower & Exhaust Fan</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_hvac_f8">Make-Up Air Handling</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_hvac_f1">Pemasangan Chiller & AHU</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_hvac_f2">Fabrikasi & Isolasi Ducting</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_hvac_f3">Cleanroom Kelas ISO 7 & 8</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_hvac_f4">Perawatan & Kalibrasi Chiller</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_hvac_f5">VRF / VRV System Installation</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_hvac_f6">Fan Filter Unit (FFU)</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_hvac_f7">Cooling Tower & Exhaust Fan</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_hvac_f8">Make-Up Air Handling</span></li>
               </ul>
+              <div>
+                <a href="#planner" class="btn btn-primary" onclick="selectWizardService('perpipaan industri System')" data-translate="srv_btn_select">Pilih Jasa Ini</a>
+              </div>
             </div>
             <div class="pane-visual">
               <img src="images/plumbing.jpg" alt="Instalasi Perpipaan Industri PT TCS" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1541888946425-d0fbb186c5f7?auto=format&fit=crop&w=1000&q=80';" style="width: 100%; height: 320px; object-fit: cover; display: block; border-radius: 18px;">
@@ -490,34 +530,17 @@
                 panel kontrol LVMDP/SDP otomatis, sistem penangkal petir elektrostatis, kapasitor bank, serta
                 pengkabelan terstruktur tahan beban tinggi.</p>
               <ul class="pane-features-list">
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_elec_f1">Panel Listrik LVMDP & SDP</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_elec_f2">Instalasi Jalur Kabel Tray</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_elec_f3">Penangkal Petir & Grounding</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_elec_f4">Kalibrasi & Audit Daya Listrik</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_elec_f5">Emergency Power & Genset</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_elec_f6">Sistem Penerangan Industri</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_elec_f7">Structured Cabling & Data</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_elec_f8">Uninterruptible Power (UPS)</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_elec_f1">Panel Listrik LVMDP & SDP</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_elec_f2">Instalasi Jalur Kabel Tray</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_elec_f3">Penangkal Petir & Grounding</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_elec_f4">Kalibrasi & Audit Daya Listrik</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_elec_f5">Emergency Power & Genset</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_elec_f6">Sistem Penerangan Industri</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_elec_f7">Structured Cabling & Data</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_elec_f8">Uninterruptible Power (UPS)</span></li>
               </ul>
               <div>
-                <a href="#planner" class="btn btn-primary" onclick="selectWizardService('Electrical System')"
-                  data-translate="srv_btn_select">Pilih Jasa Ini</a>
+                <a href="#planner" class="btn btn-primary" onclick="selectWizardService('Electrical System')" data-translate="srv_btn_select">Pilih Jasa Ini</a>
               </div>
             </div>
             <div class="pane-visual">
@@ -539,34 +562,17 @@
                 bersertifikat (PPR, PVC, Galvanis). Seluruh sambungan diuji keandalannya melalui pengujian tekanan
                 tinggi (*hydrostatic test*).</p>
               <ul class="pane-features-list">
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_plumb_f1">Pipa PPR, PVC, & Galvanis</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_plumb_f2">Pompa Booster & Transfer</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_plumb_f3">Pemipaan Air Kotor & Bekas</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_plumb_f4">Hydrostatic & Leakage Testing</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_plumb_f5">Air Bersih & Air Hujan</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_plumb_f6">Sewage Treatment Plant (STP)</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_plumb_f7">Wastewater Treatment (WWT)</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_plumb_f8">Air Panas & Dingin</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_plumb_f1">Pipa PPR, PVC, & Galvanis</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_plumb_f2">Pompa Booster & Transfer</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_plumb_f3">Pemipaan Air Kotor & Bekas</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_plumb_f4">Hydrostatic & Leakage Testing</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_plumb_f5">Air Bersih & Air Hujan</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_plumb_f6">Sewage Treatment Plant (STP)</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_plumb_f7">Wastewater Treatment (WWT)</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_plumb_f8">Air Panas & Dingin</span></li>
               </ul>
               <div>
-                <a href="#planner" class="btn btn-primary" onclick="selectWizardService('Plumbing System')"
-                  data-translate="srv_btn_select">Pilih Jasa Ini</a>
+                <a href="#planner" class="btn btn-primary" onclick="selectWizardService('Plumbing System')" data-translate="srv_btn_select">Pilih Jasa Ini</a>
               </div>
             </div>
             <div class="pane-visual">
@@ -588,34 +594,17 @@
                 sirkulasi air pendingin (*cooling tower*). Proses pengelasan menggunakan mesin las argon bersertifikat
                 resmi DEPNAKER/MIGAS (M.I.G/T.I.G).</p>
               <ul class="pane-features-list">
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_util_f1">Pipa Steam / Boiler</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_util_f2">Piping Compressed Air</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_util_f3">Las Stainless Argon (MIG/TIG)</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_util_f4">Boiler & Cooling Tower</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_util_f5">Process Cooling Water Loop</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_util_f6">Process Vacuum Piping</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_util_f7">Process Exhaust & Ventilation</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_util_f8">High Pressure Industrial Gas</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_util_f1">Pipa Steam / Boiler</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_util_f2">Piping Compressed Air</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_util_f3">Las Stainless Argon (MIG/TIG)</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_util_f4">Boiler & Cooling Tower</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_util_f5">Process Cooling Water Loop</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_util_f6">Process Vacuum Piping</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_util_f7">Process Exhaust & Ventilation</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_util_f8">High Pressure Industrial Gas</span></li>
               </ul>
               <div>
-                <a href="#planner" class="btn btn-primary" onclick="selectWizardService('Process Utilities')"
-                  data-translate="srv_btn_select">Pilih Jasa Ini</a>
+                <a href="#planner" class="btn btn-primary" onclick="selectWizardService('Process Utilities')" data-translate="srv_btn_select">Pilih Jasa Ini</a>
               </div>
             </div>
             <div class="pane-visual">
@@ -637,34 +626,17 @@
                 hydrant basah/kering dengan diesel pump handal, master control alarm kebakaran (MCFA), sprinkler
                 otomatis, hingga sistem penjinak api gas FM200 steril untuk ruang server sensitif.</p>
               <ul class="pane-features-list">
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_fire_f1">Hidran & Pompa Pemadam Diesel</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_fire_f2">Sprinkler Otomatis Wet-Pipe</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_fire_f3">Panel Master Alarm MCFA</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_fire_f4">Gas Suppression FM200 Steril</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_fire_f5">Alat Pemadam Portabel APAR</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_fire_f6">Dry Riser System Installation</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_fire_f7">Fire Barrier & Sealant</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_fire_f8">Jockey Pump & Duty Pump Control</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_fire_f1">Hidran & Pompa Pemadam Diesel</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_fire_f2">Sprinkler Otomatis Wet-Pipe</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_fire_f3">Panel Master Alarm MCFA</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_fire_f4">Gas Suppression FM200 Steril</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_fire_f5">Alat Pemadam Portabel APAR</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_fire_f6">Dry Riser System Installation</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_fire_f7">Fire Barrier & Sealant</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_fire_f8">Jockey Pump & Duty Pump Control</span></li>
               </ul>
               <div>
-                <a href="#planner" class="btn btn-primary" onclick="selectWizardService('Fire Protection')"
-                  data-translate="srv_btn_select">Pilih Jasa Ini</a>
+                <a href="#planner" class="btn btn-primary" onclick="selectWizardService('Fire Protection')" data-translate="srv_btn_select">Pilih Jasa Ini</a>
               </div>
             </div>
             <div class="pane-visual">
@@ -686,34 +658,17 @@
                 feeding water*), pemurnian air bersih industri farmasi, kosmetik, serta penunjang proses manufaktur
                 skala besar.</p>
               <ul class="pane-features-list">
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_water_f1">Reverse Osmosis</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_water_f2">Demineralisasi</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_water_f3">Water Treatment Plant</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_water_f4">Sewage Treatment Plant</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_water_f5">Wastewater Treatment</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_water_f6">Softener</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_water_f7">Carbon Filter</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_water_f8">Sand Filter</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_water_f1">Reverse Osmosis</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_water_f2">Demineralisasi</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_water_f3">Water Treatment Plant</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_water_f4">Sewage Treatment Plant</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_water_f5">Wastewater Treatment</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_water_f6">Softener</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_water_f7">Carbon Filter</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_water_f8">Sand Filter</span></li>
               </ul>
               <div>
-                <a href="#planner" class="btn btn-primary" onclick="selectWizardService('Water Treatment')"
-                  data-translate="srv_btn_select">Pilih Jasa Ini</a>
+                <a href="#planner" class="btn btn-primary" onclick="selectWizardService('Water Treatment')" data-translate="srv_btn_select">Pilih Jasa Ini</a>
               </div>
             </div>
             <div class="pane-visual">
@@ -735,34 +690,17 @@
                 Charging rumahan) serta pembangunan stasiun publik DC Fast Charging (SPKLU) untuk area ruko komersial,
                 pusat perbelanjaan, hotel, dan rest area yang dilengkapi sistem pembayaran QRIS otomatis.</p>
               <ul class="pane-features-list">
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_ev_f1">AC Charging (Home Charging)</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_ev_f2">DC Fast Charging (SPKLU)</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_ev_f3">Pedestal & Wall Charger</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_ev_f4">Gateway QRIS & E-Wallet</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_ev_f5">SaaS Billing & Monitoring App</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_ev_f6">Gardu Hubung & Upgrade PLN</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_ev_f7">Sertifikat Laik Operasi (SLO)</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_ev_f8">EV Grounding & Protection</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_ev_f1">AC Charging (Home Charging)</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_ev_f2">DC Fast Charging (SPKLU)</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_ev_f3">Pedestal & Wall Charger</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_ev_f4">Gateway QRIS & E-Wallet</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_ev_f5">SaaS Billing & Monitoring App</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_ev_f6">Gardu Hubung & Upgrade PLN</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_ev_f7">Sertifikat Laik Operasi (SLO)</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_ev_f8">EV Grounding & Protection</span></li>
               </ul>
               <div>
-                <a href="#planner" class="btn btn-primary" onclick="selectWizardService('EV Charging & SPKLU')"
-                  data-translate="srv_btn_select">Pilih Jasa Ini</a>
+                <a href="#planner" class="btn btn-primary" onclick="selectWizardService('EV Charging & SPKLU')" data-translate="srv_btn_select">Pilih Jasa Ini</a>
               </div>
             </div>
             <div class="pane-visual">
@@ -784,51 +722,28 @@
                 meminimalkan bentrokan jalur pipa (*clash detection*), menghitung beban pendinginan udara (*cooling
                 load*), dan merancang single line diagram panel daya secara akurat.</p>
               <ul class="pane-features-list">
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_design_f1">Gambar 3D BIM MEP (Revit/CAD)</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_design_f2">Clash Detection & Koordinasi 3D</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_design_f3">Perhitungan Cooling Load & Udara</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_design_f4">SLD Panel & Layout Kelistrikan</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_design_f5">Pembuatan As-Built Drawings</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_design_f6">Fluid Dynamics & Pump Head</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_design_f7">Konsultasi Teknik MEP</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg> <span data-translate="srv_design_f8">Desain Cleanroom BPOM / GMP</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_design_f1">Gambar 3D BIM MEP (Revit/CAD)</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_design_f2">Clash Detection & Koordinasi 3D</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_design_f3">Perhitungan Cooling Load & Udara</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_design_f4">SLD Panel & Layout Kelistrikan</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_design_f5">Pembuatan As-Built Drawings</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_design_f6">Fluid Dynamics & Pump Head</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_design_f7">Konsultasi Teknik MEP</span></li>
+                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_design_f8">Desain Cleanroom BPOM / GMP</span></li>
               </ul>
               <div>
-                <a href="#planner" class="btn btn-primary" onclick="selectWizardService('Design Facility')"
-                  data-translate="srv_btn_select">Pilih Jasa Ini</a>
+                <a href="#planner" class="btn btn-primary" onclick="selectWizardService('Design Facility')" data-translate="srv_btn_select">Pilih Jasa Ini</a>
               </div>
             </div>
             <div class="pane-visual bim-visual-container" style="height: 420px;">
-              <!-- HTML5 Canvas for the Isometric 3D Rendering -->
               <canvas id="bimCanvas" style="width: 100%; height: 100%; display: block; background: #030712;"></canvas>
-
-              <!-- Holographic Scanline laser -->
               <div id="bimScanline" class="bim-scanline"></div>
 
-              <!-- HUD Panel Overlay (Top) -->
               <div class="bim-hud-overlay">
                 <span class="bim-hud-status-label" data-translate="bim_status_label">Status Pemodeling:</span>
-                <span id="bimHudStatus" class="bim-hud-status-badge clash" data-translate="bim_status_clash">⚠️ 3
-                  Bentrokan Terdeteksi</span>
+                <span id="bimHudStatus" class="bim-hud-status-badge clash" data-translate="bim_status_clash">⚠️ 3 Bentrokan Terdeteksi</span>
               </div>
 
-              <!-- Control Dashboard Overlay (Bottom Left) -->
               <div class="bim-dashboard-overlay">
                 <div class="bim-toggles">
                   <label class="bim-toggle-label">
@@ -858,7 +773,6 @@
                 </div>
               </div>
 
-              <!-- Console Log Overlay (Bottom Right) -->
               <div class="bim-console-overlay">
                 <div class="bim-console-header">BIM v2.4 Terminal</div>
                 <div id="bimLogConsole" class="bim-console-body">
@@ -960,8 +874,7 @@
                   <div class="card-icon">💨</div>
                   <h4 data-translate="tab_hvac">perpipaan industri System</h4>
                 </div>
-                <div class="service-select-card" data-val="Electrical System"
-                  onclick="selectWizardCard(this, 'service')">
+                <div class="service-select-card" data-val="Electrical System" onclick="selectWizardCard(this, 'service')">
                   <div class="card-icon">⚡</div>
                   <h4 data-translate="tab_elec">Electrical System</h4>
                 </div>
@@ -969,8 +882,7 @@
                   <div class="card-icon">💧</div>
                   <h4 data-translate="tab_plumb">Plumbing System</h4>
                 </div>
-                <div class="service-select-card" data-val="Process Utilities"
-                  onclick="selectWizardCard(this, 'service')">
+                <div class="service-select-card" data-val="Process Utilities" onclick="selectWizardCard(this, 'service')">
                   <div class="card-icon">⚙️</div>
                   <h4 data-translate="tab_util">Process Utilities</h4>
                 </div>
@@ -982,8 +894,7 @@
                   <div class="card-icon">🧪</div>
                   <h4 data-translate="tab_water">Water Treatment</h4>
                 </div>
-                <div class="service-select-card" data-val="EV Charging & SPKLU"
-                  onclick="selectWizardCard(this, 'service')">
+                <div class="service-select-card" data-val="EV Charging & SPKLU" onclick="selectWizardCard(this, 'service')">
                   <div class="card-icon">🔋</div>
                   <h4 data-translate="tab_ev">EV Charging & SPKLU</h4>
                 </div>
@@ -1002,7 +913,6 @@
               data-translate="wiz_step_2_title">Berapa Skala Area Proyek Anda?</h3>
             <div class="form-group-wizard">
               <div class="scale-select-grid" id="wizard-step-2-grid">
-                <!-- Will be dynamically populated in JavaScript -->
               </div>
               <input type="hidden" id="wizard-input-scale" required>
             </div>
@@ -1129,10 +1039,8 @@
 
     <div class="marquee-container">
       <div class="marquee-wrapper">
-        <!-- Logo 1: PT Kalbe Farma Tbk -->
         <div class="marquee-logo-card">
-          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg"
-            style="width:100%; height:100%; max-height:40px;">
+          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%; max-height:40px;">
             <path d="M25 25C25 21 21 21 21 21C21 21 21 25 25 25Z" fill="#10B981" />
             <path d="M25 25C29 25 29 21 29 21C29 21 25 21 25 25Z" fill="#059669" />
             <path d="M25 25C25 29 29 29 29 29C29 29 29 25 25 25Z" fill="#10B981" />
@@ -1141,354 +1049,110 @@
             <path d="M25 25C27.8 22.2 27.8 20.2 27.8 20.2C27.8 20.2 25 22.2 25 25Z" fill="#047857" />
             <path d="M25 25C27.8 27.8 29.8 26.8 29.8 26.8C29.8 26.8 27.8 25 25 25Z" fill="#34D399" />
             <path d="M25 25C22.2 27.8 22.2 29.8 22.2 29.8C22.2 29.8 25 27.8 25 25Z" fill="#047857" />
-            <text x="38" y="32" font-family="'Outfit', sans-serif" font-weight="800" font-size="16" fill="#047857"
-              letter-spacing="1">KALBE</text>
+            <text x="38" y="32" font-family="'Outfit', sans-serif" font-weight="800" font-size="16" fill="#047857" letter-spacing="1">KALBE</text>
           </svg>
         </div>
-        <!-- Logo 2: PT Akebono Brake Astra Indonesia -->
         <div class="marquee-logo-card">
-          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg"
-            style="width:100%; height:100%; max-height:35px;">
-            <text x="50%" y="28" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700"
-              font-size="17" fill="#1E40AF" letter-spacing="-0.5">akebono</text>
-            <text x="50%" y="39" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600"
-              font-size="7" fill="#6B7280" letter-spacing="1.5">ASTRA INDONESIA</text>
+          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%; max-height:35px;">
+            <text x="50%" y="28" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="17" fill="#1E40AF" letter-spacing="-0.5">akebono</text>
+            <text x="50%" y="39" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600" font-size="7" fill="#6B7280" letter-spacing="1.5">ASTRA INDONESIA</text>
           </svg>
         </div>
-        <!-- Logo 3: PT Bumitangerang Mesindotama (BT Cocoa) -->
         <div class="marquee-logo-card">
-          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg"
-            style="width:100%; height:100%; max-height:40px;">
+          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%; max-height:40px;">
             <ellipse cx="23" cy="25" rx="9" ry="5.5" transform="rotate(-30 23 25)" fill="#78350F" />
             <line x1="15" y1="29" x2="31" y2="21" stroke="#F59E0B" stroke-width="1.5" />
-            <text x="38" y="27" font-family="'Outfit', sans-serif" font-weight="800" font-size="15"
-              fill="#78350F">bt</text>
-            <text x="54" y="27" font-family="'Outfit', sans-serif" font-weight="400" font-size="15"
-              fill="#78350F">cocoa</text>
-            <text x="38" y="38" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600" font-size="7"
-              fill="#9A3412" letter-spacing="0.5">BUMITANGERANG</text>
+            <text x="38" y="27" font-family="'Outfit', sans-serif" font-weight="800" font-size="15" fill="#78350F">bt</text>
+            <text x="54" y="27" font-family="'Outfit', sans-serif" font-weight="400" font-size="15" fill="#78350F">cocoa</text>
+            <text x="38" y="38" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600" font-size="7" fill="#9A3412" letter-spacing="0.5">BUMITANGERANG</text>
           </svg>
         </div>
-        <!-- Logo 4: PT Olam Indonesia (OFI) -->
         <div class="marquee-logo-card">
-          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg"
-            style="width:100%; height:100%; max-height:38px;">
+          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%; max-height:38px;">
             <circle cx="23" cy="25" r="9" stroke="#059669" stroke-width="2" />
             <path d="M23 16C23 16 26 21 23 25C20 21 23 16 23 16Z" fill="#10B981" />
             <path d="M23 25C23 25 26 30 23 34C20 30 23 25 23 25Z" fill="#F59E0B" />
-            <text x="38" y="29" font-family="'Outfit', sans-serif" font-weight="800" font-size="18"
-              fill="#047857">ofi</text>
-            <text x="38" y="39" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600" font-size="7"
-              fill="#6B7280" letter-spacing="0.5">olam food ingredients</text>
+            <text x="38" y="29" font-family="'Outfit', sans-serif" font-weight="800" font-size="18" fill="#047857">ofi</text>
+            <text x="38" y="39" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600" font-size="7" fill="#6B7280" letter-spacing="0.5">olam food ingredients</text>
           </svg>
         </div>
-        <!-- Logo 5: PT Tempo Scan Pacific -->
         <div class="marquee-logo-card">
-          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg"
-            style="width:100%; height:100%; max-height:35px;">
-            <text x="50%" y="25" text-anchor="middle" font-family="'Outfit', sans-serif" font-weight="800"
-              font-size="17" fill="#1E3A8A">Tempo Scan</text>
-            <text x="50%" y="37" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700"
-              font-size="8" fill="#3B82F6" letter-spacing="2">PACIFIC</text>
+          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%; max-height:35px;">
+            <text x="50%" y="25" text-anchor="middle" font-family="'Outfit', sans-serif" font-weight="800" font-size="17" fill="#1E3A8A">Tempo Scan</text>
+            <text x="50%" y="37" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="8" fill="#3B82F6" letter-spacing="2">PACIFIC</text>
           </svg>
         </div>
-        <!-- Logo 6: PT Sinwa Perdana Mandiri -->
         <div class="marquee-logo-card">
-          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg"
-            style="width:100%; height:100%; max-height:35px;">
-            <text x="50%" y="27" text-anchor="middle" font-family="'Outfit', sans-serif" font-weight="900"
-              font-size="20" fill="#111827">SIN<tspan fill="#DC2626">WA</tspan></text>
-            <text x="50%" y="39" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600"
-              font-size="7" fill="#6B7280" letter-spacing="1">PERDANA MANDIRI</text>
+          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%; max-height:35px;">
+            <text x="50%" y="27" text-anchor="middle" font-family="'Outfit', sans-serif" font-weight="900" font-size="20" fill="#111827">SIN<tspan fill="#DC2626">WA</tspan></text>
+            <text x="50%" y="39" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600" font-size="7" fill="#6B7280" letter-spacing="1">PERDANA MANDIRI</text>
           </svg>
         </div>
-        <!-- Logo 7: PT Fahrenheit Synthon Pharma -->
         <div class="marquee-logo-card">
-          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg"
-            style="width:100%; height:100%; max-height:40px;">
+          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%; max-height:40px;">
             <circle cx="18" cy="20" r="5" stroke="#2563EB" stroke-width="2" fill="none" />
             <circle cx="25" cy="27" r="5" stroke="#1E3A8A" stroke-width="2" fill="none" />
-            <text x="36" y="23" font-family="'Outfit', sans-serif" font-weight="800" font-size="12" fill="#1E3A8A"
-              letter-spacing="0.5">FAHRENHEIT</text>
-            <text x="36" y="36" font-family="'Plus Jakarta Sans', sans-serif" font-weight="500" font-size="10"
-              fill="#4B5563">Synthon Pharma</text>
+            <text x="36" y="23" font-family="'Outfit', sans-serif" font-weight="800" font-size="12" fill="#1E3A8A" letter-spacing="0.5">FAHRENHEIT</text>
+            <text x="36" y="36" font-family="'Plus Jakarta Sans', sans-serif" font-weight="500" font-size="10" fill="#4B5563">Synthon Pharma</text>
           </svg>
         </div>
-        <!-- Logo 8: PT Garuda Metalindo Tbk -->
         <div class="marquee-logo-card">
-          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg"
-            style="width:100%; height:100%; max-height:40px;">
-            <path
-              d="M10 25C10 17.8 15.8 12 23 12C27.4 12 31.3 14.2 33.6 17.5L28.2 21C27 19.5 25.1 18.5 23 18.5C19.4 18.5 16.5 21.4 16.5 25C16.5 28.6 19.4 31.5 23 31.5C25.1 31.5 27 30.5 28.2 29L33.6 32.5C31.3 35.8 27.4 38 23 38C15.8 38 10 32.2 10 25Z"
-              fill="#D97706" />
+          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%; max-height:40px;">
+            <path d="M10 25C10 17.8 15.8 12 23 12C27.4 12 31.3 14.2 33.6 17.5L28.2 21C27 19.5 25.1 18.5 23 18.5C19.4 18.5 16.5 21.4 16.5 25C16.5 28.6 19.4 31.5 23 31.5C25.1 31.5 27 30.5 28.2 29L33.6 32.5C31.3 35.8 27.4 38 23 38C15.8 38 10 32.2 10 25Z" fill="#D97706" />
             <path d="M23 22.5H32V27.5H23V22.5Z" fill="#F59E0B" />
-            <text x="38" y="26" font-family="'Outfit', sans-serif" font-weight="800" font-size="12"
-              fill="#1F2937">GARUDA</text>
-            <text x="38" y="37" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="9"
-              fill="#4B5563" letter-spacing="0.5">METALINDO</text>
+            <text x="38" y="26" font-family="'Outfit', sans-serif" font-weight="800" font-size="12" fill="#1F2937">GARUDA</text>
+            <text x="38" y="37" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="9" fill="#4B5563" letter-spacing="0.5">METALINDO</text>
           </svg>
         </div>
-        <!-- Logo 9: PT Vaksindo Satwa Nusantara (Japfa Group) -->
         <div class="marquee-logo-card">
-          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg"
-            style="width:100%; height:100%; max-height:40px;">
+          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%; max-height:40px;">
             <path d="M12 15H32L27 25L32 35H12V15Z" fill="#DC2626" />
             <circle cx="18" cy="25" r="2.5" fill="#FFFFFF" />
-            <text x="38" y="27" font-family="'Outfit', sans-serif" font-weight="800" font-size="15"
-              fill="#111827">JAPFA</text>
-            <text x="38" y="37" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600" font-size="8"
-              fill="#DC2626" letter-spacing="0.5">VAKSINDO SATWA</text>
+            <text x="38" y="27" font-family="'Outfit', sans-serif" font-weight="800" font-size="15" fill="#111827">JAPFA</text>
+            <text x="38" y="37" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600" font-size="8" fill="#DC2626" letter-spacing="0.5">VAKSINDO SATWA</text>
           </svg>
         </div>
-        <!-- Logo 10: PT Molex Ayus -->
         <div class="marquee-logo-card">
-          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg"
-            style="width:100%; height:100%; max-height:35px;">
-            <text x="50%" y="24" text-anchor="middle" font-family="'Outfit', sans-serif" font-weight="800"
-              font-size="15" fill="#047857" letter-spacing="0.5">molex ayus</text>
-            <text x="50%" y="36" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600"
-              font-size="8" fill="#4B5563" letter-spacing="1">PHARMACEUTICAL</text>
+          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%; max-height:35px;">
+            <text x="50%" y="24" text-anchor="middle" font-family="'Outfit', sans-serif" font-weight="800" font-size="15" fill="#047857" letter-spacing="0.5">molex ayus</text>
+            <text x="50%" y="36" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600" font-size="8" fill="#4B5563" letter-spacing="1">PHARMACEUTICAL</text>
           </svg>
         </div>
-        <!-- Logo 11: RSUD Pasar Rebo -->
         <div class="marquee-logo-card">
-          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg"
-            style="width:100%; height:100%; max-height:40px;">
+          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%; max-height:40px;">
             <rect x="18" y="13" width="7" height="24" rx="2" fill="#10B981" />
             <rect x="10" y="21" width="23" height="7" rx="2" fill="#10B981" />
             <circle cx="21" cy="25" r="6" stroke="#FFFFFF" stroke-width="2" fill="none" />
-            <text x="38" y="25" font-family="'Outfit', sans-serif" font-weight="800" font-size="13"
-              fill="#065F46">RSUD</text>
-            <text x="38" y="37" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="10"
-              fill="#0F766E">PASAR REBO</text>
+            <text x="38" y="25" font-family="'Outfit', sans-serif" font-weight="800" font-size="13" fill="#065F46">RSUD</text>
+            <text x="38" y="37" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="10" fill="#0F766E">PASAR REBO</text>
           </svg>
         </div>
-        <!-- Logo 12: PT City Vision -->
         <div class="marquee-logo-card">
-          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg"
-            style="width:100%; height:100%; max-height:35px;">
-            <text x="50%" y="27" text-anchor="middle" font-family="'Outfit', sans-serif" font-weight="900"
-              font-size="17" fill="#111827" letter-spacing="1">CITY <tspan fill="#3B82F6">VISION</tspan></text>
-            <text x="50%" y="39" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600"
-              font-size="7" fill="#6B7280" letter-spacing="2">OUT-OF-HOME MEDIA</text>
+          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%; max-height:35px;">
+            <text x="50%" y="27" text-anchor="middle" font-family="'Outfit', sans-serif" font-weight="900" font-size="17" fill="#111827" letter-spacing="1">CITY <tspan fill="#3B82F6">VISION</tspan></text>
+            <text x="50%" y="39" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600" font-size="7" fill="#6B7280" letter-spacing="2">OUT-OF-HOME MEDIA</text>
           </svg>
         </div>
-        <!-- Logo 13: PT Mesin Isuzu Indonesia -->
         <div class="marquee-logo-card">
-          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg"
-            style="width:100%; height:100%; max-height:35px;">
-            <text x="50%" y="25" text-anchor="middle" font-family="'Outfit', sans-serif" font-weight="900"
-              font-size="20" fill="#DC2626" letter-spacing="0.5">ISUZU</text>
-            <text x="50%" y="37" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600"
-              font-size="8" fill="#4B5563" letter-spacing="0.5">MESIN INDONESIA</text>
+          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%; max-height:35px;">
+            <text x="50%" y="25" text-anchor="middle" font-family="'Outfit', sans-serif" font-weight="900" font-size="20" fill="#DC2626" letter-spacing="0.5">ISUZU</text>
+            <text x="50%" y="37" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600" font-size="8" fill="#4B5563" letter-spacing="0.5">MESIN INDONESIA</text>
           </svg>
         </div>
-        <!-- Logo 14: PT Supra Ferbindo Farma (Tempo Group) -->
         <div class="marquee-logo-card">
-          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg"
-            style="width:100%; height:100%; max-height:40px;">
+          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%; max-height:40px;">
             <circle cx="21" cy="25" r="9" stroke="#EF4444" stroke-width="2" />
-            <text x="21" y="30" text-anchor="middle" font-family="'Outfit', sans-serif" font-weight="800" font-size="13"
-              fill="#EF4444">S</text>
-            <text x="36" y="24" font-family="'Outfit', sans-serif" font-weight="800" font-size="13"
-              fill="#EF4444">SUPRA</text>
-            <text x="36" y="37" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600" font-size="9"
-              fill="#4B5563" letter-spacing="0.5">Ferbindo Farma</text>
+            <text x="21" y="30" text-anchor="middle" font-family="'Outfit', sans-serif" font-weight="800" font-size="13" fill="#EF4444">S</text>
+            <text x="36" y="24" font-family="'Outfit', sans-serif" font-weight="800" font-size="13" fill="#EF4444">SUPRA</text>
+            <text x="36" y="37" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600" font-size="9" fill="#4B5563" letter-spacing="0.5">Ferbindo Farma</text>
           </svg>
         </div>
-        <!-- Logo 15: PT Duta Indah Abadi -->
         <div class="marquee-logo-card">
-          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg"
-            style="width:100%; height:100%; max-height:40px;">
-            <rect x="18" y="18" width="13" height="13" transform="rotate(45 24.5 24.5)" stroke="#3B82F6"
-              stroke-width="2" fill="none" />
+          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%; max-height:40px;">
+            <rect x="18" y="18" width="13" height="13" transform="rotate(45 24.5 24.5)" stroke="#3B82F6" stroke-width="2" fill="none" />
             <circle cx="24.5" cy="24.5" r="3.5" fill="#1E3A8A" />
-            <text x="40" y="27" font-family="'Outfit', sans-serif" font-weight="800" font-size="16"
-              fill="#1E3A8A">D·I·A</text>
-            <text x="40" y="37" font-family="'Plus Jakarta Sans', sans-serif" font-weight="500" font-size="8"
-              fill="#4B5563">DUTA INDAH ABADI</text>
-          </svg>
-        </div>
-
-        <!-- Duplicate for Infinite Loop -->
-        <!-- Logo 1: PT Kalbe Farma Tbk -->
-        <div class="marquee-logo-card">
-          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg"
-            style="width:100%; height:100%; max-height:40px;">
-            <path d="M25 25C25 21 21 21 21 21C21 21 21 25 25 25Z" fill="#10B981" />
-            <path d="M25 25C29 25 29 21 29 21C29 21 25 21 25 25Z" fill="#059669" />
-            <path d="M25 25C25 29 29 29 29 29C29 29 29 25 25 25Z" fill="#10B981" />
-            <path d="M25 25C21 25 21 29 21 29C21 29 25 29 25 25Z" fill="#059669" />
-            <path d="M25 25C22.2 22.2 20.2 23.2 20.2 23.2C20.2 23.2 22.2 25 25 25Z" fill="#34D399" />
-            <path d="M25 25C27.8 22.2 27.8 20.2 27.8 20.2C27.8 20.2 25 22.2 25 25Z" fill="#047857" />
-            <path d="M25 25C27.8 27.8 29.8 26.8 29.8 26.8C29.8 26.8 27.8 25 25 25Z" fill="#34D399" />
-            <path d="M25 25C22.2 27.8 22.2 29.8 22.2 29.8C22.2 29.8 25 27.8 25 25Z" fill="#047857" />
-            <text x="38" y="32" font-family="'Outfit', sans-serif" font-weight="800" font-size="16" fill="#047857"
-              letter-spacing="1">KALBE</text>
-          </svg>
-        </div>
-        <!-- Logo 2: PT Akebono Brake Astra Indonesia -->
-        <div class="marquee-logo-card">
-          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg"
-            style="width:100%; height:100%; max-height:35px;">
-            <text x="50%" y="28" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700"
-              font-size="17" fill="#1E40AF" letter-spacing="-0.5">akebono</text>
-            <text x="50%" y="39" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600"
-              font-size="7" fill="#6B7280" letter-spacing="1.5">ASTRA INDONESIA</text>
-          </svg>
-        </div>
-        <!-- Logo 3: PT Bumitangerang Mesindotama (BT Cocoa) -->
-        <div class="marquee-logo-card">
-          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg"
-            style="width:100%; height:100%; max-height:40px;">
-            <ellipse cx="23" cy="25" rx="9" ry="5.5" transform="rotate(-30 23 25)" fill="#78350F" />
-            <line x1="15" y1="29" x2="31" y2="21" stroke="#F59E0B" stroke-width="1.5" />
-            <text x="38" y="27" font-family="'Outfit', sans-serif" font-weight="800" font-size="15"
-              fill="#78350F">bt</text>
-            <text x="54" y="27" font-family="'Outfit', sans-serif" font-weight="400" font-size="15"
-              fill="#78350F">cocoa</text>
-            <text x="38" y="38" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600" font-size="7"
-              fill="#9A3412" letter-spacing="0.5">BUMITANGERANG</text>
-          </svg>
-        </div>
-        <!-- Logo 4: PT Olam Indonesia (OFI) -->
-        <div class="marquee-logo-card">
-          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg"
-            style="width:100%; height:100%; max-height:38px;">
-            <circle cx="23" cy="25" r="9" stroke="#059669" stroke-width="2" />
-            <path d="M23 16C23 16 26 21 23 25C20 21 23 16 23 16Z" fill="#10B981" />
-            <path d="M23 25C23 25 26 30 23 34C20 30 23 25 23 25Z" fill="#F59E0B" />
-            <text x="38" y="29" font-family="'Outfit', sans-serif" font-weight="800" font-size="18"
-              fill="#047857">ofi</text>
-            <text x="38" y="39" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600" font-size="7"
-              fill="#6B7280" letter-spacing="0.5">olam food ingredients</text>
-          </svg>
-        </div>
-        <!-- Logo 5: PT Tempo Scan Pacific -->
-        <div class="marquee-logo-card">
-          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg"
-            style="width:100%; height:100%; max-height:35px;">
-            <text x="50%" y="25" text-anchor="middle" font-family="'Outfit', sans-serif" font-weight="800"
-              font-size="17" fill="#1E3A8A">Tempo Scan</text>
-            <text x="50%" y="37" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700"
-              font-size="8" fill="#3B82F6" letter-spacing="2">PACIFIC</text>
-          </svg>
-        </div>
-        <!-- Logo 6: PT Sinwa Perdana Mandiri -->
-        <div class="marquee-logo-card">
-          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg"
-            style="width:100%; height:100%; max-height:35px;">
-            <text x="50%" y="27" text-anchor="middle" font-family="'Outfit', sans-serif" font-weight="900"
-              font-size="20" fill="#111827">SIN<tspan fill="#DC2626">WA</tspan></text>
-            <text x="50%" y="39" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600"
-              font-size="7" fill="#6B7280" letter-spacing="1">PERDANA MANDIRI</text>
-          </svg>
-        </div>
-        <!-- Logo 7: PT Fahrenheit Synthon Pharma -->
-        <div class="marquee-logo-card">
-          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg"
-            style="width:100%; height:100%; max-height:40px;">
-            <circle cx="18" cy="20" r="5" stroke="#2563EB" stroke-width="2" fill="none" />
-            <circle cx="25" cy="27" r="5" stroke="#1E3A8A" stroke-width="2" fill="none" />
-            <text x="36" y="23" font-family="'Outfit', sans-serif" font-weight="800" font-size="12" fill="#1E3A8A"
-              letter-spacing="0.5">FAHRENHEIT</text>
-            <text x="36" y="36" font-family="'Plus Jakarta Sans', sans-serif" font-weight="500" font-size="10"
-              fill="#4B5563">Synthon Pharma</text>
-          </svg>
-        </div>
-        <!-- Logo 8: PT Garuda Metalindo Tbk -->
-        <div class="marquee-logo-card">
-          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg"
-            style="width:100%; height:100%; max-height:40px;">
-            <path
-              d="M10 25C10 17.8 15.8 12 23 12C27.4 12 31.3 14.2 33.6 17.5L28.2 21C27 19.5 25.1 18.5 23 18.5C19.4 18.5 16.5 21.4 16.5 25C16.5 28.6 19.4 31.5 23 31.5C25.1 31.5 27 30.5 28.2 29L33.6 32.5C31.3 35.8 27.4 38 23 38C15.8 38 10 32.2 10 25Z"
-              fill="#D97706" />
-            <path d="M23 22.5H32V27.5H23V22.5Z" fill="#F59E0B" />
-            <text x="38" y="26" font-family="'Outfit', sans-serif" font-weight="800" font-size="12"
-              fill="#1F2937">GARUDA</text>
-            <text x="38" y="37" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="9"
-              fill="#4B5563" letter-spacing="0.5">METALINDO</text>
-          </svg>
-        </div>
-        <!-- Logo 9: PT Vaksindo Satwa Nusantara (Japfa Group) -->
-        <div class="marquee-logo-card">
-          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg"
-            style="width:100%; height:100%; max-height:40px;">
-            <path d="M12 15H32L27 25L32 35H12V15Z" fill="#DC2626" />
-            <circle cx="18" cy="25" r="2.5" fill="#FFFFFF" />
-            <text x="38" y="27" font-family="'Outfit', sans-serif" font-weight="800" font-size="15"
-              fill="#111827">JAPFA</text>
-            <text x="38" y="37" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600" font-size="8"
-              fill="#DC2626" letter-spacing="0.5">VAKSINDO SATWA</text>
-          </svg>
-        </div>
-        <!-- Logo 10: PT Molex Ayus -->
-        <div class="marquee-logo-card">
-          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg"
-            style="width:100%; height:100%; max-height:35px;">
-            <text x="50%" y="24" text-anchor="middle" font-family="'Outfit', sans-serif" font-weight="800"
-              font-size="15" fill="#047857" letter-spacing="0.5">molex ayus</text>
-            <text x="50%" y="36" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600"
-              font-size="8" fill="#4B5563" letter-spacing="1">PHARMACEUTICAL</text>
-          </svg>
-        </div>
-        <!-- Logo 11: RSUD Pasar Rebo -->
-        <div class="marquee-logo-card">
-          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg"
-            style="width:100%; height:100%; max-height:40px;">
-            <rect x="18" y="13" width="7" height="24" rx="2" fill="#10B981" />
-            <rect x="10" y="21" width="23" height="7" rx="2" fill="#10B981" />
-            <circle cx="21" cy="25" r="6" stroke="#FFFFFF" stroke-width="2" fill="none" />
-            <text x="38" y="25" font-family="'Outfit', sans-serif" font-weight="800" font-size="13"
-              fill="#065F46">RSUD</text>
-            <text x="38" y="37" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="10"
-              fill="#0F766E">PASAR REBO</text>
-          </svg>
-        </div>
-        <!-- Logo 12: PT City Vision -->
-        <div class="marquee-logo-card">
-          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg"
-            style="width:100%; height:100%; max-height:35px;">
-            <text x="50%" y="27" text-anchor="middle" font-family="'Outfit', sans-serif" font-weight="900"
-              font-size="17" fill="#111827" letter-spacing="1">CITY <tspan fill="#3B82F6">VISION</tspan></text>
-            <text x="50%" y="39" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600"
-              font-size="7" fill="#6B7280" letter-spacing="2">OUT-OF-HOME MEDIA</text>
-          </svg>
-        </div>
-        <!-- Logo 13: PT Mesin Isuzu Indonesia -->
-        <div class="marquee-logo-card">
-          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg"
-            style="width:100%; height:100%; max-height:35px;">
-            <text x="50%" y="25" text-anchor="middle" font-family="'Outfit', sans-serif" font-weight="900"
-              font-size="20" fill="#DC2626" letter-spacing="0.5">ISUZU</text>
-            <text x="50%" y="37" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600"
-              font-size="8" fill="#4B5563" letter-spacing="0.5">MESIN INDONESIA</text>
-          </svg>
-        </div>
-        <!-- Logo 14: PT Supra Ferbindo Farma (Tempo Group) -->
-        <div class="marquee-logo-card">
-          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg"
-            style="width:100%; height:100%; max-height:40px;">
-            <circle cx="21" cy="25" r="9" stroke="#EF4444" stroke-width="2" />
-            <text x="21" y="30" text-anchor="middle" font-family="'Outfit', sans-serif" font-weight="800" font-size="13"
-              fill="#EF4444">S</text>
-            <text x="36" y="24" font-family="'Outfit', sans-serif" font-weight="800" font-size="13"
-              fill="#EF4444">SUPRA</text>
-            <text x="36" y="37" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600" font-size="9"
-              fill="#4B5563" letter-spacing="0.5">Ferbindo Farma</text>
-          </svg>
-        </div>
-        <!-- Logo 15: PT Duta Indah Abadi -->
-        <div class="marquee-logo-card">
-          <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg"
-            style="width:100%; height:100%; max-height:40px;">
-            <rect x="18" y="18" width="13" height="13" transform="rotate(45 24.5 24.5)" stroke="#3B82F6"
-              stroke-width="2" fill="none" />
-            <circle cx="24.5" cy="24.5" r="3.5" fill="#1E3A8A" />
-            <text x="40" y="27" font-family="'Outfit', sans-serif" font-weight="800" font-size="16"
-              fill="#1E3A8A">D·I·A</text>
-            <text x="40" y="37" font-family="'Plus Jakarta Sans', sans-serif" font-weight="500" font-size="8"
-              fill="#4B5563">DUTA INDAH ABADI</text>
+            <text x="40" y="27" font-family="'Outfit', sans-serif" font-weight="800" font-size="16" fill="#1E3A8A">D·I·A</text>
+            <text x="40" y="37" font-family="'Plus Jakarta Sans', sans-serif" font-weight="500" font-size="8" fill="#4B5563">DUTA INDAH ABADI</text>
           </svg>
         </div>
       </div>
@@ -1500,11 +1164,9 @@
     <div class="container footer-top">
       <div class="footer-brand">
         <div class="footer-brand" style="display: inline-flex; align-items: center; gap: 14px; margin-bottom: 20px;">
-          <!-- Container Crop: Emblem Metalik Perak -->
           <div style="width: 58px; height: 58px; border-radius: 12px; overflow: hidden; display: flex; align-items: flex-start; justify-content: center; background: rgba(255,255,255,0.03); border: 1.2px solid rgba(255,255,255,0.15); box-shadow: 0 6px 18px rgba(0,0,0,0.5); flex-shrink: 0;">
             <img src="images/logo-tcs.png" alt="Logo PT TCS" style="width: 78px; height: 78px; max-width: none; object-fit: cover; object-position: center 14%; margin-top: -4px; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4)); display: block;" class="brand-logo-img">
           </div>
-          <!-- Tipografi Identik Atas -->
           <div class="brand-text-block" style="display: flex; flex-direction: column; justify-content: center; line-height: 1.15;">
             <span style="font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 800; color: #ffffff; letter-spacing: 0.04em; text-transform: uppercase;">TITIS CAHAYA</span>
             <span style="font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 800; color: #00f2fe; letter-spacing: 0.12em; text-transform: uppercase;">SEJAHTERA</span>
@@ -1516,43 +1178,29 @@
           letak pipa presisi tinggi, sirkulasi udara bersih industri sejak 2020.
         </p>
 
-        <!-- Social Media Links (TCS Media Sosial) -->
         <div class="footer-social-wrap" style="margin-top: 15px; margin-bottom: 20px; display: flex; gap: 10px;">
-          <!-- Instagram -->
-          <a href="https://www.instagram.com/titiscahayasejahtera/" target="_blank" class="footer-social-btn"
-            aria-label="Instagram">
+          <a href="https://www.instagram.com/titiscahayasejahtera/" target="_blank" class="footer-social-btn" aria-label="Instagram">
             <svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor">
-              <path
-                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
             </svg>
           </a>
-          <!-- Facebook -->
-          <a href="https://www.facebook.com/TitisCahayaSejahtera/" target="_blank" class="footer-social-btn"
-            aria-label="Facebook">
+          <a href="https://www.facebook.com/TitisCahayaSejahtera/" target="_blank" class="footer-social-btn" aria-label="Facebook">
             <svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor">
-              <path
-                d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z" />
+              <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z" />
             </svg>
           </a>
-          <!-- LinkedIn -->
-          <a href="https://www.linkedin.com/company/titis-cahaya-sejahtera/" target="_blank" class="footer-social-btn"
-            aria-label="LinkedIn">
+          <a href="https://www.linkedin.com/company/titis-cahaya-sejahtera/" target="_blank" class="footer-social-btn" aria-label="LinkedIn">
             <svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor">
-              <path
-                d="M22.23 0H1.77C.8 0 0 .77 0 1.72v20.56C0 23.23.8 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.72V1.72C24 .77 23.2 0 22.23 0zM7.12 20.45H3.56V9h3.56v11.45zM5.34 7.43c-1.14 0-2.06-.92-2.06-2.06 0-1.14.92-2.06 2.06-2.06 1.14 0 2.06.92 2.06 2.06 0 1.14-.92 2.06-2.06 2.06zm15.11 13.02h-3.56v-5.6c0-1.34-.03-3.05-1.86-3.05-1.86 0-2.14 1.45-2.14 2.95v5.7H9.33V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29z" />
+              <path d="M22.23 0H1.77C.8 0 0 .77 0 1.72v20.56C0 23.23.8 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.72V1.72C24 .77 23.2 0 22.23 0zM7.12 20.45H3.56V9h3.56v11.45zM5.34 7.43c-1.14 0-2.06-.92-2.06-2.06 0-1.14.92-2.06 2.06-2.06 1.14 0 2.06.92 2.06 2.06 0 1.14-.92 2.06-2.06 2.06zm15.11 13.02h-3.56v-5.6c0-1.34-.03-3.05-1.86-3.05-1.86 0-2.14 1.45-2.14 2.95v5.7H9.33V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29z" />
             </svg>
           </a>
-          <!-- YouTube -->
-          <a href="https://www.youtube.com/@titiscahayasejahtera" target="_blank" class="footer-social-btn"
-            aria-label="YouTube">
+          <a href="https://www.youtube.com/@titiscahayasejahtera" target="_blank" class="footer-social-btn" aria-label="YouTube">
             <svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor">
-              <path
-                d="M23.498 6.163a3.003 3.003 0 00-2.11-2.11C19.517 3.545 12 3.545 12 3.545s-7.517 0-9.388.508a3.003 3.003 0 00-2.11 2.11C0 8.033 0 12 0 12s0 3.967.502 5.837a3.003 3.003 0 002.11 2.11c1.871.508 9.388.508 9.388.508s7.517 0 9.388-.508a3.003 3.003 0 002.11-2.11C24 15.967 24 12 24 12s0-3.967-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+              <path d="M23.498 6.163a3.003 3.003 0 00-2.11-2.11C19.517 3.545 12 3.545 12 3.545s-7.517 0-9.388.508a3.003 3.003 0 00-2.11 2.11C0 8.033 0 12 0 12s0 3.967.502 5.837a3.003 3.003 0 002.11 2.11c1.871.508 9.388.508 9.388.508s7.517 0 9.388-.508a3.003 3.003 0 002.11-2.11C24 15.967 24 12 24 12s0-3.967-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
             </svg>
           </a>
         </div>
-        <span style="font-size:12px; color:var(--text-muted);" data-translate="footer_text">PT. Titis Cahaya Sejahtera
-          &copy; 2020 - 2026.</span>
+        <span style="font-size:12px; color:var(--text-muted);" data-translate="footer_text">PT. Titis Cahaya Sejahtera &copy; 2020 - 2026.</span>
       </div>
 
       <div>
@@ -1572,8 +1220,7 @@
           <div class="footer-contact-icon">📍</div>
           <div class="footer-contact-text">
             <strong data-translate="footer_office_title">Kantor Pusat</strong>
-            <span>Rukan Taman Meruya Plaza 2 Blok A2, Jl. Permata Meruya 2, Meruya Utara, Kembangan, Jakarta Barat
-              11620.</span>
+            <span>Rukan Taman Meruya Plaza 2 Blok A2, Jl. Permata Meruya 2, Meruya Utara, Kembangan, Jakarta Barat 11620.</span>
           </div>
         </div>
         <div class="footer-contact-item">
@@ -1586,16 +1233,12 @@
         <div class="footer-contact-item">
           <div class="footer-contact-icon" style="color:#25d366;">
             <svg style="width:18px;height:18px;vertical-align:middle;" viewBox="0 0 24 24" fill="currentColor">
-              <path
-                d="M12.012 2c-5.506 0-9.989 4.478-9.99 9.984a9.96 9.96 0 001.333 4.993L2 22l5.233-1.371a9.945 9.945 0 004.773 1.226h.005c5.508 0 9.99-4.479 9.992-9.986a9.94 9.94 0 00-2.927-7.064A9.925 9.925 0 0012.012 2zm5.726 14.19c-.252.712-1.461 1.303-2.014 1.383-.496.072-1.144.131-3.294-.755-2.75-1.133-4.512-3.924-4.65-4.105-.137-.18-1.109-1.474-1.109-2.812 0-1.337.702-1.996.953-2.257.252-.262.548-.328.73-.328.18 0 .361.002.518.01.16.007.372-.06.58.463.214.537.734 1.79.797 1.922.064.13.107.284.02.459-.087.174-.13.284-.262.437-.13.153-.274.341-.393.458-.13.13-.267.273-.115.534.153.262.678 1.115 1.455 1.808.998.89 1.838 1.167 2.1 1.298.263.13.415.109.569-.066.153-.175.656-.765.832-1.028.175-.262.35-.219.59-.131.24.088 1.52.717 1.782.848.263.13.438.196.504.306.065.11.065.634-.187 1.346z" />
+              <path d="M12.012 2c-5.506 0-9.989 4.478-9.99 9.984a9.96 9.96 0 001.333 4.993L2 22l5.233-1.371a9.945 9.945 0 004.773 1.226h.005c5.508 0 9.99-4.479 9.992-9.986a9.94 9.94 0 00-2.927-7.064A9.925 9.925 0 0012.012 2zm5.726 14.19c-.252.712-1.461 1.303-2.014 1.383-.496.072-1.144.131-3.294-.755-2.75-1.133-4.512-3.924-4.65-4.105-.137-.18-1.109-1.474-1.109-2.812 0-1.337.702-1.996.953-2.257.252-.262.548-.328.73-.328.18 0 .361.002.518.01.16.007.372-.06.58.463.214.537.734 1.79.797 1.922.064.13.107.284.02.459-.087.174-.13.284-.262.437-.13.153-.274.341-.393.458-.13.13-.267.273-.115.534.153.262.678 1.115 1.455 1.808.998.89 1.838 1.167 2.1 1.298.263.13.415.109.569-.066.153-.175.656-.765.832-1.028.175-.262.35-.219.59-.131.24.088 1.52.717 1.782.848.263.13.438.196.504.306.065.11.065.634-.187 1.346z" />
             </svg>
           </div>
           <div class="footer-contact-text">
             <strong>WhatsApp Chat</strong>
-            <span><a
-                href="https://wa.me/628111460707?text=Halo%20Admin%20TCS%2C%20saya%20tertarik%20dengan%20layanan%20kontraktor%20MEP%20Anda."
-                target="_blank" style="color:#25d366; font-weight:600;" data-translate="contact_wa_text">+62
-                811-1460-707 (Hubungi WA)</a></span>
+            <span><a href="https://wa.me/628111460707?text=Halo%20Admin%20TCS%2C%20saya%20tertarik%20dengan%20layanan%20kontraktor%20MEP%20Anda." target="_blank" style="color:#25d366; font-weight:600;" data-translate="contact_wa_text">+62 811-1460-707 (Hubungi WA)</a></span>
           </div>
         </div>
         <div class="footer-contact-item">
@@ -1610,17 +1253,13 @@
       <div>
         <h4 class="footer-title" data-translate="footer_map_title">Peta Lokasi Kantor</h4>
         <div class="footer-map-wrap">
-          <!-- Dark themed styled embedded Google Maps matching the Meruya head office address -->
-          <iframe
-            src="https://maps.google.com/maps?q=Rukan%20Taman%20Meruya%20Plaza%202,%20Meruya%20Utara,%20Kembangan,%20Jakarta%20Barat%2011620&t=&z=16&ie=UTF8&iwloc=&output=embed"
-            allowfullscreen="" loading="lazy"></iframe>
+          <iframe src="https://maps.google.com/maps?q=Rukan%20Taman%20Meruya%20Plaza%202,%20Meruya%20Utara,%20Kembangan,%20Jakarta%20Barat%2011620&t=&z=16&ie=UTF8&iwloc=&output=embed" allowfullscreen="" loading="lazy"></iframe>
         </div>
       </div>
     </div>
 
     <div class="container footer-bottom">
-      <span data-translate="footer_bottom_credit">Designed with premium dark aesthetic by Antigravity AI. Powered by GAS
-        Web Ecosystem.</span>
+      <span data-translate="footer_bottom_credit">Designed with premium dark aesthetic by Antigravity AI. Powered by GAS Web Ecosystem.</span>
       <div class="footer-bottom-links">
         <a href="#profil" data-translate="footer_privacy">Kebijakan Privasi</a>
         <a href="#profil" data-translate="footer_terms">Syarat Ketentuan</a>
@@ -1628,24 +1267,16 @@
     </div>
   </footer>
 
-  <!-- Floating SPKLU Partnership Badge (Bottom-Left) -->
-  
-
   <!-- ------------------- FLOATING HELPCENTER ------------------- -->
   <div class="floating-container">
-    <!-- WhatsApp Floating Trigger with Custom Pre-filled message -->
-    <a href="https://wa.me/628111460707?text=Halo%20kawan%20TCS%2C%20saya%20tertarik%20dengan%20layanan%20kontraktor%20MEP%20Anda.%20Bisa%20berdiskusi%20lebih%20lanjut%3F"
-      class="float-btn float-wa" target="_blank" aria-label="Chat WhatsApp">
+    <a href="https://wa.me/628111460707?text=Halo%20kawan%20TCS%2C%20saya%20tertarik%20dengan%20layanan%20kontraktor%20MEP%20Anda.%20Bisa%20berdiskusi%20lebih%20lanjut%3F" class="float-btn float-wa" target="_blank" aria-label="Chat WhatsApp">
       <svg style="width:28px;height:28px;" viewBox="0 0 24 24" fill="currentColor">
-        <path
-          d="M12.012 2c-5.506 0-9.989 4.478-9.99 9.984a9.96 9.96 0 001.333 4.993L2 22l5.233-1.371a9.945 9.945 0 004.773 1.226h.005c5.508 0 9.99-4.479 9.992-9.986a9.94 9.94 0 00-2.927-7.064A9.925 9.925 0 0012.012 2zm5.726 14.19c-.252.712-1.461 1.303-2.014 1.383-.496.072-1.144.131-3.294-.755-2.75-1.133-4.512-3.924-4.65-4.105-.137-.18-1.109-1.474-1.109-2.812 0-1.337.702-1.996.953-2.257.252-.262.548-.328.73-.328.18 0 .361.002.518.01.16.007.372-.06.58.463.214.537.734 1.79.797 1.922.064.13.107.284.02.459-.087.174-.13.284-.262.437-.13.153-.274.341-.393.458-.13.13-.267.273-.115.534.153.262.678 1.115 1.455 1.808.998.89 1.838 1.167 2.1 1.298.263.13.415.109.569-.066.153-.175.656-.765.832-1.028.175-.262.35-.219.59-.131.24.088 1.52.717 1.782.848.263.13.438.196.504.306.065.11.065.634-.187 1.346z" />
+        <path d="M12.012 2c-5.506 0-9.989 4.478-9.99 9.984a9.96 9.96 0 001.333 4.993L2 22l5.233-1.371a9.945 9.945 0 004.773 1.226h.005c5.508 0 9.99-4.479 9.992-9.986a9.94 9.94 0 00-2.927-7.064A9.925 9.925 0 0012.012 2zm5.726 14.19c-.252.712-1.461 1.303-2.014 1.383-.496.072-1.144.131-3.294-.755-2.75-1.133-4.512-3.924-4.65-4.105-.137-.18-1.109-1.474-1.109-2.812 0-1.337.702-1.996.953-2.257.252-.262.548-.328.73-.328.18 0 .361.002.518.01.16.007.372-.06.58.463.214.537.734 1.79.797 1.922.064.13.107.284.02.459-.087.174-.13.284-.262.437-.13.153-.274.341-.393.458-.13.13-.267.273-.115.534.153.262.678 1.115 1.455 1.808.998.89 1.838 1.167 2.1 1.298.263.13.415.109.569-.066.153-.175.656-.765.832-1.028.175-.262.35-.219.59-.131.24.088 1.52.717 1.782.848.263.13.438.196.504.306.065.11.065.634-.187 1.346z" />
       </svg>
     </a>
-    <!-- Phone Floating Trigger -->
     <a href="tel:+628111460707" class="float-btn float-call" aria-label="Telepon Langsung">
       <svg style="width:24px;height:24px;" viewBox="0 0 24 24" fill="currentColor">
-        <path
-          d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
+        <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
       </svg>
     </a>
   </div>
@@ -1654,13 +1285,10 @@
   <?!= include('JS'); ?>
 
   <!-- Fallback Loader for Local Live Server Preview -->
-  <!-- Centralized Translation System (Google Apps Script) -->
   <?!= include('TranslationJS'); ?>
 
-  <!-- Fallback Loader for Local Live Server & Static Hosting Preview -->
   <script>
     if (!window.location.hostname.includes('google')) {
-      // Load local TranslationJS fallback first
       fetch('TranslationJS.html')
         .then(response => response.text())
         .then(html => {
@@ -1675,7 +1303,6 @@
         })
         .catch(err => console.error('Failed to load local TranslationJS fallback:', err));
 
-      // Load local JS fallback
       fetch('JS.html')
         .then(response => response.text())
         .then(html => {
@@ -1691,29 +1318,27 @@
         .catch(err => console.error('Failed to load local JS fallback:', err));
     }
   </script>
-<!-- DYNAMIC WHATSAPP SYNC (TERHUBUNG DENGAN ADMIN.HTML) -->
-<script>
-  (function() {
-    // 1. Ambil nomor tersimpan dari admin.html, atau gunakan default beranda: 628111460707
-    var defaultWaMain = "628111460707";
-    var activeWa = localStorage.getItem('tcs_wa_main') || defaultWaMain;
 
-    // 2. Perbarui seluruh link WhatsApp di halaman index.html (tombol melayang & tombol kontak)
-    document.querySelectorAll('a[href*="wa.me"]').forEach(function(anchor) {
-      var currentHref = anchor.getAttribute('href');
-      if (currentHref) {
-        var updatedHref = currentHref.replace(/wa\.me\/\d+/, 'wa.me/' + activeWa);
-        anchor.setAttribute('href', updatedHref);
+  <!-- DYNAMIC WHATSAPP SYNC (TERHUBUNG DENGAN ADMIN.HTML) -->
+  <script>
+    (function() {
+      var defaultWaMain = "628111460707";
+      var activeWa = localStorage.getItem('tcs_wa_main') || defaultWaMain;
+
+      document.querySelectorAll('a[href*="wa.me"]').forEach(function(anchor) {
+        var currentHref = anchor.getAttribute('href');
+        if (currentHref) {
+          var updatedHref = currentHref.replace(/wa\.me\/\d+/, 'wa.me/' + activeWa);
+          anchor.setAttribute('href', updatedHref);
+        }
+      });
+
+      var topbarWaText = document.querySelector('.topbar-wa-text, a[href*="628111460707"]');
+      if (topbarWaText && activeWa !== defaultWaMain) {
+        topbarWaText.textContent = topbarWaText.textContent.replace(/62\d+/, activeWa);
       }
-    });
-
-    // 3. Perbarui teks nomor telepon di topbar jika elemennya ada
-    var topbarWaText = document.querySelector('.topbar-wa-text, a[href*="628111460707"]');
-    if (topbarWaText && activeWa !== defaultWaMain) {
-      topbarWaText.textContent = topbarWaText.textContent.replace(/62\d+/, activeWa);
-    }
-  })();
-</script>
+    })();
+  </script>
 
 </body>
 

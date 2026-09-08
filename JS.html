@@ -36,7 +36,6 @@ function initNavbar() {
   const mobileToggle = document.getElementById('mobile-toggle');
   const navLinks = document.getElementById('nav-links');
   
-  // Sticky Navbar on Scroll
   window.addEventListener('scroll', () => {
     if (window.scrollY > 50) {
       navbar.classList.add('scrolled');
@@ -45,19 +44,16 @@ function initNavbar() {
     }
   });
   
-  // Mobile Menu Toggle
   mobileToggle.addEventListener('click', () => {
     navLinks.classList.toggle('open');
   });
   
-  // Close menu when link is clicked
   document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', () => {
       navLinks.classList.remove('open');
     });
   });
 
-  // Auto-reset wizard when clicking any planner links if success screen is active
   document.querySelectorAll('a[href="#planner"]').forEach(link => {
     link.addEventListener('click', () => {
       const success = document.getElementById('wizard-success-pane');
@@ -77,7 +73,6 @@ function initScrollspy() {
     
     sections.forEach(section => {
       const sectionTop = section.offsetTop;
-      const sectionHeight = section.clientHeight;
       if (window.pageYOffset >= (sectionTop - 150)) {
         current = section.getAttribute('id');
       }
@@ -93,131 +88,122 @@ function initScrollspy() {
 }
 
 /* ==========================================================================
-   2. HERO INTERACTIVE CANVAS (MEP ENERGY/PIPE sirkuits)
+   2. HERO INTERACTIVE CANVAS (INDUSTRIAL WELDING SPARKS & ARGON ARC ENGINE)
    ========================================================================== */
 function initHeroCanvas() {
   const canvas = document.getElementById('hero-canvas');
   if (!canvas) return;
-  
+
   const ctx = canvas.getContext('2d');
-  let animationFrameId;
-  
-  let width = canvas.width = window.innerWidth;
-  let height = canvas.height = window.innerHeight;
-  
+  let width, height;
   const particles = [];
-  const particleCount = Math.min(60, Math.floor(width / 25)); // Responsive density
-  const connectionDistance = 120;
-  
-  const mouse = {
-    x: null,
-    y: null,
-    radius: 180
-  };
-  
-  window.addEventListener('mousemove', (e) => {
-    mouse.x = e.clientX;
-    mouse.y = e.clientY + window.scrollY; // Compensate for scroll page offset
-  });
-  
-  window.addEventListener('mouseleave', () => {
-    mouse.x = null;
-    mouse.y = null;
-  });
-  
-  window.addEventListener('resize', () => {
+  const mouse = { x: null, y: null, isActive: false };
+
+  function resize() {
     width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
-  });
-  
-  class Particle {
-    constructor() {
-      this.x = Math.random() * width;
-      this.y = Math.random() * height;
-      this.vx = (Math.random() - 0.5) * 0.6;
-      this.vy = (Math.random() - 0.5) * 0.6;
+    height = canvas.height = canvas.parentElement ? canvas.parentElement.offsetHeight : window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  class Spark {
+    constructor(x, y, isBurst = false) {
+      this.x = x || (width > 768 ? width * 0.72 : width * 0.5);
+      this.y = y || (height > 768 ? height * 0.52 : height * 0.65);
+
+      const angle = isBurst 
+        ? Math.random() * Math.PI * 2 
+        : (Math.PI * 1.05 + Math.random() * Math.PI * 0.9);
+      const speed = isBurst ? (Math.random() * 6 + 2) : (Math.random() * 5 + 1.2);
+
+      this.vx = Math.cos(angle) * speed;
+      this.vy = Math.sin(angle) * speed;
+      this.gravity = 0.14;
+      this.life = Math.random() * 45 + 25;
+      this.maxLife = this.life;
       this.size = Math.random() * 2 + 1;
-      
-      // Select primary cyan, teal, or gold colors dynamically
-      const colorType = Math.random();
-      if (colorType < 0.4) {
-        this.color = '0, 242, 254'; // Teal Cyan
-      } else if (colorType < 0.8) {
-        this.color = '0, 229, 117'; // Neon Green-Teal
-      } else {
-        this.color = '243, 156, 18'; // Amber Gold
-      }
+
+      const colors = ['#ffffff', '#00f2fe', '#38bdf8', '#f59e0b', '#fbbf24', '#ef4444'];
+      this.color = colors[Math.floor(Math.random() * colors.length)];
     }
-    
+
     update() {
       this.x += this.vx;
       this.y += this.vy;
-      
-      // Screen edge bounce
-      if (this.x < 0 || this.x > width) this.vx *= -1;
-      if (this.y < 0 || this.y > height) this.vy *= -1;
-      
-      // Mouse push effect
-      if (mouse.x != null && mouse.y != null) {
-        let dx = this.x - mouse.x;
-        let dy = this.y - mouse.y;
-        let dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < mouse.radius) {
-          const force = (mouse.radius - dist) / mouse.radius;
-          this.x += (dx / dist) * force * 1.5;
-          this.y += (dy / dist) * force * 1.5;
-        }
-      }
+      this.vy += this.gravity;
+      this.life--;
     }
-    
+
     draw() {
+      const alpha = Math.max(0, this.life / this.maxLife);
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.shadowBlur = 9;
+      ctx.shadowColor = this.color;
+      ctx.fillStyle = this.color;
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(${this.color}, 0.65)`;
       ctx.fill();
+      ctx.restore();
     }
   }
-  
-  // Initialize particles
-  for (let i = 0; i < particleCount; i++) {
-    particles.push(new Particle());
-  }
-  
-  function animate() {
-    ctx.clearRect(0, 0, width, height);
-    
-    // Connect particles
-    for (let i = 0; i < particles.length; i++) {
-      particles[i].update();
-      particles[i].draw();
-      
-      for (let j = i + 1; j < particles.length; j++) {
-        const dx = particles[i].x - particles[j].x;
-        const dy = particles[i].y - particles[j].y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        
-        if (dist < connectionDistance) {
-          const alpha = (connectionDistance - dist) / connectionDistance * 0.15;
-          ctx.beginPath();
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(particles[j].x, particles[j].y);
-          // Color based on particle 1
-          ctx.strokeStyle = `rgba(${particles[i].color}, ${alpha})`;
-          ctx.lineWidth = 0.8;
-          ctx.stroke();
-        }
+
+  window.addEventListener('mousemove', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    if (e.clientY >= rect.top && e.clientY <= rect.bottom) {
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+      mouse.isActive = true;
+      for (let i = 0; i < 2; i++) {
+        particles.push(new Spark(mouse.x, mouse.y, true));
       }
     }
-    
-    animationFrameId = requestAnimationFrame(animate);
+  });
+
+  window.addEventListener('mouseleave', () => { mouse.isActive = false; });
+
+  function animate() {
+    ctx.fillStyle = 'rgba(3, 7, 18, 0.22)';
+    ctx.fillRect(0, 0, width, height);
+
+    const arcX = width > 768 ? width * 0.72 : width * 0.5;
+    const arcY = height > 768 ? height * 0.52 : height * 0.65;
+
+    // Flash busur listrik argon
+    if (Math.random() > 0.88) {
+      ctx.save();
+      const gradient = ctx.createRadialGradient(arcX, arcY, 2, arcX, arcY, 70);
+      gradient.addColorStop(0, 'rgba(0, 242, 254, 0.45)');
+      gradient.addColorStop(0.4, 'rgba(14, 165, 233, 0.18)');
+      gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(arcX, arcY, 70, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    if (Math.random() > 0.35) {
+      particles.push(new Spark(arcX, arcY));
+    }
+
+    for (let i = particles.length - 1; i >= 0; i--) {
+      particles[i].update();
+      particles[i].draw();
+      if (particles[i].life <= 0) {
+        particles.splice(i, 1);
+      }
+    }
+
+    requestAnimationFrame(animate);
   }
-  
+
   animate();
 }
 
 /* ==========================================================================
    3. SERVICES EXPLORER TABS
-   ========================================================================== */
+   ========================================================================= */
 function initServiceTabs() {
   const tabButtons = document.querySelectorAll('.service-tab-btn');
   const tabPanes = document.querySelectorAll('.service-content-pane');
@@ -226,11 +212,9 @@ function initServiceTabs() {
     button.addEventListener('click', () => {
       const tabId = button.getAttribute('data-tab');
       
-      // Update buttons
       tabButtons.forEach(btn => btn.classList.remove('active'));
       button.classList.add('active');
       
-      // Update panes
       tabPanes.forEach(pane => {
         pane.classList.remove('active');
         if (pane.getAttribute('id') === `pane-${tabId}`) {
@@ -238,7 +222,6 @@ function initServiceTabs() {
         }
       });
       
-      // Resize BIM canvas if Design Facility tab is clicked and it's initialized
       if (tabId === 'design' && window.tcsBimState && typeof window.tcsBimState.resize === 'function') {
         setTimeout(() => {
           window.tcsBimState.resize();
@@ -249,7 +232,6 @@ function initServiceTabs() {
 }
 
 window.selectWizardService = function(serviceName) {
-  // Ensure the form is visible and success/loader screens are hidden if previous submission occurred
   const form = document.getElementById('tcs-wizard-form');
   const loader = document.getElementById('wizard-loader-pane');
   const success = document.getElementById('wizard-success-pane');
@@ -262,7 +244,6 @@ window.selectWizardService = function(serviceName) {
     input.value = serviceName;
   }
   
-  // Highlight card visually
   document.querySelectorAll('.service-select-card').forEach(card => {
     card.classList.remove('selected');
     if (card.getAttribute('data-val') === serviceName) {
@@ -270,10 +251,7 @@ window.selectWizardService = function(serviceName) {
     }
   });
   
-  // Update step 2 questions dynamically
   updateStep2Questions(serviceName);
-  
-  // Directly set the step to 2 and update UI
   wizardStep = 2;
   updateWizardUI();
 }
@@ -433,13 +411,11 @@ function updateStep2Questions(serviceName) {
   const serviceConfig = serviceWizardConfigs[serviceName] || serviceWizardConfigs["perpipaan industri System"];
   const config = serviceConfig[currentLang] || serviceConfig['id'];
   
-  // Update Step 2 Title
   const titleEl = document.getElementById('wizard-step-2-title');
   if (titleEl) {
     titleEl.innerText = config.title;
   }
   
-  // Update Step 2 Grid
   const gridEl = document.getElementById('wizard-step-2-grid');
   if (gridEl) {
     let html = '';
@@ -455,7 +431,6 @@ function updateStep2Questions(serviceName) {
     gridEl.innerHTML = html;
   }
   
-  // Reset selected scale value when service changes
   const scaleInput = document.getElementById('wizard-input-scale');
   if (scaleInput) {
     scaleInput.value = '';
@@ -469,8 +444,7 @@ function initWizard() {
   updateStep2Questions("perpipaan industri System");
   updateWizardUI();
   
-  // Dynamic language listener to re-render step 2 questions and next/prev button texts
-  window.addEventListener('tcsLanguageChanged', (e) => {
+  window.addEventListener('tcsLanguageChanged', () => {
     const currentService = document.getElementById('wizard-input-service').value;
     if (currentService) {
       updateStep2Questions(currentService);
@@ -488,8 +462,6 @@ window.selectWizardCard = function(element, type) {
     document.getElementById('wizard-input-service').value = val;
     document.querySelectorAll('.service-select-card').forEach(card => card.classList.remove('selected'));
     element.classList.add('selected');
-    
-    // Update step 2 questions dynamically based on selected service
     updateStep2Questions(val);
   } else if (type === 'scale') {
     document.getElementById('wizard-input-scale').value = val;
@@ -497,7 +469,6 @@ window.selectWizardCard = function(element, type) {
     element.classList.add('selected');
   }
   
-  // Automatically move to next step for better micro-interactions UX
   setTimeout(() => {
     moveWizardStep(1);
   }, 350);
@@ -506,65 +477,38 @@ window.selectWizardCard = function(element, type) {
 window.moveWizardStep = function(direction) {
   const currentLang = localStorage.getItem('tcs_lang') || 'id';
 
-  // Validate current step before moving forward
   if (direction === 1) {
     if (wizardStep === 1) {
       const service = document.getElementById('wizard-input-service').value;
       if (!service) {
-        const msg = currentLang === 'en'
-          ? 'Please select one of the service categories first.'
-          : 'Mohon pilih salah satu kategori jasa terlebih dahulu.';
-        alert(msg);
+        alert(currentLang === 'en' ? 'Please select one of the service categories first.' : 'Mohon pilih salah satu kategori jasa terlebih dahulu.');
         return;
       }
     } else if (wizardStep === 2) {
       const scale = document.getElementById('wizard-input-scale').value;
       if (!scale) {
-        const msg = currentLang === 'en'
-          ? 'Please select your project scale.'
-          : 'Mohon pilih skala proyek Anda.';
-        alert(msg);
+        alert(currentLang === 'en' ? 'Please select your project scale.' : 'Mohon pilih skala proyek Anda.');
         return;
       }
     } else if (wizardStep === 3) {
       const name = document.getElementById('wizard-name').value.trim();
       const phone = document.getElementById('wizard-phone').value.trim();
       if (!name || !phone) {
-        const msg = currentLang === 'en'
-          ? 'Full Name and active WhatsApp/phone number are required fields.'
-          : 'Nama Lengkap dan Nomor Telepon/WhatsApp wajib diisi.';
-        alert(msg);
+        alert(currentLang === 'en' ? 'Full Name and active WhatsApp/phone number are required fields.' : 'Nama Lengkap dan Nomor Telepon/WhatsApp wajib diisi.');
         return;
       }
     }
   }
   
   wizardStep += direction;
-  
-  // Bound check
   if (wizardStep < 1) wizardStep = 1;
   if (wizardStep > totalSteps) wizardStep = totalSteps;
   
-  // Update review values on step 4
   if (wizardStep === 4) {
-    // Translate the Category values on Step 4 dynamically for premium quality
     const rawService = document.getElementById('wizard-input-service').value;
     const rawScale = document.getElementById('wizard-input-scale').value;
     
-    // Check tab keys to see if we can easily map the service name
-    let localizedService = rawService;
-    if (currentLang === 'en') {
-      if (rawService === "perpipaan industri System") localizedService = "perpipaan industri System";
-      else if (rawService === "Electrical System") localizedService = "Electrical System";
-      else if (rawService === "Plumbing System") localizedService = "Plumbing System";
-      else if (rawService === "Process Utilities") localizedService = "Process Process Utilities";
-      else if (rawService === "Fire Protection") localizedService = "Fire Protection";
-      else if (rawService === "Water Treatment") localizedService = "Water Treatment";
-      else if (rawService === "EV Charging & SPKLU") localizedService = "EV Charging & SPKLU";
-      else if (rawService === "Design Facility") localizedService = "Design Facility";
-    }
-
-    document.getElementById('sum-service').innerText = localizedService;
+    document.getElementById('sum-service').innerText = rawService;
     document.getElementById('sum-scale').innerText = rawScale;
     document.getElementById('sum-name').innerText = document.getElementById('wizard-name').value;
     document.getElementById('sum-company').innerText = document.getElementById('wizard-company').value || '-';
@@ -577,15 +521,12 @@ window.moveWizardStep = function(direction) {
 function updateWizardUI() {
   const currentLang = localStorage.getItem('tcs_lang') || 'id';
 
-  // Toggle step panes
   document.querySelectorAll('.wizard-step-content').forEach(pane => pane.classList.remove('active'));
   document.getElementById(`step-${wizardStep}`).classList.add('active');
   
-  // Toggle progress nodes active state
   document.querySelectorAll('.wizard-step-node').forEach((node, idx) => {
     const stepIdx = idx + 1;
     node.classList.remove('active', 'completed');
-    
     if (stepIdx < wizardStep) {
       node.classList.add('completed');
     } else if (stepIdx === wizardStep) {
@@ -593,11 +534,9 @@ function updateWizardUI() {
     }
   });
   
-  // Update progress line width
   const percent = ((wizardStep - 1) / (totalSteps - 1)) * 100;
   document.getElementById('wizard-progress-line').style.width = `${percent}%`;
   
-  // Toggle prev/next action buttons
   const prevBtn = document.getElementById('btn-wizard-prev');
   const nextBtn = document.getElementById('btn-wizard-next');
   
@@ -614,7 +553,6 @@ function updateWizardUI() {
   } else {
     nextBtn.innerText = currentLang === 'en' ? 'Next' : 'Berikutnya';
     nextBtn.setAttribute('type', 'button');
-    // Ensure button acts as step navigator
     nextBtn.onclick = () => moveWizardStep(1);
   }
 }
@@ -623,7 +561,6 @@ window.handleWizardSubmit = function(event) {
   event.preventDefault();
   const currentLang = localStorage.getItem('tcs_lang') || 'id';
   
-  // 1. Collect form data
   const formData = {
     service: document.getElementById('wizard-input-service').value,
     scale: document.getElementById('wizard-input-scale').value,
@@ -633,28 +570,19 @@ window.handleWizardSubmit = function(event) {
     notes: document.getElementById('wizard-notes').value.trim()
   };
   
-  // 2. Hide form UI, Show Loader
   document.getElementById('tcs-wizard-form').style.display = 'none';
   document.getElementById('wizard-loader-pane').style.display = 'block';
   
-  // 3. Submit to GAS backend asynchronously via google.script.run (with Local Fallback Simulation)
   if (typeof google !== 'undefined' && google.script && google.script.run) {
     google.script.run
       .withSuccessHandler(onWizardSuccess)
       .withFailureHandler(onWizardFailure)
       .submitConsultation(formData);
   } else if (window.TCS_GAS_WEB_APP_URL) {
-    // Vercel API Bridge Submit
-    console.log("Bridging consultation submit to GAS Web App URL...");
     fetch(window.TCS_GAS_WEB_APP_URL, {
       method: "POST",
-      headers: {
-        "Content-Type": "text/plain"
-      },
-      body: JSON.stringify({
-        action: "submitConsultation",
-        data: formData
-      })
+      headers: { "Content-Type": "text/plain" },
+      body: JSON.stringify({ action: "submitConsultation", data: formData })
     })
     .then(response => response.json())
     .then(res => {
@@ -665,26 +593,21 @@ window.handleWizardSubmit = function(event) {
       }
     })
     .catch(err => {
-      console.error("API submit failed, falling back locally:", err);
-      // Fallback locally
       onWizardSuccess({
         success: true,
         message: currentLang === 'en'
-          ? "Thank you #KawanTCS! Your consultation request has been successfully submitted. Our professional MEP engineers will contact you shortly via phone/WhatsApp: " + formData.phone
-          : "Terima kasih #KawanTCS! Konsultasi Anda telah diterima. Tim profesional MEP kami akan segera menghubungi Anda melalui nomor telepon/WhatsApp: " + formData.phone
+          ? "Thank you #KawanTCS! Your consultation request has been successfully submitted: " + formData.phone
+          : "Terima kasih #KawanTCS! Konsultasi Anda telah diterima: " + formData.phone
       });
     });
   } else {
-    // Local environment simulation for rapid prototyping and offline checking
-    console.warn("GAS Environment not detected. Simulating API submission locally...");
     setTimeout(() => {
-      const mockResponse = {
+      onWizardSuccess({
         success: true,
         message: currentLang === 'en'
-          ? "Thank you #KawanTCS! Your consultation request has been successfully submitted. Our professional MEP engineers will contact you shortly via phone/WhatsApp: " + formData.phone
-          : "Terima kasih #KawanTCS! Konsultasi Anda telah diterima. Tim profesional MEP kami akan segera menghubungi Anda melalui nomor telepon/WhatsApp: " + formData.phone,
-      };
-      onWizardSuccess(mockResponse);
+          ? "Thank you #KawanTCS! Your consultation request has been submitted."
+          : "Terima kasih #KawanTCS! Konsultasi Anda telah diterima."
+      });
     }, 1500);
   }
 }
@@ -699,7 +622,6 @@ function onWizardSuccess(response) {
   if (response.success) {
     document.getElementById('wizard-success-msg').innerText = response.message;
     
-    // Format a high-fidelity formatted WhatsApp direct link
     const phone = document.getElementById('wizard-phone').value;
     const name = document.getElementById('wizard-name').value;
     const service = document.getElementById('wizard-input-service').value;
@@ -708,35 +630,26 @@ function onWizardSuccess(response) {
     const notes = document.getElementById('wizard-notes').value || (currentLang === 'en' ? 'No additional notes provided.' : 'Tidak ada catatan tambahan.');
     
     const waText = currentLang === 'en' 
-      ? `Hello TCS Team! I have submitted the Project Planner form on the website with the following details:
-
+      ? `Hello TCS Team! I have submitted the Project Planner form:
 Name: ${name}
 Company: ${company}
 Contact No: ${phone}
-Service Needed: ${service}
-Project Scale: ${scale}
-Specific Requirements: ${notes}
-
-Please process this consultation. Thank you!`
-      : `Halo Kawan TCS! Saya sudah mengisi Perencana Proyek di website dengan rincian berikut:
-
+Service: ${service}
+Scale: ${scale}
+Notes: ${notes}`
+      : `Halo Kawan TCS! Saya sudah mengisi formulir Perencana Proyek:
 Nama: ${name}
 Perusahaan: ${company}
 No. HP: ${phone}
-Jasa yang dibutuhkan: ${service}
+Jasa: ${service}
 Skala Proyek: ${scale}
-Detail Kebutuhan: ${notes}
-
-Mohon dapat diproses segera. Terima kasih!`;
+Detail Kebutuhan: ${notes}`;
     
     const activeWa = window.tcsContactSettings ? window.tcsContactSettings.TCS_CONTACT_WHATSAPP : "628111460707";
     const waUrl = `https://wa.me/${activeWa}?text=${encodeURIComponent(waText)}`;
     document.getElementById('wizard-whatsapp-direct').setAttribute('href', waUrl);
   } else {
-    // If business validation failed in the server
-    document.getElementById('wizard-success-msg').innerText = currentLang === 'en' 
-      ? "Sorry, submission failed: " + response.message 
-      : "Maaf, pengiriman gagal: " + response.message;
+    document.getElementById('wizard-success-msg').innerText = (currentLang === 'en' ? "Failed: " : "Gagal: ") + response.message;
     document.getElementById('wizard-whatsapp-direct').style.display = 'none';
   }
 }
@@ -747,15 +660,10 @@ function onWizardFailure(error) {
   successPane.style.display = 'block';
   
   const currentLang = localStorage.getItem('tcs_lang') || 'id';
-  
-  if (currentLang === 'en') {
-    document.getElementById('wizard-success-msg').innerHTML = `<span style="color:#ff4d4d;">Server transmission failure: ${error.message}</span><br>Please click the button below to directly contact TCS Admin via WhatsApp.`;
-  } else {
-    document.getElementById('wizard-success-msg').innerHTML = `<span style="color:#ff4d4d;">Terjadi kegagalan transmisi server: ${error.message}</span><br>Silakan klik tombol di bawah untuk langsung menghubungi Admin TCS via WhatsApp.`;
-  }
+  document.getElementById('wizard-success-msg').innerHTML = `<span style="color:#ff4d4d;">${currentLang === 'en' ? 'Server failure: ' : 'Kegagalan transmisi server: '}${error.message}</span>`;
   
   const activeWa = window.tcsContactSettings ? window.tcsContactSettings.TCS_CONTACT_WHATSAPP : "628111460707";
-  const waUrl = `https://wa.me/${activeWa}?text=Halo%20TCS%2C%20saya%20mengalami%20kendala%20saat%20mengirim%20formulir%20di%20website.%20Saya%20ingin%20berkonsultasi%20langsung%20di%20sini.`;
+  const waUrl = `https://wa.me/${activeWa}?text=Halo%20TCS%2C%20saya%20mengalami%20kendala%20saat%20mengirim%20formulir%20di%20website.`;
   document.getElementById('wizard-whatsapp-direct').setAttribute('href', waUrl);
 }
 
@@ -763,7 +671,6 @@ window.resetWizard = function() {
   wizardStep = 1;
   document.getElementById('tcs-wizard-form').reset();
   
-  // Clear select cards
   document.querySelectorAll('.service-select-card').forEach(card => card.classList.remove('selected'));
   document.querySelectorAll('.scale-select-card').forEach(card => card.classList.remove('selected'));
   document.getElementById('wizard-input-service').value = '';
@@ -787,16 +694,14 @@ function initStatsCounter() {
         const target = entry.target;
         const targetValAttr = target.innerText;
         
-        // Skip year logic
         if (target.id === 'stat-year') return;
         
         const isPercent = targetValAttr.includes('%');
         const isPlus = targetValAttr.includes('+');
-        
         const rawVal = parseInt(targetValAttr.replace(/[^0-9]/g, ''));
-        animateCount(target, rawVal, isPercent, isPlus);
         
-        observer.unobserve(target); // Animate once
+        animateCount(target, rawVal, isPercent, isPlus);
+        observer.unobserve(target);
       }
     });
   }, { threshold: 0.5 });
@@ -806,7 +711,7 @@ function initStatsCounter() {
 
 function animateCount(element, targetVal, isPercent, isPlus) {
   let currentVal = 0;
-  const duration = 1200; // ms
+  const duration = 1200;
   const stepTime = Math.max(10, Math.floor(duration / targetVal));
   
   const timer = setInterval(() => {
@@ -841,17 +746,15 @@ function initBimSimulator() {
   
   if (!scanline || !hudStatus || !consoleBody || !togglePlumb || !toggleHvac || !toggleElec || !btnRun || !btnReset) return;
   
-  // Expose state globally so we can control and clean up if necessary
   window.tcsBimState = {
-    state: 'idle', // 'idle', 'scanning', 'resolved'
+    state: 'idle',
     progress: 0,
-    pipeOffset: 0, // current interpolated offset of plumbing (0 to 1)
-    elecOffset: 0, // current interpolated offset of electrical (0 to 1)
+    pipeOffset: 0,
+    elecOffset: 0,
     scale: 1,
     logsPrinted: new Set()
   };
   
-  // Set high-DPI scaling for retina screens
   function resizeCanvas() {
     const rect = canvas.getBoundingClientRect();
     const dpr = window.devicePixelRatio || 1;
@@ -866,24 +769,19 @@ function initBimSimulator() {
   window.addEventListener('resize', resizeCanvas);
   resizeCanvas();
   
-  // Isometric projection math helper
   function toIso(x, y, z) {
     const cx = window.tcsBimState.width / 2;
     const cy = window.tcsBimState.height / 2 - 10;
-    
-    // Rotate and projection factor
-    const isoX = cx + (x - y) * 0.866; // cos(30) = 0.866
-    const isoY = cy + (x + y) * 0.5 - z; // sin(30) = 0.5
+    const isoX = cx + (x - y) * 0.866;
+    const isoY = cy + (x + y) * 0.5 - z;
     return { x: isoX, y: isoY };
   }
   
-  // Drawing helpers
   function drawIsoPillar(x, y, h) {
     ctx.fillStyle = 'rgba(30, 41, 59, 0.4)';
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
     ctx.lineWidth = 1;
     
-    // Draw columns
     const w = 15;
     const bottom = toIso(x, y, 0);
     const top = toIso(x, y, h);
@@ -897,7 +795,6 @@ function initBimSimulator() {
     ctx.fill();
     ctx.stroke();
     
-    // Vertical line
     ctx.beginPath();
     ctx.moveTo(bottom.x, bottom.y);
     ctx.lineTo(top.x, top.y);
@@ -906,7 +803,6 @@ function initBimSimulator() {
   }
   
   function drawIsoBox(x, y, z, wx, wy, wz, colorGradients) {
-    // Volume faces
     const p1 = toIso(x, y, z);
     const p2 = toIso(x + wx, y, z);
     const p3 = toIso(x + wx, y + wy, z);
@@ -916,7 +812,6 @@ function initBimSimulator() {
     const p7 = toIso(x + wx, y + wy, z + wz);
     const p8 = toIso(x, y + wy, z + wz);
     
-    // Face Top
     ctx.fillStyle = colorGradients.top;
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
     ctx.lineWidth = 0.5;
@@ -929,7 +824,6 @@ function initBimSimulator() {
     ctx.fill();
     ctx.stroke();
     
-    // Face Left
     ctx.fillStyle = colorGradients.left;
     ctx.beginPath();
     ctx.moveTo(p1.x, p1.y);
@@ -940,7 +834,6 @@ function initBimSimulator() {
     ctx.fill();
     ctx.stroke();
     
-    // Face Right
     ctx.fillStyle = colorGradients.right;
     ctx.beginPath();
     ctx.moveTo(p2.x, p2.y);
@@ -969,8 +862,6 @@ function initBimSimulator() {
     ctx.moveTo(start.x, start.y);
     ctx.lineTo(end.x, end.y);
     ctx.stroke();
-    
-    // Reset shadow
     ctx.shadowBlur = 0;
   }
   
@@ -979,7 +870,6 @@ function initBimSimulator() {
     const currentLang = localStorage.getItem('tcs_lang') || 'id';
     
     if (active) {
-      // Glow pulse
       const pulseRadius = 8 + Math.sin(Date.now() / 150) * 4;
       ctx.fillStyle = 'rgba(239, 68, 68, 0.25)';
       ctx.beginPath();
@@ -997,12 +887,10 @@ function initBimSimulator() {
       ctx.arc(pt.x, pt.y, 6, 0, Math.PI * 2);
       ctx.stroke();
       
-      // Draw small warning text label
       ctx.fillStyle = '#f87171';
       ctx.font = 'bold 8px Courier New';
       ctx.fillText(label, pt.x + 10, pt.y - 4);
     } else {
-      // Soft green checkmark node
       ctx.fillStyle = 'rgba(0, 229, 117, 0.2)';
       ctx.beginPath();
       ctx.arc(pt.x, pt.y, 10, 0, Math.PI * 2);
@@ -1019,13 +907,11 @@ function initBimSimulator() {
     }
   }
   
-  // Console logging queue runner
   function addConsoleLine(logKey, type) {
     const currentLang = localStorage.getItem('tcs_lang') || 'id';
-    const translation = window.TCS_TRANSLATIONS[logKey];
+    const translation = window.TCS_TRANSLATIONS ? window.TCS_TRANSLATIONS[logKey] : null;
     const text = translation ? translation[currentLang] : logKey;
     
-    // Prevent duplicate logs in same run
     if (window.tcsBimState.logsPrinted.has(logKey)) return;
     window.tcsBimState.logsPrinted.add(logKey);
     
@@ -1042,11 +928,9 @@ function initBimSimulator() {
     window.tcsBimState.logsPrinted.clear();
   }
   
-  // MAIN ANIMATION LOOP
   function render() {
     ctx.clearRect(0, 0, window.tcsBimState.width, window.tcsBimState.height);
     
-    // Draw Grid floor
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.02)';
     ctx.lineWidth = 0.5;
     for (let i = -160; i <= 160; i += 40) {
@@ -1065,35 +949,34 @@ function initBimSimulator() {
       ctx.stroke();
     }
     
-    // Draw Pillars/Columns
     drawIsoPillar(-120, -120, 80);
     drawIsoPillar(-120, 120, 80);
     drawIsoPillar(120, -120, 80);
     drawIsoPillar(120, 120, 80);
     
-    // Interpolate offset routes
     if (window.tcsBimState.state === 'scanning') {
       window.tcsBimState.progress += 0.006;
       if (window.tcsBimState.progress >= 1) {
         window.tcsBimState.progress = 1;
         window.tcsBimState.state = 'resolved';
         
-        // Update UI status to Zero-Clash
         hudStatus.className = 'bim-hud-status-badge clean';
         hudStatus.setAttribute('data-translate', 'bim_status_clean');
         const currentLang = localStorage.getItem('tcs_lang') || 'id';
-        hudStatus.innerText = window.TCS_TRANSLATIONS['bim_status_clean'][currentLang];
+        if (window.TCS_TRANSLATIONS && window.TCS_TRANSLATIONS['bim_status_clean']) {
+          hudStatus.innerText = window.TCS_TRANSLATIONS['bim_status_clean'][currentLang];
+        } else {
+          hudStatus.innerText = currentLang === 'en' ? '✓ Zero-Clash' : '✓ Bebas Bentrokan';
+        }
         
         btnRun.style.display = 'none';
         btnReset.style.display = 'inline-block';
         scanline.classList.remove('scanning');
       }
       
-      // Interpolate offsets
       window.tcsBimState.pipeOffset = Math.min(1, window.tcsBimState.progress * 1.3);
       window.tcsBimState.elecOffset = Math.min(1, window.tcsBimState.progress * 1.1);
       
-      // Inject logs dynamically as scan bar passes coordinate thresholds
       if (window.tcsBimState.progress > 0.05) addConsoleLine('bim_log_1', 'system');
       if (window.tcsBimState.progress > 0.20) addConsoleLine('bim_log_2', 'scan');
       if (window.tcsBimState.progress > 0.35) addConsoleLine('bim_log_3', 'warn');
@@ -1104,12 +987,10 @@ function initBimSimulator() {
       if (window.tcsBimState.progress >= 0.98) addConsoleLine('bim_log_8', 'resolve');
     }
     
-    // --- 1. Draw perpipaan industri Ducting (STATIC - TEAL) ---
-    // Complies with real-life standards: volumetric perpipaan industri ducts
     if (toggleHvac.checked) {
       drawIsoBox(
-        -100, -60, 40,   // Position (X, Y, Z)
-        200, 40, 25,     // Dimensions (WX, WY, WZ)
+        -100, -60, 40,
+        200, 40, 25,
         {
           top: 'rgba(0, 229, 117, 0.15)',
           left: 'rgba(0, 229, 117, 0.1)',
@@ -1118,60 +999,41 @@ function initBimSimulator() {
       );
     }
     
-    // --- 2. Draw Plumbing System (BLUE PIPELINE with offset translation) ---
-    // Connects chiller pipeline. Initial clash occurs at X:0, Y:-40, Z:40.
     if (togglePlumb.checked) {
-      const zOffset = window.tcsBimState.pipeOffset * 35; // Shifts pipeline up by 35px in Z to resolve conflict
-      
-      // Part 1: Entering pipe
+      const zOffset = window.tcsBimState.pipeOffset * 35;
       drawIsoTube(-140, -40, 30, -50, -40, 30 + zOffset, 3.5, '#00f2fe', 'rgba(0, 242, 254, 0.3)');
-      // Part 2: Middle crossing pipe (clashing segment)
       drawIsoTube(-50, -40, 30 + zOffset, 50, -40, 30 + zOffset, 3.5, '#00f2fe', 'rgba(0, 242, 254, 0.3)');
-      // Part 3: Exiting pipe
       drawIsoTube(50, -40, 30 + zOffset, 140, -40, 30, 3.5, '#00f2fe', 'rgba(0, 242, 254, 0.3)');
     }
     
-    // --- 3. Draw Electrical System (YELLOW WIRE WAY with offset translation) ---
-    // Conduits. Initial clash occurs at X:-40, Y:-20, Z:55.
     if (toggleElec.checked) {
-      const yOffset = window.tcsBimState.elecOffset * -25; // Shifts cable laterally by 25px in Y to resolve conflict
-      
-      // Part 1: Entering tray
+      const yOffset = window.tcsBimState.elecOffset * -25;
       drawIsoTube(-40, -120, 52, -40, -50 + yOffset, 52, 1.8, '#f39c12', 'rgba(243, 156, 18, 0.2)');
-      // Part 2: Middle crossing tray
       drawIsoTube(-40, -50 + yOffset, 52, -40, 40 + yOffset, 52, 1.8, '#f39c12', 'rgba(243, 156, 18, 0.2)');
-      // Part 3: Exiting tray
       drawIsoTube(-40, 40 + yOffset, 52, -40, 120, 52, 1.8, '#f39c12', 'rgba(243, 156, 18, 0.2)');
     }
     
-    // --- 4. Draw Clash / Conflict Nodes ---
-    // Visually highlights real-life coordination nodes
     const plumbingActive = window.tcsBimState.state !== 'resolved';
     const electricalActive = window.tcsBimState.state !== 'resolved';
     
     if (toggleHvac.checked && togglePlumb.checked) {
-      // Clash Node 1: Plumbing crossing perpipaan industri duct boundary
       drawClashNode(-50, -40, 30, 'CLASH-B12A', plumbingActive);
       drawClashNode(50, -40, 30, 'CLASH-B12B', plumbingActive);
     }
     
     if (toggleHvac.checked && toggleElec.checked) {
-      // Clash Node 2: Electrical tray crossing perpipaan industri top clearance boundary
       drawClashNode(-40, -50, 52, 'CLASH-C04', electricalActive);
     }
     
     requestAnimationFrame(render);
   }
   
-  // EVENT TRIGGER HANDLERS
   btnRun.addEventListener('click', () => {
     if (window.tcsBimState.state !== 'idle') return;
-    
     window.tcsBimState.state = 'scanning';
     window.tcsBimState.progress = 0;
     scanline.classList.add('scanning');
     clearConsole();
-    
     addConsoleLine('bim_log_1', 'system');
   });
   
@@ -1184,7 +1046,11 @@ function initBimSimulator() {
     hudStatus.className = 'bim-hud-status-badge clash';
     hudStatus.setAttribute('data-translate', 'bim_status_clash');
     const currentLang = localStorage.getItem('tcs_lang') || 'id';
-    hudStatus.innerText = window.TCS_TRANSLATIONS['bim_status_clash'][currentLang];
+    if (window.TCS_TRANSLATIONS && window.TCS_TRANSLATIONS['bim_status_clash']) {
+      hudStatus.innerText = window.TCS_TRANSLATIONS['bim_status_clash'][currentLang];
+    } else {
+      hudStatus.innerText = currentLang === 'en' ? '⚠️ 3 Clashes Detected' : '⚠️ 3 Bentrokan Terdeteksi';
+    }
     
     btnRun.style.display = 'inline-block';
     btnReset.style.display = 'none';
@@ -1197,7 +1063,6 @@ function initBimSimulator() {
     consoleBody.appendChild(lineEl);
   });
   
-  // Watch checkbox layer toggles
   togglePlumb.addEventListener('change', () => {
     addConsoleLine(togglePlumb.checked ? 'Plumbing Layer Enabled.' : 'Plumbing Layer Disabled.', 'system');
   });
@@ -1208,63 +1073,33 @@ function initBimSimulator() {
     addConsoleLine(toggleElec.checked ? 'Electrical Layer Enabled.' : 'Electrical Layer Disabled.', 'system');
   });
   
-  // Dynamic language listener to update HUD and reset console on the fly
   window.addEventListener('tcsLanguageChanged', (e) => {
     const lang = e.detail.language || 'id';
-    
-    // Update active status badge text
     const activeKey = hudStatus.getAttribute('data-translate');
-    if (activeKey && window.TCS_TRANSLATIONS[activeKey]) {
+    if (activeKey && window.TCS_TRANSLATIONS && window.TCS_TRANSLATIONS[activeKey]) {
       hudStatus.innerText = window.TCS_TRANSLATIONS[activeKey][lang];
     }
     
-    // Translate the run and reset button texts
     const runKey = btnRun.getAttribute('data-translate');
-    if (runKey && window.TCS_TRANSLATIONS[runKey]) {
+    if (runKey && window.TCS_TRANSLATIONS && window.TCS_TRANSLATIONS[runKey]) {
       btnRun.innerText = window.TCS_TRANSLATIONS[runKey][lang];
     }
     const resetKey = btnReset.getAttribute('data-translate');
-    if (resetKey && window.TCS_TRANSLATIONS[resetKey]) {
+    if (resetKey && window.TCS_TRANSLATIONS && window.TCS_TRANSLATIONS[resetKey]) {
       btnReset.innerText = window.TCS_TRANSLATIONS[resetKey][lang];
     }
     
-    // Translate the checkboxes toggle texts
     document.querySelectorAll('.bim-toggle-text').forEach((el) => {
       const key = el.getAttribute('data-translate');
-      if (key && window.TCS_TRANSLATIONS[key]) {
+      if (key && window.TCS_TRANSLATIONS && window.TCS_TRANSLATIONS[key]) {
         el.innerText = window.TCS_TRANSLATIONS[key][lang];
       }
     });
-    
-    // Re-render printed console logs in correct language
-    const currentLines = Array.from(consoleBody.children);
-    const printedLogs = Array.from(window.tcsBimState.logsPrinted);
-    
-    // Clear and reprint printed logs
-    consoleBody.innerHTML = '';
-    window.tcsBimState.logsPrinted.clear();
-    
-    if (printedLogs.length === 0) {
-      const lineEl = document.createElement('div');
-      lineEl.className = 'console-line system';
-      lineEl.innerText = lang === 'en' ? '> [SYS] READY. PRESS RUN TO INITIATE 3D AUDIT.' : '> [SYS] READY. TEKAN MULAI UNTUK AUDIT BENTROKAN.';
-      consoleBody.appendChild(lineEl);
-    } else {
-      printedLogs.forEach((logKey) => {
-        let type = 'system';
-        if (logKey.includes('log_3') || logKey.includes('log_4')) type = 'warn';
-        else if (logKey.includes('log_6') || logKey.includes('log_7') || logKey.includes('log_8')) type = 'resolve';
-        else if (logKey.includes('log_2')) type = 'scan';
-        addConsoleLine(logKey, type);
-      });
-    }
   });
   
-  // Kickstart animation loop
   render();
 }
 
-// Helper to apply dynamic contact numbers loaded from Sheets
 function applyTcsContactSettings(settings) {
   if (!settings) return;
   
@@ -1273,7 +1108,6 @@ function applyTcsContactSettings(settings) {
   const telephone = settings.TCS_CONTACT_TELEPHONE || "021 - 2126 6084";
   const telephoneDigits = telephone.replace(/[^0-9]/g, '');
 
-  // 1. Update all links matching general/sales WhatsApp and telephone
   document.querySelectorAll('a').forEach(a => {
     let href = a.getAttribute('href') || '';
     if (href.includes('wa.me/628111460707')) {
@@ -1285,7 +1119,6 @@ function applyTcsContactSettings(settings) {
     }
   });
 
-  // 2. Update specific text nodes / display numbers
   const headerContact = document.querySelector('.header-top-bar a[href^="tel:"]');
   if (headerContact) {
     headerContact.innerText = telephone;
@@ -1309,16 +1142,11 @@ function applyTcsContactSettings(settings) {
   });
 }
 
-// Start API fetch immediately on script run to minimize visual latency
 if (window.TCS_GAS_WEB_APP_URL) {
   fetch(window.TCS_GAS_WEB_APP_URL, {
     method: "POST",
-    headers: {
-      "Content-Type": "text/plain"
-    },
-    body: JSON.stringify({
-      action: "getContactSettings"
-    })
+    headers: { "Content-Type": "text/plain" },
+    body: JSON.stringify({ action: "getContactSettings" })
   })
   .then(res => res.json())
   .then(res => {
@@ -1348,14 +1176,12 @@ function initTcsChatbot() {
   let chatOpen = false;
   let isAiResponding = false;
   
-  // Toggle Chat Popup Window
   trigger.addEventListener('click', () => {
     chatOpen = !chatOpen;
     if (chatOpen) {
       container.classList.add('open');
       container.setAttribute('aria-hidden', 'false');
       inputField.focus();
-      // Remove pulsing on button once clicked
       const dot = trigger.querySelector('.chat-trigger-dot');
       if (dot) dot.style.display = 'none';
     } else {
@@ -1371,7 +1197,6 @@ function initTcsChatbot() {
     container.setAttribute('aria-hidden', 'true');
   });
   
-  // Close chatbot when clicking outside
   document.addEventListener('click', (e) => {
     if (chatOpen && !container.contains(e.target) && !trigger.contains(e.target)) {
       chatOpen = false;
@@ -1379,7 +1204,6 @@ function initTcsChatbot() {
     }
   });
   
-  // Send message on Enter keydown for reliability; close on Escape
   inputField.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
@@ -1392,7 +1216,6 @@ function initTcsChatbot() {
     }
   });
   
-  // Send message on click
   sendBtn.addEventListener('click', sendChatMessage);
   
   function sendChatMessage() {
@@ -1402,22 +1225,15 @@ function initTcsChatbot() {
     isAiResponding = true;
     inputField.value = '';
     
-    // 1. Render User Message bubble
     appendChatBubble(text, true);
-    
-    // 2. Render Typing Loading Indicator
     const loaderId = appendChatLoader();
     
-    // 3. Trigger Secure Gemini Call (environment-aware)
-
     if (typeof google !== 'undefined' && google.script && google.script.run) {
-      // Direct call inside Google Apps Script Web App
       google.script.run
         .withSuccessHandler((response) => handleChatSuccess(response, loaderId))
         .withFailureHandler((error) => handleChatFailure(error, loaderId))
         .callGeminiSecure(text);
     } else if (window.TCS_GAS_WEB_APP_URL) {
-      // Call secure endpoint via Vercel/Static POST bridge with retry
       attemptFetch(window.TCS_GAS_WEB_APP_URL, {
         method: "POST",
         headers: { "Content-Type": "text/plain" },
@@ -1427,22 +1243,13 @@ function initTcsChatbot() {
       .then(response => handleChatSuccess(response, loaderId))
       .catch(error => handleChatFailure(error, loaderId));
     } else {
-      // Local/offline developer preview fallback
       setTimeout(() => {
         const dummyResponses = [
-          "Berdasarkan **Opsi A (Kemitraan Lahan)**, Anda bisa bermitra dengan modal mesin Rp0. Cukup sediakan lahan minimal muat 2-4 mobil. Bagi hasil bersih yang Anda peroleh adalah **35% untuk Anda (Host)** dan **65% untuk PT TCS**. Kami mengurus unit mesin, instalasi, dan perizinannya.\n\nApakah lahan Anda saat ini berada di area strategis seperti pusat perbelanjaan, rest area, atau jalan utama?",
-          "Untuk **Opsi B (Finansial Mandiri)**, modal awal dimulai dari **Rp100 Juta** (skema Capex AC 22 kW mulai Rp150 Juta, dan Tipe DC 50 kW mulai Rp850 Juta). Skema ini autopilot penuh diurus tim TCS. Anda dapat memantau pendapatan harian secara real-time lewat aplikasi investor.\n\nBerapa kisaran anggaran investasi yang ingin Anda alokasikan untuk jaringan SPKLU ini?",
-          "Legalitas dan izin operasional SPKLU sepenuhnya didampingi dan diurus oleh **PT TCS**. Kami memastikan sistem terintegrasi dengan regulasi PLN hulu-hilir (Permen ESDM No. 7/2024 & Kepmen ESDM 182.K/2023) sehingga bebas biaya rekening minimum selama 2 tahun pertama.\n\nApakah lokasi lahan Anda sudah memiliki daya listrik terpasang yang memadai atau membutuhkan upgrade?"
+          "Berdasarkan **Opsi A (Kemitraan Lahan)**, Anda bisa bermitra dengan modal mesin Rp0. Bagi hasil bersih adalah **35% Host** dan **65% PT TCS**.",
+          "Untuk **Opsi B (Finansial Mandiri)**, modal awal mulai dari **Rp100 Juta**.",
+          "Legalitas dan izin operasional SPKLU sepenuhnya didampingi oleh **PT TCS**."
         ];
-        
-        let chosenText = dummyResponses[0];
-        if (text.toLowerCase().includes('opsi b') || text.toLowerCase().includes('modal') || text.toLowerCase().includes('mandiri')) {
-          chosenText = dummyResponses[1];
-        } else if (text.toLowerCase().includes('izin') || text.toLowerCase().includes('legal') || text.toLowerCase().includes('pln')) {
-          chosenText = dummyResponses[2];
-        }
-        
-        handleChatSuccess({ success: true, text: chosenText }, loaderId);
+        handleChatSuccess({ success: true, text: dummyResponses[0] }, loaderId);
       }, 1500);
     }
   }
@@ -1450,65 +1257,10 @@ function initTcsChatbot() {
   function handleChatSuccess(response, loaderId) {
     removeChatLoader(loaderId);
     isAiResponding = false;
-    
     if (response.success && response.text) {
       appendChatBubble(response.text, false);
     } else {
-      const errMsg = response.error || response.message || "Gagal mendapatkan balasan dari AI.";
-      const errLower = errMsg.toLowerCase();
-      
-      // 1. Google Apps Script UrlFetchApp / External Request Authorization Missing
-      if (errLower.includes("external_request") || errLower.includes("urlfetchapp") || errLower.includes("urlfetch")) {
-        const oauthInstruct = 
-          "⚠️ **Izin Akses Eksternal (UrlFetchApp) Belum Diotorisasi!**\n\n" +
-          "Sistem mendeteksi bahwa Google Apps Script Anda memerlukan persetujuan otorisasi sekali saja agar dapat memanggil API Gemini secara eksternal.\n\n" +
-          "**Cara Mengatasi dalam 3 Klik Cepat:**\n" +
-          "1. Buka halaman Editor Google Apps Script Anda.\n" +
-          "2. Di bar menu atas, klik tombol dropdown pilihan fungsi, pilih `getSpkluPasscode` atau `callGeminiSecure`.\n" +
-          "3. Klik tombol **Run (Jalankan)** di sebelah kirinya.\n" +
-          "4. Google akan memunculkan dialog 'Authorization Required'. Klik **Review Permissions** -> Pilih Akun Google Anda -> Klik **Advanced (Lanjutan)** -> Klik **Go to TCS SPKLU Web App (unsafe)** -> Klik **Allow (Izinkan)**.\n" +
-          "5. Setelah berhasil dijalankan sekali di Editor, kembali ke halaman ini dan silakan muat ulang (refresh) halaman! AI Chatbot Anda akan langsung aktif bekerja 100%.";
-        appendSystemError(oauthInstruct);
-      } 
-      // 2. Gemini API Key is Not Configured in Script Properties
-      else if (errLower.includes("belum dikonfigurasi") || errLower.includes("belum di-setting") || errLower.includes("api key belum")) {
-        const configInstruct = 
-          "⚠️ **Gemini API Key Belum Dikonfigurasi!**\n\n" +
-          "Kunci API Gemini (`GEMINI_API_KEY`) belum dimasukkan ke dalam Script Properties Google Apps Script Anda.\n\n" +
-          "**Cara Konfigurasi:**\n" +
-          "1. Buka Editor Google Apps Script Anda.\n" +
-          "2. Klik ikon roda gigi di sebelah kiri (**Project Settings / Setelan Proyek**).\n" +
-          "3. Gulir ke bawah hingga bagian **Script Properties (Properti Skrip)**.\n" +
-          "4. Klik **Add script property**, masukkan Property: `GEMINI_API_KEY`, dan isi Value dengan API Key Anda yang diperoleh dari Google AI Studio.\n" +
-          "5. Klik **Save script properties**.";
-        appendSystemError(configInstruct);
-      }
-      // 3. Gemini API Key is Configured but Invalid / Expired
-      else if (errLower.includes("api key not valid") || errLower.includes("invalid_argument") || errLower.includes("not valid") || errLower.includes("key tidak valid")) {
-        const invalidInstruct = 
-          "⚠️ **Kunci API Gemini Tidak Valid (Invalid API Key)!**\n\n" +
-          "Kunci API Gemini (`GEMINI_API_KEY`) yang tersimpan di Script Properties Anda salah atau telah kedaluwarsa.\n\n" +
-          "**Solusi:**\n" +
-          "1. Buka Google AI Studio dan buat kunci API baru yang aktif.\n" +
-          "2. Buka Editor Apps Script -> Project Settings -> Perbarui nilai `GEMINI_API_KEY` Anda di bagian Script Properties.\n" +
-          "3. Simpan perubahan dan coba kirim pesan kembali.";
-        appendSystemError(invalidInstruct);
-      }
-      // 4. Gemini API Access Denied / Permission Denied (e.g. Model access blocked or quota limit)
-      else if (errLower.includes("caller does not have permission") || errLower.includes("permission_denied") || errLower.includes("have permission")) {
-        const permissionInstruct = 
-          "⚠️ **Akses API Gemini Ditolak (Permission Denied)!**\n\n" +
-          "Google Apps Script berhasil terhubung, namun Google AI Studio menolak permintaan akses menggunakan API Key Anda.\n\n" +
-          "**Kemungkinan Penyebab:**\n" +
-          "- API Key Anda belum diaktifkan secara penuh di Google AI Studio.\n" +
-          "- Model `gemini-1.5-flash` belum didukung atau dibatasi di regional akun Google AI Studio Anda.\n" +
-          "- Pastikan Anda menyalin API Key yang benar dari konsol Google AI Studio.";
-        appendSystemError(permissionInstruct);
-      }
-      // 5. Default Fallback for other errors
-      else {
-        appendSystemError(errMsg);
-      }
+      appendSystemError(response.error || response.message || "Gagal mendapatkan respon AI.");
     }
   }
   
@@ -1521,62 +1273,7 @@ function initTcsChatbot() {
   function appendChatBubble(messageText, isUser = false) {
     const bubble = document.createElement('div');
     bubble.className = isUser ? 'tcs-chat-bubble user' : 'tcs-chat-bubble bot';
-
-    const urlRegex = /https?:\/\/[\w\-\.\/:?=&%#~,+]+/gi;
-
-    function buildFragment(text) {
-      const frag = document.createDocumentFragment();
-      const lines = text.split(/\n/);
-      lines.forEach((line, li) => {
-        let lastIndex = 0;
-        let match;
-        while ((match = urlRegex.exec(line)) !== null) {
-          const before = line.substring(lastIndex, match.index);
-          if (before) {
-            const parts = before.split(/\*\*(.*?)\*\*/);
-            for (let i = 0; i < parts.length; i++) {
-              if (i % 2 === 1) {
-                const strong = document.createElement('strong');
-                strong.textContent = parts[i];
-                frag.appendChild(strong);
-              } else if (parts[i]) {
-                frag.appendChild(document.createTextNode(parts[i]));
-              }
-            }
-          }
-
-          const url = match[0];
-          const a = document.createElement('a');
-          a.href = url;
-          a.target = '_blank';
-          a.rel = 'noopener noreferrer';
-          a.textContent = url;
-          a.style.color = 'inherit';
-          a.style.textDecoration = 'underline';
-          frag.appendChild(a);
-          lastIndex = match.index + url.length;
-        }
-
-        const remaining = line.substring(lastIndex);
-        if (remaining) {
-          const parts = remaining.split(/\*\*(.*?)\*\*/);
-          for (let i = 0; i < parts.length; i++) {
-            if (i % 2 === 1) {
-              const strong = document.createElement('strong');
-              strong.textContent = parts[i];
-              frag.appendChild(strong);
-            } else if (parts[i]) {
-              frag.appendChild(document.createTextNode(parts[i]));
-            }
-          }
-        }
-
-        if (li < lines.length - 1) frag.appendChild(document.createElement('br'));
-      });
-      return frag;
-    }
-
-    bubble.appendChild(buildFragment(messageText));
+    bubble.textContent = messageText;
     messagesArea.appendChild(bubble);
     messagesArea.scrollTop = messagesArea.scrollHeight;
   }
@@ -1591,32 +1288,18 @@ function initTcsChatbot() {
   
   function appendChatLoader() {
     const loaderId = 'loader_' + Date.now();
-    
     const wrapper = document.createElement('div');
     wrapper.id = loaderId;
     wrapper.className = 'tcs-chat-bubble bot';
-    wrapper.style.padding = '8px 12px';
-    
-    const loader = document.createElement('div');
-    loader.className = 'tcs-typing-indicator';
-    loader.innerHTML = `
-      <span class="tcs-typing-dot"></span>
-      <span class="tcs-typing-dot"></span>
-      <span class="tcs-typing-dot"></span>
-    `;
-    
-    wrapper.appendChild(loader);
+    wrapper.innerHTML = `<div class="tcs-typing-indicator"><span class="tcs-typing-dot"></span><span class="tcs-typing-dot"></span><span class="tcs-typing-dot"></span></div>`;
     messagesArea.appendChild(wrapper);
     messagesArea.scrollTop = messagesArea.scrollHeight;
-    
     return loaderId;
   }
   
   function removeChatLoader(loaderId) {
     const loader = document.getElementById(loaderId);
-    if (loader) {
-      loader.remove();
-    }
+    if (loader) loader.remove();
   }
 }
 
@@ -1626,4 +1309,3 @@ if (document.readyState === 'loading') {
   startApp();
 }
 </script>
-<!-- <body></body> -->
