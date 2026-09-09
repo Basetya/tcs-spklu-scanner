@@ -10,27 +10,22 @@
   <meta name="keywords"
     content="titis cahaya sejahtera, kontraktor mep jakarta, mep contractor, instalasi perpipaan industri, elektrikal gedung, instalasi plumbing, process utilities, fire protection mep, water treatment mep">
 
-  <!-- Favicon -->
   <link rel="icon" type="image/png" href="images/favicon.png">
   <link rel="apple-touch-icon" href="images/favicon.png">
 
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
     rel="stylesheet">
 
-  <!-- CSS Stylesheet Injection (Google Apps Script Scriptlet) -->
   <?!= include('CSS'); ?>
 
-  <!-- Centralized API Configuration for Vercel Static Hosting -> Google Sheets Database Bridge -->
   <script>
     window.TCS_GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyShEEFSwaLqZY-aG8msDmTt_iVdun2j6Q4kT7AQhHXu434g-4V89kI3oLLZ26FdxMV/exec";
     window.TCS_GEMINI_API_KEY = "";
   </script>
 
-  <!-- Prevent Flash of Unstyled Content (FOUC) on static hosting platforms like Vercel -->
   <style id="fouc-style">
     html,
     body {
@@ -38,7 +33,6 @@
     }
   </style>
 
-  <!-- Fallback Loader for Local Live Server & Static Hosting Preview -->
   <script>
     if (window.location.hostname.includes('google')) {
       const fouc = document.getElementById('fouc-style');
@@ -153,7 +147,6 @@
 
 <body>
 
-  <!-- ------------------- HEADER TOP BAR ------------------- -->
   <div class="header-top">
     <div class="header-top-container">
       <div class="header-top-left">
@@ -188,7 +181,6 @@
     </div>
   </div>
 
-  <!-- ------------------- MAIN HEADER & NAVIGATION ------------------- -->
   <header class="main-header" id="navbar">
     <div class="header-container">
       <a href="index.html" class="logo" style="display: inline-flex; align-items: center; gap: 16px; text-decoration: none;">
@@ -227,7 +219,6 @@
     </div>
   </header>
 
-  <!-- ------------------- HERO SECTION ------------------- -->
   <section class="hero" id="home">
     <canvas id="hero-canvas"></canvas>
     <div class="hero-glow-1"></div>
@@ -241,7 +232,7 @@
         </h1>
         <p class="hero-description" data-translate="hero_desc">
           Kontraktor Mechanical, Electrical, dan Plumbing (MEP) berskala nasional. Kami menghadirkan solusi instalasi,
-          desain, pemeliharaan perpipaan industri, kelistrikan, pemipaan, proteksi kebakaran, dan pengolahan air bersih dengan presisi
+          desain, pemeliharaan kelistrikan, pemipaan, utilitas proses, proteksi kebakaran, dan pengolahan air bersih dengan presisi
           tinggi sejak 2020.
         </p>
         <div class="hero-btns">
@@ -266,7 +257,6 @@
     </div>
   </section>
 
-  <!-- ------------------- STATS GRID SECTION ------------------- -->
   <section class="stats-section">
     <div class="container grid-4">
       <div class="stat-card">
@@ -288,7 +278,6 @@
     </div>
   </section>
 
-  <!-- ------------------- PROFIL / CORE DNA ------------------- -->
   <section class="section dna-section" id="profil">
     <div class="container grid-2">
       <div class="about-visual">
@@ -378,7 +367,6 @@
           </div>
         </div>
 
-        <!-- Corporate Certifications Row -->
         <div class="certifications-row"
           style="margin-top: 35px; border-top: 1px solid var(--border-card); padding-top: 25px;">
           <h4
@@ -421,7 +409,6 @@
     </div>
   </section>
 
-  <!-- ------------------- INTERACTIVE SERVICES SECTION ------------------- -->
   <section class="section services-section" id="services">
     <div class="container">
       <div class="section-header">
@@ -432,7 +419,6 @@
       </div>
 
       <div class="services-explorer">
-        <!-- Tab menu left side (Mulai dari Electrical) -->
         <ul class="services-tab-menu">
           <li>
             <button class="service-tab-btn active" data-tab="electrical">
@@ -478,10 +464,8 @@
           </li>
         </ul>
 
-        <!-- Tab panes content right side -->
         <div class="services-content-display">
 
-          <!-- Electrical Pane (Default Active) -->
           <div class="service-content-pane active" id="pane-electrical">
             <div class="pane-info">
               <span class="pane-service-tag gold" data-translate="srv_pane_tag_elec">Electrical</span>
@@ -495,25 +479,20 @@
                 <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_elec_f2">Instalasi Jalur Kabel Tray</span></li>
                 <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_elec_f3">Penangkal Petir & Grounding</span></li>
                 <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_elec_f4">Kalibrasi & Audit Daya Listrik</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_elec_f5">Emergency Power & Genset</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_elec_f6">Sistem Penerangan Industri</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_elec_f7">Structured Cabling & Data</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_elec_f8">Uninterruptible Power (UPS)</span></li>
               </ul>
               <div>
                 <a href="#planner" class="btn btn-primary" onclick="selectWizardService('Electrical System')" data-translate="srv_btn_select">Pilih Jasa Ini</a>
               </div>
             </div>
             <div class="pane-visual">
-  <video src="images/Electrical.mov" autoplay muted loop playsinline style="width: 100%; height: 320px; object-fit: cover; display: block; border-radius: 18px;"></video>
-  <div class="pane-visual-caption">
-    <span class="pane-visual-tag gold">Electrical System</span>
-    <p class="pane-visual-title" data-translate="srv_elec_cap">Instalasi Panel & Grounding Gedung</p>
-  </div>
-</div>
+              <video src="images/Electrical.mov" autoplay muted loop playsinline style="width: 100%; height: 320px; object-fit: cover; display: block; border-radius: 18px;"></video>
+              <div class="pane-visual-caption">
+                <span class="pane-visual-tag gold">Electrical System</span>
+                <p class="pane-visual-title" data-translate="srv_elec_cap">Instalasi Panel & Grounding Gedung</p>
+              </div>
+            </div>
           </div>
 
-          <!-- Plumbing Pane (OUT-OF-BOUNDS 3D PARALLAX EFFECT) -->
           <div class="service-content-pane" id="pane-plumbing">
             <div class="pane-info">
               <span class="pane-service-tag" data-translate="srv_pane_tag_plumb">Plumbing</span>
@@ -521,16 +500,12 @@
               <p class="pane-desc" data-translate="srv_plumb_desc">Perancangan layout distribusi air bersih, pengolahan
                 air kotor, pipa air panas/dingin, serta instalasi pipa gas industri tanpa kebocoran menggunakan material
                 bersertifikat (PPR, PVC, Galvanis). Seluruh sambungan diuji keandalannya melalui pengujian tekanan
-                tinggi (*hydrostatic test*).</p>
+                tinggi (hydrostatic test).</p>
               <ul class="pane-features-list">
                 <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_plumb_f1">Pipa PPR, PVC, & Galvanis</span></li>
                 <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_plumb_f2">Pompa Booster & Transfer</span></li>
                 <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_plumb_f3">Pemipaan Air Kotor & Bekas</span></li>
                 <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_plumb_f4">Hydrostatic & Leakage Testing</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_plumb_f5">Air Bersih & Air Hujan</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_plumb_f6">Sewage Treatment Plant (STP)</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_plumb_f7">Wastewater Treatment (WWT)</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_plumb_f8">Air Panas & Dingin</span></li>
               </ul>
               <div>
                 <a href="#planner" class="btn btn-primary" onclick="selectWizardService('Plumbing System')" data-translate="srv_btn_select">Pilih Jasa Ini</a>
@@ -538,15 +513,12 @@
             </div>
 
             <div class="pane-visual oob-3d-card" id="plumbing3dCard">
-              <!-- Background Layer (Clipped inside card) -->
               <div class="oob-bg-layer">
                 <img src="images/plumbing-bg.jpg" alt="Bengkel Fabrikasi TCS" class="oob-bg-img">
               </div>
 
-              <!-- Out-of-Bounds Cutout Subject (Breaks through top boundary) -->
               <div class="oob-cutout-layer">
                 <img src="images/plumbing-cutout.png" alt="Instalasi Plumbing & Pompa PT TCS" class="oob-cutout-img">
-                <!-- Live Torch Glint / Glow Spot -->
                 <div class="torch-glint"></div>
               </div>
 
@@ -557,56 +529,59 @@
             </div>
           </div>
 
-          <!-- Process Utilities Pane -->
           <div class="service-content-pane" id="pane-utilities">
             <div class="pane-info">
               <span class="pane-service-tag gold" data-translate="srv_pane_tag_util">Utilities</span>
               <h3 class="pane-title" data-translate="srv_util_title">Process Utilities & Plant Auxiliary System</h3>
-              <p class="pane-desc" data-translate="srv_util_desc">Infrastruktur utilitas penunjang mesin produksi pabrik
-                meliputi instalasi perpipaan uap (*steam boiler*), udara bertekanan (*compressed air*), dan sistem
-                sirkulasi air pendingin (*cooling tower*). Proses pengelasan menggunakan mesin las argon bersertifikat
-                resmi DEPNAKER/MIGAS (M.I.G/T.I.G).</p>
+              <p class="pane-desc" data-translate="srv_util_desc">Infrastruktur utilitas penunjang mesin produksi pabrik meliputi instalasi perpipaan uap (steam boiler), udara bertekanan (compressed air), dan sistem sirkulasi air pendingin (cooling tower). Proses pengelasan menggunakan mesin las argon bersertifikat resmi DEPNAKER/MIGAS (M.I.G/T.I.G).</p>
               <ul class="pane-features-list">
                 <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_util_f1">Pipa Steam / Boiler</span></li>
                 <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_util_f2">Piping Compressed Air</span></li>
                 <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_util_f3">Las Stainless Argon (MIG/TIG)</span></li>
                 <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_util_f4">Boiler & Cooling Tower</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_util_f5">Process Cooling Water Loop</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_util_f6">Process Vacuum Piping</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_util_f7">Process Exhaust & Ventilation</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_util_f8">High Pressure Industrial Gas</span></li>
               </ul>
               <div>
                 <a href="#planner" class="btn btn-primary" onclick="selectWizardService('Process Utilities')" data-translate="srv_btn_select">Pilih Jasa Ini</a>
               </div>
             </div>
-            <div class="pane-visual">
-              <img src="images/utilities.png" alt="Instalasi Pipa Fabrikasi PT TCS">
-              <div class="pane-visual-caption">
+
+            <!-- Masterpiece Fluid Particle SCADA pada Process Utilities -->
+            <div class="pane-visual scada-utilities-card" id="scadaUtilitiesCard" style="position: relative; overflow: hidden; border-radius: 18px; background: #030712;">
+              <div class="scada-bg-layer" style="width: 100%; height: 320px;">
+                <img src="images/Process.jpeg" alt="Process Utilities Industrial Plant" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.65; display: block;">
+              </div>
+              
+              <canvas id="scadaCanvas" width="500" height="320" style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2;"></canvas>
+              
+              <div class="scada-hud-badge" style="position: absolute; top: 12px; left: 12px; background: rgba(3,7,18,0.85); border: 1px solid #00f2fe; padding: 4px 10px; border-radius: 4px; font-size: 0.7rem; font-family: 'Courier New', monospace; color: #00e575; z-index: 3;">
+                ● SCADA LIVE TELEMETRY ACTIVE
+              </div>
+
+              <div id="scadaTooltip" class="scada-sensor-tooltip" style="position: absolute; bottom: 20px; right: 20px; background: rgba(3,7,18,0.95); border: 1px solid #f59e0b; padding: 10px 15px; border-radius: 6px; font-family: 'Courier New', monospace; font-size: 0.75rem; z-index: 3;">
+                <div style="color: #f59e0b; margin-bottom: 4px; font-weight: bold;">VALVE #04 - PRESSURE FEED</div>
+                <div style="color: #00f2fe;">14.8 BAR | 185°C | 310 m³/h</div>
+              </div>
+
+              <div class="pane-visual-caption" style="z-index: 3; position: relative;">
                 <span class="pane-visual-tag gold">Process Utilities</span>
-                <p class="pane-visual-title" data-translate="srv_util_cap">Fabrikasi Jalur Pipa Stainless</p>
+                <p class="pane-visual-title">SCADA Flow & Pressure Simulation</p>
               </div>
             </div>
           </div>
 
-          <!-- Fire Protection Pane -->
           <div class="service-content-pane" id="pane-fire">
             <div class="pane-info">
               <span class="pane-service-tag" data-translate="srv_pane_tag_safety">Safety</span>
               <h3 class="pane-title" data-translate="srv_fire_title">Industrial Fire Protection & Suppression</h3>
               <p class="pane-desc" data-translate="srv_fire_desc">Perlindungan struktur bangunan dan aset penting
                 melalui sistem proteksi kebakaran otomatis sesuai standar NFPA. Layanan kami meliputi instalasi pipa
-                hydrant basah/kering dengan diesel pump handal, master control alarm kebakaran (MCFA), sprinkler
+                hidran basah/kering dengan diesel pump handal, master control alarm kebakaran (MCFA), sprinkler
                 otomatis, hingga sistem penjinak api gas FM200 steril untuk ruang server sensitif.</p>
               <ul class="pane-features-list">
                 <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_fire_f1">Hidran & Pompa Pemadam Diesel</span></li>
                 <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_fire_f2">Sprinkler Otomatis Wet-Pipe</span></li>
                 <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_fire_f3">Panel Master Alarm MCFA</span></li>
                 <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_fire_f4">Gas Suppression FM200 Steril</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_fire_f5">Alat Pemadam Portabel APAR</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_fire_f6">Dry Riser System Installation</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_fire_f7">Fire Barrier & Sealant</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_fire_f8">Jockey Pump & Duty Pump Control</span></li>
               </ul>
               <div>
                 <a href="#planner" class="btn btn-primary" onclick="selectWizardService('Fire Protection')" data-translate="srv_btn_select">Pilih Jasa Ini</a>
@@ -621,24 +596,19 @@
             </div>
           </div>
 
-          <!-- Water Treatment Pane -->
           <div class="service-content-pane" id="pane-treatment">
             <div class="pane-info">
               <span class="pane-service-tag gold" data-translate="srv_pane_tag_chem">Chemistry</span>
               <h3 class="pane-title" data-translate="srv_water_title">Advanced Water Filtration & Treatment Plant</h3>
               <p class="pane-desc" data-translate="srv_water_desc">Pengolahan air tanah menjadi air bersih layak guna
-                melalui teknologi pemurnian tingkat lanjut. Sangat vital untuk pasokan air umpan ketel uap (*boiler
-                feeding water*), pemurnian air bersih industri farmasi, kosmetik, serta penunjang proses manufaktur
+                melalui teknologi pemurnian tingkat lanjut. Sangat vital untuk pasokan air umpan ketel uap (boiler
+                feeding water), pemurnian air bersih industri farmasi, kosmetik, serta penunjang proses manufaktur
                 skala besar.</p>
               <ul class="pane-features-list">
                 <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_water_f1">Reverse Osmosis</span></li>
                 <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_water_f2">Demineralisasi</span></li>
                 <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_water_f3">Water Treatment Plant</span></li>
                 <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_water_f4">Sewage Treatment Plant</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_water_f5">Wastewater Treatment</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_water_f6">Softener</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_water_f7">Carbon Filter</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_water_f8">Sand Filter</span></li>
               </ul>
               <div>
                 <a href="#planner" class="btn btn-primary" onclick="selectWizardService('Water Treatment')" data-translate="srv_btn_select">Pilih Jasa Ini</a>
@@ -653,7 +623,6 @@
             </div>
           </div>
 
-          <!-- EV Charging Pane -->
           <div class="service-content-pane" id="pane-ev-charging">
             <div class="pane-info">
               <span class="pane-service-tag gold" data-translate="srv_pane_tag_ev">EV Infrastructure</span>
@@ -667,10 +636,6 @@
                 <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_ev_f2">DC Fast Charging (SPKLU)</span></li>
                 <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_ev_f3">Pedestal & Wall Charger</span></li>
                 <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_ev_f4">Gateway QRIS & E-Wallet</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_ev_f5">SaaS Billing & Monitoring App</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_ev_f6">Gardu Hubung & Upgrade PLN</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_ev_f7">Sertifikat Laik Operasi (SLO)</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_ev_f8">EV Grounding & Protection</span></li>
               </ul>
               <div>
                 <a href="#planner" class="btn btn-primary" onclick="selectWizardService('EV Charging & SPKLU')" data-translate="srv_btn_select">Pilih Jasa Ini</a>
@@ -685,7 +650,6 @@
             </div>
           </div>
 
-          <!-- Design Facility Pane -->
           <div class="service-content-pane" id="pane-design">
             <div class="pane-info">
               <span class="pane-service-tag" data-translate="srv_pane_tag_eng">Engineering</span>
@@ -699,10 +663,6 @@
                 <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_design_f2">Clash Detection & Koordinasi 3D</span></li>
                 <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_design_f3">Perhitungan Cooling Load & Udara</span></li>
                 <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_design_f4">SLD Panel & Layout Kelistrikan</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_design_f5">Pembuatan As-Built Drawings</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_design_f6">Fluid Dynamics & Pump Head</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_design_f7">Konsultasi Teknik MEP</span></li>
-                <li><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg> <span data-translate="srv_design_f8">Desain Cleanroom BPOM / GMP</span></li>
               </ul>
               <div>
                 <a href="#planner" class="btn btn-primary" onclick="selectWizardService('Design Facility')" data-translate="srv_btn_select">Pilih Jasa Ini</a>
@@ -760,7 +720,6 @@
     </div>
   </section>
 
-  <!-- ------------------- PROSES ALUR KERJA (WORKFLOW TIMELINE) ------------------- -->
   <section class="section workflow-section" id="alur-kerja"
     style="background: rgba(3, 7, 18, 0.4); border-top: 1px solid var(--border-card); border-bottom: 1px solid var(--border-card);">
     <div class="container">
@@ -772,7 +731,6 @@
       </div>
 
       <div class="timeline-container">
-        <!-- Step 1 -->
         <div class="timeline-card glass-card">
           <div class="timeline-step">01</div>
           <h3 class="timeline-title" data-translate="flow_step_1_title">Konsultasi & Survei</h3>
@@ -780,15 +738,13 @@
             kondisi lapangan, dan penyusunan spesifikasi teknis dasar.</p>
         </div>
 
-        <!-- Step 2 -->
         <div class="timeline-card glass-card">
           <div class="timeline-step">02</div>
           <h3 class="timeline-title" data-translate="flow_step_2_title">Desain & B.I.M Revit</h3>
           <p class="timeline-desc" data-translate="flow_step_2_desc">Pemodelan 3D MEP terpadu untuk deteksi bentrokan
-            (*clash detection*), perhitungan beban mekanis, & *single-line diagram*.</p>
+            (clash detection), perhitungan beban mekanis, & single-line diagram.</p>
         </div>
 
-        <!-- Step 3 -->
         <div class="timeline-card glass-card">
           <div class="timeline-step">03</div>
           <h3 class="timeline-title" data-translate="flow_step_3_title">Fabrikasi & Pengadaan</h3>
@@ -796,7 +752,6 @@
             bersertifikasi Depnaker, perakitan panel LVMDP, & pengadaan material SNI.</p>
         </div>
 
-        <!-- Step 4 -->
         <div class="timeline-card glass-card">
           <div class="timeline-step">04</div>
           <h3 class="timeline-title" data-translate="flow_step_4_title">Instalasi & K3</h3>
@@ -804,7 +759,6 @@
             bersertifikasi khusus di bawah pengawasan K3 & CSMS yang ketat.</p>
         </div>
 
-        <!-- Step 5 -->
         <div class="timeline-card glass-card">
           <div class="timeline-step">05</div>
           <h3 class="timeline-title" data-translate="flow_step_5_title">Komisioning & SLA</h3>
@@ -815,7 +769,6 @@
     </div>
   </section>
 
-  <!-- ------------------- LEADS CONSULTATION WIZARD ------------------- -->
   <section class="section wizard-section" id="planner">
     <div class="container">
       <div class="section-header">
@@ -837,7 +790,6 @@
         </div>
 
         <form id="tcs-wizard-form" onsubmit="handleWizardSubmit(event)" class="wizard-form">
-          <!-- Step 1: Select Service Category (Mulai dari Electrical System) -->
           <div class="wizard-step-content active" id="step-1">
             <h3 style="margin-bottom:20px; font-family:'Outfit'; text-align:center;" data-translate="wiz_step_1_title">
               Layanan Apa yang Anda Butuhkan?</h3>
@@ -876,7 +828,6 @@
             </div>
           </div>
 
-          <!-- Step 2: Select Project Scale -->
           <div class="wizard-step-content" id="step-2">
             <h3 id="wizard-step-2-title" style="margin-bottom:20px; font-family:'Outfit'; text-align:center;"
               data-translate="wiz_step_2_title">Berapa Skala Area Proyek Anda?</h3>
@@ -887,7 +838,6 @@
             </div>
           </div>
 
-          <!-- Step 3: Contact Details -->
           <div class="wizard-step-content" id="step-3">
             <h3 style="margin-bottom:20px; font-family:'Outfit'; text-align:center;" data-translate="wiz_step_3_title">
               Masukkan Info Kontak Perusahaan</h3>
@@ -921,7 +871,6 @@
             </div>
           </div>
 
-          <!-- Step 4: Final Summary & Review -->
           <div class="wizard-step-content" id="step-4">
             <h3 style="margin-bottom:20px; font-family:'Outfit'; text-align:center;" data-translate="wiz_step_4_title">
               Tinjau Permintaan Konsultasi Anda</h3>
@@ -956,7 +905,6 @@
             </p>
           </div>
 
-          <!-- Actions footer buttons inside form -->
           <div class="wizard-btns-container" id="wizard-action-footer">
             <button type="button" class="btn btn-secondary" id="btn-wizard-prev" onclick="moveWizardStep(-1)"
               style="visibility:hidden;" data-translate="wiz_btn_prev">Sebelumnya</button>
@@ -965,7 +913,6 @@
           </div>
         </form>
 
-        <!-- Loading Spinner Pane -->
         <div class="wizard-loader" id="wizard-loader-pane">
           <div class="spinner"></div>
           <h3 style="font-family:'Outfit'; margin-bottom:10px;" data-translate="wiz_loader_title">Mengirim Data
@@ -974,7 +921,6 @@
             sedang menyiapkan alokasi database Anda.</p>
         </div>
 
-        <!-- Success Screen Pane -->
         <div class="wizard-success-pane" id="wizard-success-pane">
           <div class="success-icon-wrap">
             <svg style="width:36px;height:36px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
@@ -998,7 +944,6 @@
     </div>
   </section>
 
-  <!-- ------------------- LOGO INFINITE MARQUEE ------------------- -->
   <section class="marquee-section" id="marquee">
     <div class="container" style="margin-bottom:30px; text-align:center;">
       <span class="section-tag" style="margin-bottom:8px;" data-translate="clients_section_tag">Klien Kami</span>
@@ -1128,7 +1073,6 @@
     </div>
   </section>
 
-  <!-- ------------------- FOOTER & MAPS ------------------- -->
   <footer class="main-footer">
     <div class="container footer-top">
       <div class="footer-brand">
@@ -1169,7 +1113,7 @@
             </svg>
           </a>
         </div>
-        <span style="font-size:12px; color:var(--text-muted);" data-translate="footer_text">PT. Titis Cahaya Sejahtera &copy; 2020 - 2026.</span>
+        <span style="font-size:12px; color:var(--text-muted);" data-translate="footer_text">PT. Titis Cahaya Sejahtera © 2020 - 2026.</span>
       </div>
 
       <div>
@@ -1236,7 +1180,6 @@
     </div>
   </footer>
 
-  <!-- ------------------- FLOATING HELPCENTER ------------------- -->
   <div class="floating-container">
     <a href="https://wa.me/628111460707?text=Halo%20kawan%20TCS%2C%20saya%20tertarik%20dengan%20layanan%20kontraktor%20MEP%20Anda.%20Bisa%20berdiskusi%20lebih%20lanjut%3F" class="float-btn float-wa" target="_blank" aria-label="Chat WhatsApp">
       <svg style="width:28px;height:28px;" viewBox="0 0 24 24" fill="currentColor">
@@ -1250,10 +1193,118 @@
     </a>
   </div>
 
-  <!-- JS Logic Injection (Google Apps Script Scriptlet) -->
   <?!= include('JS'); ?>
 
-  <!-- Fallback Loader for Local Live Server Preview -->
+  <!-- Masterpiece Fluid Particle SCADA Engine -->
+  <script>
+    (function() {
+      function initMasterpieceScada() {
+        const canvas = document.getElementById('scadaCanvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+
+        const pipePath = [
+          {x: 40, y: 175},
+          {x: 230, y: 175},
+          {x: 230, y: 235},
+          {x: 460, y: 235}
+        ];
+
+        let particles = [];
+        const particleCount = 35;
+
+        for (let i = 0; i < particleCount; i++) {
+          particles.push({
+            progress: Math.random() * getPathLength(pipePath),
+            speed: 1.8 + Math.random() * 1.2,
+            size: 2 + Math.random() * 1.8
+          });
+        }
+
+        function getPathLength(path) {
+          let len = 0;
+          for (let i = 0; i < path.length - 1; i++) {
+            let dx = path[i+1].x - path[i].x;
+            let dy = path[i+1].y - path[i].y;
+            len += Math.sqrt(dx*dx + dy*dy);
+          }
+          return len;
+        }
+
+        function getPointAtDistance(path, distance) {
+          let currentDist = 0;
+          for (let i = 0; i < path.length - 1; i++) {
+            let p1 = path[i];
+            let p2 = path[i+1];
+            let dx = p2.x - p1.x;
+            let dy = p2.y - p1.y;
+            let segLen = Math.sqrt(dx*dx + dy*dy);
+
+            if (currentDist + segLen >= distance) {
+              let t = (distance - currentDist) / segLen;
+              return { x: p1.x + t * dx, y: p1.y + t * dy };
+            }
+            currentDist += segLen;
+          }
+          return path[path.length - 1];
+        }
+
+        const totalLen = getPathLength(pipePath);
+
+        function render() {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+          ctx.lineWidth = 7;
+          ctx.strokeStyle = '#030712';
+          ctx.beginPath();
+          ctx.moveTo(pipePath[0].x, pipePath[0].y);
+          for (let i = 1; i < pipePath.length; i++) ctx.lineTo(pipePath[i].x, pipePath[i].y);
+          ctx.stroke();
+
+          ctx.lineWidth = 3;
+          ctx.strokeStyle = 'rgba(0, 242, 254, 0.45)';
+          ctx.beginPath();
+          ctx.moveTo(pipePath[0].x, pipePath[0].y);
+          for (let i = 1; i < pipePath.length; i++) ctx.lineTo(pipePath[i].x, pipePath[i].y);
+          ctx.stroke();
+
+          particles.forEach(p => {
+            p.progress += p.speed;
+            if (p.progress > totalLen) p.progress = 0;
+
+            let pos = getPointAtDistance(pipePath, p.progress);
+
+            ctx.shadowBlur = 12;
+            ctx.shadowColor = '#00f2fe';
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(pos.x, pos.y, p.size, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+          });
+
+          ctx.fillStyle = '#f59e0b';
+          ctx.beginPath();
+          ctx.arc(230, 175, 5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = '#ffffff';
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+
+          requestAnimationFrame(render);
+        }
+
+        render();
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initMasterpieceScada);
+      } else {
+        initMasterpieceScada();
+      }
+    })();
+  </script>
+
   <?!= include('TranslationJS'); ?>
 
   <script>
@@ -1288,7 +1339,6 @@
     }
   </script>
 
-  <!-- DYNAMIC WHATSAPP SYNC (TERHUBUNG DENGAN ADMIN.HTML) -->
   <script>
     (function() {
       var defaultWaMain = "628111460707";

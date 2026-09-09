@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TCS Masterpiece SCADA Fluid Flow</title>
+  <style>
+    body {
+      background-color: #030712;
+      color: #f3f4f6;
+      font-family: 'Courier New', Courier, monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .preview-card {
+      position: relative;
+      width: 500px;
+      height: 320px;
+      background: #030712;
+      border: 1px solid rgba(0, 242, 254, 0.3);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 0 30px rgba(0, 242, 254, 0.2);
+    }
+    .bg-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.6;
+    }
+    canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .hud-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(3, 7, 18, 0.85);
+      border: 1px solid #00f2fe;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      color: #00e575;
+      z-index: 3;
+    }
+    .tooltip-box {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(3, 7, 18, 0.95);
+      border: 1px solid #f59e0b;
+      padding: 10px 15px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      z-index: 3;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="preview-card">
+    <!-- Ganti path gambar sesuai direktori lokal Anda -->
+    <img src="images/Process.jpeg" alt="Industrial Plant" class="bg-image">
+    
+    <canvas id="masterpieceCanvas" width="500" height="320"></canvas>
+    
+    <div class="hud-badge">
+      ● SCADA MASTERPIECE FLUID STREAM ACTIVE
+    </div>
+
+    <div class="tooltip-box">
+      <div style="color: #f59e0b; margin-bottom: 4px; font-weight: bold;">VALVE #04 - STEAM LINE</div>
+      <div style="color: #00f2fe;">14.8 BAR | 185°C | Particle Flow OK</div>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('masterpieceCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Koordinat jalur pipa melintasi gambar pabrik
+    const pipePath = [
+      {x: 30, y: 170},
+      {x: 220, y: 170},
+      {x: 220, y: 230},
+      {x: 470, y: 230}
+    ];
+
+    let particles = [];
+    const particleCount = 30;
+
+    for (let i = 0; i < particleCount; i++) {
+      particles.push({
+        progress: Math.random() * getPathLength(pipePath),
+        speed: 1.8 + Math.random() * 1.2,
+        size: 2 + Math.random() * 1.8
+      });
+    }
+
+    function getPathLength(path) {
+      let len = 0;
+      for (let i = 0; i < path.length - 1; i++) {
+        let dx = path[i+1].x - path[i].x;
+        let dy = path[i+1].y - path[i].y;
+        len += Math.sqrt(dx*dx + dy*dy);
+      }
+      return len;
+    }
+
+    function getPointAtDistance(path, distance) {
+      let currentDist = 0;
+      for (let i = 0; i < path.length - 1; i++) {
+        let p1 = path[i];
+        let p2 = path[i+1];
+        let dx = p2.x - p1.x;
+        let dy = p2.y - p1.y;
+        let segLen = Math.sqrt(dx*dx + dy*dy);
+
+        if (currentDist + segLen >= distance) {
+          let t = (distance - currentDist) / segLen;
+          return { x: p1.x + t * dx, y: p1.y + t * dy };
+        }
+        currentDist += segLen;
+      }
+      return path[path.length - 1];
+    }
+
+    const totalLen = getPathLength(pipePath);
+
+    function render() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // 1. Gambar Dasar Pipa Industri (Garis Tebal Gelap + Border Neon Tipis)
+      ctx.lineWidth = 7;
+      ctx.strokeStyle = '#030712';
+      ctx.beginPath();
+      ctx.moveTo(pipePath[0].x, pipePath[0].y);
+      for (let i = 1; i < pipePath.length; i++) ctx.lineTo(pipePath[i].x, pipePath[i].y);
+      ctx.stroke();
+
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = 'rgba(0, 242, 254, 0.4)';
+      ctx.beginPath();
+      ctx.moveTo(pipePath[0].x, pipePath[0].y);
+      for (let i = 1; i < pipePath.length; i++) ctx.lineTo(pipePath[i].x, pipePath[i].y);
+      ctx.stroke();
+
+      // 2. Render Aliran Partikel Zat Cair / Uap Berkilau di Dalam Pipa
+      particles.forEach(p => {
+        p.progress += p.speed;
+        if (p.progress > totalLen) p.progress = 0;
+
+        let pos = getPointAtDistance(pipePath, p.progress);
+
+        ctx.shadowBlur = 12;
+        ctx.shadowColor = '#00f2fe';
+        ctx.fillStyle = '#ffffff'; // Inti partikel putih terang
+        ctx.beginPath();
+        ctx.arc(pos.x, pos.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      });
+
+      // 3. Titik Sensor / Valve Dinamis di Tikungan Pipa
+      ctx.fillStyle = '#f59e0b';
+      ctx.beginPath();
+      ctx.arc(220, 170, 6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      requestAnimationFrame(render);
+    }
+
+    render();
+  </script>
+</body>
+</html>

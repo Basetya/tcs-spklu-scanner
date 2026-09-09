@@ -15,6 +15,7 @@ function startApp() {
   initBimSimulator();
   initTcsChatbot();
   init3DParallaxCard();
+  initScadaUtilitiesSimulator(); // <-- Pastikan ini dipanggil di sini!
 }
 
 // Global retrying fetch helper for remote services (Overpass/Nominatim/GAS bridge)
@@ -103,12 +104,12 @@ function initHeroCanvas() {
   let mouseY = -1000;
   let textAlpha = 0;
   let fadeTimeout = null;
-  let textXPos = 0; // Posisi x untuk running text
+  let textXPos = 0;
 
   function resize() {
     width = canvas.width = window.innerWidth;
     height = canvas.height = canvas.parentElement ? canvas.parentElement.offsetHeight : window.innerHeight;
-    textXPos = width; // Inisialisasi awal di sebelah kanan layar
+    textXPos = width;
   }
   window.addEventListener('resize', resize);
   resize();
@@ -119,7 +120,7 @@ function initHeroCanvas() {
       mouseX = e.clientX - rect.left;
       mouseY = e.clientY - rect.top;
       
-      textAlpha = 0.38; // Opasitas lembut agar terlihat di background hitam tanpa menutup teks landing page
+      textAlpha = 0.38;
 
       if (fadeTimeout) clearTimeout(fadeTimeout);
       
@@ -143,14 +144,12 @@ function initHeroCanvas() {
       ctx.save();
       ctx.font = '600 24px "Outfit", sans-serif';
       
-      // Hitung pergerakan teks dari kanan ke kiri
       textXPos -= 3.5;
       const textMetrics = ctx.measureText(targetText);
       if (textXPos < -textMetrics.width - 100) {
-        textXPos = width + 50; // Reset ke ujung kanan saat teks sudah lewat habis ke kiri
+        textXPos = width + 50;
       }
 
-      // Efek kilau perak metalik (Silver Metallic Gradient) mengikuti posisi teks yang bergerak
       const grad = ctx.createLinearGradient(textXPos, mouseY, textXPos + 350, mouseY);
       grad.addColorStop(0, `rgba(168, 182, 204, ${textAlpha * 0.4})`);
       grad.addColorStop(0.5, `rgba(241, 245, 249, ${textAlpha})`);
@@ -160,7 +159,6 @@ function initHeroCanvas() {
       ctx.shadowBlur = 12;
       ctx.shadowColor = 'rgba(226, 232, 240, 0.3)';
       
-      // Render teks mengalir dari kanan ke kiri pada ketinggian kursor
       ctx.fillText(targetText, textXPos, mouseY);
       ctx.restore();
     }
@@ -172,7 +170,7 @@ function initHeroCanvas() {
 }
 
 /* ==========================================================================
-   3. SERVICES EXPLORER TABS & ELECTRICAL VIDEO INTEGRATION
+   3. SERVICES EXPLORER TABS
    ========================================================================== */
 function initServiceTabs() {
   const tabButtons = document.querySelectorAll('.service-tab-btn');
@@ -315,7 +313,7 @@ const serviceWizardConfigs = {
       title: "What Water Treatment Capacity is Required?",
       options: [
         { val: "Domestic Capacity (< 10 m3/day, Filter & Portable STP)", icon: "💧", title: "Domestic Capacity", desc: "&lt; 10 m³/day<br>(Filter / Portable STP)" },
-        { val: "Commercial Capacity (10 - 50 m3/day, Building WTP/STP)", icon: "🏢", title: "Commercial Capacity", desc: "10 - 50 m³/day<br>(WTP/STP Building & Hotel)" },
+        { val: "Commercial Capacity (10 - 50 m3/day, Building WTP/STP)", icon: "🏢", title: "Commercial Capacity", desc: "10 - 50 m3/day<br>(WTP/STP Building & Hotel)" },
         { val: "Industrial Scale (> 50 m3/day, Factory WTP/WWTP)", icon: "🏭", title: "Industrial / WWTP", desc: "&gt; 50 m³/day<br>(WTP / WWTP Factory)" }
       ]
     }
@@ -1052,6 +1050,139 @@ function initBimSimulator() {
   render();
 }
 
+/* ==========================================================================
+   7. CYBERPUNK SCADA UTILITIES HOVER SIMULATOR ENGINE (FIXED & ENHANCED)
+   ========================================================================== */
+function initScadaUtilitiesSimulator() {
+  const canvas = document.getElementById('scadaCanvas');
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+  const tooltip = document.getElementById('scadaTooltip');
+  const sensorVal = document.getElementById('sensorVal');
+  const card = document.getElementById('scadaUtilitiesCard');
+
+  let width, height;
+  let isHovered = false;
+  let mouseX = -1000;
+  let mouseY = -1000;
+  let particleOffset = 0;
+
+  function resize() {
+    const rect = card.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) return;
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    ctx.scale(dpr, dpr);
+    width = rect.width;
+    height = rect.height;
+  }
+  
+  // Panggil resize berkala agar ukuran pas saat tab dibuka
+  window.addEventListener('resize', resize);
+  setTimeout(resize, 100);
+  
+  // Deteksi klik tab utilities agar canvas langsung menyesuaikan ukuran
+  const utilTabBtn = document.querySelector('[data-tab="utilities"]');
+  if (utilTabBtn) {
+    utilTabBtn.addEventListener('click', () => {
+      setTimeout(resize, 50);
+    });
+  }
+
+  card.addEventListener('mouseenter', () => { isHovered = true; });
+  card.addEventListener('mouseleave', () => {
+    isHovered = false;
+    if (tooltip) tooltip.style.display = 'none';
+  });
+
+  card.addEventListener('mousemove', (e) => {
+    const rect = card.getBoundingClientRect();
+    mouseX = e.clientX - rect.left;
+    mouseY = e.clientY - rect.top;
+  });
+
+  // Titik koordinat sensor katup (Valves) di atas gambar Process.jpeg
+  const valves = [
+    { xRatio: 0.28, yRatio: 0.48, name: "VALVE #01 - STEAM MAIN", bar: "16.2 BAR", temp: "210°C" },
+    { xRatio: 0.52, yRatio: 0.52, name: "VALVE #02 - COMPRESSED AIR", bar: "8.5 BAR", temp: "45°C" },
+    { xRatio: 0.76, yRatio: 0.48, name: "VALVE #03 - COOLING LOOP", bar: "4.1 BAR", temp: "18°C" }
+  ];
+
+  function render() {
+    if (!width || !height) {
+      resize();
+      requestAnimationFrame(render);
+      return;
+    }
+
+    ctx.clearRect(0, 0, width, height);
+
+    particleOffset += 3.5;
+    if (particleOffset > 30) particleOffset = 0;
+
+    // 1. Render Garis Aliran Neon Melintang (Selalu aktif bersinar lembut, makin terang saat hover)
+    ctx.save();
+    ctx.shadowBlur = isHovered ? 18 : 10;
+    ctx.shadowColor = '#00f2fe';
+    ctx.strokeStyle = isHovered ? 'rgba(0, 242, 254, 0.95)' : 'rgba(0, 242, 254, 0.5)';
+    ctx.lineWidth = isHovered ? 6 : 4;
+    ctx.setLineDash([15, 12]);
+    ctx.lineDashOffset = -particleOffset;
+
+    ctx.beginPath();
+    ctx.moveTo(40, height * 0.5);
+    ctx.lineTo(width - 40, height * 0.5);
+    ctx.stroke();
+    ctx.restore();
+
+    // 2. Render Titik Sensor Katup (Valves)
+    let activeValve = null;
+    valves.forEach((v, idx) => {
+      const vx = width * v.xRatio;
+      const vy = height * v.yRatio;
+
+      // Lingkaran luar radar katup
+      ctx.fillStyle = 'rgba(3, 7, 18, 0.85)';
+      ctx.strokeStyle = isHovered ? '#00f2fe' : '#f59e0b';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.arc(vx, vy, 15, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      // Inti lampu katup berdenyut
+      ctx.fillStyle = idx % 2 === 0 ? '#00f2fe' : '#f59e0b';
+      ctx.beginPath();
+      ctx.arc(vx, vy, 6, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Cek jarak kursor ke katup untuk menampilkan pop-up data tekanan
+      const dist = Math.hypot(mouseX - vx, mouseY - vy);
+      if (isHovered && dist < 50) {
+        activeValve = { x: vx, y: vy, ...v };
+      }
+    });
+
+    // 3. Tampilkan Pop-up Sensor Real-time jika kursor mendekati katup
+    if (activeValve && tooltip) {
+      tooltip.style.left = `${activeValve.x}px`;
+      tooltip.style.top = `${activeValve.y - 15}px`;
+      tooltip.style.display = 'block';
+      sensorVal.innerText = `${activeValve.bar} | ${activeValve.temp}`;
+      const titleEl = tooltip.querySelector('.sensor-title');
+      if (titleEl) titleEl.innerText = activeValve.name;
+    } else if (tooltip) {
+      tooltip.style.display = 'none';
+    }
+
+    requestAnimationFrame(render);
+  }
+
+  render();
+}
+
 function applyTcsContactSettings(settings) {
   if (!settings) return;
   
@@ -1316,3 +1447,497 @@ if (document.readyState === 'loading') {
   startApp();
 }
 </script>
+
+/* ================================================================= */
+/* ENGINE & KONTROL SKRIP 5 FITUR UTAMA PT TCS                       */
+/* ================================================================= */
+
+// 1. SCADA HMI ENGINE
+const scadaCanvas = document.getElementById('scadaCanvas');
+const scadaCtx = scadaCanvas ? scadaCanvas.getContext('2d') : null;
+let scadaOffset = 0;
+let valveOpenState = true;
+
+const scadaDataMock = {
+  'pump-01': { title: 'P-01: BOILER FEED PUMP', pressure: '42.5', temp: '118.4', flow: '310.2' },
+  'turbine-01': { title: 'TURBINE-A GENERATOR', pressure: '18.1', temp: '245.0', flow: '520.8' }
+};
+
+function drawScadaPipes() {
+  if (!scadaCtx) return;
+  scadaCtx.clearRect(0, 0, scadaCanvas.width, scadaCanvas.height);
+
+  // Pipa Utama
+  scadaCtx.lineWidth = 6;
+  scadaCtx.strokeStyle = '#1e293b';
+  scadaCtx.beginPath();
+  scadaCtx.moveTo(80, 130);
+  scadaCtx.lineTo(380, 130);
+  scadaCtx.lineTo(380, 280);
+  scadaCtx.lineTo(820, 280);
+  scadaCtx.stroke();
+
+  // Aliran Fluida Menyala (jika valve terbuka)
+  if (valveOpenState) {
+    scadaCtx.lineWidth = 3;
+    scadaCtx.strokeStyle = '#00f2fe';
+    scadaCtx.setLineDash([12, 16]);
+    scadaCtx.lineDashOffset = -scadaOffset;
+    scadaCtx.beginPath();
+    scadaCtx.moveTo(80, 130);
+    scadaCtx.lineTo(380, 130);
+    scadaCtx.lineTo(380, 280);
+    scadaCtx.lineTo(820, 280);
+    scadaCtx.stroke();
+    scadaCtx.setLineDash([]);
+  }
+}
+
+function loopScada() {
+  scadaOffset += 1.2;
+  if (scadaOffset > 50) scadaOffset = 0;
+  drawScadaPipes();
+  requestAnimationFrame(loopScada);
+}
+
+function toggleScadaValve(id) {
+  valveOpenState = !valveOpenState;
+  const btn = document.getElementById('valveBtn01');
+  if (valveOpenState) {
+    btn.className = 'valve-btn open';
+    btn.textContent = 'V-01: OPEN';
+  } else {
+    btn.className = 'valve-btn';
+    btn.textContent = 'V-01: CLOSED';
+  }
+}
+
+function showScadaTelemetry(key, e) {
+  const d = scadaDataMock[key];
+  if (!d) return;
+  document.getElementById('telTitle').textContent = d.title;
+  document.getElementById('telPressure').textContent = valveOpenState ? d.pressure : '0.0';
+  document.getElementById('telTemp').textContent = valveOpenState ? d.temp : '25.0';
+  document.getElementById('telFlow').textContent = valveOpenState ? d.flow : '0.0';
+  document.getElementById('scadaTelemetryPanel').classList.remove('hidden');
+}
+
+function hideScadaTelemetry() {
+  document.getElementById('scadaTelemetryPanel').classList.add('hidden');
+}
+
+if (scadaCanvas) loopScada();
+
+
+// 2. 3D EQUIPMENT INSPECTOR (Isometric Canvas Simulation)
+const eqCanvas = document.getElementById('equipmentCanvas');
+const eqCtx = eqCanvas ? eqCanvas.getContext('2d') : null;
+let currentEqType = 'trafo';
+
+const equipmentData = {
+  trafo: {
+    title: 'TRAFO DAYA 1000kVA',
+    desc: 'Transformator distribusi step-down efisiensi tinggi dengan pendingin oli tahan beban industri berat.',
+    list: [['Kapasitas', '1000 kVA'], ['Primer', '20 kV'], ['Sekunder', '400 V'], ['Efisiensi', '98.5%']]
+  },
+  lvmdp: {
+    title: 'PANEL LVMDP INDUSTRIAL',
+    desc: 'Low Voltage Main Distribution Panel dengan sistem proteksi ACB, MCCB, dan digital power meter terintegrasi.',
+    list: [['Arus Nominal', '2500 A'], ['Kapasitas Breaking', '65 kA'], ['Enclosure', 'IP55 Indoor'], ['Smart Meter', 'Modbus RTU']]
+  },
+  spklu: {
+    title: 'SPKLU ULTRA FAST CHARGER',
+    desc: 'Stasiun Pengisian Kendaraan Listrik Umum ultra-cepat dual gun CCS2 dengan manajemen daya cerdas.',
+    list: [['Output Daya', '150 kW DC'], ['Tegangan', '200-950 VDC'], ['Konektor', 'Dual CCS2'], ['Sistem Bayar', 'RFID / QRIS / OCPP']]
+  }
+};
+
+function drawEquipmentGraphic(type) {
+  if (!eqCtx) return;
+  eqCtx.clearRect(0, 0, eqCanvas.width, eqCanvas.height);
+  
+  // Background Grid Isometric
+  eqCtx.strokeStyle = 'rgba(0, 242, 254, 0.08)';
+  eqCtx.lineWidth = 1;
+  for (let i = 0; i < eqCanvas.width; i += 30) {
+    eqCtx.beginPath(); eqCtx.moveTo(i, 0); eqCtx.lineTo(i, eqCanvas.height); eqCtx.stroke();
+  }
+
+  // Render Objek 3D Isometrik Mock berdasarkan tipe
+  eqCtx.save();
+  eqCtx.translate(eqCanvas.width / 2, eqCanvas.height / 2 + 20);
+
+  if (type === 'trafo') {
+    // Body Trafo Utama
+    eqCtx.fillStyle = '#0f172a';
+    eqCtx.strokeStyle = '#00f2fe';
+    eqCtx.lineWidth = 2;
+    eqCtx.fillRect(-60, -80, 120, 130);
+    eqCtx.strokeRect(-60, -80, 120, 130);
+    // Radiator Fins
+    eqCtx.fillStyle = '#1e293b';
+    eqCtx.fillRect(-80, -70, 20, 110);
+    eqCtx.fillRect(60, -70, 20, 110);
+    // Label Teks di Canvas
+    eqCtx.fillStyle = '#00f2fe';
+    eqCtx.font = '12px Courier New';
+    eqCtx.fillText('TRAFO 1000kVA', -50, -95);
+  } else if (type === 'lvmdp') {
+    eqCtx.fillStyle = '#0f172a';
+    eqCtx.strokeStyle = '#f59e0b';
+    eqCtx.lineWidth = 2;
+    eqCtx.fillRect(-70, -90, 140, 150);
+    eqCtx.strokeRect(-70, -90, 140, 150);
+    // Panel Indicators
+    eqCtx.fillStyle = '#00e575';
+    eqCtx.fillRect(-50, -60, 20, 10);
+    eqCtx.fillStyle = '#ef4444';
+    eqCtx.fillRect(-20, -60, 20, 10);
+    eqCtx.fillStyle = '#f59e0b';
+    eqCtx.font = '12px Courier New';
+    eqCtx.fillText('PANEL LVMDP', -45, -105);
+  } else {
+    // SPKLU Charger
+    eqCtx.fillStyle = '#0f172a';
+    eqCtx.strokeStyle = '#00e575';
+    eqCtx.lineWidth = 2;
+    eqCtx.fillRect(-45, -100, 90, 170);
+    eqCtx.strokeRect(-45, -100, 90, 170);
+    // Screen LCD
+    eqCtx.fillStyle = '#00f2fe';
+    eqCtx.fillRect(-30, -80, 60, 40);
+    eqCtx.fillStyle = '#00e575';
+    eqCtx.font = '11px Courier New';
+    eqCtx.fillText('SPKLU 150kW', -40, -115);
+  }
+  eqCtx.restore();
+}
+
+function switchEquipment(type) {
+  currentEqType = type;
+  drawEquipmentGraphic(type);
+  const data = equipmentData[type];
+  document.getElementById('specTitle').textContent = data.title;
+  document.getElementById('specDesc').textContent = data.desc;
+  const listEl = document.getElementById('specList');
+  listEl.innerHTML = data.list.map(item => `<li><span>${item[0]}:</span> <strong>${item[1]}</strong></li>`).join('');
+}
+
+if (eqCanvas) drawEquipmentGraphic('trafo');
+
+
+// 3. CARBON & ENERGY SAVINGS CALCULATOR
+function calculateSavings() {
+  const kva = parseFloat(document.getElementById('inputKva').value);
+  const hours = parseFloat(document.getElementById('inputHours').value);
+  
+  document.getElementById('valKva').textContent = kva;
+  document.getElementById('valHours').textContent = hours;
+
+  // Rumus Estimasi Penghematan & Karbon
+  const monthlySavings = kva * hours * 30 * 145; // Asumsi efisiensi dan tarif industri
+  const annualCarbon = (kva * hours * 365 * 0.85) / 1000; // Ton CO2
+
+  document.getElementById('resRupiah').textContent = 'Rp ' + monthlySavings.toLocaleString('id-ID');
+  document.getElementById('resCarbon').textContent = annualCarbon.toFixed(1) + ' Ton';
+}
+
+
+// 4. BIM & MEP CLASH DETECTION SIMULATOR V2
+const clashCanvas = document.getElementById('clashCanvas');
+const clashCtx = clashCanvas ? clashCanvas.getContext('2d') : null;
+
+function drawClashScene(statusText, hasClash) {
+  if (!clashCtx) return;
+  clashCtx.clearRect(0, 0, clashCanvas.width, clashCanvas.height);
+
+  // Jalur Pipa Hidran (Biru)
+  clashCtx.lineWidth = 14;
+  clashCtx.strokeStyle = '#00f2fe';
+  clashCtx.beginPath();
+  clashCtx.moveTo(50, 150);
+  clashCtx.lineTo(850, 150);
+  clashCtx.stroke();
+
+  // Jalur Tray Kabel (Kuning / Oranye)
+  clashCtx.lineWidth = 12;
+  clashCtx.strokeStyle = '#f59e0b';
+  clashCtx.beginPath();
+  clashCtx.moveTo(450, 40);
+  clashCtx.lineTo(450, 260);
+  clashCtx.stroke();
+
+  // Titik Koordinat Bentrokan (Clash Point di tengah X:450, Y:150)
+  if (hasClash) {
+    clashCtx.fillStyle = '#ef4444';
+    clashCtx.beginPath();
+    clashCtx.arc(450, 150, 22, 0, Math.PI * 2);
+    clashCtx.fill();
+    clashCtx.lineWidth = 3;
+    clashCtx.strokeStyle = '#ffffff';
+    clashCtx.stroke();
+
+    clashCtx.fillStyle = '#ffffff';
+    clashCtx.font = 'bold 11px Courier New';
+    clashCtx.fillText('CLASH #01', 420, 190);
+  }
+
+  document.getElementById('clashStatus').textContent = statusText;
+  document.getElementById('clashStatus').style.color = hasClash ? '#ef4444' : '#00e575';
+}
+
+function runClashSimulation() {
+  drawClashScene('MEMINDAI SPASIAL BIM NODES...', false);
+  setTimeout(() => {
+    drawClashScene('PERINGATAN: TERDETEKSI 1 BENTROKAN (Pipa vs Tray Kabel di Zona A-2)!', true);
+  }, 1000);
+}
+
+if (clashCanvas) drawClashScene('STATUS: SIAP MEMINDAI NODES', false);
+
+
+// 5. AI PROJECT ESTIMATOR & INSTANT QUOTATION GENERATOR
+function generateAIQuotation() {
+  const industry = document.getElementById('estIndustry').value;
+  const scale = parseFloat(document.getElementById('estScale').value) || 1000;
+  
+  let costMultiplier = 450000;
+  let durationMonths = '3 Bulan';
+  let moduleRec = 'SCADA HMI + Panel LVMDP Tier-1';
+
+  if (industry === 'gedung') {
+    costMultiplier = 350000;
+    durationMonths = '2 Bulan';
+    moduleRec = 'Smart Building MEP & Energy Monitor';
+  } else if (industry === 'spklu') {
+    costMultiplier = 600000;
+    durationMonths = '4 Bulan';
+    moduleRec = 'EV Charging Hub SCADA + Trafo 1000kVA';
+  }
+
+  const totalCost = scale * costMultiplier;
+  
+  document.getElementById('boqTimestamp').textContent = new Date().toLocaleTimeString('id-ID');
+  document.getElementById('boqTotalCost').textContent = 'Rp ' + totalCost.toLocaleString('id-ID');
+  document.getElementById('boqDuration').textContent = durationMonths;
+  document.getElementById('boqModule').textContent = moduleRec;
+}
+
+function sendWhatsAppQuotation() {
+  const industry = document.getElementById('estIndustry').value;
+  const scale = document.getElementById('estScale').value;
+  const totalCost = document.getElementById('boqTotalCost').textContent;
+  
+  const text = `Halo Tim PT Titis Cahaya Sejahtera (TCS), saya tertarik dengan estimasi proyek:\n- Industri: ${industry.toUpperCase()}\n- Skala: ${scale} m²\n- Estimasi BoQ: ${totalCost}\nMohon informasi lanjutan untuk konsultasi teknis.`;
+  const encoded = encodeURIComponent(text);
+  window.open(`https://wa.me/628111460707?text=${encoded}`, '_blank');
+}
+
+// Inisialisasi Kalkulator & Estimator saat halaman dimuat
+if (document.getElementById('inputKva')) calculateSavings();
+if (document.getElementById('estIndustry')) generateAIQuotation();
+/* ================================================================= */
+/* CYBER-INDUSTRIAL SCADA HMI ENGINE (AUTO-INIT)                     */
+/* ================================================================= */
+(function() {
+  function initScadaHmi() {
+    const canvas = document.getElementById('scadaControlCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let offset = 0;
+    let valveOpen = true;
+
+    const mockData = {
+      'pump-01': { title: 'P-01: BOILER FEED PUMP', pressure: '42.5', temp: '118.4', flow: '310.2' },
+      'turbine-01': { title: 'TURBINE-A GENERATOR', pressure: '18.1', temp: '245.0', flow: '520.8' }
+    };
+
+    function drawPipes() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Jalur Pipa Dasar
+      ctx.lineWidth = 6;
+      ctx.strokeStyle = '#1e293b';
+      ctx.beginPath();
+      ctx.moveTo(70, 120);
+      ctx.lineTo(370, 120);
+      ctx.lineTo(370, 270);
+      ctx.lineTo(840, 270);
+      ctx.stroke();
+
+      // Animasi Aliran Fluida / Uap Menyala (Cyan Neon)
+      if (valveOpen) {
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = '#00f2fe';
+        ctx.setLineDash([12, 16]);
+        ctx.lineDashOffset = -offset;
+        ctx.beginPath();
+        ctx.moveTo(70, 120);
+        ctx.lineTo(370, 120);
+        ctx.lineTo(370, 270);
+        ctx.lineTo(840, 270);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+    }
+
+    function animateLoop() {
+      offset += 1.5;
+      if (offset > 50) offset = 0;
+      drawPipes();
+      requestAnimationFrame(animateLoop);
+    }
+
+    animateLoop();
+
+    // Global Functions untuk interaksi tombol & hover
+    window.toggleScadaControlValve = function(id) {
+      valveOpen = !valveOpen;
+      const btn = document.getElementById('scadaValveBtn01');
+      if (!btn) return;
+      if (valveOpen) {
+        btn.textContent = 'V-01: OPEN';
+        btn.style.background = '#00e575';
+        btn.style.boxShadow = '0 0 8px #00e575';
+        btn.style.color = '#030712';
+      } else {
+        btn.textContent = 'V-01: CLOSED';
+        btn.style.background = '#ef4444';
+        btn.style.boxShadow = '0 0 8px #ef4444';
+        btn.style.color = '#ffffff';
+      }
+    };
+
+    window.showScadaControlTelemetry = function(key, e) {
+      const d = mockData[key];
+      const popup = document.getElementById('scadaTelemetryPopup');
+      if (!d || !popup) return;
+      document.getElementById('scadaTelTitle').textContent = d.title;
+      document.getElementById('scadaTelPressure').textContent = valveOpen ? d.pressure : '0.0';
+      document.getElementById('scadaTelTemp').textContent = valveOpen ? d.temp : '25.0';
+      document.getElementById('scadaTelFlow').textContent = valveOpen ? d.flow : '0.0';
+      popup.classList.remove('hidden');
+    };
+
+    window.hideScadaControlTelemetry = function() {
+      const popup = document.getElementById('scadaTelemetryPopup');
+      if (popup) popup.classList.add('hidden');
+    };
+  }
+
+  // Jalankan saat DOM siap
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initScadaHmi);
+  } else {
+    initScadaHmi();
+  }
+})();
+/* ================================================================= */
+/* MASTERPIECE SCADA PARTICLE FLOW ENGINE (ACTIVE OVERRIDE)          */
+/* ================================================================= */
+(function() {
+  function initMasterpieceScada() {
+    const canvas = document.getElementById('scadaCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    const pipePath = [
+      {x: 40, y: 175},
+      {x: 230, y: 175},
+      {x: 230, y: 235},
+      {x: 460, y: 235}
+    ];
+
+    let particles = [];
+    const particleCount = 35;
+
+    for (let i = 0; i < particleCount; i++) {
+      particles.push({
+        progress: Math.random() * getPathLength(pipePath),
+        speed: 1.8 + Math.random() * 1.2,
+        size: 2 + Math.random() * 1.8
+      });
+    }
+
+    function getPathLength(path) {
+      let len = 0;
+      for (let i = 0; i < path.length - 1; i++) {
+        let dx = path[i+1].x - path[i].x;
+        let dy = path[i+1].y - path[i].y;
+        len += Math.sqrt(dx*dx + dy*dy);
+      }
+      return len;
+    }
+
+    function getPointAtDistance(path, distance) {
+      let currentDist = 0;
+      for (let i = 0; i < path.length - 1; i++) {
+        let p1 = path[i];
+        let p2 = path[i+1];
+        let dx = p2.x - p1.x;
+        let dy = p2.y - p1.y;
+        let segLen = Math.sqrt(dx*dx + dy*dy);
+
+        if (currentDist + segLen >= distance) {
+          let t = (distance - currentDist) / segLen;
+          return { x: p1.x + t * dx, y: p1.y + t * dy };
+        }
+        currentDist += segLen;
+      }
+      return path[path.length - 1];
+    }
+
+    const totalLen = getPathLength(pipePath);
+
+    function render() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ctx.lineWidth = 7;
+      ctx.strokeStyle = '#030712';
+      ctx.beginPath();
+      ctx.moveTo(pipePath[0].x, pipePath[0].y);
+      for (let i = 1; i < pipePath.length; i++) ctx.lineTo(pipePath[i].x, pipePath[i].y);
+      ctx.stroke();
+
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = 'rgba(0, 242, 254, 0.45)';
+      ctx.beginPath();
+      ctx.moveTo(pipePath[0].x, pipePath[0].y);
+      for (let i = 1; i < pipePath.length; i++) ctx.lineTo(pipePath[i].x, pipePath[i].y);
+      ctx.stroke();
+
+      particles.forEach(p => {
+        p.progress += p.speed;
+        if (p.progress > totalLen) p.progress = 0;
+
+        let pos = getPointAtDistance(pipePath, p.progress);
+
+        ctx.shadowBlur = 12;
+        ctx.shadowColor = '#00f2fe';
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(pos.x, pos.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      });
+
+      ctx.fillStyle = '#f59e0b';
+      ctx.beginPath();
+      ctx.arc(230, 175, 5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      requestAnimationFrame(render);
+    }
+
+    render();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMasterpieceScada);
+  } else {
+    initMasterpieceScada();
+  }
+})();

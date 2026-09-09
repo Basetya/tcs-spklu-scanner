@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TCS SCADA HMI Isolated Module</title>
+  <style>
+    body {
+      background-color: #030712;
+      color: #f3f4f6;
+      font-family: 'Courier New', Courier, monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .scada-section {
+      width: 100%;
+      max-width: 900px;
+      padding: 20px;
+      background: #030712;
+      border: 1px solid rgba(0, 242, 254, 0.3);
+      border-radius: 12px;
+      box-shadow: 0 0 30px rgba(0, 242, 254, 0.15);
+    }
+    .scada-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 10px;
+    }
+    .scada-header h2 {
+      font-size: 1rem;
+      color: #00f2fe;
+      margin: 0;
+      letter-spacing: 1px;
+    }
+    .status-badge {
+      font-size: 0.7rem;
+      color: #00e575;
+      background: rgba(0, 229, 117, 0.1);
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid rgba(0, 229, 117, 0.3);
+    }
+    .scada-workspace {
+      position: relative;
+      background: radial-gradient(circle at center, #0b1329 0%, #030712 100%);
+      border: 1px solid rgba(0, 242, 254, 0.2);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    .scada-overlays {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    .hmi-node {
+      position: absolute;
+      pointer-events: auto;
+    }
+    .equipment-badge {
+      background: rgba(3, 7, 18, 0.9);
+      border: 1px solid #00f2fe;
+      color: #00f2fe;
+      padding: 5px 10px;
+      font-size: 0.7rem;
+      border-radius: 4px;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+      transition: 0.3s;
+    }
+    .equipment-badge:hover {
+      background: #00f2fe;
+      color: #030712;
+    }
+    .valve-btn {
+      background: #00e575;
+      border: none;
+      color: #030712;
+      padding: 4px 8px;
+      font-size: 0.7rem;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
+      box-shadow: 0 0 8px #00e575;
+    }
+    .valve-btn.closed {
+      background: #ef4444;
+      color: #fff;
+      box-shadow: 0 0 8px #ef4444;
+    }
+    .telemetry-popup {
+      position: absolute;
+      bottom: 15px;
+      right: 15px;
+      background: rgba(3, 7, 18, 0.96);
+      border: 1px solid #f59e0b;
+      padding: 12px;
+      border-radius: 6px;
+      width: 200px;
+      box-shadow: 0 0 15px rgba(245, 158, 11, 0.25);
+      z-index: 10;
+    }
+    .telemetry-popup.hidden {
+      display: none !important;
+    }
+    .telemetry-popup h4 {
+      margin: 0 0 6px 0;
+      font-size: 0.75rem;
+      color: #f59e0b;
+      border-bottom: 1px dashed rgba(245, 158, 11, 0.3);
+      padding-bottom: 3px;
+    }
+    .telemetry-popup ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 0.7rem;
+      line-height: 1.5;
+    }
+    .cyan-txt { color: #00f2fe; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+  <div class="scada-section">
+    <div class="scada-header">
+      <h2>PT TCS // ISOLATED SCADA HMI MODULE</h2>
+      <div class="status-badge">● LIVE TELEMETRY</div>
+    </div>
+    
+    <div class="scada-workspace">
+      <canvas id="isolatedCanvas" width="900" height="400"></canvas>
+      
+      <div class="scada-overlays">
+        <div class="hmi-node" style="top: 100px; left: 150px;">
+          <button class="valve-btn" id="isoValveBtn" onclick="toggleValve()">V-01: OPEN</button>
+        </div>
+        <div class="hmi-node" style="top: 250px; left: 350px;">
+          <div class="equipment-badge" onmouseenter="showTelemetry('pump-01')" onmouseleave="hideTelemetry()">P-01: BOILER FEED</div>
+        </div>
+        <div class="hmi-node" style="top: 100px; left: 650px;">
+          <div class="equipment-badge" onmouseenter="showTelemetry('turbine-01')" onmouseleave="hideTelemetry()">TURBINE-A</div>
+        </div>
+      </div>
+
+      <div id="isoTelemetry" class="telemetry-popup hidden">
+        <h4 id="isoTitle">NODE METRICS</h4>
+        <ul>
+          <li>Tekanan: <span id="isoPress" class="cyan-txt">--</span> Bar</li>
+          <li>Suhu: <span id="isoTemp" class="cyan-txt">--</span> °C</li>
+          <li>Flow Rate: <span id="isoFlow" class="cyan-txt">--</span> m³/h</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('isolatedCanvas');
+    const ctx = canvas.getContext('2d');
+    let offset = 0;
+    let valveOpen = true;
+
+    const mockData = {
+      'pump-01': { title: 'P-01: BOILER FEED', press: '42.5', temp: '118.4', flow: '310.2' },
+      'turbine-01': { title: 'TURBINE-A', press: '18.1', temp: '245.0', flow: '520.8' }
+    };
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Jalur Pipa Dasar
+      ctx.lineWidth = 6;
+      ctx.strokeStyle = '#1e293b';
+      ctx.beginPath();
+      ctx.moveTo(60, 110);
+      ctx.lineTo(360, 110);
+      ctx.lineTo(360, 260);
+      ctx.lineTo(840, 260);
+      ctx.stroke();
+
+      // Garis Aliran Menyala (Cyan)
+      if (valveOpen) {
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = '#00f2fe';
+        ctx.setLineDash([12, 16]);
+        ctx.lineDashOffset = -offset;
+        ctx.beginPath();
+        ctx.moveTo(60, 110);
+        ctx.lineTo(360, 110);
+        ctx.lineTo(360, 260);
+        ctx.lineTo(840, 260);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+    }
+
+    function loop() {
+      offset += 1.5;
+      if (offset > 50) offset = 0;
+      draw();
+      requestAnimationFrame(loop);
+    }
+    loop();
+
+    function toggleValve() {
+      valveOpen = !valveOpen;
+      const btn = document.getElementById('isoValveBtn');
+      if (valveOpen) {
+        btn.className = 'valve-btn';
+        btn.textContent = 'V-01: OPEN';
+      } else {
+        btn.className = 'valve-btn closed';
+        btn.textContent = 'V-01: CLOSED';
+      }
+    }
+
+    function showTelemetry(key) {
+      const d = mockData[key];
+      if (!d) return;
+      document.getElementById('isoTitle').textContent = d.title;
+      document.getElementById('isoPress').textContent = valveOpen ? d.press : '0.0';
+      document.getElementById('isoTemp').textContent = valveOpen ? d.temp : '25.0';
+      document.getElementById('isoFlow').textContent = valveOpen ? d.flow : '0.0';
+      document.getElementById('isoTelemetry').classList.remove('hidden');
+    }
+
+    function hideTelemetry() {
+      document.getElementById('isoTelemetry').classList.add('hidden');
+    }
+  </script>
+</body>
+</html>
