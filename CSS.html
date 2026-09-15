@@ -727,18 +727,19 @@ a {
   align-items: center;
 }
 
-@media (min-width: 1024px) {
-  .about-grid-split {
-    grid-template-columns: 42% 58%;
-    gap: 45px;
-  }
+/* Mobile-First Image Wrapper (< 768px Base) */
+.about-visual {
+  width: 100%;
+  max-width: 100%;
 }
 
 .about-img-frame {
   position: relative;
   width: 100%;
-  min-height: 520px;
-  border-radius: 20px;
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  border-radius: 16px;
   overflow: hidden;
   border: 1px solid rgba(0, 242, 254, 0.25);
   background: #030712;
@@ -757,7 +758,6 @@ a {
   position: relative;
   width: 100%;
   height: 100%;
-  min-height: 520px;
   overflow: hidden;
   will-change: transform;
   transform: scale(1.02);
@@ -767,9 +767,8 @@ a {
 .about-img-frame img.about-parallax-img {
   width: 100%;
   height: 100%;
-  min-height: 520px;
   object-fit: cover;
-  object-position: center 22%;
+  object-position: 70% center;
   display: block;
   filter: contrast(115%) saturate(108%) brightness(0.92);
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
@@ -778,6 +777,32 @@ a {
 
 .about-img-frame:hover img.about-parallax-img {
   filter: contrast(120%) saturate(115%) brightness(0.98);
+}
+
+/* Desktop Overrides (>= 1024px) */
+@media (min-width: 1024px) {
+  .about-grid-split {
+    grid-template-columns: 42% 58%;
+    gap: 45px;
+  }
+
+  .about-img-frame {
+    height: 100%;
+    min-height: 520px;
+    aspect-ratio: auto;
+    border-radius: 20px;
+  }
+
+  .about-img-inner {
+    min-height: 520px;
+  }
+
+  .about-img-frame img.about-parallax-img {
+    height: 100%;
+    min-height: 520px;
+    aspect-ratio: auto;
+    object-position: center center;
+  }
 }
 
 .about-img-frame::after {
@@ -867,18 +892,20 @@ a {
 }
 
 /* Compact Frosted Glass Badge at Bottom-Left */
+/* Card Badge ("Bekerja Sejak 2020"): Mobile Base (< 768px) */
 .about-floating-card.compact-frosted-badge {
   position: absolute;
-  bottom: 22px;
-  left: 22px;
-  right: auto;
-  background: rgba(11, 15, 23, 0.75);
+  bottom: 12px;
+  left: 12px;
+  right: 12px;
+  width: auto;
+  max-width: none;
+  background: rgba(11, 15, 23, 0.84);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(0, 242, 254, 0.4);
-  padding: 10px 16px;
-  border-radius: 12px;
-  max-width: 240px;
+  padding: 8px 12px;
+  border-radius: 10px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6), 0 0 18px rgba(0, 242, 254, 0.15);
   z-index: 5;
   display: flex;
@@ -909,7 +936,20 @@ a {
 .about-floating-desc {
   font-size: 11px;
   color: var(--text-secondary);
-  line-height: 1.35;
+  line-height: 1.25;
+}
+
+/* Desktop Badge Override (>= 1024px) */
+@media (min-width: 1024px) {
+  .about-floating-card.compact-frosted-badge {
+    bottom: 22px;
+    left: 22px;
+    right: auto;
+    width: auto;
+    max-width: 260px;
+    padding: 10px 16px;
+    border-radius: 12px;
+  }
 }
 
 /* 4 Value Cards: Glassmorphism & Cursor 3D Tilt Physics */
@@ -2437,19 +2477,51 @@ textarea.form-input-text {
   /* Mobile Stack Order & Tap Target Optimizations */
   .about-visual {
     width: 100%;
+    max-width: 100%;
     margin-bottom: 20px;
   }
   .about-img-frame {
-    aspect-ratio: 16 / 10;
+    width: 100%;
+    max-width: 100%;
     height: auto;
+    min-height: unset !important;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: 16px;
   }
+  .about-img-inner {
+    width: 100%;
+    height: 100%;
+    min-height: unset !important;
+  }
+  .about-img-frame img.about-parallax-img {
+    width: 100%;
+    height: 100%;
+    min-height: unset !important;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    object-position: 70% center !important;
+  }
+  .about-floating-card.compact-frosted-badge,
   .about-floating-card {
-    position: relative;
-    bottom: auto;
-    right: auto;
-    margin: -30px 14px 14px 14px;
-    max-width: none;
+    position: absolute !important;
+    bottom: 12px !important;
+    left: 12px !important;
+    right: 12px !important;
+    width: auto !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 8px 12px !important;
+    border-radius: 10px !important;
     animation: none;
+  }
+  .about-floating-title {
+    font-size: 13px !important;
+    line-height: 1.2 !important;
+  }
+  .about-floating-desc {
+    font-size: 11px !important;
+    line-height: 1.25 !important;
   }
   .dna-cards-grid {
     grid-template-columns: 1fr;
