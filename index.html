@@ -790,7 +790,20 @@
               <img src="images/ev.png" alt="Commercial SPKLU Fast Charging Hub at Dusk" class="pane-media-element" id="spkluBaseSceneImg">
 
               <!-- Dynamic Multi-Phase Reversing, Docking & 150kW Pulsed Cyan Charge Sequence Canvas -->
-              <canvas id="evChargingCanvas" class="pane-canvas-overlay" width="600" height="380"></canvas>
+              <canvas id="evChargingCanvas" class="pane-canvas-overlay spklu-energy-stream charging-pulse" width="600" height="380"></canvas>
+
+              <!-- Active SPKLU Electrical Pulse Flow Animation Layer (SVG Hardware-Accelerated Flow Stream) -->
+              <svg class="spklu-energy-stream charging-pulse" viewBox="0 0 600 380" preserveAspectRatio="none">
+                <defs>
+                  <filter id="glow-spklu-pulse" x="-30%" y="-30%" width="160%" height="160%">
+                    <feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#00f2fe" flood-opacity="0.9" />
+                  </filter>
+                </defs>
+                <!-- Glowing Conduit Cable Outer Halo -->
+                <path d="M 214 227 C 216 275, 240 275, 253 241" fill="none" stroke="rgba(0, 242, 254, 0.38)" stroke-width="5.5" stroke-linecap="round" />
+                <!-- Fast Active Electric Pulse Current -->
+                <path class="spklu-flow-path" d="M 214 227 C 216 275, 240 275, 253 241" fill="none" stroke="#00f2fe" stroke-width="2.5" stroke-linecap="round" filter="url(#glow-spklu-pulse)" />
+              </svg>
 
               <div class="pane-visual-caption">
                 <span class="pane-visual-tag gold">EV CHARGING</span>
