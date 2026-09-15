@@ -1,4 +1,4 @@
-﻿<script>
+<script>
 /**
  * PT. Titis Cahaya Sejahtera (TCS) - Client-side Interactive Logic
  * Platform: Google Apps Script Web App Ecosystem
@@ -7,7 +7,9 @@
 
 function startApp() {
   initNavbar();
-  initHeroCanvas();
+  initHeroCursorGlow();
+  initHeroMagneticCta();
+  initHeroMep3D();
   initServiceTabs();
   initWizard();
   initStatsCounter();
@@ -15,6 +17,11 @@ function startApp() {
   initBimSimulator();
   initTcsChatbot();
   init3DParallaxCard();
+  initAboutParallaxAndTilt();
+  initInspectionHudAndUltrasonic();
+  initFirePumpCanvas();
+  initWaterRoCanvas();
+  initEvChargingSimulation();
   initScadaUtilitiesSimulator(); // <-- Pastikan ini dipanggil di sini!
 }
 
@@ -90,83 +97,674 @@ function initScrollspy() {
 }
 
 /* ==========================================================================
-   2. HERO INTERACTIVE CANVAS (RIGHT-TO-LEFT SILVER RUNNING TEXT ENGINE)
+   2. HERO INTERACTIVE SUITE: AMBIENT GLOW, MAGNETIC CTA & 3D MEP INFRASTRUCTURE
    ========================================================================== */
-function initHeroCanvas() {
-  const canvas = document.getElementById('hero-canvas');
-  if (!canvas) return;
 
-  const ctx = canvas.getContext('2d');
-  let width, height;
-  const targetText = "One-stop engineering solution";
-  
-  let mouseX = -1000;
-  let mouseY = -1000;
-  let textAlpha = 0;
-  let fadeTimeout = null;
-  let textXPos = 0;
+/**
+ * 2A. Ambient Cursor-Follower Glow
+ * Trails cursor smoothly using lerp interpolation across the technical charcoal background.
+ */
+function initHeroCursorGlow() {
+  const glow = document.getElementById('hero-cursor-glow');
+  const hero = document.getElementById('home');
+  if (!glow || !hero) return;
 
-  function resize() {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = canvas.parentElement ? canvas.parentElement.offsetHeight : window.innerHeight;
-    textXPos = width;
-  }
-  window.addEventListener('resize', resize);
-  resize();
+  let mouseX = window.innerWidth / 2;
+  let mouseY = window.innerHeight / 2;
+  let currentX = mouseX;
+  let currentY = mouseY;
+  let isInside = false;
 
   window.addEventListener('mousemove', (e) => {
-    const rect = canvas.getBoundingClientRect();
-    if (e.clientY >= rect.top && e.clientY <= rect.bottom) {
+    const rect = hero.getBoundingClientRect();
+    if (e.clientY >= rect.top && e.clientY <= rect.bottom && e.clientX >= rect.left && e.clientX <= rect.right) {
       mouseX = e.clientX - rect.left;
       mouseY = e.clientY - rect.top;
-      
-      textAlpha = 0.38;
-
-      if (fadeTimeout) clearTimeout(fadeTimeout);
-      
-      fadeTimeout = setTimeout(() => {
-        let fadeInterval = setInterval(() => {
-          textAlpha -= 0.02;
-          if (textAlpha <= 0) {
-            textAlpha = 0;
-            clearInterval(fadeInterval);
-          }
-        }, 50);
-      }, 800);
+      if (!isInside) {
+        isInside = true;
+        glow.style.opacity = '1';
+      }
+    } else {
+      if (isInside) {
+        isInside = false;
+        glow.style.opacity = '0.35';
+      }
     }
   });
 
-  function animate() {
-    ctx.fillStyle = 'rgba(3, 7, 18, 0.25)';
-    ctx.fillRect(0, 0, width, height);
+  function renderGlow() {
+    currentX += (mouseX - currentX) * 0.075;
+    currentY += (mouseY - currentY) * 0.075;
 
-    if (textAlpha > 0) {
-      ctx.save();
-      ctx.font = '600 24px "Outfit", sans-serif';
-      
-      textXPos -= 3.5;
-      const textMetrics = ctx.measureText(targetText);
-      if (textXPos < -textMetrics.width - 100) {
-        textXPos = width + 50;
-      }
+    glow.style.left = currentX + 'px';
+    glow.style.top = currentY + 'px';
 
-      const grad = ctx.createLinearGradient(textXPos, mouseY, textXPos + 350, mouseY);
-      grad.addColorStop(0, `rgba(168, 182, 204, ${textAlpha * 0.4})`);
-      grad.addColorStop(0.5, `rgba(241, 245, 249, ${textAlpha})`);
-      grad.addColorStop(1, `rgba(148, 163, 184, ${textAlpha * 0.4})`);
-      
-      ctx.fillStyle = grad;
-      ctx.shadowBlur = 12;
-      ctx.shadowColor = 'rgba(226, 232, 240, 0.3)';
-      
-      ctx.fillText(targetText, textXPos, mouseY);
-      ctx.restore();
+    requestAnimationFrame(renderGlow);
+  }
+  renderGlow();
+}
+
+/**
+ * 2B. Magnetic Snap CTA Button with High-Specular Glass Border Highlight
+ */
+function initHeroMagneticCta() {
+  const btn = document.getElementById('hero-cta-btn');
+  if (!btn) return;
+
+  const magneticRadius = 90;
+  let targetX = 0;
+  let targetY = 0;
+  let currentX = 0;
+  let currentY = 0;
+  let isHovered = false;
+
+  window.addEventListener('mousemove', (e) => {
+    const rect = btn.getBoundingClientRect();
+    const btnCenterX = rect.left + rect.width / 2;
+    const btnCenterY = rect.top + rect.height / 2;
+
+    const distX = e.clientX - btnCenterX;
+    const distY = e.clientY - btnCenterY;
+    const dist = Math.hypot(distX, distY);
+
+    if (dist < magneticRadius) {
+      const power = (1 - dist / magneticRadius);
+      targetX = distX * power * 0.38;
+      targetY = distY * power * 0.38;
+      isHovered = true;
+    } else {
+      targetX = 0;
+      targetY = 0;
+      isHovered = false;
+    }
+  });
+
+  btn.addEventListener('mouseleave', () => {
+    targetX = 0;
+    targetY = 0;
+    isHovered = false;
+  });
+
+  function updatePhysics() {
+    currentX += (targetX - currentX) * 0.16;
+    currentY += (targetY - currentY) * 0.16;
+
+    if (Math.abs(currentX) > 0.01 || Math.abs(currentY) > 0.01 || isHovered) {
+      btn.style.transform = `translate3d(${currentX.toFixed(2)}px, ${currentY.toFixed(2)}px, 0)`;
+    } else {
+      btn.style.transform = 'translate3d(0, 0, 0)';
     }
 
-    requestAnimationFrame(animate);
+    requestAnimationFrame(updatePhysics);
+  }
+  updatePhysics();
+}
+
+/**
+ * 2C. Realistic Industrial MEP Machinery: Water-Cooled Centrifugal Chiller Plant
+ * Features dual cylindrical pressure shells (Evaporator & Condenser), cast saddles on H-beam skid,
+ * centrifugal compressor volute & finned motor, copper busbars, flanged water boxes with
+ * luminous conduit nozzles (#00F2FE / #00C9A7), analog pressure gauges with glowing dials,
+ * VFD control panel, active fluid flow tracers, and smooth mouse-tilt parallax (lerp: 0.08).
+ */
+function initHeroMep3D() {
+  const canvas = document.getElementById('hero-mep-canvas');
+  const container = document.getElementById('hero-3d-container');
+  if (!canvas || !container) return;
+
+  function runEngine() {
+    if (typeof THREE === 'undefined') {
+      setTimeout(runEngine, 100);
+      return;
+    }
+
+    let width = container.clientWidth || 540;
+    let height = container.clientHeight || 500;
+
+    // Three.js Core
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 1000);
+    
+    const isMobile = window.innerWidth <= 768;
+    camera.position.set(isMobile ? 21 : 16, isMobile ? 12 : 10, isMobile ? 22 : 17);
+    camera.lookAt(0, 0.5, 0);
+
+    const renderer = new THREE.WebGLRenderer({
+      canvas: canvas,
+      alpha: true,
+      antialias: true,
+      powerPreference: 'high-performance'
+    });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setSize(width, height);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.3;
+
+    // Lighting Environment: Technical Rim & Directional Specular
+    const ambientLight = new THREE.AmbientLight(0x0a101d, 2.5);
+    scene.add(ambientLight);
+
+    // Primary Cyan Key Light
+    const keyLight = new THREE.DirectionalLight(0x00f2fe, 3.5);
+    keyLight.position.set(18, 22, 16);
+    scene.add(keyLight);
+
+    // Emerald Technical Rim Light
+    const rimLight = new THREE.DirectionalLight(0x00c9a7, 2.6);
+    rimLight.position.set(-22, 14, -18);
+    scene.add(rimLight);
+
+    // Overhead White Specular Chrome Light
+    const overheadLight = new THREE.DirectionalLight(0xffffff, 2.2);
+    overheadLight.position.set(0, 25, 0);
+    scene.add(overheadLight);
+
+    // Amber Substation / Motor Core Glow
+    const coreLight = new THREE.PointLight(0xf59e0b, 1.8, 15);
+    coreLight.position.set(0, 1.5, 0);
+    scene.add(coreLight);
+
+    // Root Machinery Group
+    const mepRoot = new THREE.Group();
+    scene.add(mepRoot);
+
+    // ==========================================
+    // INDUSTRIAL MEP MATERIALS PALETTE
+    // ==========================================
+    // 1. Matte Dark Slate Steel (#1A202C) for Main Vessel Shells
+    const slateSteelMat = new THREE.MeshStandardMaterial({
+      color: 0x1a202c,
+      roughness: 0.42,
+      metalness: 0.85
+    });
+
+    // 2. Brushed Chrome / Polished Titanium for Compressor & Mechanical Fittings
+    const chromeMat = new THREE.MeshStandardMaterial({
+      color: 0xd4d8e0,
+      roughness: 0.18,
+      metalness: 0.96
+    });
+
+    // 3. Dark Cast Iron for Heavy Flanges & Mounting Saddles
+    const castIronMat = new THREE.MeshStandardMaterial({
+      color: 0x0f172a,
+      roughness: 0.65,
+      metalness: 0.7
+    });
+
+    // 4. Industrial Copper for High-Current Busbars & Refrigerant Tubes
+    const copperMat = new THREE.MeshStandardMaterial({
+      color: 0xc26d38,
+      roughness: 0.22,
+      metalness: 0.92
+    });
+
+    // 5. Glowing Cyan Chilled Water Conduit (#00F2FE)
+    const cyanConduitMat = new THREE.MeshStandardMaterial({
+      color: 0x00f2fe,
+      emissive: 0x00f2fe,
+      emissiveIntensity: 0.65,
+      roughness: 0.2,
+      metalness: 0.85
+    });
+
+    // 6. Glowing Teal / Emerald Condenser Cooling Loop (#00C9A7)
+    const tealConduitMat = new THREE.MeshStandardMaterial({
+      color: 0x00c9a7,
+      emissive: 0x00c9a7,
+      emissiveIntensity: 0.55,
+      roughness: 0.22,
+      metalness: 0.85
+    });
+
+    // 7. Luminous Gauge / Dial Material
+    const dialGlowMat = new THREE.MeshBasicMaterial({
+      color: 0x00f2fe
+    });
+
+    // 8. Base Wireframe Edge Accent
+    const wireAccentMat = new THREE.LineBasicMaterial({
+      color: 0x00f2fe,
+      transparent: true,
+      opacity: 0.35
+    });
+
+    // ==========================================
+    // 1. STRUCTURAL SKID & ISOLATION BASE
+    // ==========================================
+    // Heavy H-Beam Base Frame
+    const skidGroup = new THREE.Group();
+    const beamLength = 10.5;
+    const beamMat = castIronMat;
+
+    // Twin longitudinal I-beams
+    [-2.2, 2.2].forEach(z => {
+      const beam = new THREE.Mesh(new THREE.BoxGeometry(beamLength, 0.45, 0.35), beamMat);
+      beam.position.set(0, -2.4, z);
+      skidGroup.add(beam);
+    });
+
+    // Cross members
+    [-4.2, 0, 4.2].forEach(x => {
+      const cross = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.45, 4.6), beamMat);
+      cross.position.set(x, -2.4, 0);
+      skidGroup.add(cross);
+
+      // Vibration spring isolator pads beneath
+      [-2.2, 2.2].forEach(z => {
+        const iso = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.28, 0.25, 16), chromeMat);
+        iso.position.set(x, -2.7, z);
+        skidGroup.add(iso);
+      });
+    });
+    mepRoot.add(skidGroup);
+
+    // ==========================================
+    // 2. DUAL PRESSURE VESSELS (EVAPORATOR & CONDENSER)
+    // ==========================================
+    // Heavy Cast Saddle Mounts
+    [-2.8, 2.8].forEach(x => {
+      const saddle = new THREE.Mesh(new THREE.BoxGeometry(0.65, 1.2, 4.2), castIronMat);
+      saddle.position.set(x, -1.8, 0);
+      mepRoot.add(saddle);
+    });
+
+    // Vessel A: Lower Evaporator Shell (Chilled Water)
+    const evapRadius = 1.35;
+    const evapLength = 8.6;
+    const evapShellGeo = new THREE.CylinderGeometry(evapRadius, evapRadius, evapLength, 36);
+    const evapShell = new THREE.Mesh(evapShellGeo, slateSteelMat);
+    evapShell.rotation.z = Math.PI / 2;
+    evapShell.position.set(0, -1.0, 0.6);
+    mepRoot.add(evapShell);
+
+    // Reinforcing shell bands
+    [-3.0, -1.5, 0, 1.5, 3.0].forEach(bx => {
+      const band = new THREE.Mesh(new THREE.TorusGeometry(evapRadius + 0.03, 0.05, 8, 36), chromeMat);
+      band.position.set(bx, -1.0, 0.6);
+      band.rotation.y = Math.PI / 2;
+      mepRoot.add(band);
+    });
+
+    // Vessel A Marine Water Boxes (both ends)
+    [-4.4, 4.4].forEach((wx, idx) => {
+      const waterBox = new THREE.Mesh(new THREE.CylinderGeometry(evapRadius * 1.05, evapRadius * 1.05, 0.65, 32), castIronMat);
+      waterBox.rotation.z = Math.PI / 2;
+      waterBox.position.set(wx, -1.0, 0.6);
+      mepRoot.add(waterBox);
+
+      // Flange Bolt Ring
+      const flangeRing = new THREE.Mesh(new THREE.TorusGeometry(evapRadius * 1.08, 0.08, 8, 32), chromeMat);
+      flangeRing.rotation.y = Math.PI / 2;
+      flangeRing.position.set(wx + (idx === 0 ? 0.35 : -0.35), -1.0, 0.6);
+      mepRoot.add(flangeRing);
+
+      // Domed end cap
+      const cap = new THREE.Mesh(new THREE.SphereGeometry(evapRadius * 1.05, 24, 12, 0, Math.PI * 2, 0, Math.PI / 2), castIronMat);
+      cap.rotation.z = idx === 0 ? -Math.PI / 2 : Math.PI / 2;
+      cap.position.set(wx + (idx === 0 ? -0.35 : 0.35), -1.0, 0.6);
+      mepRoot.add(cap);
+    });
+
+    // Vessel B: Upper Condenser Shell (Cooling Water)
+    const condRadius = 1.2;
+    const condLength = 8.2;
+    const condShellGeo = new THREE.CylinderGeometry(condRadius, condRadius, condLength, 36);
+    const condShell = new THREE.Mesh(condShellGeo, slateSteelMat);
+    condShell.rotation.z = Math.PI / 2;
+    condShell.position.set(0, 0.9, -0.7);
+    mepRoot.add(condShell);
+
+    // Condenser Water Boxes
+    [-4.2, 4.2].forEach((cx, idx) => {
+      const cBox = new THREE.Mesh(new THREE.CylinderGeometry(condRadius * 1.05, condRadius * 1.05, 0.6, 32), castIronMat);
+      cBox.rotation.z = Math.PI / 2;
+      cBox.position.set(cx, 0.9, -0.7);
+      mepRoot.add(cBox);
+
+      const cRing = new THREE.Mesh(new THREE.TorusGeometry(condRadius * 1.08, 0.07, 8, 32), chromeMat);
+      cRing.rotation.y = Math.PI / 2;
+      cRing.position.set(cx + (idx === 0 ? 0.32 : -0.32), 0.9, -0.7);
+      mepRoot.add(cRing);
+    });
+
+    // ==========================================
+    // 3. CENTRIFUGAL COMPRESSOR & MOTOR DRIVE
+    // ==========================================
+    const compressorGroup = new THREE.Group();
+
+    // Centrifugal Volute Casing (Central Scroll)
+    const voluteCore = new THREE.Mesh(new THREE.CylinderGeometry(1.25, 1.4, 1.1, 24), chromeMat);
+    voluteCore.position.set(-0.2, 2.6, 0);
+    compressorGroup.add(voluteCore);
+
+    // Scroll diffuser shroud
+    const shroud = new THREE.Mesh(new THREE.TorusGeometry(1.4, 0.38, 16, 32), chromeMat);
+    shroud.position.set(-0.2, 2.6, 0);
+    compressorGroup.add(shroud);
+
+    // Heavy High-Pressure Discharge Pipe (Volute to Condenser)
+    const dischargePipe = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.42, 1.8, 20), chromeMat);
+    dischargePipe.position.set(-0.2, 1.8, -0.5);
+    dischargePipe.rotation.x = 0.45;
+    compressorGroup.add(dischargePipe);
+
+    // High-Efficiency Electric Drive Motor Housing
+    const motorHousing = new THREE.Mesh(new THREE.CylinderGeometry(0.95, 0.95, 3.2, 24), slateSteelMat);
+    motorHousing.rotation.z = Math.PI / 2;
+    motorHousing.position.set(1.9, 2.6, 0);
+    compressorGroup.add(motorHousing);
+
+    // Longitudinal Cooling Fins on Motor
+    for (let f = 0; f < 12; f++) {
+      const finAngle = (Math.PI * 2 / 12) * f;
+      const fin = new THREE.Mesh(new THREE.BoxGeometry(2.8, 0.14, 0.05), chromeMat);
+      fin.position.set(1.9, 2.6 + Math.cos(finAngle) * 1.02, Math.sin(finAngle) * 1.02);
+      fin.rotation.x = finAngle;
+      compressorGroup.add(fin);
+    }
+
+    // Motor Rear Bearing & Terminal Box
+    const motorCap = new THREE.Mesh(new THREE.CylinderGeometry(0.96, 0.96, 0.4, 24), castIronMat);
+    motorCap.rotation.z = Math.PI / 2;
+    motorCap.position.set(3.6, 2.6, 0);
+    compressorGroup.add(motorCap);
+
+    mepRoot.add(compressorGroup);
+
+    // ==========================================
+    // 4. INTRICATE METALLIC PIPING & GLOWING CONDUITS
+    // ==========================================
+    const flowPipes = [];
+
+    // Helper to build industrial flanged pipe
+    function addFlangedPipe(p1, p2, radius, material, hasFlanges = true) {
+      const dist = p1.distanceTo(p2);
+      const geo = new THREE.CylinderGeometry(radius, radius, dist, 16);
+      const mesh = new THREE.Mesh(geo, material);
+
+      const mid = new THREE.Vector3().addVectors(p1, p2).multiplyScalar(0.5);
+      mesh.position.copy(mid);
+
+      const orient = new THREE.Vector3().subVectors(p2, p1).normalize();
+      mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), orient);
+      mepRoot.add(mesh);
+
+      if (hasFlanges) {
+        [p1, p2].forEach(p => {
+          const flange = new THREE.Mesh(new THREE.TorusGeometry(radius * 1.6, radius * 0.35, 8, 16), chromeMat);
+          flange.position.copy(p);
+          flange.quaternion.copy(mesh.quaternion);
+          flange.rotateX(Math.PI / 2);
+          mepRoot.add(flange);
+        });
+      }
+      return { p1, p2, dist, mesh };
+    }
+
+    // 4A. Large Suction Riser (Evaporator to Compressor)
+    const pS1 = new THREE.Vector3(-1.4, -0.1, 0.6);
+    const pS2 = new THREE.Vector3(-1.4, 2.6, 0.6);
+    const pS3 = new THREE.Vector3(-0.6, 2.6, 0.6);
+    addFlangedPipe(pS1, pS2, 0.52, chromeMat);
+    addFlangedPipe(pS2, pS3, 0.52, chromeMat);
+
+    // 4B. Chilled Water Primary Supply & Return Headers (Luminous Cyan #00F2FE)
+    const pCW1 = new THREE.Vector3(-4.4, -0.6, 1.8);
+    const pCW2 = new THREE.Vector3(-2.0, -0.6, 1.8);
+    const pCW3 = new THREE.Vector3(-2.0, -0.6, 3.2);
+    const pCW4 = new THREE.Vector3(3.2, -0.6, 3.2);
+    const pCW5 = new THREE.Vector3(3.2, -0.6, 1.8);
+    const pCW6 = new THREE.Vector3(4.4, -0.6, 1.8);
+
+    flowPipes.push(addFlangedPipe(pCW1, pCW2, 0.28, cyanConduitMat));
+    flowPipes.push(addFlangedPipe(pCW2, pCW3, 0.28, cyanConduitMat));
+    flowPipes.push(addFlangedPipe(pCW3, pCW4, 0.28, cyanConduitMat));
+    flowPipes.push(addFlangedPipe(pCW4, pCW5, 0.28, cyanConduitMat));
+    flowPipes.push(addFlangedPipe(pCW5, pCW6, 0.28, cyanConduitMat));
+
+    // Connectors from headers into Evaporator
+    addFlangedPipe(new THREE.Vector3(-2.0, -0.6, 1.8), new THREE.Vector3(-2.0, -0.6, 0.6), 0.28, cyanConduitMat);
+    addFlangedPipe(new THREE.Vector3(3.2, -0.6, 1.8), new THREE.Vector3(3.2, -0.6, 0.6), 0.28, cyanConduitMat);
+
+    // 4C. Condenser Cooling Loop Headers (Luminous Teal #00C9A7)
+    const pCD1 = new THREE.Vector3(-4.2, 1.4, -1.9);
+    const pCD2 = new THREE.Vector3(-1.6, 1.4, -1.9);
+    const pCD3 = new THREE.Vector3(2.6, 1.4, -1.9);
+    const pCD4 = new THREE.Vector3(4.2, 1.4, -1.9);
+
+    flowPipes.push(addFlangedPipe(pCD1, pCD2, 0.26, tealConduitMat));
+    flowPipes.push(addFlangedPipe(pCD2, pCD3, 0.26, tealConduitMat));
+    flowPipes.push(addFlangedPipe(pCD3, pCD4, 0.26, tealConduitMat));
+
+    // Connectors into Condenser Shell
+    addFlangedPipe(new THREE.Vector3(-1.6, 1.4, -1.9), new THREE.Vector3(-1.6, 0.9, -0.7), 0.26, tealConduitMat);
+    addFlangedPipe(new THREE.Vector3(2.6, 1.4, -1.9), new THREE.Vector3(2.6, 0.9, -0.7), 0.26, tealConduitMat);
+
+    // 4D. Copper Busbars & High-Voltage Power Conduit
+    const busbarGroup = new THREE.Group();
+    [-0.15, 0, 0.15].forEach(offset => {
+      const busbar = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.08, 0.04), copperMat);
+      busbar.position.set(2.4, 1.8 + offset, 1.2);
+      busbarGroup.add(busbar);
+    });
+    // Vertical riser busbar from starter panel to motor
+    const busbarRiser = new THREE.Mesh(new THREE.BoxGeometry(0.08, 1.4, 0.35), copperMat);
+    busbarRiser.position.set(3.5, 2.2, 0.8);
+    busbarGroup.add(busbarRiser);
+    mepRoot.add(busbarGroup);
+
+    // ==========================================
+    // 5. INDUSTRIAL VFD / PLC CONTROL ENCLOSURE
+    // ==========================================
+    const panelGroup = new THREE.Group();
+    const panelCabinet = new THREE.Mesh(new THREE.BoxGeometry(2.6, 2.4, 0.85), slateSteelMat);
+    panelCabinet.position.set(0.6, 0.4, 2.5);
+    panelGroup.add(panelCabinet);
+
+    // Chrome Bezel Door Frame
+    const panelDoor = new THREE.Mesh(new THREE.BoxGeometry(2.4, 2.2, 0.06), castIronMat);
+    panelDoor.position.set(0.6, 0.4, 2.95);
+    panelGroup.add(panelDoor);
+
+    // Glowing Digital HMI Screen
+    const hmiScreen = new THREE.Mesh(new THREE.BoxGeometry(1.6, 1.0, 0.04), new THREE.MeshBasicMaterial({
+      color: 0x00f2fe
+    }));
+    hmiScreen.position.set(0.6, 0.6, 3.0);
+    panelGroup.add(hmiScreen);
+
+    // Status Indicator Lights on Panel
+    [-0.3, 0, 0.3].forEach((lx, idx) => {
+      const lightCol = idx === 0 ? 0x00e575 : (idx === 1 ? 0x00f2fe : 0xf59e0b);
+      const indLight = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.06, 12), new THREE.MeshBasicMaterial({ color: lightCol }));
+      indLight.rotation.x = Math.PI / 2;
+      indLight.position.set(0.6 + lx, -0.2, 3.0);
+      panelGroup.add(indLight);
+    });
+
+    mepRoot.add(panelGroup);
+
+    // ==========================================
+    // 6. PRECISION ANALOG PRESSURE GAUGES WITH GLOWING DIALS
+    // ==========================================
+    function createPressureGauge(position, rotationY = 0) {
+      const gauge = new THREE.Group();
+      // Chrome casing
+      const caseMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.24, 0.12, 24), chromeMat);
+      caseMesh.rotation.x = Math.PI / 2;
+      gauge.add(caseMesh);
+
+      // Glowing dial face
+      const dial = new THREE.Mesh(new THREE.CircleGeometry(0.20, 24), dialGlowMat);
+      dial.position.z = 0.07;
+      gauge.add(dial);
+
+      // Needle
+      const needle = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.14, 0.02), castIronMat);
+      needle.position.set(0.04, 0.03, 0.08);
+      needle.rotation.z = -0.6;
+      gauge.add(needle);
+
+      // Mount stem
+      const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.25, 8), copperMat);
+      stem.position.y = -0.2;
+      gauge.add(stem);
+
+      gauge.position.copy(position);
+      gauge.rotation.y = rotationY;
+      mepRoot.add(gauge);
+    }
+
+    createPressureGauge(new THREE.Vector3(-1.8, 0.1, 2.1), 0);
+    createPressureGauge(new THREE.Vector3(-0.6, 3.4, 0.4), 0.3);
+    createPressureGauge(new THREE.Vector3(2.2, 0.1, 2.1), 0);
+
+    // ==========================================
+    // 7. ACTIVE PULSATING FLUID & POWER PARTICLES
+    // ==========================================
+    const particleCount = 42;
+    const pGeo = new THREE.SphereGeometry(0.14, 8, 8);
+    const pMatCyan = new THREE.MeshBasicMaterial({ color: 0xffffff });
+    const pMatTeal = new THREE.MeshBasicMaterial({ color: 0x00f2fe });
+
+    const particles = [];
+    const chwPath = [pCW1, pCW2, pCW3, pCW4, pCW5, pCW6];
+    let chwPathLen = 0;
+    for (let i = 0; i < chwPath.length - 1; i++) {
+      chwPathLen += chwPath[i].distanceTo(chwPath[i + 1]);
+    }
+
+    for (let i = 0; i < particleCount; i++) {
+      const pMesh = new THREE.Mesh(pGeo, i % 2 === 0 ? pMatCyan : pMatTeal);
+      mepRoot.add(pMesh);
+      particles.push({
+        mesh: pMesh,
+        dist: (i / particleCount) * chwPathLen,
+        speed: 0.05 + Math.random() * 0.03
+      });
+    }
+
+    function getPointOnChw(d) {
+      let cur = 0;
+      for (let i = 0; i < chwPath.length - 1; i++) {
+        const seg = chwPath[i].distanceTo(chwPath[i + 1]);
+        if (d <= cur + seg) {
+          const t = (d - cur) / seg;
+          return new THREE.Vector3().lerpVectors(chwPath[i], chwPath[i + 1], t);
+        }
+        cur += seg;
+      }
+      return chwPath[chwPath.length - 1].clone();
+    }
+
+    // ==========================================
+    // 8. TECHNICAL BLUEPRINT RADAR BASE
+    // ==========================================
+    const radarGeo = new THREE.RingGeometry(5.8, 5.86, 48);
+    const radarMat = new THREE.MeshBasicMaterial({
+      color: 0x00f2fe,
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.32
+    });
+    const radarRing = new THREE.Mesh(radarGeo, radarMat);
+    radarRing.rotation.x = Math.PI / 2;
+    radarRing.position.y = -2.85;
+    mepRoot.add(radarRing);
+
+    // Initial Isometric Alignment
+    mepRoot.rotation.y = -0.42;
+
+    // ==========================================
+    // 9. PHYSICS & PARALLAX ENGINE (LERP: 0.08)
+    // ==========================================
+    let mouseNormX = 0;
+    let mouseNormY = 0;
+    let targetRotX = 0;
+    let targetRotY = -0.42;
+    let currentRotX = 0;
+    let currentRotY = -0.42;
+
+    // Max rotation 14 degrees = 0.244 rad
+    const maxRot = 0.244;
+
+    function onPointer(clientX, clientY) {
+      const halfW = window.innerWidth / 2;
+      const halfH = window.innerHeight / 2;
+      mouseNormX = (clientX - halfW) / halfW;
+      mouseNormY = (clientY - halfH) / halfH;
+
+      targetRotY = -0.42 + mouseNormX * maxRot;
+      targetRotX = -mouseNormY * (maxRot * 0.72);
+    }
+
+    window.addEventListener('mousemove', (e) => onPointer(e.clientX, e.clientY));
+
+    // Touch Support for Mobile
+    canvas.addEventListener('touchmove', (e) => {
+      if (e.touches.length === 1) {
+        onPointer(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    }, { passive: true });
+
+    // Responsive Canvas Resize
+    function onResize() {
+      if (!container) return;
+      width = container.clientWidth || 540;
+      height = container.clientHeight || 500;
+      camera.aspect = width / height;
+
+      const isMob = window.innerWidth <= 768;
+      camera.position.set(isMob ? 21 : 16, isMob ? 12 : 10, isMob ? 22 : 17);
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height);
+    }
+    window.addEventListener('resize', onResize);
+
+    const clock = new THREE.Clock();
+
+    // Main Render Loop
+    function animate() {
+      requestAnimationFrame(animate);
+
+      const time = clock.getElapsedTime();
+
+      // Smooth Physics Interpolation (lerp: 0.08)
+      currentRotX += (targetRotX - currentRotX) * 0.08;
+      currentRotY += (targetRotY - currentRotY) * 0.08;
+
+      // Subtle Harmonic Idle Float & Vibration
+      const idleFloatY = Math.sin(time * 1.2) * 0.18;
+      const idleVibe = Math.sin(time * 24.0) * 0.003; // Real industrial machinery micro-vibration!
+
+      mepRoot.position.y = idleFloatY + idleVibe;
+      mepRoot.rotation.x = currentRotX + Math.cos(time * 0.7) * 0.012;
+      mepRoot.rotation.y = currentRotY + Math.sin(time * 0.5) * 0.025;
+
+      // Active Pulsating Flow in Conduit Pipes
+      const pulse = 0.55 + Math.sin(time * 3.5) * 0.25;
+      cyanConduitMat.emissiveIntensity = pulse;
+      tealConduitMat.emissiveIntensity = 0.45 + Math.cos(time * 3.0) * 0.2;
+
+      // Advance Fluid Particles
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        p.dist += p.speed;
+        if (p.dist >= chwPathLen) p.dist = 0;
+        p.mesh.position.copy(getPointOnChw(p.dist));
+      }
+
+      // Radar Ring Slow Spin
+      radarRing.rotation.z += 0.003;
+
+      renderer.render(scene, camera);
+    }
+
+    animate();
   }
 
-  animate();
+  runEngine();
 }
 
 /* ==========================================================================
@@ -179,14 +777,39 @@ function initServiceTabs() {
   tabButtons.forEach(button => {
     button.addEventListener('click', () => {
       const tabId = button.getAttribute('data-tab');
+      const theme = button.getAttribute('data-theme-pulse') || 'cyan';
       
       tabButtons.forEach(btn => btn.classList.remove('active'));
       button.classList.add('active');
+      
+      // 1. Fire Visible Circuit / Pipe Energy Spine Bolt
+      const bolt = document.getElementById('spineEnergyBolt');
+      if (bolt) {
+        bolt.className = 'spine-energy-bolt';
+        void bolt.offsetWidth; // force DOM reflow
+        bolt.classList.add(`fire-pulse-${theme}`);
+      }
+
+      // Auto-center clicked chip in horizontal scroll container on mobile/tablet
+      try {
+        button.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      } catch (err) {
+        // Fallback for older browsers
+      }
       
       tabPanes.forEach(pane => {
         pane.classList.remove('active');
         if (pane.getAttribute('id') === `pane-${tabId}`) {
           pane.classList.add('active');
+          // Subtle border glow feed from the spine
+          const visual = pane.querySelector('.pane-visual');
+          if (visual) {
+            const glowColor = theme === 'red' ? '#ef4444' : (theme === 'amber' ? '#f59e0b' : '#00f2fe');
+            visual.style.boxShadow = `inset 0 0 40px rgba(0,0,0,0.8), 0 0 25px ${glowColor}80`;
+            setTimeout(() => {
+              visual.style.boxShadow = '';
+            }, 650);
+          }
         }
       });
       
@@ -197,6 +820,579 @@ function initServiceTabs() {
       }
     });
   });
+}
+
+/* ==========================================================================
+   3B. PROFILE PARALLAX & VALUE CARDS 3D TILT PHYSICS
+   ========================================================================== */
+function initAboutParallaxAndTilt() {
+  const frame = document.getElementById('aboutImgFrame');
+  const img = document.getElementById('aboutParallaxImg');
+  
+  // 1. Multi-layered Cursor Parallax Depth Effect on Supervisory Engineers Visual
+  if (frame && window.matchMedia('(hover: hover)').matches) {
+    frame.addEventListener('mousemove', (e) => {
+      const rect = frame.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      const rotX = ((y - centerY) / centerY) * -5.5;
+      const rotY = ((x - centerX) / centerX) * 5.5;
+      const transX = ((x - centerX) / centerX) * -8;
+      const transY = ((y - centerY) / centerY) * -8;
+      
+      frame.style.transform = `perspective(1000px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg)`;
+      if (img) {
+        img.style.transform = `scale(1.06) translate3d(${transX.toFixed(1)}px, ${transY.toFixed(1)}px, 0)`;
+      }
+    });
+    
+    frame.addEventListener('mouseleave', () => {
+      frame.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+      if (img) {
+        img.style.transform = 'scale(1.02) translate3d(0, 0, 0)';
+      }
+    });
+  }
+
+  // 2. 4 Value Cards: Cursor-Reactive 3D Tilt & Dynamic Specular Glare Physics
+  const tiltCards = document.querySelectorAll('.dna-card.tilt-card');
+  tiltCards.forEach(card => {
+    if (!window.matchMedia('(hover: hover)').matches) return;
+    
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      const rotX = ((y - centerY) / centerY) * -9.5;
+      const rotY = ((x - centerX) / centerX) * 9.5;
+      
+      const pctX = (x / rect.width) * 100;
+      const pctY = (y / rect.height) * 100;
+      
+      card.style.setProperty('--glare-x', `${pctX}%`);
+      card.style.setProperty('--glare-y', `${pctY}%`);
+      card.style.transform = `perspective(1000px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) translateZ(8px)`;
+    });
+    
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0)';
+    });
+  });
+
+  // 3. Service Containers Interactive Tilt Viewport
+  const serviceTiltCards = document.querySelectorAll('.hud-media-container[data-service-tilt]');
+  serviceTiltCards.forEach(media => {
+    if (!window.matchMedia('(hover: hover)').matches) return;
+    
+    media.addEventListener('mousemove', (e) => {
+      const rect = media.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotX = ((y - centerY) / centerY) * -4.5;
+      const rotY = ((x - centerX) / centerX) * 4.5;
+      media.style.transform = `perspective(1000px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg)`;
+    });
+    
+    media.addEventListener('mouseleave', () => {
+      media.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+    });
+  });
+}
+
+/* ==========================================================================
+   3C. DIGITAL TWIN: INSPECTION HUD CURSOR & ULTRASONIC TESTING RIPPLE
+   ========================================================================== */
+function initInspectionHudAndUltrasonic() {
+  const hudCursor = document.getElementById('inspectionHudCursor');
+  const coordsTag = document.getElementById('hudCursorCoords');
+  const mediaContainers = document.querySelectorAll('.hud-media-container');
+
+  if (!hudCursor || !window.matchMedia('(hover: hover)').matches) return;
+
+  mediaContainers.forEach(container => {
+    container.addEventListener('mouseenter', () => {
+      hudCursor.classList.add('active');
+    });
+
+    container.addEventListener('mousemove', (e) => {
+      hudCursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+      if (coordsTag) {
+        coordsTag.textContent = `X:${Math.round(e.offsetX)} Y:${Math.round(e.offsetY)}`;
+      }
+    });
+
+    container.addEventListener('mouseleave', () => {
+      hudCursor.classList.remove('active');
+    });
+
+    // Ultrasonic Testing (UT) Click Ripple Wave
+    container.addEventListener('click', (e) => {
+      const ripple = document.createElement('div');
+      ripple.className = 'ultrasonic-ripple';
+      ripple.style.left = `${e.offsetX}px`;
+      ripple.style.top = `${e.offsetY}px`;
+      
+      const activeTab = document.querySelector('.service-tab-btn.active');
+      const theme = activeTab ? activeTab.getAttribute('data-theme-pulse') : 'cyan';
+      if (theme === 'red') {
+        ripple.style.borderColor = '#ef4444';
+        ripple.style.boxShadow = '0 0 18px rgba(239,68,68,0.9), inset 0 0 15px rgba(239,68,68,0.5)';
+      } else if (theme === 'amber') {
+        ripple.style.borderColor = '#f59e0b';
+        ripple.style.boxShadow = '0 0 18px rgba(245,158,11,0.9), inset 0 0 15px rgba(245,158,11,0.5)';
+      }
+      
+      container.appendChild(ripple);
+      setTimeout(() => {
+        ripple.remove();
+      }, 750);
+    });
+  });
+}
+
+/* ==========================================================================
+   3D. FIRE PROTECTION: NFPA-20 DIESEL PUMP GAUGE TELEMETRY SIMULATION
+   ========================================================================== */
+function initFirePumpCanvas() {
+  const canvas = document.getElementById('firePumpCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let time = 0;
+
+  function drawGauge(cx, cy, radius, label, value, unit, minVal, maxVal, curVal, color) {
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(11, 15, 23, 0.85)';
+    ctx.fill();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1.8;
+    ctx.stroke();
+
+    const startAngle = 0.75 * Math.PI;
+    const endAngle = 2.25 * Math.PI;
+    for (let i = 0; i <= 8; i++) {
+      const angle = startAngle + (i / 8) * (endAngle - startAngle);
+      const x1 = cx + Math.cos(angle) * (radius - 3);
+      const y1 = cy + Math.sin(angle) * (radius - 3);
+      const x2 = cx + Math.cos(angle) * (radius - 7);
+      const y2 = cy + Math.sin(angle) * (radius - 7);
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.strokeStyle = 'rgba(255,255,255,0.4)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    const pct = (curVal - minVal) / (maxVal - minVal);
+    const flutter = Math.sin(time * 14 + cx) * 0.035;
+    const needleAngle = startAngle + pct * (endAngle - startAngle) + flutter;
+
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + Math.cos(needleAngle) * (radius - 6), cy + Math.sin(needleAngle) * (radius - 6));
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2.2;
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(cx, cy, 3.5, 0, Math.PI * 2);
+    ctx.fillStyle = color;
+    ctx.fill();
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 8.5px "Outfit", monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText(`${label}: ${curVal.toFixed(1)} ${unit}`, cx, cy + radius + 12);
+    ctx.restore();
+  }
+
+  function render() {
+    time += 0.05;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    drawGauge(110, 95, 28, 'SUCTION', 4.5, 'BAR', 0, 10, 4.5 + Math.sin(time * 2) * 0.2, '#f59e0b');
+    drawGauge(180, 95, 34, 'DISCHARGE', 12.8, 'BAR', 0, 25, 12.8 + Math.cos(time * 1.5) * 0.3, '#ef4444');
+
+    ctx.save();
+    ctx.strokeStyle = 'rgba(239, 68, 68, 0.8)';
+    ctx.lineWidth = 2.5;
+    ctx.setLineDash([12, 16]);
+    ctx.lineDashOffset = -time * 30;
+    ctx.beginPath();
+    ctx.moveTo(30, 280);
+    ctx.lineTo(240, 280);
+    ctx.lineTo(360, 210);
+    ctx.lineTo(540, 210);
+    ctx.stroke();
+    ctx.restore();
+
+    requestAnimationFrame(render);
+  }
+  render();
+}
+
+/* ==========================================================================
+   3E. WATER TREATMENT: REVERSE OSMOSIS (RO) SKID FLUID PULSE SIMULATION
+   ========================================================================== */
+function initWaterRoCanvas() {
+  const canvas = document.getElementById('waterRoCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let time = 0;
+
+  function render() {
+    time += 0.035;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const vessels = [115, 160, 205, 250];
+    ctx.save();
+    vessels.forEach((y, idx) => {
+      ctx.strokeStyle = 'rgba(0, 242, 254, 0.65)';
+      ctx.lineWidth = 2.2;
+      ctx.shadowColor = '#00f2fe';
+      ctx.shadowBlur = 8;
+      ctx.setLineDash([14, 18]);
+      ctx.lineDashOffset = -(time * 40 + idx * 30);
+      ctx.beginPath();
+      ctx.moveTo(110, y);
+      ctx.lineTo(440, y);
+      ctx.stroke();
+
+      const px = 110 + ((time * 50 + idx * 75) % 330);
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(px, y, 2.5, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    ctx.restore();
+
+    requestAnimationFrame(render);
+  }
+  render();
+}
+
+/* ==========================================================================
+   3F. EV CHARGING & SPKLU: DYNAMIC 3-PHASE REVERSING, DOCKING & 150 kW CHARGE
+   Base Scene: High-End Commercial SPKLU Hub at Dusk/Night (Screenshot 4075)
+   ========================================================================== */
+function initEvChargingSimulation() {
+  const canvas = document.getElementById('evChargingCanvas');
+  const statusTag = document.getElementById('evChargeStatusTag');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  let animTime = 0;
+  let lastTimestamp = performance.now();
+
+  // Exact coordinates mapped to images/ev.png (600x380 viewport)
+  // Middle Dispenser
+  const dispScreenX = 202;
+  const dispScreenY = 192;
+  const dispScreenWidth = 30;
+  const dispScreenHeight = 38;
+  const dispOutletX = 214;
+  const dispOutletY = 227;
+
+  // Car Charge Port & Rear Lights (Silver Sports Sedan)
+  const portX = 253;
+  const portY = 241;
+  const rearLightX = 264;
+  const rearLightY = 228;
+  const reverseLightX = 258;
+  const reverseLightY = 236;
+
+  // Cable Bezier Curve: from dispenser outlet to car charge port
+  function getCablePoint(t) {
+    const p0 = { x: dispOutletX, y: dispOutletY };
+    const p1 = { x: 216, y: 275 };
+    const p2 = { x: 240, y: 275 };
+    const p3 = { x: portX, y: portY };
+    const cx = 3 * (p1.x - p0.x);
+    const bx = 3 * (p2.x - p1.x) - cx;
+    const ax = p3.x - p0.x - cx - bx;
+    const cy = 3 * (p1.y - p0.y);
+    const by = 3 * (p2.y - p1.y) - cy;
+    const ay = p3.y - p0.y - cy - by;
+    const x = ax * (t ** 3) + bx * (t ** 2) + cx * t + p0.x;
+    const y = ay * (t ** 3) + by * (t ** 2) + cy * t + p0.y;
+    return { x, y };
+  }
+
+  function render(now) {
+    const dt = Math.min((now - lastTimestamp) / 1000, 0.1);
+    lastTimestamp = now;
+    animTime += dt;
+
+    const cycle = animTime % 12.0; // 12-second seamless loop
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // =========================================================================
+    // PHASE 1: REVERSING ENTRY (0.0s - 3.2s)
+    // Vehicle backs smoothly into the stall with white reverse lights & red reflections
+    // =========================================================================
+    if (cycle < 3.2) {
+      const phaseProgress = cycle / 3.2;
+      const dist = 3.2 * (1.0 - phaseProgress); // 3.2m -> 0.0m
+
+      if (statusTag) {
+        statusTag.innerHTML = `<span class="hud-dot live" style="background:#f59e0b;box-shadow:0 0 8px #f59e0b;"></span> AUTONOMOUS DOCKING // ${dist.toFixed(1)}m`;
+      }
+
+      ctx.save();
+
+      // 1A. Autonomous Parking Guidance Trajectory Lines on Wet Asphalt
+      ctx.strokeStyle = 'rgba(0, 242, 254, 0.65)';
+      ctx.lineWidth = 1.8;
+      ctx.setLineDash([8, 8]);
+      ctx.lineDashOffset = -animTime * 30;
+      ctx.shadowColor = '#00f2fe';
+      ctx.shadowBlur = 8;
+
+      // Trajectory arc lines
+      ctx.beginPath();
+      ctx.moveTo(330, 310);
+      ctx.quadraticCurveTo(280, 280, 240, 260);
+      ctx.moveTo(370, 335);
+      ctx.quadraticCurveTo(310, 305, 270, 275);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.shadowBlur = 0;
+
+      // 1B. Dynamic Red Taillight Bar (High Intensity)
+      ctx.shadowColor = '#ff1133';
+      ctx.shadowBlur = 18;
+      ctx.fillStyle = '#ff1133';
+      ctx.fillRect(rearLightX - 12, rearLightY - 2, 22, 4);
+
+      // 1C. Bright White Reverse Lamp Beam
+      ctx.shadowColor = '#ffffff';
+      ctx.shadowBlur = 24;
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(reverseLightX, reverseLightY, 3.5, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Reverse Light Cone casting backwards onto wet ground
+      const reverseBeam = ctx.createRadialGradient(reverseLightX, reverseLightY, 2, reverseLightX - 45, reverseLightY + 25, 60);
+      reverseBeam.addColorStop(0, 'rgba(255, 255, 255, 0.55)');
+      reverseBeam.addColorStop(0.4, 'rgba(255, 255, 255, 0.2)');
+      reverseBeam.addColorStop(1, 'transparent');
+      ctx.fillStyle = reverseBeam;
+      ctx.beginPath();
+      ctx.moveTo(reverseLightX, reverseLightY);
+      ctx.lineTo(reverseLightX - 55, reverseLightY + 10);
+      ctx.lineTo(reverseLightX - 35, reverseLightY + 45);
+      ctx.closePath();
+      ctx.fill();
+
+      // 1D. Dynamic Red Reflection Pool on Wet Asphalt
+      const redReflection = ctx.createRadialGradient(255, 275, 4, 255, 275, 55);
+      redReflection.addColorStop(0, 'rgba(255, 20, 40, 0.45)');
+      redReflection.addColorStop(0.6, 'rgba(255, 20, 40, 0.15)');
+      redReflection.addColorStop(1, 'transparent');
+      ctx.fillStyle = redReflection;
+      ctx.beginPath();
+      ctx.ellipse(255, 275, 55, 18, -0.15, 0, Math.PI * 2);
+      ctx.fill();
+
+      // 1E. Proximity Sonar Indicator on Bumper
+      ctx.strokeStyle = '#00e575';
+      ctx.lineWidth = 1.5;
+      const sonarR = 8 + (animTime * 20) % 24;
+      ctx.beginPath();
+      ctx.arc(rearLightX - 5, rearLightY, sonarR, Math.PI * 0.6, Math.PI * 1.4);
+      ctx.stroke();
+
+      ctx.restore();
+    }
+
+    // =========================================================================
+    // PHASE 2: PRECISION STOP & PARKING BRAKE (3.2s - 4.5s)
+    // Reverse lights off, brake light pulse, radar alignment lock
+    // =========================================================================
+    else if (cycle < 4.5) {
+      if (statusTag) {
+        statusTag.innerHTML = `<span class="hud-dot live" style="background:#00e575;box-shadow:0 0 8px #00e575;"></span> VEHICLE DOCKED // CCS2 INITIATING...`;
+      }
+
+      ctx.save();
+      const stopProgress = (cycle - 3.2) / 1.3;
+
+      // 2A. Brake Light Flash settling to Standby (Reverse lights OFF)
+      const brakeFlash = stopProgress < 0.35 ? 1.0 : (1.0 - (stopProgress - 0.35) * 0.7);
+      ctx.shadowColor = '#ff1133';
+      ctx.shadowBlur = 12 * brakeFlash;
+      ctx.fillStyle = `rgba(255, 30, 50, ${0.4 + brakeFlash * 0.6})`;
+      ctx.fillRect(rearLightX - 10, rearLightY - 1, 18, 3.5);
+
+      // Residual red ground reflection
+      const redRef = ctx.createRadialGradient(255, 275, 4, 255, 275, 45);
+      redRef.addColorStop(0, `rgba(255, 20, 40, ${0.25 * brakeFlash})`);
+      redRef.addColorStop(1, 'transparent');
+      ctx.fillStyle = redRef;
+      ctx.beginPath();
+      ctx.ellipse(255, 275, 45, 14, -0.15, 0, Math.PI * 2);
+      ctx.fill();
+
+      // 2B. Coupler Alignment Target Reticle at Charge Port
+      const targetR = 18 - stopProgress * 8;
+      ctx.strokeStyle = '#00f2fe';
+      ctx.lineWidth = 1.5;
+      ctx.shadowColor = '#00f2fe';
+      ctx.shadowBlur = 10;
+      ctx.beginPath();
+      ctx.arc(portX, portY, targetR, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Crosshairs
+      ctx.beginPath();
+      ctx.moveTo(portX - targetR - 4, portY); ctx.lineTo(portX - targetR + 3, portY);
+      ctx.moveTo(portX + targetR - 3, portY); ctx.lineTo(portX + targetR + 4, portY);
+      ctx.moveTo(portX, portY - targetR - 4); ctx.lineTo(portX, portY - targetR + 3);
+      ctx.moveTo(portX, portY + targetR - 3); ctx.lineTo(portX, portY + targetR + 4);
+      ctx.stroke();
+
+      ctx.restore();
+    }
+
+    // =========================================================================
+    // PHASE 3: ACTIVE CHARGING STATE (4.5s - 12.0s)
+    // 150 kW live telemetry, continuous cyan energy wave along cable, port ripples
+    // =========================================================================
+    else {
+      const chargeProgress = (cycle - 4.5) / 7.5; // 0.0 -> 1.0
+      const soc = 42 + chargeProgress * 38; // 42% -> 80%
+      const kw = 149.8 + Math.sin(animTime * 8) * 0.4; // 149.8 - 150.2 kW
+
+      if (statusTag) {
+        statusTag.innerHTML = `<span class="hud-dot live"></span> 150 kW FAST CHARGE: ${Math.round(soc)}% [800V // 187A]`;
+      }
+
+      ctx.save();
+
+      // 3A. Mechanical Latch Flash at Port (occurs briefly at 4.5s - 4.8s)
+      if (cycle < 4.8) {
+        const flashT = (cycle - 4.5) / 0.3;
+        const flashR = 6 + (1.0 - flashT) * 16;
+        ctx.fillStyle = `rgba(0, 242, 254, ${1.0 - flashT})`;
+        ctx.shadowColor = '#00f2fe';
+        ctx.shadowBlur = 25;
+        ctx.beginPath();
+        ctx.arc(portX, portY, flashR, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // 3B. High-Voltage Pulsating Cyan Light Wave through Charging Cable
+      // Outer neon-cyan conduit aura
+      ctx.strokeStyle = 'rgba(0, 242, 254, 0.45)';
+      ctx.lineWidth = 7;
+      ctx.shadowColor = '#00f2fe';
+      ctx.shadowBlur = 14;
+      ctx.beginPath();
+      ctx.moveTo(dispOutletX, dispOutletY);
+      ctx.bezierCurveTo(216, 275, 240, 275, portX, portY);
+      ctx.stroke();
+
+      // Inner intense energy pulse stream
+      ctx.strokeStyle = '#00f2fe';
+      ctx.lineWidth = 2.8;
+      ctx.setLineDash([10, 14]);
+      ctx.lineDashOffset = -animTime * 55; // high-speed flow towards car
+      ctx.beginPath();
+      ctx.moveTo(dispOutletX, dispOutletY);
+      ctx.bezierCurveTo(216, 275, 240, 275, portX, portY);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.shadowBlur = 0;
+
+      // Traveling Plasma Energy Packets along the Cable
+      for (let i = 0; i < 4; i++) {
+        const packetT = ((animTime * 1.6 + i * 0.25) % 1.0);
+        const pt = getCablePoint(packetT);
+        ctx.fillStyle = '#ffffff';
+        ctx.shadowColor = '#00f2fe';
+        ctx.shadowBlur = 10;
+        ctx.beginPath();
+        ctx.arc(pt.x, pt.y, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // 3C. Concentric Energy Wave Ripples at Charge Port
+      for (let r = 0; r < 3; r++) {
+        const ripplePhase = (animTime * 2.2 + r * 0.33) % 1.0;
+        const radius = 4 + ripplePhase * 16;
+        const alpha = (1.0 - ripplePhase) * 0.75;
+        ctx.strokeStyle = `rgba(0, 242, 254, ${alpha})`;
+        ctx.lineWidth = 1.4;
+        ctx.beginPath();
+        ctx.arc(portX, portY, radius, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      // 3D. Soft Cyan Battery Underglow beneath Chassis on Wet Pavement
+      const underglowPulse = 0.65 + Math.sin(animTime * 5) * 0.35;
+      const underglow = ctx.createRadialGradient(340, 310, 10, 340, 310, 85);
+      underglow.addColorStop(0, `rgba(0, 242, 254, ${0.32 * underglowPulse})`);
+      underglow.addColorStop(0.5, `rgba(0, 229, 117, ${0.18 * underglowPulse})`);
+      underglow.addColorStop(1, 'transparent');
+      ctx.fillStyle = underglow;
+      ctx.beginPath();
+      ctx.ellipse(340, 310, 85, 22, 0.05, 0, Math.PI * 2);
+      ctx.fill();
+
+      // 3E. Middle Dispenser Digital Status Screen (High-Tech OLED Overlay)
+      ctx.fillStyle = 'rgba(2, 6, 17, 0.96)';
+      ctx.strokeStyle = '#00f2fe';
+      ctx.lineWidth = 1.2;
+      ctx.shadowColor = '#00f2fe';
+      ctx.shadowBlur = 8;
+      ctx.fillRect(dispScreenX, dispScreenY, dispScreenWidth, dispScreenHeight);
+      ctx.strokeRect(dispScreenX, dispScreenY, dispScreenWidth, dispScreenHeight);
+      ctx.shadowBlur = 0;
+
+      // Screen Text
+      ctx.fillStyle = '#00e575';
+      ctx.font = 'bold 6px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(`${kw.toFixed(1)} kW`, dispScreenX + dispScreenWidth / 2, dispScreenY + 9);
+
+      ctx.fillStyle = '#00f2fe';
+      ctx.font = '5.5px monospace';
+      ctx.fillText(`${Math.round(soc)}%`, dispScreenX + dispScreenWidth / 2, dispScreenY + 18);
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '4.5px monospace';
+      ctx.fillText('800V // 187A', dispScreenX + dispScreenWidth / 2, dispScreenY + 25);
+
+      // Segmented Battery Bar on Screen
+      const barX = dispScreenX + 4;
+      const barY = dispScreenY + 28;
+      const barW = dispScreenWidth - 8;
+      const barH = 5;
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+      ctx.fillRect(barX, barY, barW, barH);
+
+      const fillW = barW * (soc / 100);
+      ctx.fillStyle = '#00e575';
+      ctx.fillRect(barX, barY, fillW, barH);
+
+      ctx.restore();
+    }
+
+    requestAnimationFrame(render);
+  }
+
+  requestAnimationFrame(render);
 }
 
 window.selectWizardService = function(serviceName) {

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 
 <head>
@@ -18,6 +18,8 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
     rel="stylesheet">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
   <?!= include('CSS'); ?>
 
@@ -47,7 +49,7 @@
         window.location.href = 'spklu.html' + window.location.search;
       }
 
-      fetch('CSS.html')
+      fetch('CSS.html?v=' + Date.now())
         .then(response => response.text())
         .then(html => {
           const parser = new DOMParser();
@@ -220,9 +222,14 @@
   </header>
 
   <section class="hero" id="home">
-    <canvas id="hero-canvas"></canvas>
-    <div class="hero-glow-1"></div>
-    <div class="hero-glow-2"></div>
+    <div class="hero-cursor-glow" id="hero-cursor-glow"></div>
+    <div class="hero-grid-overlay"></div>
+    <div class="hero-tech-telemetry telemetry-left">
+      <span class="telemetry-point"></span> COORD: 06°12'S 106°49'E &bull; MEP INFRASTRUCTURE MATRIX
+    </div>
+    <div class="hero-tech-telemetry telemetry-right">
+      SYS: HIGH-VOLT &bull; HVAC &bull; PROCESS PIPING &bull; BIM 400
+    </div>
 
     <div class="container grid-2">
       <div class="hero-content">
@@ -236,9 +243,10 @@
           tinggi sejak 2020.
         </p>
         <div class="hero-btns">
-          <a href="#planner" class="btn btn-primary">
-            <span data-translate="hero_btn_plan">Rancang Proyek</span>
-            <svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <a href="#planner" class="btn btn-primary magnetic-btn" id="hero-cta-btn">
+            <span class="btn-specular-border"></span>
+            <span class="btn-inner-text" data-translate="hero_btn_plan">Rancang Proyek</span>
+            <svg class="btn-icon" style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
             </svg>
           </a>
@@ -246,11 +254,24 @@
         </div>
       </div>
 
-      <div class="hero-visual">
-        <div class="hero-sphere">
-          <div class="hero-sphere-content">
-            <span class="hero-sphere-num" id="hero-proj-count">100+</span>
-            <span class="hero-sphere-text" data-translate="hero_sphere_text">Proyek Sukses</span>
+      <div class="hero-visual" id="hero-visual-wrapper">
+        <div class="hero-3d-container" id="hero-3d-container">
+          <canvas id="hero-mep-canvas"></canvas>
+          <div class="hero-3d-hud-badge">
+            <div class="hud-status-indicator">
+              <span class="hud-dot"></span>
+              <span class="hud-status-text">BIM MEP MATRIX ONLINE</span>
+            </div>
+            <div class="hud-metric-row">
+              <span class="hud-metric-value" id="hero-proj-count">100+</span>
+              <span class="hud-metric-label" data-translate="hero_sphere_text">Proyek Sukses</span>
+            </div>
+            <div class="hud-tech-tags">
+              <span>HVAC</span>
+              <span>ELEC</span>
+              <span>PIPE</span>
+              <span>FIRE</span>
+            </div>
           </div>
         </div>
       </div>
@@ -279,14 +300,40 @@
   </section>
 
   <section class="section dna-section" id="profil">
-    <div class="container grid-2">
+    <div class="container about-grid-split">
       <div class="about-visual">
-        <div class="about-img-frame">
-          <img src="images/profil.png" alt="PT. Titis Cahaya Sejahtera Industrial Work">
-          <div class="about-floating-card">
-            <h4 class="about-floating-title" data-translate="prof_floating_title">Bekerja Sejak 2020</h4>
-            <p class="about-floating-desc" data-translate="prof_floating_desc">Dipercaya puluhan korporasi besar di
-              Indonesia untuk infrastruktur vital.</p>
+        <div class="about-img-frame" id="aboutImgFrame">
+          <!-- Multi-layer Parallax Image Container -->
+          <div class="about-img-inner" id="aboutImgInner">
+            <img src="images/tcs_engineers_cinematic.jpg" alt="PT. Titis Cahaya Sejahtera Supervisory Engineers" class="about-parallax-img" id="aboutParallaxImg">
+          </div>
+          
+          <!-- High-Tech Telemetry HUD Overlays -->
+          <div class="hud-corner-bracket top-left"></div>
+          <div class="hud-corner-bracket top-right"></div>
+          <div class="hud-corner-bracket bottom-left"></div>
+          <div class="hud-corner-bracket bottom-right"></div>
+
+          <div class="about-hud-top-telemetry">
+            <span class="hud-live-indicator">
+              <span class="hud-live-dot"></span>
+              LIVE AUDIT
+            </span>
+            <span class="hud-telemetry-text">TCS-MEP // FIELD SUPERVISION #01</span>
+            <span class="hud-telemetry-badge-tag">ISO 45001</span>
+          </div>
+
+          <!-- Compact Frosted Glass Badge at Bottom-Left (Never Obscuring Faces/Branding) -->
+          <div class="about-floating-card compact-frosted-badge">
+            <div class="about-floating-badge-icon">
+              <svg style="width:18px;height:18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+            </div>
+            <div>
+              <h4 class="about-floating-title" data-translate="prof_floating_title">Bekerja Sejak 2020</h4>
+              <p class="about-floating-desc" data-translate="prof_floating_desc">Infrastruktur vital nasional terpercaya.</p>
+            </div>
           </div>
         </div>
       </div>
@@ -313,8 +360,9 @@
           dedikasi untuk kesuksesan jangka panjang mitra kami."
         </blockquote>
 
-        <div class="grid-2" style="gap:20px;">
-          <div class="glass-card dna-card">
+        <div class="grid-2 dna-cards-grid" style="gap:20px;">
+          <div class="glass-card dna-card tilt-card" data-tilt>
+            <div class="card-specular-glare"></div>
             <div class="dna-icon-wrap">
               <svg style="width:20px;height:20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                 stroke-width="2">
@@ -327,7 +375,8 @@
               fabrikasi, instalasi fisik, hingga perawatan preventif jangka panjang.</p>
           </div>
 
-          <div class="glass-card dna-card">
+          <div class="glass-card dna-card tilt-card" data-tilt>
+            <div class="card-specular-glare"></div>
             <div class="dna-icon-wrap">
               <svg style="width:20px;height:20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                 stroke-width="2">
@@ -340,7 +389,8 @@
               nasional di bidang kelistrikan, mekanikal, dan pemipaan gas/air.</p>
           </div>
 
-          <div class="glass-card dna-card">
+          <div class="glass-card dna-card tilt-card" data-tilt>
+            <div class="card-specular-glare"></div>
             <div class="dna-icon-wrap gold">
               <svg style="width:20px;height:20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                 stroke-width="2">
@@ -353,7 +403,8 @@
               manufaktur obat, makanan, kosmetik, perkantoran, dan industri otomotif.</p>
           </div>
 
-          <div class="glass-card dna-card">
+          <div class="glass-card dna-card tilt-card" data-tilt>
+            <div class="card-specular-glare"></div>
             <div class="dna-icon-wrap gold">
               <svg style="width:20px;height:20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                 stroke-width="2">
@@ -374,29 +425,29 @@
             data-translate="cert_section_title">
             Standar Sertifikasi & Kepatuhan Industri PT TCS
           </h4>
-          <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
-            <div class="cert-badge">
+          <div class="cert-badges-grid">
+            <div class="cert-badge brushed-metal-badge">
               <span class="cert-icon">📜</span>
               <div class="cert-info">
                 <h5>LPJK SBU</h5>
                 <p data-translate="cert_lpjk_desc">Mekanikal & Elektrikal</p>
               </div>
             </div>
-            <div class="cert-badge">
+            <div class="cert-badge brushed-metal-badge">
               <span class="cert-icon">🛡️</span>
               <div class="cert-info">
                 <h5>ISO 9001:2015</h5>
                 <p data-translate="cert_iso9_desc">Manajemen Mutu</p>
               </div>
             </div>
-            <div class="cert-badge">
+            <div class="cert-badge brushed-metal-badge">
               <span class="cert-icon">⚖️</span>
               <div class="cert-info">
                 <h5>ISO 45001:2018</h5>
                 <p data-translate="cert_iso45_desc">Manajemen Keselamatan K3</p>
               </div>
             </div>
-            <div class="cert-badge">
+            <div class="cert-badge brushed-metal-badge">
               <span class="cert-icon">⚡</span>
               <div class="cert-info">
                 <h5>CSMS Qualified</h5>
@@ -409,6 +460,17 @@
     </div>
   </section>
 
+  <!-- Inspection Floating HUD Cursor -->
+  <div class="inspection-hud-cursor" id="inspectionHudCursor">
+    <div class="hud-cursor-line-h"></div>
+    <div class="hud-cursor-line-v"></div>
+    <div class="hud-cursor-tag-body">
+      <span class="hud-cursor-dot"></span>
+      <span class="hud-cursor-label">[X-RAY BIM SCAN // STATUS: ACTIVE]</span>
+      <span class="hud-cursor-coords" id="hudCursorCoords">X:00 Y:00</span>
+    </div>
+  </div>
+
   <section class="section services-section" id="services">
     <div class="container">
       <div class="section-header">
@@ -419,52 +481,69 @@
       </div>
 
       <div class="services-explorer">
-        <ul class="services-tab-menu">
-          <li>
-            <button class="service-tab-btn active" data-tab="electrical">
-              <span class="tab-icon">⚡</span>
-              <span data-translate="tab_elec">Electrical System</span>
-            </button>
-          </li>
-          <li>
-            <button class="service-tab-btn" data-tab="plumbing">
-              <span class="tab-icon">💧</span>
-              <span data-translate="tab_plumb">Plumbing System</span>
-            </button>
-          </li>
-          <li>
-            <button class="service-tab-btn" data-tab="utilities">
-              <span class="tab-icon">⚙️</span>
-              <span data-translate="tab_util">Process Utilities</span>
-            </button>
-          </li>
-          <li>
-            <button class="service-tab-btn" data-tab="fire">
-              <span class="tab-icon">🔥</span>
-              <span data-translate="tab_fire">Fire Protection</span>
-            </button>
-          </li>
-          <li>
-            <button class="service-tab-btn" data-tab="treatment">
-              <span class="tab-icon">🧪</span>
-              <span data-translate="tab_water">Water Treatment</span>
-            </button>
-          </li>
-          <li>
-            <button class="service-tab-btn" data-tab="ev-charging">
-              <span class="tab-icon">🔋</span>
-              <span data-translate="tab_ev">EV Charging & SPKLU</span>
-            </button>
-          </li>
-          <li>
-            <button class="service-tab-btn" data-tab="design">
-              <span class="tab-icon">📐</span>
-              <span data-translate="tab_design">Design Facility</span>
-            </button>
-          </li>
-        </ul>
+        <!-- Interactive Circuit / Pipe Energy Spine Tracer -->
+        <div class="services-tab-col">
+          <ul class="services-tab-menu" id="servicesTabMenu">
+            <li>
+              <button class="service-tab-btn active" data-tab="electrical" data-theme-pulse="amber">
+                <span class="tab-icon">⚡</span>
+                <span data-translate="tab_elec">Electrical System</span>
+                <span class="tab-pulse-port"></span>
+              </button>
+            </li>
+            <li>
+              <button class="service-tab-btn" data-tab="plumbing" data-theme-pulse="cyan">
+                <span class="tab-icon">💧</span>
+                <span data-translate="tab_plumb">Plumbing System</span>
+                <span class="tab-pulse-port"></span>
+              </button>
+            </li>
+            <li>
+              <button class="service-tab-btn" data-tab="utilities" data-theme-pulse="amber">
+                <span class="tab-icon">⚙️</span>
+                <span data-translate="tab_util">Process Utilities</span>
+                <span class="tab-pulse-port"></span>
+              </button>
+            </li>
+            <li>
+              <button class="service-tab-btn" data-tab="fire" data-theme-pulse="red">
+                <span class="tab-icon">🔥</span>
+                <span data-translate="tab_fire">Fire Protection</span>
+                <span class="tab-pulse-port"></span>
+              </button>
+            </li>
+            <li>
+              <button class="service-tab-btn" data-tab="treatment" data-theme-pulse="cyan">
+                <span class="tab-icon">🧪</span>
+                <span data-translate="tab_water">Water Treatment</span>
+                <span class="tab-pulse-port"></span>
+              </button>
+            </li>
+            <li>
+              <button class="service-tab-btn" data-tab="ev-charging" data-theme-pulse="cyan">
+                <span class="tab-icon">🔋</span>
+                <span data-translate="tab_ev">EV Charging & SPKLU</span>
+                <span class="tab-pulse-port"></span>
+              </button>
+            </li>
+            <li>
+              <button class="service-tab-btn" data-tab="design" data-theme-pulse="cyan">
+                <span class="tab-icon">📐</span>
+                <span data-translate="tab_design">Design Facility</span>
+                <span class="tab-pulse-port"></span>
+              </button>
+            </li>
+          </ul>
+        </div>
 
-        <div class="services-content-display">
+        <!-- Central Telemetry Energy Bridge (Desktop Visual Tracer) -->
+        <div class="spine-energy-bridge" id="spineEnergyBridge">
+          <div class="spine-tracer-channel">
+            <div class="spine-energy-bolt" id="spineEnergyBolt"></div>
+          </div>
+        </div>
+
+        <div class="services-content-display" id="servicesContentDisplay">
 
           <div class="service-content-pane active" id="pane-electrical">
             <div class="pane-info">
@@ -484,8 +563,19 @@
                 <a href="#planner" class="btn btn-primary" onclick="selectWizardService('Electrical System')" data-translate="srv_btn_select">Pilih Jasa Ini</a>
               </div>
             </div>
-            <div class="pane-visual">
-              <video src="images/Electrical.mov" autoplay muted loop playsinline style="width: 100%; height: 320px; object-fit: cover; display: block; border-radius: 18px;"></video>
+            <div class="pane-visual hud-media-container" data-service-tilt>
+              <div class="hud-corner-bracket top-left"></div>
+              <div class="hud-corner-bracket top-right"></div>
+              <div class="hud-corner-bracket bottom-left"></div>
+              <div class="hud-corner-bracket bottom-right"></div>
+              <div class="hud-telemetry-tag top-left">
+                <span class="hud-dot live"></span> FEEDER 380V // 3-PHASE LVMDP
+              </div>
+              <div class="hud-telemetry-tag top-right">
+                FREQ: 50.0 HZ // SNI 0225:2020
+              </div>
+              <div class="hud-target-reticle"></div>
+              <video src="images/Electrical.mov" autoplay muted loop playsinline class="pane-media-element" style="width: 100%; height: 100%; object-fit: cover; display: block;"></video>
               <div class="pane-visual-caption">
                 <span class="pane-visual-tag gold">Electrical System</span>
                 <p class="pane-visual-title" data-translate="srv_elec_cap">Instalasi Panel & Grounding Gedung</p>
@@ -512,7 +602,18 @@
               </div>
             </div>
 
-            <div class="pane-visual oob-3d-card" id="plumbing3dCard">
+            <div class="pane-visual oob-3d-card hud-media-container" id="plumbing3dCard" data-service-tilt>
+              <div class="hud-corner-bracket top-left"></div>
+              <div class="hud-corner-bracket top-right"></div>
+              <div class="hud-corner-bracket bottom-left"></div>
+              <div class="hud-corner-bracket bottom-right"></div>
+              <div class="hud-telemetry-tag top-left">
+                <span class="hud-dot live"></span> HYDROSTATIC TEST: 16.0 BAR [PASSED]
+              </div>
+              <div class="hud-telemetry-tag top-right">
+                PPR / SCH-40 // LEAK: 0.00%
+              </div>
+              <div class="hud-target-reticle"></div>
               <div class="oob-bg-layer">
                 <img src="images/plumbing-bg.jpg" alt="Bengkel Fabrikasi TCS" class="oob-bg-img">
               </div>
@@ -546,15 +647,19 @@
             </div>
 
             <!-- Masterpiece Fluid Particle SCADA pada Process Utilities -->
-            <div class="pane-visual scada-utilities-card" id="scadaUtilitiesCard" style="position: relative; overflow: hidden; border-radius: 18px; background: #030712;">
-              <div class="scada-bg-layer" style="width: 100%; height: 320px;">
+            <div class="pane-visual scada-utilities-card hud-media-container" id="scadaUtilitiesCard" data-service-tilt style="position: relative; overflow: hidden; border-radius: 18px; background: #030712;">
+              <div class="hud-corner-bracket top-left"></div>
+              <div class="hud-corner-bracket top-right"></div>
+              <div class="hud-corner-bracket bottom-left"></div>
+              <div class="hud-corner-bracket bottom-right"></div>
+              <div class="scada-bg-layer" style="width: 100%; height: 100%;">
                 <img src="images/Process.jpeg" alt="Process Utilities Industrial Plant" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.65; display: block;">
               </div>
               
               <canvas id="scadaCanvas" width="500" height="320" style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2;"></canvas>
               
-              <div class="scada-hud-badge" style="position: absolute; top: 12px; left: 12px; background: rgba(3,7,18,0.85); border: 1px solid #00f2fe; padding: 4px 10px; border-radius: 4px; font-size: 0.7rem; font-family: 'Courier New', monospace; color: #00e575; z-index: 3;">
-                ● SCADA LIVE TELEMETRY ACTIVE
+              <div class="scada-hud-badge" style="position: absolute; top: 14px; left: 14px; background: rgba(3,7,18,0.85); border: 1px solid #00f2fe; padding: 4px 10px; border-radius: 4px; font-size: 0.7rem; font-family: 'Outfit', monospace; color: #00e575; z-index: 3; display: flex; align-items: center; gap: 6px; box-shadow: 0 0 10px rgba(0,242,254,0.25);">
+                <span class="hud-dot live"></span> SCADA LIVE TELEMETRY ACTIVE
               </div>
 
               <div id="scadaTooltip" class="scada-sensor-tooltip" style="position: absolute; bottom: 20px; right: 20px; background: rgba(3,7,18,0.95); border: 1px solid #f59e0b; padding: 10px 15px; border-radius: 6px; font-family: 'Courier New', monospace; font-size: 0.75rem; z-index: 3;">
@@ -569,6 +674,7 @@
             </div>
           </div>
 
+          <!-- REPLACED & UPGRADED: Cinematic NFPA-20 Industrial Diesel Fire Pump Room -->
           <div class="service-content-pane" id="pane-fire">
             <div class="pane-info">
               <span class="pane-service-tag" data-translate="srv_pane_tag_safety">Safety</span>
@@ -587,15 +693,28 @@
                 <a href="#planner" class="btn btn-primary" onclick="selectWizardService('Fire Protection')" data-translate="srv_btn_select">Pilih Jasa Ini</a>
               </div>
             </div>
-            <div class="pane-visual">
-              <img src="images/fire.jpg" alt="Instalasi Pemadam Kebakaran PT TCS">
+            <div class="pane-visual hud-media-container" data-service-tilt>
+              <div class="hud-corner-bracket top-left"></div>
+              <div class="hud-corner-bracket top-right"></div>
+              <div class="hud-corner-bracket bottom-left"></div>
+              <div class="hud-corner-bracket bottom-right"></div>
+              <div class="hud-telemetry-tag top-left">
+                <span class="hud-dot live" style="background:#ef4444;box-shadow:0 0 8px #ef4444;"></span> NFPA-20 DIESEL PUMP // 1500 GPM
+              </div>
+              <div class="hud-telemetry-tag top-right" style="color:#f87171;border-color:rgba(239,68,68,0.4);">
+                HYDROTEST: 24.5 BAR [PASSED]
+              </div>
+              <div class="hud-target-reticle"></div>
+              <img src="images/fire_diesel_pump_nfpa20.jpg" alt="NFPA-20 Industrial Diesel Fire Pump Room" class="pane-media-element">
+              <canvas id="firePumpCanvas" class="pane-canvas-overlay" width="600" height="380"></canvas>
               <div class="pane-visual-caption">
-                <span class="pane-visual-tag">Fire Protection</span>
-                <p class="pane-visual-title" data-translate="srv_fire_cap">Instalasi Pipa Sprinkler & Alarm</p>
+                <span class="pane-visual-tag" style="background: linear-gradient(135deg, #ef4444, #b91c1c); box-shadow: 0 2px 8px rgba(239,68,68,0.4);">NFPA-20 Fire Protection</span>
+                <p class="pane-visual-title" data-translate="srv_fire_cap">Instalasi Pompa Diesel & Manifold Merah Presisi</p>
               </div>
             </div>
           </div>
 
+          <!-- REPLACED & UPGRADED: High-Tech Reverse Osmosis (RO) Skid System -->
           <div class="service-content-pane" id="pane-treatment">
             <div class="pane-info">
               <span class="pane-service-tag gold" data-translate="srv_pane_tag_chem">Chemistry</span>
@@ -614,15 +733,28 @@
                 <a href="#planner" class="btn btn-primary" onclick="selectWizardService('Water Treatment')" data-translate="srv_btn_select">Pilih Jasa Ini</a>
               </div>
             </div>
-            <div class="pane-visual">
-              <img src="images/water.jpg" alt="Water Treatment Plant TCS">
+            <div class="pane-visual hud-media-container" data-service-tilt>
+              <div class="hud-corner-bracket top-left"></div>
+              <div class="hud-corner-bracket top-right"></div>
+              <div class="hud-corner-bracket bottom-left"></div>
+              <div class="hud-corner-bracket bottom-right"></div>
+              <div class="hud-telemetry-tag top-left">
+                <span class="hud-dot live"></span> RO MEMBRANE SKID // 45.2 m³/h
+              </div>
+              <div class="hud-telemetry-tag top-right">
+                TDS: 8.5 PPM // REJECTION: 99.4%
+              </div>
+              <div class="hud-target-reticle"></div>
+              <img src="images/water_ro_skid_industrial.jpg" alt="Industrial Reverse Osmosis Skid Plant" class="pane-media-element">
+              <canvas id="waterRoCanvas" class="pane-canvas-overlay" width="600" height="380"></canvas>
               <div class="pane-visual-caption">
                 <span class="pane-visual-tag gold">Water Treatment</span>
-                <p class="pane-visual-title" data-translate="srv_water_cap">Instalasi Bak Purifikasi & Sand Filter</p>
+                <p class="pane-visual-title" data-translate="srv_water_cap">Industrial RO Skid & Stainless Filtration Vessels</p>
               </div>
             </div>
           </div>
 
+          <!-- REPLACED & UPGRADED: Animated EV Docking & 150kW Pulsed Cyan Charge Sequence -->
           <div class="service-content-pane" id="pane-ev-charging">
             <div class="pane-info">
               <span class="pane-service-tag gold" data-translate="srv_pane_tag_ev">EV Infrastructure</span>
@@ -641,10 +773,27 @@
                 <a href="#planner" class="btn btn-primary" onclick="selectWizardService('EV Charging & SPKLU')" data-translate="srv_btn_select">Pilih Jasa Ini</a>
               </div>
             </div>
-            <div class="pane-visual">
-              <img src="images/ev.png" alt="Instalasi Charger SPKLU PT TCS">
+            <div class="pane-visual hud-media-container" id="evChargingVisualContainer" data-service-tilt>
+              <div class="hud-corner-bracket top-left"></div>
+              <div class="hud-corner-bracket top-right"></div>
+              <div class="hud-corner-bracket bottom-left"></div>
+              <div class="hud-corner-bracket bottom-right"></div>
+              <div class="hud-telemetry-tag top-left">
+                <span class="hud-dot live"></span> DC FAST CHARGE // 150 kW // CCS2 ACTIVE PROTOCOL
+              </div>
+              <div class="hud-telemetry-tag top-right" id="evChargeStatusTag">
+                STANDBY // INITIATING...
+              </div>
+              <div class="hud-target-reticle"></div>
+
+              <!-- High-End Commercial SPKLU Environment Base Scene (Screenshot 4075) -->
+              <img src="images/ev.png" alt="Commercial SPKLU Fast Charging Hub at Dusk" class="pane-media-element" id="spkluBaseSceneImg">
+
+              <!-- Dynamic Multi-Phase Reversing, Docking & 150kW Pulsed Cyan Charge Sequence Canvas -->
+              <canvas id="evChargingCanvas" class="pane-canvas-overlay" width="600" height="380"></canvas>
+
               <div class="pane-visual-caption">
-                <span class="pane-visual-tag gold">EV Charging</span>
+                <span class="pane-visual-tag gold">EV CHARGING</span>
                 <p class="pane-visual-title" data-translate="srv_ev_cap">Instalasi Charger Mobil Listrik SPKLU</p>
               </div>
             </div>
@@ -668,7 +817,11 @@
                 <a href="#planner" class="btn btn-primary" onclick="selectWizardService('Design Facility')" data-translate="srv_btn_select">Pilih Jasa Ini</a>
               </div>
             </div>
-            <div class="pane-visual bim-visual-container" style="height: 420px;">
+            <div class="pane-visual bim-visual-container hud-media-container" data-service-tilt style="height: 420px;">
+              <div class="hud-corner-bracket top-left"></div>
+              <div class="hud-corner-bracket top-right"></div>
+              <div class="hud-corner-bracket bottom-left"></div>
+              <div class="hud-corner-bracket bottom-right"></div>
               <canvas id="bimCanvas" style="width: 100%; height: 100%; display: block; background: #030712;"></canvas>
               <div id="bimScanline" class="bim-scanline"></div>
 
@@ -1309,7 +1462,7 @@
 
   <script>
     if (!window.location.hostname.includes('google')) {
-      fetch('TranslationJS.html')
+      fetch('TranslationJS.html?v=' + Date.now())
         .then(response => response.text())
         .then(html => {
           const parser = new DOMParser();
@@ -1323,7 +1476,7 @@
         })
         .catch(err => console.error('Failed to load local TranslationJS fallback:', err));
 
-      fetch('JS.html')
+      fetch('JS.html?v=' + Date.now())
         .then(response => response.text())
         .then(html => {
           const parser = new DOMParser();
