@@ -3114,11 +3114,18 @@ textarea.form-input-text {
   padding: 80px 0;
 }
 
+.matrix-section .section-desc {
+  max-width: 680px;
+  margin: 12px auto 24px auto;
+  line-height: 1.6;
+  text-align: center;
+}
+
 .matrix-filter-bar {
   display: flex;
   justify-content: center;
   gap: 10px;
-  margin: 25px auto 45px auto;
+  margin: 0 auto 28px auto;
   flex-wrap: wrap;
 }
 
@@ -3148,11 +3155,25 @@ textarea.form-input-text {
   box-shadow: 0 0 16px rgba(0, 242, 254, 0.25);
 }
 
-.matrix-dossier-grid {
+.matrix-dossier-grid,
+.dossier-grid,
+.project-matrix-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
   width: 100%;
+  max-width: 1100px;
+  margin: 32px auto 0 auto;
+  align-items: stretch;
+}
+
+@media (max-width: 768px) {
+  .matrix-dossier-grid,
+  .dossier-grid,
+  .project-matrix-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
 }
 
 .dossier-card {
@@ -3160,16 +3181,19 @@ textarea.form-input-text {
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgba(0, 242, 254, 0.18);
-  border-radius: 18px;
-  padding: clamp(16px, 2vw, 24px);
+  border-radius: 16px;
+  padding: 24px;
   position: relative;
   overflow: hidden;
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   overflow-wrap: break-word;
   word-wrap: break-word;
   hyphens: auto;
+  box-sizing: border-box;
 }
 
 .dossier-card:hover {
@@ -3287,7 +3311,7 @@ textarea.form-input-text {
   justify-content: space-between;
   align-items: center;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
-  padding-top: 14px;
+  padding-top: 16px;
   flex-wrap: wrap;
   gap: 10px;
 }
