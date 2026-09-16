@@ -201,6 +201,7 @@
           <li><a href="#home" class="nav-link active" data-translate="nav_home">Beranda</a></li>
           <li><a href="#profil" class="nav-link" data-translate="nav_about">Profil</a></li>
           <li><a href="#services" class="nav-link" data-translate="nav_services">Services</a></li>
+          <li><a href="#matrix" class="nav-link" data-translate="nav_matrix">Dossier Proyek</a></li>
           <li><a href="#marquee" class="nav-link" data-translate="nav_clients">Klien</a></li>
           <li>
             <div class="lang-switcher">
@@ -225,7 +226,7 @@
     <div class="hero-cursor-glow" id="hero-cursor-glow"></div>
     <div class="hero-grid-overlay"></div>
     <div class="hero-tech-telemetry telemetry-left">
-      <span class="telemetry-point"></span> COORD: 06°12'S 106°49'E &bull; MEP INFRASTRUCTURE MATRIX
+      <span class="telemetry-point-pulse"></span> COORD: 06°11'42"S 106°44'17"E // TCS HQ JAKARTA // MEP INFRASTRUCTURE MATRIX
     </div>
     <div class="hero-tech-telemetry telemetry-right">
       SYS: HIGH-VOLT &bull; HVAC &bull; PROCESS PIPING &bull; BIM 400
@@ -233,14 +234,11 @@
 
     <div class="container grid-2">
       <div class="hero-content">
-        <span class="hero-tag" data-translate="hero_tag_tcs">#KawanTCS MEP Contractor</span>
         <h1 class="hero-title" data-translate="hero_title">
-          Sophisticated <span>Engineering</span> For National <em>Prestige</em>.
+          Engineering High-Reliability MEP Systems for <span>Zero-Downtime</span> Operations.
         </h1>
         <p class="hero-description" data-translate="hero_desc">
-          Kontraktor Mechanical, Electrical, dan Plumbing (MEP) berskala nasional. Kami menghadirkan solusi instalasi,
-          desain, pemeliharaan kelistrikan, pemipaan, utilitas proses, proteksi kebakaran, dan pengolahan air bersih dengan presisi
-          tinggi sejak 2020.
+          Kontraktor MEP Nasional bersertifikasi untuk fasilitas industri, data center, dan bangunan komersial berstandar tinggi.
         </p>
         <div class="hero-btns">
           <a href="#planner" class="btn btn-primary magnetic-btn" id="hero-cta-btn">
@@ -257,6 +255,32 @@
       <div class="hero-visual" id="hero-visual-wrapper">
         <div class="hero-3d-container" id="hero-3d-container">
           <canvas id="hero-mep-canvas"></canvas>
+
+          <!-- Floating Holographic Telemetry Pins (Visible in Exploded State) -->
+          <div class="hero-3d-telemetry-pins" id="hero3dPins">
+            <div class="hero-telemetry-pin pin-compressor" id="pinCompressor">
+              <span class="pin-marker"></span>
+              <div class="pin-content">
+                <span class="pin-badge">800 TR</span>
+                <span class="pin-text">[CENTRIFUGAL COMPRESSOR // 800 TR]</span>
+              </div>
+            </div>
+            <div class="hero-telemetry-pin pin-chilled-water" id="pinChilledWater">
+              <span class="pin-marker"></span>
+              <div class="pin-content">
+                <span class="pin-badge">6.5°C</span>
+                <span class="pin-text">[CHILLED WATER LOOP: 6.5°C]</span>
+              </div>
+            </div>
+            <div class="hero-telemetry-pin pin-vibration" id="pinVibration">
+              <span class="pin-marker"></span>
+              <div class="pin-content">
+                <span class="pin-badge">ISO</span>
+                <span class="pin-text">[VIBRATION HARMONIC: ISO COMPLIANT]</span>
+              </div>
+            </div>
+          </div>
+
           <div class="hero-3d-hud-badge">
             <div class="hud-status-indicator">
               <span class="hud-dot"></span>
@@ -271,6 +295,14 @@
               <span>ELEC</span>
               <span>PIPE</span>
               <span>FIRE</span>
+            </div>
+            <div class="hero-3d-interactive-actions">
+              <button type="button" class="hero-3d-action-btn" id="btnHeroExplode" onclick="window.tcsToggleExplode()">
+                <span>💥 Exploded View</span>
+              </button>
+              <button type="button" class="hero-3d-action-btn" id="btnHeroGyro" onclick="window.tcsRequestGyro()">
+                <span>📱 Gyro Orbit</span>
+              </button>
             </div>
           </div>
         </div>
@@ -370,9 +402,8 @@
                   d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
               </svg>
             </div>
-            <h3 class="dna-title" data-translate="dna_one_stop_title">One Stop Solution</h3>
-            <p class="dna-desc" data-translate="dna_one_stop_desc">Layanan berkelanjutan, mulai dari desain awal,
-              fabrikasi, instalasi fisik, hingga perawatan preventif jangka panjang.</p>
+            <h3 class="dna-title" data-translate="dna_one_stop_title">Turnkey Execution (EPC)</h3>
+            <p class="dna-desc" data-translate="dna_one_stop_desc">Layanan terpadu Engineering, Procurement, dan Construction (EPC)—dari pemodelan BIM 400, pengadaan komponen tersertifikasi, hingga instalasi mekanikal dan elektrikal presisi tinggi.</p>
           </div>
 
           <div class="glass-card dna-card tilt-card" data-tilt>
@@ -384,9 +415,8 @@
                   d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
             </div>
-            <h3 class="dna-title" data-translate="dna_team_title">Tim Profesional</h3>
-            <p class="dna-desc" data-translate="dna_team_desc">Didukung oleh tim insinyur ahli dan bersertifikat teknis
-              nasional di bidang kelistrikan, mekanikal, dan pemipaan gas/air.</p>
+            <h3 class="dna-title" data-translate="dna_team_title">Certified Engineering Standards</h3>
+            <p class="dna-desc" data-translate="dna_team_desc">Didukung insinyur bersertifikasi resmi: Ahli K3 Listrik Kemnaker, Welding Inspector Migas/Depnaker, dan teknisi sistem refrigerasi/HVAC berlisensi nasional.</p>
           </div>
 
           <div class="glass-card dna-card tilt-card" data-tilt>
@@ -398,9 +428,8 @@
                   d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
               </svg>
             </div>
-            <h3 class="dna-title" data-translate="dna_trust_title">Terpercaya & Handal</h3>
-            <p class="dna-desc" data-translate="dna_trust_desc">Rekam jejak pengerjaan infrastruktur vital di pabrik
-              manufaktur obat, makanan, kosmetik, perkantoran, dan industri otomotif.</p>
+            <h3 class="dna-title" data-translate="dna_trust_title">Zero-Failure Tolerance</h3>
+            <p class="dna-desc" data-translate="dna_trust_desc">Protokol jaminan mutu (QA/QC) tanpa kompromi melalui hydrostatic testing, kalibrasi termal thermography, megger insulation test, dan Factory Acceptance Test (FAT/SAT).</p>
           </div>
 
           <div class="glass-card dna-card tilt-card" data-tilt>
@@ -412,9 +441,8 @@
                   d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
               </svg>
             </div>
-            <h3 class="dna-title" data-translate="dna_heart_title">Sepenuh Hati</h3>
-            <p class="dna-desc" data-translate="dna_heart_desc">Kami percaya bahwa komunikasi yang transparan dan after
-              sales service yang cepat merupakan kunci kesuksesan bersama.</p>
+            <h3 class="dna-title" data-translate="dna_heart_title">Rapid SLA & Maintenance Guarantee</h3>
+            <p class="dna-desc" data-translate="dna_heart_desc">Garansi respons tanggap darurat 24/7 dan pemeliharaan preventif terencana untuk menjamin kelangsungan operasional (uptime) utilitas industri tanpa gangguan downtime.</p>
           </div>
         </div>
 
@@ -882,6 +910,208 @@
           </div>
 
         </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section matrix-section" id="matrix">
+    <div class="container">
+      <div class="section-header" style="text-align: center; margin-bottom: 24px;">
+        <span class="section-tag" data-translate="matrix_section_tag">STANDAR KERJA TEKNIS // LINGKUP PENGERJAAN MEP</span>
+        <h2 class="section-title" data-translate="matrix_title">Katalog Kapabilitas & Spesifikasi Proyek Terverifikasi</h2>
+        <p class="section-desc" data-translate="matrix_desc">
+          Portofolio pengerjaan instalasi mekanikal, elektrikal, dan pemipaan industri dengan kepatuhan standar PUIL, SNI, dan uji kelaikan berkala.
+        </p>
+      </div>
+
+      <div class="matrix-filter-bar">
+        <button type="button" class="matrix-filter-btn active" data-filter="all" data-translate="matrix_filter_all">Semua Lingkup</button>
+        <button type="button" class="matrix-filter-btn" data-filter="electrical" data-translate="matrix_filter_elec">Kelistrikan & Panel</button>
+        <button type="button" class="matrix-filter-btn" data-filter="piping" data-translate="matrix_filter_pipe">Perpipaan & Utilitas</button>
+        <button type="button" class="matrix-filter-btn" data-filter="ev-water" data-translate="matrix_filter_ev_water">Infrastruktur EV & Air</button>
+      </div>
+
+      <div class="matrix-dossier-grid">
+        <!-- Dossier Card 1: Distribusi Daya / Panel LVMDP -->
+        <div class="dossier-card" data-category="electrical">
+          <div class="dossier-top-meta">
+            <span class="dossier-category-badge" data-translate="dossier_1_cat">DISTRIBUSI DAYA // SERVER ROOM & GEDUNG</span>
+            <span class="dossier-lti-badge">
+              <span class="lti-dot"></span>
+              <span data-translate="dossier_1_status">TERUJI & TERVERIFIKASI</span>
+            </span>
+          </div>
+          <h3 class="dossier-title" data-translate="dossier_1_title">Instalasi Panel LVMDP, Kabel Tray & Backup Daya Ruang Kontrol</h3>
+          <p class="dossier-desc" data-translate="dossier_1_desc">
+            Penataan sistem kelistrikan terstruktur, panel distribusi utama, penangkal petir, dan grounding proteksi ruang kontrol.
+          </p>
+          <div class="dossier-specs-table">
+            <div class="dossier-spec-item">
+              <span class="dossier-spec-label" data-translate="dossier_1_lbl_ground">Uji Tahanan Grounding</span>
+              <span class="dossier-spec-val" style="color:#00f2fe;">&lt; 2 Ohm</span>
+            </div>
+            <div class="dossier-spec-item">
+              <span class="dossier-spec-label" data-translate="dossier_1_lbl_comply">Kepatuhan Regulasi</span>
+              <span class="dossier-spec-val">Standar PUIL & SNI</span>
+            </div>
+            <div class="dossier-spec-item">
+              <span class="dossier-spec-label" data-translate="dossier_1_lbl_scan">Uji Beban Termal</span>
+              <span class="dossier-spec-val" style="color:#00e575;">100% Thermal Scan OK</span>
+            </div>
+            <div class="dossier-spec-item">
+              <span class="dossier-spec-label" data-translate="dossier_1_lbl_cutover">Status Serah Terima</span>
+              <span class="dossier-spec-val" style="color:#00e575;">Terverifikasi Sesuai Desain</span>
+            </div>
+          </div>
+          <div class="dossier-badges-footer">
+            <div class="dossier-cert-tags">
+              <span class="dossier-cert-tag">Ahli K3 Listrik Kemnaker</span>
+              <span class="dossier-cert-tag">PUIL 2020 / SNI</span>
+              <span class="dossier-cert-tag">ISO 45001</span>
+            </div>
+            <span class="dossier-status-seal">
+              <svg style="width:14px;height:14px;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+              <span data-translate="dossier_1_status">TERUJI & TERVERIFIKASI</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Dossier Card 2: Water Utility / Reverse Osmosis -->
+        <div class="dossier-card" data-category="piping ev-water">
+          <div class="dossier-top-meta">
+            <span class="dossier-category-badge" data-translate="dossier_2_cat">WATER UTILITY // SISTEM FILTRASI</span>
+            <span class="dossier-lti-badge">
+              <span class="lti-dot"></span>
+              <span data-translate="dossier_2_status">FABRIKASI & COMMISSIONING</span>
+            </span>
+          </div>
+          <h3 class="dossier-title" data-translate="dossier_2_title">Perakitan Sistem Reverse Osmosis (RO) & Pemipaan Air Bersih</h3>
+          <p class="dossier-desc" data-translate="dossier_2_desc">
+            Jalur distribusi air higienis, pompa booster transfer, dan filter membran fasilitas komersial/manufaktur.
+          </p>
+          <div class="dossier-specs-table">
+            <div class="dossier-spec-item">
+              <span class="dossier-spec-label" data-translate="dossier_2_lbl_mat">Spesifikasi Material</span>
+              <span class="dossier-spec-val" style="color:#00f2fe;">Food-Grade Stainless / PPR</span>
+            </div>
+            <div class="dossier-spec-item">
+              <span class="dossier-spec-label" data-translate="dossier_2_lbl_leak">Uji Kebocoran</span>
+              <span class="dossier-spec-val" style="color:#00e575;">Hydrostatic Leak Test OK</span>
+            </div>
+            <div class="dossier-spec-item">
+              <span class="dossier-spec-label" data-translate="dossier_2_lbl_flow">Presisi Aliran</span>
+              <span class="dossier-spec-val">Aliran & Tekanan Terkalibrasi</span>
+            </div>
+            <div class="dossier-spec-item">
+              <span class="dossier-spec-label" data-translate="dossier_2_lbl_purity">Kualitas Air Bersih</span>
+              <span class="dossier-spec-val" style="color:#00e575;">Bebas Kontaminasi Kimiawi</span>
+            </div>
+          </div>
+          <div class="dossier-badges-footer">
+            <div class="dossier-cert-tags">
+              <span class="dossier-cert-tag">Food-Grade Sanitary SS</span>
+              <span class="dossier-cert-tag">Hydrostatic Validated</span>
+              <span class="dossier-cert-tag">ISO 9001</span>
+            </div>
+            <span class="dossier-status-seal">
+              <svg style="width:14px;height:14px;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+              <span data-translate="dossier_2_status">FABRIKASI & COMMISSIONING</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Dossier Card 3: EV Charging & SPKLU -->
+        <div class="dossier-card" data-category="electrical ev-water">
+          <div class="dossier-top-meta">
+            <span class="dossier-category-badge" data-translate="dossier_3_cat">EV CHARGING // AREA KOMERSIAL</span>
+            <span class="dossier-lti-badge">
+              <span class="lti-dot"></span>
+              <span data-translate="dossier_3_status">TERPASANG & BERFUNGSI</span>
+            </span>
+          </div>
+          <h3 class="dossier-title" data-translate="dossier_3_title">Instalasi Fasilitas Charging Mobil Listrik (SPKLU & Wallbox)</h3>
+          <p class="dossier-desc" data-translate="dossier_3_desc">
+            Feeder kabel tanah, panel distribusi proteksi khusus EV, grounding terdedikasi, serta unit charger AC/DC.
+          </p>
+          <div class="dossier-specs-table">
+            <div class="dossier-spec-item">
+              <span class="dossier-spec-label" data-translate="dossier_3_lbl_power">Kapasitas Daya</span>
+              <span class="dossier-spec-val" style="color:#00f2fe;">22 kW AC / 60 kW DC Charger</span>
+            </div>
+            <div class="dossier-spec-item">
+              <span class="dossier-spec-label" data-translate="dossier_3_lbl_prot">Proteksi Sirkit</span>
+              <span class="dossier-spec-val">ELCB Type B & Surge Arrester</span>
+            </div>
+            <div class="dossier-spec-item">
+              <span class="dossier-spec-label" data-translate="dossier_3_lbl_ground">Grounding Proteksi</span>
+              <span class="dossier-spec-val" style="color:#00e575;">Dedicated Earth Rod &lt; 1 Ohm</span>
+            </div>
+            <div class="dossier-spec-item">
+              <span class="dossier-spec-label" data-translate="dossier_3_lbl_cert">Kelaikan Operasi</span>
+              <span class="dossier-spec-val" style="color:#00e575;">Standar SLO & PLN Ready</span>
+            </div>
+          </div>
+          <div class="dossier-badges-footer">
+            <div class="dossier-cert-tags">
+              <span class="dossier-cert-tag">Proteksi ELCB Type B</span>
+              <span class="dossier-cert-tag">Surge Arrester Class II</span>
+              <span class="dossier-cert-tag">Uji Beban DC</span>
+            </div>
+            <span class="dossier-status-seal">
+              <svg style="width:14px;height:14px;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+              <span data-translate="dossier_3_status">TERPASANG & BERFUNGSI</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Dossier Card 4: Mekanikal Pabrik & Utilitas Pipa -->
+        <div class="dossier-card" data-category="piping">
+          <div class="dossier-top-meta">
+            <span class="dossier-category-badge" data-translate="dossier_4_cat">MEKANIKAL PABRIK // UTILITAS PIPA</span>
+            <span class="dossier-lti-badge">
+              <span class="lti-dot"></span>
+              <span data-translate="dossier_4_status">INSPEKSI SISTEM TUNTAS</span>
+            </span>
+          </div>
+          <h3 class="dossier-title" data-translate="dossier_4_title">Instalasi Jalur Pipa Steam Boiler, Kompresor Udara & Chiller</h3>
+          <p class="dossier-desc" data-translate="dossier_4_desc">
+            Fabrikasi dan pengelasan pipa baja SCH 40/80 untuk suplai udara bertekanan, sirkulasi air pendingin, dan pemipaan uap panas.
+          </p>
+          <div class="dossier-specs-table">
+            <div class="dossier-spec-item">
+              <span class="dossier-spec-label" data-translate="dossier_4_lbl_weld">Metode Las</span>
+              <span class="dossier-spec-val" style="color:#00f2fe;">GTAW / TIG Bersertifikat</span>
+            </div>
+            <div class="dossier-spec-item">
+              <span class="dossier-spec-label" data-translate="dossier_4_lbl_press">Inspeksi Tekanan</span>
+              <span class="dossier-spec-val" style="color:#00e575;">Pressure Hold 1.5x Design Bar</span>
+            </div>
+            <div class="dossier-spec-item">
+              <span class="dossier-spec-label" data-translate="dossier_4_lbl_spec">Spesifikasi Material</span>
+              <span class="dossier-spec-val">Steel SCH 40/80 Seamless</span>
+            </div>
+            <div class="dossier-spec-item">
+              <span class="dossier-spec-label" data-translate="dossier_4_lbl_leak">Integritas Sambungan</span>
+              <span class="dossier-spec-val" style="color:#00e575;">Nol Kebocoran Sambungan</span>
+            </div>
+          </div>
+          <div class="dossier-badges-footer">
+            <div class="dossier-cert-tags">
+              <span class="dossier-cert-tag">Juru Las Bersertifikat Migas</span>
+              <span class="dossier-cert-tag">ASME B31.3 Standard</span>
+              <span class="dossier-cert-tag">Pressure Test 1.5x</span>
+            </div>
+            <span class="dossier-status-seal">
+              <svg style="width:14px;height:14px;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+              <span data-translate="dossier_4_status">INSPEKSI SISTEM TUNTAS</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Compliance Footnote -->
+      <div class="matrix-footnote">
+        <p data-translate="matrix_footnote">*Catatan: Parameter uji dan lingkup teknis disesuaikan dengan kapasitas kontrak serta regulasi spesifik fasilitas klien.</p>
       </div>
     </div>
   </section>

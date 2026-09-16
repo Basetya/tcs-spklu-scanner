@@ -23,6 +23,7 @@ function startApp() {
   initWaterRoCanvas();
   initEvChargingSimulation();
   initScadaUtilitiesSimulator(); // <-- Pastikan ini dipanggil di sini!
+  initProjectMatrixFilters();
 }
 
 // Global retrying fetch helper for remote services (Overpass/Nominatim/GAS bridge)
@@ -205,7 +206,8 @@ function initHeroMagneticCta() {
  * Features dual cylindrical pressure shells (Evaporator & Condenser), cast saddles on H-beam skid,
  * centrifugal compressor volute & finned motor, copper busbars, flanged water boxes with
  * luminous conduit nozzles (#00F2FE / #00C9A7), analog pressure gauges with glowing dials,
- * VFD control panel, active fluid flow tracers, and smooth mouse-tilt parallax (lerp: 0.08).
+ * VFD control panel, active fluid flow tracers, dynamic BIM Exploded-View subsystems,
+ * and DeviceOrientation API gyroscope motion physics (Gamma/Beta axes) with smooth touch drag fallback.
  */
 function initHeroMep3D() {
   const canvas = document.getElementById('hero-mep-canvas');
@@ -218,8 +220,9 @@ function initHeroMep3D() {
       return;
     }
 
-    let width = container.clientWidth || 540;
-    let height = container.clientHeight || Math.round(width * 0.75) || 405;
+    const rect = container.getBoundingClientRect();
+    let width = rect.width || container.clientWidth || 540;
+    let height = rect.height || container.clientHeight || Math.round(width * 0.75) || 405;
 
     // Three.js Core
     const scene = new THREE.Scene();
@@ -329,11 +332,37 @@ function initHeroMep3D() {
       opacity: 0.35
     });
 
+    // 9. Exploded BIM CAD Leader Line Material
+    const leaderLineMat = new THREE.LineDashedMaterial({
+      color: 0x00f2fe,
+      dashSize: 0.35,
+      gapSize: 0.18,
+      transparent: true,
+      opacity: 0.0
+    });
+
+    // ==========================================
+    // MODULAR EXPLODED BIM SUBSYSTEMS
+    // ==========================================
+    const skidSubsystem = new THREE.Group();
+    const evapSubsystem = new THREE.Group();
+    const condSubsystem = new THREE.Group();
+    const compressorSubsystem = new THREE.Group();
+    const panelSubsystem = new THREE.Group();
+    const pipeSubsystem = new THREE.Group();
+    const explodedLinesSubsystem = new THREE.Group();
+
+    mepRoot.add(skidSubsystem);
+    mepRoot.add(evapSubsystem);
+    mepRoot.add(condSubsystem);
+    mepRoot.add(compressorSubsystem);
+    mepRoot.add(panelSubsystem);
+    mepRoot.add(pipeSubsystem);
+    mepRoot.add(explodedLinesSubsystem);
+
     // ==========================================
     // 1. STRUCTURAL SKID & ISOLATION BASE
     // ==========================================
-    // Heavy H-Beam Base Frame
-    const skidGroup = new THREE.Group();
     const beamLength = 10.5;
     const beamMat = castIronMat;
 
@@ -341,32 +370,31 @@ function initHeroMep3D() {
     [-2.2, 2.2].forEach(z => {
       const beam = new THREE.Mesh(new THREE.BoxGeometry(beamLength, 0.45, 0.35), beamMat);
       beam.position.set(0, -2.4, z);
-      skidGroup.add(beam);
+      skidSubsystem.add(beam);
     });
 
     // Cross members
     [-4.2, 0, 4.2].forEach(x => {
       const cross = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.45, 4.6), beamMat);
       cross.position.set(x, -2.4, 0);
-      skidGroup.add(cross);
+      skidSubsystem.add(cross);
 
       // Vibration spring isolator pads beneath
       [-2.2, 2.2].forEach(z => {
         const iso = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.28, 0.25, 16), chromeMat);
         iso.position.set(x, -2.7, z);
-        skidGroup.add(iso);
+        skidSubsystem.add(iso);
       });
     });
-    mepRoot.add(skidGroup);
 
     // ==========================================
-    // 2. DUAL PRESSURE VESSELS (EVAPORATOR & CONDENSER)
+    // 2. EVAPORATOR SUBSYSTEM (LOWER VESSEL)
     // ==========================================
     // Heavy Cast Saddle Mounts
     [-2.8, 2.8].forEach(x => {
       const saddle = new THREE.Mesh(new THREE.BoxGeometry(0.65, 1.2, 4.2), castIronMat);
       saddle.position.set(x, -1.8, 0);
-      mepRoot.add(saddle);
+      evapSubsystem.add(saddle);
     });
 
     // Vessel A: Lower Evaporator Shell (Chilled Water)
@@ -376,14 +404,28 @@ function initHeroMep3D() {
     const evapShell = new THREE.Mesh(evapShellGeo, slateSteelMat);
     evapShell.rotation.z = Math.PI / 2;
     evapShell.position.set(0, -1.0, 0.6);
-    mepRoot.add(evapShell);
+    evapSubsystem.add(evapShell);
+
+    // Revealed internal copper tube bundle (visible on explosion)
+    const evapCoreTubes = new THREE.Mesh(
+      new THREE.CylinderGeometry(1.05, 1.05, 7.8, 24),
+      new THREE.MeshStandardMaterial({
+        color: 0xc26d38,
+        roughness: 0.3,
+        metalness: 0.9,
+        wireframe: true
+      })
+    );
+    evapCoreTubes.rotation.z = Math.PI / 2;
+    evapCoreTubes.position.set(0, -1.0, 0.6);
+    evapSubsystem.add(evapCoreTubes);
 
     // Reinforcing shell bands
     [-3.0, -1.5, 0, 1.5, 3.0].forEach(bx => {
       const band = new THREE.Mesh(new THREE.TorusGeometry(evapRadius + 0.03, 0.05, 8, 36), chromeMat);
       band.position.set(bx, -1.0, 0.6);
       band.rotation.y = Math.PI / 2;
-      mepRoot.add(band);
+      evapSubsystem.add(band);
     });
 
     // Vessel A Marine Water Boxes (both ends)
@@ -391,69 +433,84 @@ function initHeroMep3D() {
       const waterBox = new THREE.Mesh(new THREE.CylinderGeometry(evapRadius * 1.05, evapRadius * 1.05, 0.65, 32), castIronMat);
       waterBox.rotation.z = Math.PI / 2;
       waterBox.position.set(wx, -1.0, 0.6);
-      mepRoot.add(waterBox);
+      evapSubsystem.add(waterBox);
 
       // Flange Bolt Ring
       const flangeRing = new THREE.Mesh(new THREE.TorusGeometry(evapRadius * 1.08, 0.08, 8, 32), chromeMat);
       flangeRing.rotation.y = Math.PI / 2;
       flangeRing.position.set(wx + (idx === 0 ? 0.35 : -0.35), -1.0, 0.6);
-      mepRoot.add(flangeRing);
+      evapSubsystem.add(flangeRing);
 
       // Domed end cap
       const cap = new THREE.Mesh(new THREE.SphereGeometry(evapRadius * 1.05, 24, 12, 0, Math.PI * 2, 0, Math.PI / 2), castIronMat);
       cap.rotation.z = idx === 0 ? -Math.PI / 2 : Math.PI / 2;
       cap.position.set(wx + (idx === 0 ? -0.35 : 0.35), -1.0, 0.6);
-      mepRoot.add(cap);
+      evapSubsystem.add(cap);
     });
 
-    // Vessel B: Upper Condenser Shell (Cooling Water)
+    // ==========================================
+    // 3. CONDENSER SUBSYSTEM (UPPER VESSEL)
+    // ==========================================
     const condRadius = 1.2;
     const condLength = 8.2;
     const condShellGeo = new THREE.CylinderGeometry(condRadius, condRadius, condLength, 36);
     const condShell = new THREE.Mesh(condShellGeo, slateSteelMat);
     condShell.rotation.z = Math.PI / 2;
     condShell.position.set(0, 0.9, -0.7);
-    mepRoot.add(condShell);
+    condSubsystem.add(condShell);
 
     // Condenser Water Boxes
     [-4.2, 4.2].forEach((cx, idx) => {
       const cBox = new THREE.Mesh(new THREE.CylinderGeometry(condRadius * 1.05, condRadius * 1.05, 0.6, 32), castIronMat);
       cBox.rotation.z = Math.PI / 2;
       cBox.position.set(cx, 0.9, -0.7);
-      mepRoot.add(cBox);
+      condSubsystem.add(cBox);
 
       const cRing = new THREE.Mesh(new THREE.TorusGeometry(condRadius * 1.08, 0.07, 8, 32), chromeMat);
       cRing.rotation.y = Math.PI / 2;
       cRing.position.set(cx + (idx === 0 ? 0.32 : -0.32), 0.9, -0.7);
-      mepRoot.add(cRing);
+      condSubsystem.add(cRing);
     });
 
     // ==========================================
-    // 3. CENTRIFUGAL COMPRESSOR & MOTOR DRIVE
+    // 4. COMPRESSOR & MOTOR DRIVE SUBSYSTEM
     // ==========================================
-    const compressorGroup = new THREE.Group();
-
     // Centrifugal Volute Casing (Central Scroll)
     const voluteCore = new THREE.Mesh(new THREE.CylinderGeometry(1.25, 1.4, 1.1, 24), chromeMat);
     voluteCore.position.set(-0.2, 2.6, 0);
-    compressorGroup.add(voluteCore);
+    compressorSubsystem.add(voluteCore);
+
+    // Revealed Internal Impeller Rotor (spins dynamically!)
+    const impellerRotor = new THREE.Mesh(
+      new THREE.TorusGeometry(0.85, 0.16, 12, 18),
+      new THREE.MeshStandardMaterial({
+        color: 0x00f2fe,
+        emissive: 0x00f2fe,
+        emissiveIntensity: 0.6,
+        roughness: 0.2,
+        metalness: 0.9
+      })
+    );
+    impellerRotor.position.set(-0.2, 2.6, 0);
+    impellerRotor.rotation.x = Math.PI / 2;
+    compressorSubsystem.add(impellerRotor);
 
     // Scroll diffuser shroud
     const shroud = new THREE.Mesh(new THREE.TorusGeometry(1.4, 0.38, 16, 32), chromeMat);
     shroud.position.set(-0.2, 2.6, 0);
-    compressorGroup.add(shroud);
+    compressorSubsystem.add(shroud);
 
     // Heavy High-Pressure Discharge Pipe (Volute to Condenser)
     const dischargePipe = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.42, 1.8, 20), chromeMat);
     dischargePipe.position.set(-0.2, 1.8, -0.5);
     dischargePipe.rotation.x = 0.45;
-    compressorGroup.add(dischargePipe);
+    compressorSubsystem.add(dischargePipe);
 
     // High-Efficiency Electric Drive Motor Housing
     const motorHousing = new THREE.Mesh(new THREE.CylinderGeometry(0.95, 0.95, 3.2, 24), slateSteelMat);
     motorHousing.rotation.z = Math.PI / 2;
     motorHousing.position.set(1.9, 2.6, 0);
-    compressorGroup.add(motorHousing);
+    compressorSubsystem.add(motorHousing);
 
     // Longitudinal Cooling Fins on Motor
     for (let f = 0; f < 12; f++) {
@@ -461,118 +518,49 @@ function initHeroMep3D() {
       const fin = new THREE.Mesh(new THREE.BoxGeometry(2.8, 0.14, 0.05), chromeMat);
       fin.position.set(1.9, 2.6 + Math.cos(finAngle) * 1.02, Math.sin(finAngle) * 1.02);
       fin.rotation.x = finAngle;
-      compressorGroup.add(fin);
+      compressorSubsystem.add(fin);
     }
 
     // Motor Rear Bearing & Terminal Box
     const motorCap = new THREE.Mesh(new THREE.CylinderGeometry(0.96, 0.96, 0.4, 24), castIronMat);
     motorCap.rotation.z = Math.PI / 2;
     motorCap.position.set(3.6, 2.6, 0);
-    compressorGroup.add(motorCap);
+    compressorSubsystem.add(motorCap);
 
-    mepRoot.add(compressorGroup);
-
-    // ==========================================
-    // 4. INTRICATE METALLIC PIPING & GLOWING CONDUITS
-    // ==========================================
-    const flowPipes = [];
-
-    // Helper to build industrial flanged pipe
-    function addFlangedPipe(p1, p2, radius, material, hasFlanges = true) {
+    // Large Suction Riser (Evaporator to Compressor)
+    function addSubPipe(p1, p2, radius, material, parent) {
       const dist = p1.distanceTo(p2);
       const geo = new THREE.CylinderGeometry(radius, radius, dist, 16);
       const mesh = new THREE.Mesh(geo, material);
-
       const mid = new THREE.Vector3().addVectors(p1, p2).multiplyScalar(0.5);
       mesh.position.copy(mid);
-
       const orient = new THREE.Vector3().subVectors(p2, p1).normalize();
       mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), orient);
-      mepRoot.add(mesh);
-
-      if (hasFlanges) {
-        [p1, p2].forEach(p => {
-          const flange = new THREE.Mesh(new THREE.TorusGeometry(radius * 1.6, radius * 0.35, 8, 16), chromeMat);
-          flange.position.copy(p);
-          flange.quaternion.copy(mesh.quaternion);
-          flange.rotateX(Math.PI / 2);
-          mepRoot.add(flange);
-        });
-      }
-      return { p1, p2, dist, mesh };
+      parent.add(mesh);
+      return mesh;
     }
 
-    // 4A. Large Suction Riser (Evaporator to Compressor)
-    const pS1 = new THREE.Vector3(-1.4, -0.1, 0.6);
-    const pS2 = new THREE.Vector3(-1.4, 2.6, 0.6);
-    const pS3 = new THREE.Vector3(-0.6, 2.6, 0.6);
-    addFlangedPipe(pS1, pS2, 0.52, chromeMat);
-    addFlangedPipe(pS2, pS3, 0.52, chromeMat);
-
-    // 4B. Chilled Water Primary Supply & Return Headers (Luminous Cyan #00F2FE)
-    const pCW1 = new THREE.Vector3(-4.4, -0.6, 1.8);
-    const pCW2 = new THREE.Vector3(-2.0, -0.6, 1.8);
-    const pCW3 = new THREE.Vector3(-2.0, -0.6, 3.2);
-    const pCW4 = new THREE.Vector3(3.2, -0.6, 3.2);
-    const pCW5 = new THREE.Vector3(3.2, -0.6, 1.8);
-    const pCW6 = new THREE.Vector3(4.4, -0.6, 1.8);
-
-    flowPipes.push(addFlangedPipe(pCW1, pCW2, 0.28, cyanConduitMat));
-    flowPipes.push(addFlangedPipe(pCW2, pCW3, 0.28, cyanConduitMat));
-    flowPipes.push(addFlangedPipe(pCW3, pCW4, 0.28, cyanConduitMat));
-    flowPipes.push(addFlangedPipe(pCW4, pCW5, 0.28, cyanConduitMat));
-    flowPipes.push(addFlangedPipe(pCW5, pCW6, 0.28, cyanConduitMat));
-
-    // Connectors from headers into Evaporator
-    addFlangedPipe(new THREE.Vector3(-2.0, -0.6, 1.8), new THREE.Vector3(-2.0, -0.6, 0.6), 0.28, cyanConduitMat);
-    addFlangedPipe(new THREE.Vector3(3.2, -0.6, 1.8), new THREE.Vector3(3.2, -0.6, 0.6), 0.28, cyanConduitMat);
-
-    // 4C. Condenser Cooling Loop Headers (Luminous Teal #00C9A7)
-    const pCD1 = new THREE.Vector3(-4.2, 1.4, -1.9);
-    const pCD2 = new THREE.Vector3(-1.6, 1.4, -1.9);
-    const pCD3 = new THREE.Vector3(2.6, 1.4, -1.9);
-    const pCD4 = new THREE.Vector3(4.2, 1.4, -1.9);
-
-    flowPipes.push(addFlangedPipe(pCD1, pCD2, 0.26, tealConduitMat));
-    flowPipes.push(addFlangedPipe(pCD2, pCD3, 0.26, tealConduitMat));
-    flowPipes.push(addFlangedPipe(pCD3, pCD4, 0.26, tealConduitMat));
-
-    // Connectors into Condenser Shell
-    addFlangedPipe(new THREE.Vector3(-1.6, 1.4, -1.9), new THREE.Vector3(-1.6, 0.9, -0.7), 0.26, tealConduitMat);
-    addFlangedPipe(new THREE.Vector3(2.6, 1.4, -1.9), new THREE.Vector3(2.6, 0.9, -0.7), 0.26, tealConduitMat);
-
-    // 4D. Copper Busbars & High-Voltage Power Conduit
-    const busbarGroup = new THREE.Group();
-    [-0.15, 0, 0.15].forEach(offset => {
-      const busbar = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.08, 0.04), copperMat);
-      busbar.position.set(2.4, 1.8 + offset, 1.2);
-      busbarGroup.add(busbar);
-    });
-    // Vertical riser busbar from starter panel to motor
-    const busbarRiser = new THREE.Mesh(new THREE.BoxGeometry(0.08, 1.4, 0.35), copperMat);
-    busbarRiser.position.set(3.5, 2.2, 0.8);
-    busbarGroup.add(busbarRiser);
-    mepRoot.add(busbarGroup);
+    addSubPipe(new THREE.Vector3(-1.4, -0.1, 0.6), new THREE.Vector3(-1.4, 2.6, 0.6), 0.52, chromeMat, compressorSubsystem);
+    addSubPipe(new THREE.Vector3(-1.4, 2.6, 0.6), new THREE.Vector3(-0.6, 2.6, 0.6), 0.52, chromeMat, compressorSubsystem);
 
     // ==========================================
-    // 5. INDUSTRIAL VFD / PLC CONTROL ENCLOSURE
+    // 5. INDUSTRIAL VFD / PLC CONTROL SUBSYSTEM
     // ==========================================
-    const panelGroup = new THREE.Group();
     const panelCabinet = new THREE.Mesh(new THREE.BoxGeometry(2.6, 2.4, 0.85), slateSteelMat);
     panelCabinet.position.set(0.6, 0.4, 2.5);
-    panelGroup.add(panelCabinet);
+    panelSubsystem.add(panelCabinet);
 
     // Chrome Bezel Door Frame
     const panelDoor = new THREE.Mesh(new THREE.BoxGeometry(2.4, 2.2, 0.06), castIronMat);
     panelDoor.position.set(0.6, 0.4, 2.95);
-    panelGroup.add(panelDoor);
+    panelSubsystem.add(panelDoor);
 
     // Glowing Digital HMI Screen
     const hmiScreen = new THREE.Mesh(new THREE.BoxGeometry(1.6, 1.0, 0.04), new THREE.MeshBasicMaterial({
       color: 0x00f2fe
     }));
     hmiScreen.position.set(0.6, 0.6, 3.0);
-    panelGroup.add(hmiScreen);
+    panelSubsystem.add(hmiScreen);
 
     // Status Indicator Lights on Panel
     [-0.3, 0, 0.3].forEach((lx, idx) => {
@@ -580,48 +568,96 @@ function initHeroMep3D() {
       const indLight = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.06, 12), new THREE.MeshBasicMaterial({ color: lightCol }));
       indLight.rotation.x = Math.PI / 2;
       indLight.position.set(0.6 + lx, -0.2, 3.0);
-      panelGroup.add(indLight);
+      panelSubsystem.add(indLight);
     });
 
-    mepRoot.add(panelGroup);
+    // ==========================================
+    // 6. PIPING, HEADERS & BUSBAR SUBSYSTEM
+    // ==========================================
+    // 6A. Chilled Water Primary Supply & Return Headers (Luminous Cyan #00F2FE)
+    const pCW1 = new THREE.Vector3(-4.4, -0.6, 1.8);
+    const pCW2 = new THREE.Vector3(-2.0, -0.6, 1.8);
+    const pCW3 = new THREE.Vector3(-2.0, -0.6, 3.2);
+    const pCW4 = new THREE.Vector3(3.2, -0.6, 3.2);
+    const pCW5 = new THREE.Vector3(3.2, -0.6, 1.8);
+    const pCW6 = new THREE.Vector3(4.4, -0.6, 1.8);
 
-    // ==========================================
-    // 6. PRECISION ANALOG PRESSURE GAUGES WITH GLOWING DIALS
-    // ==========================================
-    function createPressureGauge(position, rotationY = 0) {
+    addSubPipe(pCW1, pCW2, 0.28, cyanConduitMat, pipeSubsystem);
+    addSubPipe(pCW2, pCW3, 0.28, cyanConduitMat, pipeSubsystem);
+    addSubPipe(pCW3, pCW4, 0.28, cyanConduitMat, pipeSubsystem);
+    addSubPipe(pCW4, pCW5, 0.28, cyanConduitMat, pipeSubsystem);
+    addSubPipe(pCW5, pCW6, 0.28, cyanConduitMat, pipeSubsystem);
+
+    // Connectors from headers into Evaporator
+    addSubPipe(new THREE.Vector3(-2.0, -0.6, 1.8), new THREE.Vector3(-2.0, -0.6, 0.6), 0.28, cyanConduitMat, pipeSubsystem);
+    addSubPipe(new THREE.Vector3(3.2, -0.6, 1.8), new THREE.Vector3(3.2, -0.6, 0.6), 0.28, cyanConduitMat, pipeSubsystem);
+
+    // 6B. Condenser Cooling Loop Headers (Luminous Teal #00C9A7)
+    const pCD1 = new THREE.Vector3(-4.2, 1.4, -1.9);
+    const pCD2 = new THREE.Vector3(-1.6, 1.4, -1.9);
+    const pCD3 = new THREE.Vector3(2.6, 1.4, -1.9);
+    const pCD4 = new THREE.Vector3(4.2, 1.4, -1.9);
+
+    addSubPipe(pCD1, pCD2, 0.26, tealConduitMat, pipeSubsystem);
+    addSubPipe(pCD2, pCD3, 0.26, tealConduitMat, pipeSubsystem);
+    addSubPipe(pCD3, pCD4, 0.26, tealConduitMat, pipeSubsystem);
+
+    // Connectors into Condenser Shell
+    addSubPipe(new THREE.Vector3(-1.6, 1.4, -1.9), new THREE.Vector3(-1.6, 0.9, -0.7), 0.26, tealConduitMat, pipeSubsystem);
+    addSubPipe(new THREE.Vector3(2.6, 1.4, -1.9), new THREE.Vector3(2.6, 0.9, -0.7), 0.26, tealConduitMat, pipeSubsystem);
+
+    // 6C. Copper Busbars
+    [-0.15, 0, 0.15].forEach(offset => {
+      const busbar = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.08, 0.04), copperMat);
+      busbar.position.set(2.4, 1.8 + offset, 1.2);
+      pipeSubsystem.add(busbar);
+    });
+
+    const busbarRiser = new THREE.Mesh(new THREE.BoxGeometry(0.08, 1.4, 0.35), copperMat);
+    busbarRiser.position.set(3.5, 2.2, 0.8);
+    pipeSubsystem.add(busbarRiser);
+
+    // 6D. Precision Pressure Gauges
+    function addGauge(pos, rotY, parent) {
       const gauge = new THREE.Group();
-      // Chrome casing
       const caseMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.24, 0.12, 24), chromeMat);
       caseMesh.rotation.x = Math.PI / 2;
       gauge.add(caseMesh);
 
-      // Glowing dial face
       const dial = new THREE.Mesh(new THREE.CircleGeometry(0.20, 24), dialGlowMat);
       dial.position.z = 0.07;
       gauge.add(dial);
 
-      // Needle
-      const needle = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.14, 0.02), castIronMat);
-      needle.position.set(0.04, 0.03, 0.08);
-      needle.rotation.z = -0.6;
-      gauge.add(needle);
-
-      // Mount stem
       const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.25, 8), copperMat);
       stem.position.y = -0.2;
       gauge.add(stem);
 
-      gauge.position.copy(position);
-      gauge.rotation.y = rotationY;
-      mepRoot.add(gauge);
+      gauge.position.copy(pos);
+      gauge.rotation.y = rotY;
+      parent.add(gauge);
     }
 
-    createPressureGauge(new THREE.Vector3(-1.8, 0.1, 2.1), 0);
-    createPressureGauge(new THREE.Vector3(-0.6, 3.4, 0.4), 0.3);
-    createPressureGauge(new THREE.Vector3(2.2, 0.1, 2.1), 0);
+    addGauge(new THREE.Vector3(-1.8, 0.1, 2.1), 0, pipeSubsystem);
+    addGauge(new THREE.Vector3(-0.6, 3.4, 0.4), 0.3, compressorSubsystem);
+    addGauge(new THREE.Vector3(2.2, 0.1, 2.1), 0, pipeSubsystem);
 
     // ==========================================
-    // 7. ACTIVE PULSATING FLUID & POWER PARTICLES
+    // 7. EXPLODED CAD 3D LEADER LINES
+    // ==========================================
+    function createLeaderLine(vStart, vEnd) {
+      const lineGeo = new THREE.BufferGeometry().setFromPoints([vStart, vEnd]);
+      const line = new THREE.Line(lineGeo, leaderLineMat);
+      line.computeLineDistances();
+      explodedLinesSubsystem.add(line);
+      return line;
+    }
+
+    const leaderCompressor = createLeaderLine(new THREE.Vector3(-0.2, 1.0, 0), new THREE.Vector3(-0.2, 2.6, 0));
+    const leaderEvap = createLeaderLine(new THREE.Vector3(0, -2.4, 0.6), new THREE.Vector3(0, -1.0, 0.6));
+    const leaderCond = createLeaderLine(new THREE.Vector3(0, 0, -0.7), new THREE.Vector3(0, 0.9, -0.7));
+
+    // ==========================================
+    // 8. ACTIVE PULSATING FLUID & POWER PARTICLES
     // ==========================================
     const particleCount = 42;
     const pGeo = new THREE.SphereGeometry(0.14, 8, 8);
@@ -637,7 +673,7 @@ function initHeroMep3D() {
 
     for (let i = 0; i < particleCount; i++) {
       const pMesh = new THREE.Mesh(pGeo, i % 2 === 0 ? pMatCyan : pMatTeal);
-      mepRoot.add(pMesh);
+      pipeSubsystem.add(pMesh);
       particles.push({
         mesh: pMesh,
         dist: (i / particleCount) * chwPathLen,
@@ -659,7 +695,42 @@ function initHeroMep3D() {
     }
 
     // ==========================================
-    // 8. TECHNICAL BLUEPRINT RADAR BASE
+    // 8B. PARTICULATE CHILLED VAPOR CONDUIT EMITTER
+    // ==========================================
+    const vaporCount = 40;
+    const vaporGeo = new THREE.BufferGeometry();
+    const vaporPositions = new Float32Array(vaporCount * 3);
+    const vaporBasePos = [];
+    const vaporVelocities = [];
+
+    for (let v = 0; v < vaporCount; v++) {
+      const rx = (Math.random() - 0.5) * 5.5;
+      const ry = -0.8 + (Math.random() - 0.5) * 1.4;
+      const rz = 0.6 + (Math.random() - 0.5) * 1.6;
+      vaporPositions[v * 3] = rx;
+      vaporPositions[v * 3 + 1] = ry;
+      vaporPositions[v * 3 + 2] = rz;
+      vaporBasePos.push(new THREE.Vector3(rx, ry, rz));
+      vaporVelocities.push(new THREE.Vector3(
+        (Math.random() - 0.5) * 0.35,
+        Math.random() * 0.55 + 0.1,
+        (Math.random() - 0.5) * 0.7
+      ));
+    }
+    vaporGeo.setAttribute('position', new THREE.BufferAttribute(vaporPositions, 3));
+
+    const vaporMat = new THREE.PointsMaterial({
+      color: 0x00f2fe,
+      size: isMobile ? 0.36 : 0.46,
+      transparent: true,
+      opacity: 0.0,
+      blending: THREE.AdditiveBlending
+    });
+    const vaporParticles = new THREE.Points(vaporGeo, vaporMat);
+    mepRoot.add(vaporParticles);
+
+    // ==========================================
+    // 9. TECHNICAL BLUEPRINT RADAR BASE
     // ==========================================
     const radarGeo = new THREE.RingGeometry(5.8, 5.86, 48);
     const radarMat = new THREE.MeshBasicMaterial({
@@ -677,7 +748,7 @@ function initHeroMep3D() {
     mepRoot.rotation.y = -0.42;
 
     // ==========================================
-    // 9. PHYSICS & PARALLAX ENGINE (LERP: 0.08)
+    // 10. PHYSICS, GYROSCOPE & EXPLODED VIEW ENGINE
     // ==========================================
     let mouseNormX = 0;
     let mouseNormY = 0;
@@ -686,10 +757,115 @@ function initHeroMep3D() {
     let currentRotX = 0;
     let currentRotY = -0.42;
 
-    // Max rotation 14 degrees = 0.244 rad
-    const maxRot = 0.244;
+    // Exploded View Interpolation
+    let explodeProgress = 0.0;
+    let targetExplode = 0.0;
+    let isExploded = false;
+    let isGyroActive = false;
 
+    // Global HUD Action Exposals
+    window.tcsToggleExplode = function() {
+      isExploded = !isExploded;
+      targetExplode = isExploded ? 1.0 : 0.0;
+      const btn = document.getElementById('btnHeroExplode');
+      if (btn) {
+        btn.classList.toggle('active', isExploded);
+        btn.innerHTML = isExploded ? '<span>💥 Explode: ON</span>' : '<span>💥 Exploded View</span>';
+      }
+    };
+
+    function updateGyroUI(active, note) {
+      const btn = document.getElementById('btnHeroGyro');
+      if (btn) {
+        if (active) {
+          btn.classList.add('active');
+          btn.innerHTML = '<span>📱 Gyro: ON</span>';
+        } else {
+          btn.classList.remove('active');
+          btn.innerHTML = `<span>📱 Gyro: ${note || 'OFF'}</span>`;
+        }
+      }
+    }
+
+    // DeviceOrientation API Handler (Gamma/Beta tilt tracking per specification)
+    function handleOrientation(e) {
+      if (e.gamma === null || e.beta === null) return;
+      isGyroActive = true;
+      updateGyroUI(true);
+
+      // Gamma Axis (Left/Right tilt): Drives smooth 3D camera orbit around chassis (±15 degrees = ±0.2618 rad)
+      const clampedGamma = Math.max(-25, Math.min(25, e.gamma));
+      const maxOrbitRad = 15 * (Math.PI / 180);
+      targetRotY = -0.42 + (clampedGamma / 25) * maxOrbitRad;
+
+      // Beta Axis (Forward/Backward tilt): Drives mechanical part separation distance
+      // Level phone upright (portrait vertical ~70°-90°) -> seals machine (0.0)
+      // Tilting forward (down to 25°-35° inspection angle) -> reveals internal components (1.0)
+      if (!isExploded) {
+        const phoneBeta = e.beta;
+        if (phoneBeta <= 32) {
+          targetExplode = 1.0;
+        } else if (phoneBeta >= 75) {
+          targetExplode = 0.0;
+        } else {
+          targetExplode = (75 - phoneBeta) / 43; // Smooth 0.0 to 1.0 transition
+        }
+      }
+    }
+
+    window.tcsRequestGyro = function() {
+      if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+        DeviceOrientationEvent.requestPermission()
+          .then(permissionState => {
+            if (permissionState === 'granted') {
+              window.addEventListener('deviceorientation', handleOrientation, { passive: true });
+              isGyroActive = true;
+              updateGyroUI(true);
+            } else {
+              updateGyroUI(false, 'Ditolak');
+            }
+          })
+          .catch(err => {
+            console.warn('Gyro request error:', err);
+            updateGyroUI(false, 'Izin');
+          });
+      } else if ('DeviceOrientationEvent' in window) {
+        window.addEventListener('deviceorientation', handleOrientation, { passive: true });
+        isGyroActive = true;
+        updateGyroUI(true);
+      } else {
+        updateGyroUI(false, 'N/A');
+      }
+    };
+
+    // Elegant iOS permission handling on first touch gesture
+    let hasPromptedGyro = false;
+    function requestGyroOnFirstTouch() {
+      if (hasPromptedGyro) return;
+      hasPromptedGyro = true;
+      if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+        DeviceOrientationEvent.requestPermission()
+          .then(state => {
+            if (state === 'granted') {
+              window.addEventListener('deviceorientation', handleOrientation, { passive: true });
+              isGyroActive = true;
+              updateGyroUI(true);
+            }
+          })
+          .catch(() => {});
+      }
+    }
+    window.addEventListener('touchstart', requestGyroOnFirstTouch, { once: true, passive: true });
+
+    // Auto-listen if permission is not restricted (Android & standard modern browsers)
+    if (window.DeviceOrientationEvent && typeof DeviceOrientationEvent.requestPermission !== 'function') {
+      window.addEventListener('deviceorientation', handleOrientation, { passive: true });
+    }
+
+    // Mouse Pointer Parallax
+    const maxRot = 0.244;
     function onPointer(clientX, clientY) {
+      if (isGyroActive) return; // Gyro takes precedence when tilting
       const halfW = window.innerWidth / 2;
       const halfH = window.innerHeight / 2;
       mouseNormX = (clientX - halfW) / halfW;
@@ -699,25 +875,90 @@ function initHeroMep3D() {
       targetRotX = -mouseNormY * (maxRot * 0.72);
     }
 
-    window.addEventListener('mousemove', (e) => onPointer(e.clientX, e.clientY));
+    // Mouse Dragging & Hover
+    let isMouseDown = false;
+    let mouseStartX = 0;
+    let mouseStartY = 0;
 
-    // Touch Support for Mobile
-    canvas.addEventListener('touchmove', (e) => {
+    canvas.addEventListener('mousedown', (e) => {
+      isMouseDown = true;
+      mouseStartX = e.clientX;
+      mouseStartY = e.clientY;
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (isMouseDown) {
+        const dx = e.clientX - mouseStartX;
+        const dy = e.clientY - mouseStartY;
+        mouseStartX = e.clientX;
+        mouseStartY = e.clientY;
+        targetRotY += dx * 0.007;
+        targetRotX += dy * 0.005;
+        targetRotX = Math.max(-0.6, Math.min(0.6, targetRotX));
+      } else {
+        onPointer(e.clientX, e.clientY);
+      }
+    });
+
+    window.addEventListener('mouseup', () => {
+      isMouseDown = false;
+    });
+
+    // Touch Drag Orbit Fallback for Mobile Viewports
+    let isTouchActive = false;
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    canvas.addEventListener('touchstart', (e) => {
       if (e.touches.length === 1) {
-        onPointer(e.touches[0].clientX, e.touches[0].clientY);
+        isTouchActive = true;
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
       }
     }, { passive: true });
 
-    // Responsive Canvas Resize
+    canvas.addEventListener('touchmove', (e) => {
+      if (isTouchActive && e.touches.length === 1) {
+        const dx = e.touches[0].clientX - touchStartX;
+        const dy = e.touches[0].clientY - touchStartY;
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+
+        targetRotY += dx * 0.009;
+        targetRotX += dy * 0.007;
+        targetRotX = Math.max(-0.65, Math.min(0.65, targetRotX));
+      }
+    }, { passive: true });
+
+    canvas.addEventListener('touchend', () => {
+      isTouchActive = false;
+    });
+
+    // Double-tap on canvas to toggle exploded view
+    let lastTapTime = 0;
+    canvas.addEventListener('touchend', (e) => {
+      const now = Date.now();
+      if (now - lastTapTime < 300) {
+        window.tcsToggleExplode();
+        if (e.cancelable) e.preventDefault();
+      }
+      lastTapTime = now;
+    });
+
+    // Responsive Canvas & Projection Matrix Resize
     function onResize() {
       if (!container || !renderer || !camera) return;
-      const w = container.clientWidth || 540;
-      const h = container.clientHeight || Math.round(w * 0.75) || 405;
-      camera.aspect = w / h;
+      const bRect = container.getBoundingClientRect();
+      const w = bRect.width || container.clientWidth || 540;
+      const h = bRect.height || container.clientHeight || Math.round(w * 0.75) || 405;
+      if (w <= 0 || h <= 0) return;
 
+      camera.aspect = w / h;
       const isMob = window.innerWidth <= 768;
       camera.position.set(isMob ? 21 : 16, isMob ? 12 : 10, isMob ? 22 : 17);
       camera.updateProjectionMatrix();
+
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
       renderer.setSize(w, h, false);
     }
     window.addEventListener('resize', onResize);
@@ -742,13 +983,82 @@ function initHeroMep3D() {
 
       const time = clock.getElapsedTime();
 
-      // Smooth Physics Interpolation (lerp: 0.08)
-      currentRotX += (targetRotX - currentRotX) * 0.08;
-      currentRotY += (targetRotY - currentRotY) * 0.08;
+      // Smooth Physics Interpolation (lerp: 0.05 per gyro specification)
+      currentRotX += (targetRotX - currentRotX) * 0.05;
+      currentRotY += (targetRotY - currentRotY) * 0.05;
 
-      // Subtle Harmonic Idle Float & Vibration
+      // Lerp Exploded View Factor
+      explodeProgress += (targetExplode - explodeProgress) * 0.06;
+
+      // Apply Exploded Displacements to Subsystems
+      compressorSubsystem.position.set(
+        -0.4 * explodeProgress,
+        2.4 * explodeProgress,
+        0
+      );
+      condSubsystem.position.set(
+        0,
+        1.2 * explodeProgress,
+        -1.8 * explodeProgress
+      );
+      evapSubsystem.position.set(
+        0,
+        -0.6 * explodeProgress,
+        1.5 * explodeProgress
+      );
+      panelSubsystem.position.set(
+        0,
+        0.3 * explodeProgress,
+        2.2 * explodeProgress
+      );
+      pipeSubsystem.position.set(
+        0,
+        0.3 * explodeProgress,
+        0.6 * explodeProgress
+      );
+
+      // Rotate Revealed Internal Impeller
+      if (impellerRotor) {
+        impellerRotor.rotation.z += 0.06;
+      }
+
+      // Fade in leader lines
+      if (leaderLineMat) {
+        leaderLineMat.opacity = Math.min(0.65, explodeProgress * 0.85);
+      }
+
+      // Particulate Chilled Vapor pulse & dispersion
+      if (vaporParticles && vaporMat) {
+        const vaporPositionsArr = vaporGeo.attributes.position.array;
+        const pulseFactor = Math.sin(time * 3.8);
+        vaporMat.opacity = Math.max(0, explodeProgress * (0.55 + pulseFactor * 0.22));
+
+        for (let v = 0; v < vaporCount; v++) {
+          const base = vaporBasePos[v];
+          const vel = vaporVelocities[v];
+          const disp = explodeProgress * 1.6;
+          vaporPositionsArr[v * 3] = base.x + vel.x * disp + Math.sin(time * 2.0 + v) * 0.12;
+          vaporPositionsArr[v * 3 + 1] = base.y + vel.y * disp + Math.cos(time * 2.4 + v) * 0.12;
+          vaporPositionsArr[v * 3 + 2] = base.z + vel.z * disp + pulseFactor * 0.1;
+        }
+        vaporGeo.attributes.position.needsUpdate = true;
+      }
+
+      // Floating Holographic Telemetry Pins update
+      const pinsContainer = document.getElementById('hero3dPins');
+      if (pinsContainer) {
+        if (explodeProgress > 0.25) {
+          pinsContainer.classList.add('active');
+          pinsContainer.style.opacity = Math.min(1, (explodeProgress - 0.25) / 0.45);
+        } else {
+          pinsContainer.classList.remove('active');
+          pinsContainer.style.opacity = 0;
+        }
+      }
+
+      // Subtle Harmonic Idle Float & Micro-Vibration
       const idleFloatY = Math.sin(time * 1.2) * 0.18;
-      const idleVibe = Math.sin(time * 24.0) * 0.003; // Real industrial machinery micro-vibration!
+      const idleVibe = Math.sin(time * 24.0) * 0.003;
 
       mepRoot.position.y = idleFloatY + idleVibe;
       mepRoot.rotation.x = currentRotX + Math.cos(time * 0.7) * 0.012;
@@ -830,6 +1140,40 @@ function initServiceTabs() {
           window.tcsBimState.resize();
         }, 50);
       }
+      if (tabId === 'spklu') {
+        const evCanvas = document.getElementById('evChargingCanvas');
+        if (evCanvas && typeof window.triggerEvChargingPulse === 'function') {
+          window.triggerEvChargingPulse();
+        }
+      }
+    });
+  });
+}
+
+/* ==========================================================================
+   2D. VERIFIED PROJECT MATRIX SECTOR FILTERS
+   ========================================================================== */
+function initProjectMatrixFilters() {
+  const filterBtns = document.querySelectorAll('.matrix-filter-btn');
+  const dossierCards = document.querySelectorAll('.dossier-card');
+  if (!filterBtns.length || !dossierCards.length) return;
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const targetFilter = btn.getAttribute('data-filter') || 'all';
+
+      dossierCards.forEach(card => {
+        const categories = (card.getAttribute('data-category') || '').split(/\s+/);
+        if (targetFilter === 'all' || categories.includes(targetFilter)) {
+          card.style.display = 'flex';
+          setTimeout(() => { card.style.opacity = '1'; }, 10);
+        } else {
+          card.style.display = 'none';
+          card.style.opacity = '0';
+        }
+      });
     });
   });
 }
@@ -1105,6 +1449,10 @@ function initEvChargingSimulation() {
 
   let animTime = 0;
   let lastTimestamp = performance.now();
+
+  window.triggerEvChargingPulse = function() {
+    lastTimestamp = performance.now();
+  };
 
   // Exact coordinates mapped to images/ev.png (600x380 viewport)
   // Middle Dispenser
