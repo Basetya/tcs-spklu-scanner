@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
@@ -166,13 +166,118 @@
       background: var(--border-card);
       margin: 20px 0;
     }
+
+    /* Toggle Switch Styling */
+    .toggle-control-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      background: rgba(3, 7, 18, 0.65);
+      border: 1px solid var(--border-card);
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 8px;
+    }
+
+    .toggle-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .toggle-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .toggle-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .toggle-status-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      padding: 3px 9px;
+      border-radius: 6px;
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #fca5a5;
+      margin-top: 6px;
+      width: fit-content;
+      transition: all 0.3s ease;
+    }
+
+    .toggle-status-badge.is-live {
+      background: rgba(0, 229, 117, 0.15);
+      border-color: rgba(0, 229, 117, 0.4);
+      color: #86efac;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 28px;
+      flex-shrink: 0;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #334155;
+      transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 28px;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 50%;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    input:checked + .slider {
+      background: linear-gradient(135deg, #00f2fe 0%, #00e575 100%);
+      box-shadow: 0 0 12px rgba(0, 242, 254, 0.5);
+    }
+
+    input:focus + .slider {
+      box-shadow: 0 0 1px #00f2fe;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(22px);
+      background-color: #030712;
+    }
   </style>
 </head>
 <body>
 
   <div class="admin-card">
     <div class="header-logo">
-      <div style="display:flex;justify-content:center;margin-bottom:12px;"><img src="images/logo-tcs.png" alt="PT. Titis Cahaya Sejahtera" style="height: 48px; width: auto; max-height: 52px; object-fit: contain; display: block;" class="brand-logo-img"></div>
       <div style="display:flex;justify-content:center;margin-bottom:12px;"><img src="images/logo-tcs.png" alt="PT. Titis Cahaya Sejahtera" style="height: 48px; width: auto; max-height: 52px; object-fit: contain; display: block;" class="brand-logo-img"></div>
       <span class="status-badge">TCS Control System</span>
       <h1>Admin Dashboard</h1>
@@ -213,6 +318,24 @@
 
       <div class="divider"></div>
 
+      <!-- FLOATING CONTACT SETTINGS SECTION -->
+      <div class="floating-settings-section">
+        <label class="form-label" style="color: var(--primary-teal);">Floating Contact Settings</label>
+        <div class="toggle-control-card">
+          <div class="toggle-info">
+            <span class="toggle-title">Enable Live WhatsApp & Call Buttons</span>
+            <span class="toggle-desc">Aktifkan untuk panggilan langsung / chat. Nonaktifkan untuk Mode Demo edukatif.</span>
+            <span class="toggle-status-badge" id="toggleStatusLabel">STATUS: MODE DEMO (OFF)</span>
+          </div>
+          <label class="switch" for="liveContactToggle">
+            <input type="checkbox" id="liveContactToggle" aria-label="Toggle Live WhatsApp and Call">
+            <span class="slider round"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
       <!-- FORM UBAH PASSWORD -->
       <form id="changePasswordForm">
         <label class="form-label" style="color: var(--primary-teal);">Ubah Kata Sandi Admin</label>
@@ -248,6 +371,35 @@
       const waMainInput = document.getElementById('waMainInput');
       const waSpkluInput = document.getElementById('waSpkluInput');
       const newPasswordInput = document.getElementById('newPasswordInput');
+      const liveContactToggle = document.getElementById('liveContactToggle');
+      const toggleStatusLabel = document.getElementById('toggleStatusLabel');
+
+      function updateToggleUI(isLive) {
+        if (liveContactToggle) liveContactToggle.checked = isLive;
+        if (toggleStatusLabel) {
+          if (isLive) {
+            toggleStatusLabel.textContent = 'STATUS: LIVE ONLINE (ON)';
+            toggleStatusLabel.className = 'toggle-status-badge is-live';
+          } else {
+            toggleStatusLabel.textContent = 'STATUS: MODE DEMO (OFF)';
+            toggleStatusLabel.className = 'toggle-status-badge';
+          }
+        }
+      }
+
+      function initContactToggle() {
+        const isLive = localStorage.getItem('tcs_live_contact_enabled') === 'true';
+        updateToggleUI(isLive);
+      }
+
+      if (liveContactToggle) {
+        liveContactToggle.addEventListener('change', function() {
+          const isLive = liveContactToggle.checked;
+          localStorage.setItem('tcs_live_contact_enabled', isLive ? 'true' : 'false');
+          updateToggleUI(isLive);
+          showAlert(isLive ? 'Tombol WA & Call sekarang LIVE ONLINE (ON).' : 'Tombol WA & Call kembali ke MODE DEMO (OFF).', true);
+        });
+      }
 
       function showAlert(msg, isSuccess) {
         alertBox.textContent = msg;
@@ -262,11 +414,15 @@
 
       async function sendGasRequest(action, dataPayload) {
         try {
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 3500);
           const response = await fetch(GAS_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify({ action: action, data: dataPayload })
+            body: JSON.stringify({ action: action, data: dataPayload }),
+            signal: controller.signal
           });
+          clearTimeout(timeoutId);
           return await response.json();
         } catch (e) {
           return null;
@@ -274,6 +430,7 @@
       }
 
       async function loadCurrentConfig() {
+        initContactToggle();
         const res = await sendGasRequest('getSystemConfig', {});
         if (res && res.success && res.config) {
           waMainInput.value = res.config.waMain || DEFAULT_WA_MAIN;
@@ -293,10 +450,15 @@
         
         // Pengecekan awal lokal / fallback
         const localSavedPass = localStorage.getItem('tcs_admin_pass') || DEFAULT_PASS;
+        let isValid = (enteredPass === localSavedPass);
 
-        // Validasi ke backend GAS
-        const res = await sendGasRequest('verifyAdminPassword', { password: enteredPass });
-        const isValid = (res && res.success) ? res.valid : (enteredPass === localSavedPass);
+        if (!isValid) {
+          // Validasi ke backend GAS jika lokal tidak cocok
+          const res = await sendGasRequest('verifyAdminPassword', { password: enteredPass });
+          if (res && res.success && res.valid) {
+            isValid = true;
+          }
+        }
 
         if (isValid) {
           sessionStorage.setItem('tcs_admin_auth', 'true');

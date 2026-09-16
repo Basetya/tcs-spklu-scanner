@@ -3511,4 +3511,76 @@ if (document.getElementById('estIndustry')) generateAIQuotation();
     initMasterpieceScada();
   }
 })();
+
+// Floating Contact Demo Notification System
+(function() {
+  var demoModalTimeout = null;
+
+  window.isLiveContactEnabled = function() {
+    return localStorage.getItem('tcs_live_contact_enabled') === 'true';
+  };
+
+  window.showDemoContactModal = function() {
+    var modal = document.getElementById('demoContactModal');
+    if (!modal) return;
+    modal.classList.add('active');
+    modal.setAttribute('aria-hidden', 'false');
+
+    var progress = document.getElementById('demoModalProgress');
+    if (progress) {
+      progress.style.animation = 'none';
+      void progress.offsetWidth;
+      progress.style.animation = 'demoModalTimer 4s linear forwards';
+    }
+
+    if (demoModalTimeout) clearTimeout(demoModalTimeout);
+    demoModalTimeout = setTimeout(function() {
+      window.closeDemoContactModal();
+    }, 4000);
+  };
+
+  window.closeDemoContactModal = function() {
+    var modal = document.getElementById('demoContactModal');
+    if (!modal) return;
+    modal.classList.remove('active');
+    modal.setAttribute('aria-hidden', 'true');
+    if (demoModalTimeout) {
+      clearTimeout(demoModalTimeout);
+      demoModalTimeout = null;
+    }
+  };
+
+  function attachDemoListeners() {
+    var waBtn = document.getElementById('floatingWaBtn') || document.querySelector('.float-wa');
+    var callBtn = document.getElementById('floatingCallBtn') || document.querySelector('.float-call');
+
+    if (waBtn && !waBtn.dataset.demoBound) {
+      waBtn.dataset.demoBound = "true";
+      waBtn.addEventListener('click', function(e) {
+        if (!window.isLiveContactEnabled()) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.showDemoContactModal();
+        }
+      });
+    }
+
+    if (callBtn && !callBtn.dataset.demoBound) {
+      callBtn.dataset.demoBound = "true";
+      callBtn.addEventListener('click', function(e) {
+        if (!window.isLiveContactEnabled()) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.showDemoContactModal();
+        }
+      });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', attachDemoListeners);
+  } else {
+    attachDemoListeners();
+  }
+})();
 </script>
