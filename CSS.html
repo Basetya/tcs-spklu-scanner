@@ -489,7 +489,9 @@ a {
   font-size: 17px;
   line-height: 1.7;
   color: var(--text-secondary);
-  margin-bottom: 40px;
+  position: relative;
+  z-index: 2;
+  margin-bottom: 28px;
   max-width: 520px;
 }
 
@@ -566,8 +568,9 @@ a {
   position: relative;
   z-index: 3;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-start;
   flex: 0 0 auto;
   width: 100%;
   max-width: 580px;
@@ -578,10 +581,14 @@ a {
   width: 100%;
   max-width: 580px;
   aspect-ratio: 4 / 3;
-  margin: 0 auto;
+  margin: 0;
   display: block;
   flex: 0 0 auto;
-  overflow: visible;
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 242, 254, 0.2);
+  background: radial-gradient(circle at center, rgba(0, 242, 254, 0.04) 0%, rgba(3, 7, 18, 0.6) 85%);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(0, 242, 254, 0.08);
 }
 
 #hero-mep-canvas {
@@ -611,6 +618,7 @@ a {
   z-index: 5;
   opacity: 0;
   transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
 }
 
 .hero-3d-telemetry-pins.active,
@@ -625,6 +633,8 @@ a {
   gap: 8px;
   transform: translateY(6px);
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+  max-width: 280px;
+  pointer-events: none;
 }
 
 .hero-3d-telemetry-pins.active .hero-telemetry-pin,
@@ -633,18 +643,18 @@ a {
 }
 
 .pin-compressor {
-  top: 14%;
+  top: 12%;
   left: 6%;
 }
 
 .pin-chilled-water {
-  top: 48%;
-  right: 5%;
+  top: 42%;
+  right: 6%;
 }
 
 .pin-vibration {
-  bottom: 20%;
-  left: 8%;
+  bottom: 22%;
+  left: 6%;
 }
 
 .pin-marker {
@@ -708,25 +718,32 @@ a {
   color: #e2e8f0;
 }
 
-/* Floating Technical Glassmorphism HUD Metric Badge */
-.hero-3d-hud-badge {
-  position: absolute;
-  bottom: 20px;
-  right: 16px;
-  background: rgba(11, 15, 23, 0.84);
+/* Floating Technical Glassmorphism HUD Metric Badge / Metric Card */
+.hero-3d-hud-badge,
+.metrics-card,
+.bim-mep-matrix {
+  position: relative;
+  margin-top: 16px;
+  margin-bottom: 24px;
+  margin-left: auto;
+  margin-right: 0;
+  width: 100%;
+  max-width: 380px;
+  background: rgba(11, 15, 23, 0.88);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(0, 242, 254, 0.28);
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), 0 0 24px rgba(0, 242, 254, 0.15);
   border-radius: 14px;
   padding: 14px 20px;
-  min-width: 210px;
   z-index: 4;
   pointer-events: auto;
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.hero-3d-hud-badge:hover {
+.hero-3d-hud-badge:hover,
+.metrics-card:hover,
+.bim-mep-matrix:hover {
   transform: translateY(-4px);
   border-color: rgba(0, 242, 254, 0.65);
   box-shadow: 0 20px 48px rgba(0, 0, 0, 0.7), 0 0 35px rgba(0, 242, 254, 0.3);
@@ -806,22 +823,28 @@ a {
   border-radius: 4px;
 }
 
-/* 3D BIM Controls on HUD Badge */
+/* 3D BIM Controls on Hero Canvas */
 .hero-3d-interactive-actions {
+  position: absolute;
+  bottom: 14px;
+  left: 16px;
   display: flex;
   gap: 8px;
-  margin-top: 10px;
   flex-wrap: wrap;
+  z-index: 6;
+  pointer-events: auto;
 }
 
 .hero-3d-action-btn {
-  background: rgba(0, 242, 254, 0.12);
+  background: rgba(11, 15, 23, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(0, 242, 254, 0.35);
   color: #00f2fe;
   font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
-  padding: 5px 10px;
+  padding: 6px 12px;
   border-radius: 6px;
   cursor: pointer;
   display: inline-flex;
@@ -2616,33 +2639,45 @@ textarea.form-input-text {
     flex-direction: column;
     align-items: center;
     gap: 0;
+    width: 100%;
+    padding: 0 16px;
   }
   .hero-content {
     display: contents;
   }
+  .hero-visual {
+    display: contents;
+  }
   .hero-title {
-    order: 2;
+    order: 1;
     font-size: 32px;
     line-height: 1.18;
     text-align: center;
     margin-bottom: 12px;
   }
-  .hero-visual {
-    order: 3;
-    width: 100%;
-    margin: 4px auto 10px auto;
+  .hero-description {
+    order: 2;
+    position: relative;
+    z-index: 2;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.5;
+    max-width: 520px;
     display: block;
-    flex: 0 0 auto;
   }
   .hero-3d-container {
+    order: 3;
     width: 100%;
     height: 280px;
     max-height: 38vh;
-    margin: 12px auto;
+    margin: 0 auto;
     display: block;
     position: relative;
     flex: 0 0 auto;
-    overflow: visible;
+    overflow: hidden;
+    border-radius: 16px;
+    border: 1px solid rgba(0, 242, 254, 0.2);
     aspect-ratio: auto !important;
   }
   #hero-mep-canvas {
@@ -2654,60 +2689,92 @@ textarea.form-input-text {
     display: block;
     touch-action: none;
   }
-  .hero-description {
+  .hero-3d-interactive-actions {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    z-index: 6;
+  }
+  .hero-3d-action-btn {
+    padding: 5px 10px;
+    font-size: 10px;
+  }
+  .hero-3d-hud-badge,
+  .metrics-card,
+  .bim-mep-matrix {
     order: 4;
-    text-align: center;
-    margin: 0 auto 14px auto;
-    font-size: 14px;
-    line-height: 1.5;
-    max-width: 520px;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    position: relative;
+    bottom: auto;
+    right: auto;
+    margin-top: 16px;
+    margin-bottom: 24px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    max-width: 380px;
+    padding: 12px 18px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6), 0 0 15px rgba(0, 242, 254, 0.15);
   }
   .hero-btns {
     order: 5;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px;
-    flex-wrap: nowrap;
-    margin-bottom: 10px;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+    width: 100%;
   }
   .hero-btns .btn {
-    padding: 10px 16px;
-    font-size: 13px;
+    padding: 12px 20px;
+    font-size: 13.5px;
     white-space: nowrap;
   }
-  .hero-3d-hud-badge {
-    position: relative;
-    bottom: auto;
-    right: auto;
-    margin: -15px auto 0 auto;
-    width: fit-content;
-    max-width: 92%;
-    padding: 8px 14px;
-    min-width: unset;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6), 0 0 15px rgba(0, 242, 254, 0.15);
+  .hero-3d-telemetry-pins {
+    overflow: hidden;
   }
-  .pin-compressor {
-    top: 6%;
-    left: 4%;
-  }
-  .pin-chilled-water {
-    top: 38%;
-    right: 3%;
-  }
-  .pin-vibration {
-    bottom: 24%;
-    left: 4%;
+  .hero-telemetry-pin {
+    max-width: 240px;
+    font-size: 11px;
+    gap: 6px;
   }
   .pin-content {
-    padding: 3px 6px;
+    padding: 4px 8px;
+    font-size: 11px;
+    max-width: 215px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .pin-badge {
+    font-size: 9px;
+    padding: 2px 5px;
+    flex-shrink: 0;
   }
   .pin-text {
-    font-size: 8.5px;
+    font-size: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .pin-compressor {
+    top: 8%;
+    left: 5%;
+    right: auto;
+  }
+  .pin-chilled-water {
+    top: 40%;
+    right: 5%;
+    left: auto;
+  }
+  .pin-vibration {
+    bottom: 22%;
+    left: 5%;
+    right: auto;
   }
   .stats-section .container {
     display: grid;

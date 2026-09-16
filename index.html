@@ -281,29 +281,32 @@
             </div>
           </div>
 
-          <div class="hero-3d-hud-badge">
-            <div class="hud-status-indicator">
-              <span class="hud-dot"></span>
-              <span class="hud-status-text">BIM MEP MATRIX ONLINE</span>
-            </div>
-            <div class="hud-metric-row">
-              <span class="hud-metric-value" id="hero-proj-count">100+</span>
-              <span class="hud-metric-label" data-translate="hero_sphere_text">Proyek Sukses</span>
-            </div>
-            <div class="hud-tech-tags">
-              <span>HVAC</span>
-              <span>ELEC</span>
-              <span>PIPE</span>
-              <span>FIRE</span>
-            </div>
-            <div class="hero-3d-interactive-actions">
-              <button type="button" class="hero-3d-action-btn" id="btnHeroExplode" onclick="window.tcsToggleExplode()">
-                <span>💥 Exploded View</span>
-              </button>
-              <button type="button" class="hero-3d-action-btn" id="btnHeroGyro" onclick="window.tcsRequestGyro()">
-                <span>📱 Gyro Orbit</span>
-              </button>
-            </div>
+          <!-- Exploded & Gyro Controls Bar -->
+          <div class="hero-3d-interactive-actions">
+            <button type="button" class="hero-3d-action-btn" id="btnHeroExplode" onclick="window.tcsToggleExplode()">
+              <span>💥 Exploded View</span>
+            </button>
+            <button type="button" class="hero-3d-action-btn" id="btnHeroGyro" onclick="window.tcsRequestGyro()">
+              <span>📱 Gyro Orbit</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Metric Card (Step 4) -->
+        <div class="hero-3d-hud-badge metrics-card bim-mep-matrix">
+          <div class="hud-status-indicator">
+            <span class="hud-dot"></span>
+            <span class="hud-status-text">BIM MEP MATRIX ONLINE</span>
+          </div>
+          <div class="hud-metric-row">
+            <span class="hud-metric-value" id="hero-proj-count">100+</span>
+            <span class="hud-metric-label" data-translate="hero_sphere_text">Proyek Sukses</span>
+          </div>
+          <div class="hud-tech-tags">
+            <span>HVAC</span>
+            <span>ELEC</span>
+            <span>PIPE</span>
+            <span>FIRE</span>
           </div>
         </div>
       </div>
