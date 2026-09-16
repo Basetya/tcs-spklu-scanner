@@ -770,7 +770,16 @@ function initHeroMep3D() {
       const btn = document.getElementById('btnHeroExplode');
       if (btn) {
         btn.classList.toggle('active', isExploded);
-        btn.innerHTML = isExploded ? '<span>💥 Explode: ON</span>' : '<span>💥 Exploded View</span>';
+        btn.innerHTML = isExploded ? '<span>🔒 ASSEMBLE VIEW</span>' : '<span>💥 EXPLODED VIEW</span>';
+      }
+      const container = document.getElementById('hero-3d-container');
+      if (container) {
+        container.classList.toggle('exploded', isExploded);
+      }
+      const pinsContainer = document.getElementById('hero3dPins');
+      if (pinsContainer && !isExploded) {
+        pinsContainer.classList.remove('active');
+        pinsContainer.style.pointerEvents = 'none';
       }
     };
 
@@ -779,10 +788,10 @@ function initHeroMep3D() {
       if (btn) {
         if (active) {
           btn.classList.add('active');
-          btn.innerHTML = '<span>📱 Gyro: ON</span>';
+          btn.innerHTML = '<span>📱 GYRO: ON</span>';
         } else {
           btn.classList.remove('active');
-          btn.innerHTML = `<span>📱 Gyro: ${note || 'OFF'}</span>`;
+          btn.innerHTML = `<span>📱 GYRO: ${note || 'OFF'}</span>`;
         }
       }
     }
@@ -798,19 +807,10 @@ function initHeroMep3D() {
       const maxOrbitRad = 15 * (Math.PI / 180);
       targetRotY = -0.42 + (clampedGamma / 25) * maxOrbitRad;
 
-      // Beta Axis (Forward/Backward tilt): Drives mechanical part separation distance
-      // Level phone upright (portrait vertical ~70°-90°) -> seals machine (0.0)
-      // Tilting forward (down to 25°-35° inspection angle) -> reveals internal components (1.0)
-      if (!isExploded) {
-        const phoneBeta = e.beta;
-        if (phoneBeta <= 32) {
-          targetExplode = 1.0;
-        } else if (phoneBeta >= 75) {
-          targetExplode = 0.0;
-        } else {
-          targetExplode = (75 - phoneBeta) / 43; // Smooth 0.0 to 1.0 transition
-        }
-      }
+      // Beta Axis (Forward/Backward tilt): Drives camera pitch elevation (±8 degrees)
+      const clampedBeta = Math.max(-20, Math.min(20, e.beta - 50));
+      const maxPitchRad = 8 * (Math.PI / 180);
+      targetRotX = -(clampedBeta / 20) * maxPitchRad;
     }
 
     window.tcsRequestGyro = function() {
@@ -987,34 +987,44 @@ function initHeroMep3D() {
       currentRotX += (targetRotX - currentRotX) * 0.05;
       currentRotY += (targetRotY - currentRotY) * 0.05;
 
-      // Lerp Exploded View Factor
-      explodeProgress += (targetExplode - explodeProgress) * 0.06;
+      // Lerp Exploded View Factor (requestAnimationFrame linear interpolation lerp 0.08 per specification)
+      explodeProgress += (targetExplode - explodeProgress) * 0.08;
+      if (!isExploded && explodeProgress < 0.002) {
+        explodeProgress = 0.0;
+      } else if (isExploded && explodeProgress > 0.998) {
+        explodeProgress = 1.0;
+      }
 
-      // Apply Exploded Displacements to Subsystems
+      // Apply Exploded Displacements to Subsystems (>= 1.5x separation outward vectors)
+      // Top compressor translates upward (+Y)
       compressorSubsystem.position.set(
-        -0.4 * explodeProgress,
-        2.4 * explodeProgress,
+        -0.6 * explodeProgress,
+        3.8 * explodeProgress,
         0
       );
+      // Condenser vessel translates upward & rearward
       condSubsystem.position.set(
         0,
-        1.2 * explodeProgress,
-        -1.8 * explodeProgress
+        1.8 * explodeProgress,
+        -2.8 * explodeProgress
       );
+      // Lower evaporator vessel translates downward & forward (+Z)
       evapSubsystem.position.set(
         0,
-        -0.6 * explodeProgress,
-        1.5 * explodeProgress
+        -1.2 * explodeProgress,
+        2.4 * explodeProgress
       );
+      // Control panel translates forward (+Z)
       panelSubsystem.position.set(
-        0,
-        0.3 * explodeProgress,
-        2.2 * explodeProgress
+        0.8 * explodeProgress,
+        0.5 * explodeProgress,
+        3.5 * explodeProgress
       );
+      // Lateral piping & headers displace outward laterally (±X)
       pipeSubsystem.position.set(
-        0,
-        0.3 * explodeProgress,
-        0.6 * explodeProgress
+        2.2 * explodeProgress,
+        0.5 * explodeProgress,
+        1.2 * explodeProgress
       );
 
       // Rotate Revealed Internal Impeller
@@ -1024,14 +1034,14 @@ function initHeroMep3D() {
 
       // Fade in leader lines
       if (leaderLineMat) {
-        leaderLineMat.opacity = Math.min(0.65, explodeProgress * 0.85);
+        leaderLineMat.opacity = Math.min(0.75, explodeProgress * 0.9);
       }
 
       // Particulate Chilled Vapor pulse & dispersion
       if (vaporParticles && vaporMat) {
         const vaporPositionsArr = vaporGeo.attributes.position.array;
         const pulseFactor = Math.sin(time * 3.8);
-        vaporMat.opacity = Math.max(0, explodeProgress * (0.55 + pulseFactor * 0.22));
+        vaporMat.opacity = explodeProgress > 0.05 ? Math.max(0, explodeProgress * (0.55 + pulseFactor * 0.22)) : 0;
 
         for (let v = 0; v < vaporCount; v++) {
           const base = vaporBasePos[v];
@@ -1044,15 +1054,20 @@ function initHeroMep3D() {
         vaporGeo.attributes.position.needsUpdate = true;
       }
 
-      // Floating Holographic Telemetry Pins update
+      // Floating Holographic Telemetry Pins update with lerp progress
       const pinsContainer = document.getElementById('hero3dPins');
       if (pinsContainer) {
-        if (explodeProgress > 0.25) {
+        if (explodeProgress > 0.15) {
           pinsContainer.classList.add('active');
-          pinsContainer.style.opacity = Math.min(1, (explodeProgress - 0.25) / 0.45);
+          const pOpacity = Math.min(1, Math.max(0, (explodeProgress - 0.15) / 0.5));
+          pinsContainer.style.opacity = pOpacity;
+          pinsContainer.style.pointerEvents = 'auto';
+          pinsContainer.style.visibility = 'visible';
         } else {
           pinsContainer.classList.remove('active');
-          pinsContainer.style.opacity = 0;
+          pinsContainer.style.opacity = '0';
+          pinsContainer.style.pointerEvents = 'none';
+          pinsContainer.style.visibility = 'hidden';
         }
       }
 
