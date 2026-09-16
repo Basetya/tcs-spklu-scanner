@@ -323,9 +323,9 @@
         <label class="form-label" style="color: var(--primary-teal);">Floating Contact Settings</label>
         <div class="toggle-control-card">
           <div class="toggle-info">
-            <span class="toggle-title">Enable Live WhatsApp & Call Buttons</span>
-            <span class="toggle-desc">Aktifkan untuk panggilan langsung / chat. Nonaktifkan untuk Mode Demo edukatif.</span>
-            <span class="toggle-status-badge" id="toggleStatusLabel">STATUS: MODE DEMO (OFF)</span>
+            <span class="toggle-title">Enable Floating WhatsApp & Call Buttons</span>
+            <span class="toggle-desc">Aktifkan untuk menampilkan tombol floating WhatsApp dan Telepon Langsung di website publik. Nonaktifkan untuk menyembunyikannya.</span>
+            <span class="toggle-status-badge" id="toggleStatusLabel">STATUS: HIDDEN (OFF)</span>
           </div>
           <label class="switch" for="liveContactToggle">
             <input type="checkbox" id="liveContactToggle" aria-label="Toggle Live WhatsApp and Call">
@@ -378,10 +378,10 @@
         if (liveContactToggle) liveContactToggle.checked = isLive;
         if (toggleStatusLabel) {
           if (isLive) {
-            toggleStatusLabel.textContent = 'STATUS: LIVE ONLINE (ON)';
+            toggleStatusLabel.textContent = 'STATUS: VISIBLE (ON)';
             toggleStatusLabel.className = 'toggle-status-badge is-live';
           } else {
-            toggleStatusLabel.textContent = 'STATUS: MODE DEMO (OFF)';
+            toggleStatusLabel.textContent = 'STATUS: HIDDEN (OFF)';
             toggleStatusLabel.className = 'toggle-status-badge';
           }
         }
@@ -397,7 +397,7 @@
           const isLive = liveContactToggle.checked;
           localStorage.setItem('tcs_live_contact_enabled', isLive ? 'true' : 'false');
           updateToggleUI(isLive);
-          showAlert(isLive ? 'Tombol WA & Call sekarang LIVE ONLINE (ON).' : 'Tombol WA & Call kembali ke MODE DEMO (OFF).', true);
+          showAlert(isLive ? 'Tombol floating WA & Call sekarang TAMPIL (ON).' : 'Tombol floating WA & Call sekarang DISEMBUNYIKAN (OFF).', true);
         });
       }
 

@@ -3512,75 +3512,35 @@ if (document.getElementById('estIndustry')) generateAIQuotation();
   }
 })();
 
-// Floating Contact Demo Notification System
+// Floating Contact Visibility Sync (Controlled via Admin Toggle)
 (function() {
-  var demoModalTimeout = null;
-
-  window.isLiveContactEnabled = function() {
-    return localStorage.getItem('tcs_live_contact_enabled') === 'true';
-  };
-
-  window.showDemoContactModal = function() {
-    var modal = document.getElementById('demoContactModal');
-    if (!modal) return;
-    modal.classList.add('active');
-    modal.setAttribute('aria-hidden', 'false');
-
-    var progress = document.getElementById('demoModalProgress');
-    if (progress) {
-      progress.style.animation = 'none';
-      void progress.offsetWidth;
-      progress.style.animation = 'demoModalTimer 4s linear forwards';
-    }
-
-    if (demoModalTimeout) clearTimeout(demoModalTimeout);
-    demoModalTimeout = setTimeout(function() {
-      window.closeDemoContactModal();
-    }, 4000);
-  };
-
-  window.closeDemoContactModal = function() {
-    var modal = document.getElementById('demoContactModal');
-    if (!modal) return;
-    modal.classList.remove('active');
-    modal.setAttribute('aria-hidden', 'true');
-    if (demoModalTimeout) {
-      clearTimeout(demoModalTimeout);
-      demoModalTimeout = null;
-    }
-  };
-
-  function attachDemoListeners() {
-    var waBtn = document.getElementById('floatingWaBtn') || document.querySelector('.float-wa');
-    var callBtn = document.getElementById('floatingCallBtn') || document.querySelector('.float-call');
-
-    if (waBtn && !waBtn.dataset.demoBound) {
-      waBtn.dataset.demoBound = "true";
-      waBtn.addEventListener('click', function(e) {
-        if (!window.isLiveContactEnabled()) {
-          e.preventDefault();
-          e.stopPropagation();
-          window.showDemoContactModal();
-        }
-      });
-    }
-
-    if (callBtn && !callBtn.dataset.demoBound) {
-      callBtn.dataset.demoBound = "true";
-      callBtn.addEventListener('click', function(e) {
-        if (!window.isLiveContactEnabled()) {
-          e.preventDefault();
-          e.stopPropagation();
-          window.showDemoContactModal();
-        }
-      });
+  function syncFloatingContactVisibility() {
+    var isLive = localStorage.getItem('tcs_live_contact_enabled') === 'true';
+    var container = document.querySelector('.floating-container');
+    if (!container) return;
+    if (isLive) {
+      container.style.setProperty('display', 'flex', 'important');
+      container.style.setProperty('opacity', '1', 'important');
+      container.style.setProperty('pointer-events', 'auto', 'important');
+    } else {
+      container.style.setProperty('display', 'none', 'important');
+      container.style.setProperty('opacity', '0', 'important');
+      container.style.setProperty('pointer-events', 'none', 'important');
     }
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', attachDemoListeners);
+    document.addEventListener('DOMContentLoaded', syncFloatingContactVisibility);
   } else {
-    attachDemoListeners();
+    syncFloatingContactVisibility();
   }
+
+  window.addEventListener('storage', function(e) {
+    if (e.key === 'tcs_live_contact_enabled') {
+      syncFloatingContactVisibility();
+    }
+  });
+
+  window.syncFloatingContactVisibility = syncFloatingContactVisibility;
 })();
 </script>
